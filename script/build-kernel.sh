@@ -23,9 +23,11 @@ done
 
 # 已在 systemd user 单元内（INVOCATION_ID 有值）= 宿主环境，直接跑；
 # 否则一律 systemd-run 重入（宿主 shell 里跑也安全，只是多一层单元）。
-if [ -z "${INVOCATION_ID:-}" ]; then
-	echo "[i] 经 systemd-run 在宿主执行（unit=pmx-nura-kernel）"
-	exec systemd-run --user --unit=pmx-nura-kernel --collect --quiet \
+if [ -z "${NURA_INSIDE_UNIT:-}" ]; then
+	echo "[i] 经 systemd-run 在宿主执行"
+	export NURA_INSIDE_UNIT=1
+	exec systemd-run --user --collect --quiet \
+		--unit="pmx-nura-$(basename "$0" .sh)-$(date +%H%M%S)" \
 		--working-directory="$NURA_ROOT" bash "$0" "$@"
 fi
 

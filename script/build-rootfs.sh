@@ -9,8 +9,11 @@ set -euo pipefail
 . "$(dirname "$0")/../config.sh"
 nura_precheck
 
-if [ -z "${INVOCATION_ID:-}" ]; then
-	exec systemd-run --user --unit=pmx-nura-rootfs --collect --quiet \
+if [ -z "${NURA_INSIDE_UNIT:-}" ]; then
+	echo "[i] 经 systemd-run 在宿主执行"
+	export NURA_INSIDE_UNIT=1
+	exec systemd-run --user --collect --quiet \
+		--unit="pmx-nura-$(basename "$0" .sh)-$(date +%H%M%S)" \
 		--working-directory="$NURA_ROOT" bash "$0" "$@"
 fi
 
@@ -20,5 +23,5 @@ echo "[i] pmbootstrap install（plasma-mobile / 密码 1234；~10-20 分钟）"
 OUT="~/work/pmos_linux/pmos/.pmbootstrap/chroot_native/home/pmos/rootfs/meizu-meizu20.img"
 [ -e "$OUT" ] || nura_die "找不到 rootfs 产物: $OUT"
 echo "[✓] 产物: $OUT"
-echo "    刷写: fastboot flash userdata $OUT（⚠ 全量重刷 = 机上手工补装件清零，")
+echo "    刷写: fastboot flash userdata $OUT（⚠ 全量重刷 = 机上手工补装件清零，"
 echo "          四件套/rmtfs drop-in/uim 补丁/discover-backend 重装清单见指纹表）"

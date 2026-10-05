@@ -7,8 +7,11 @@ set -euo pipefail
 . "$(dirname "$0")/../config.sh"
 nura_precheck
 
-if [ -z "${INVOCATION_ID:-}" ]; then
-	exec systemd-run --user --unit=pmx-nura-device --collect --quiet \
+if [ -z "${NURA_INSIDE_UNIT:-}" ]; then
+	echo "[i] 经 systemd-run 在宿主执行"
+	export NURA_INSIDE_UNIT=1
+	exec systemd-run --user --collect --quiet \
+		--unit="pmx-nura-$(basename "$0" .sh)-$(date +%H%M%S)" \
 		--working-directory="$NURA_ROOT" bash "$0" "$@"
 fi
 
