@@ -14,6 +14,7 @@ if [ -z "${NURA_INSIDE_UNIT:-}" ]; then
 	export NURA_INSIDE_UNIT=1
 	exec systemd-run --user --collect --quiet \
 		--unit="pmx-nura-$(basename "$0" .sh)-$(date +%H%M%S)" \
+		--setenv=NURA_INSIDE_UNIT=1 \
 		--working-directory="$NURA_ROOT" bash "$0" "$@"
 fi
 
