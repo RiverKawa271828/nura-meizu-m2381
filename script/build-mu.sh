@@ -34,10 +34,12 @@ fi
 echo "[2/3] build_uefi.py -d m2381（clang 需 linuxbrew PATH；约 1-7 分钟增量）"
 cd "$PIN_MU_DIR"
 export PATH="~/ubuntu/.linuxbrew/bin:$PATH"
-python3 build_uefi.py -d m2381 -r RELEASE
+# build_uefi.py 依赖 coloredlogs 等 = 只在树内 .venv 有（系统 python3 缺）
+[ -x .venv/bin/python ] || nura_die ".venv/bin/python 不存在（Mu 树 venv 未建）"
+.venv/bin/python build_uefi.py -d m2381 -r RELEASE
 
-RAWIMG=$(ls -t Mu-m2381Pkg-RELEASE-*.img 2>/dev/null | head -1)
-[ -n "$RAWIMG" ] || nura_die "找不到 build_uefi.py 产物 Mu-m2381Pkg-RELEASE-*.img"
+RAWIMG=$(ls -t Mu-m2381*.img 2>/dev/null | head -1)
+[ -n "$RAWIMG" ] || nura_die "找不到 build_uefi.py 产物 Mu-m2381*.img"
 
 OUT="$NURA_ROOT/artifacts/mu-r${PKGREL}-$(sha256sum "$RAWIMG" | cut -c1-8).img"
 mkdir -p "$NURA_ROOT/artifacts"
