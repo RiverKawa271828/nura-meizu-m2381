@@ -38,3 +38,9 @@
 - root devshell：`tools/devsh.py`（NCM + nc :23）｜ ssh：`user@172.16.42.1` / 1234 / doas 免密
 - 软进 fastboot：`systemctl reboot --reboot-argument=bootloader`（18d1:d00d）
 - 宿主长构建：systemd-run（脚本已内置）；与 K30 wrapper 串行（共享 work dir）
+
+## 2026-10-06 录音轮（（六十六））
+
+- 三件：linux r62 apk + mu-r62-9f1e8f8d.img（FdtBlob 465c4dc0 同源）+ esp-recovery-v44.img（d3ad95fa）
+- 一车刷毕：dd 读回双全等；uname #63；device r39 模块腿免刷上机（capture 固化）
+- 产物核验 = verify.sh / readback.sh 配方照旧
