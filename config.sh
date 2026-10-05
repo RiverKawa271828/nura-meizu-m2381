@@ -30,12 +30,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="~/work/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64"
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="62"      # 已构建 apk 的 pkgrel（r62 构建后更新）
+REL_LINUX_PKGREL="63"      # 已构建 apk 的 pkgrel（r63 构建后更新）
 REL_DEVICE_PKGREL="39"
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r62-9f1e8f8d.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v44.img"
-REL_KERNEL_VER="#63"       # 期望 uname = pkgrel+1（#N=pkgrel+1 定律）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v45.img"
+REL_KERNEL_VER="#64"       # 期望 uname = pkgrel+1（#N=pkgrel+1 定律）
 
 # ---- 回滚锚（刷坏救命的三个文件；路径变动必须同步 FLASHING.md）----
 ANCHOR_TB2="~/work/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img"

@@ -44,3 +44,10 @@
 - 三件：linux r62 apk + mu-r62-9f1e8f8d.img（FdtBlob 465c4dc0 同源）+ esp-recovery-v44.img（d3ad95fa）
 - 一车刷毕：dd 读回双全等；uname #63；device r39 模块腿免刷上机（capture 固化）
 - 产物核验 = verify.sh / readback.sh 配方照旧
+
+## 2026-10-06 录音收尾 M0（r63 + v45，DTS 零改动 Mu 免重编）
+
+- 两件：linux r63 apk（fork 1ddcdfde44d8 = va-macro vdd-micb 补线）+ esp-recovery-v45.img（c6a906a93767）
+- verify 全绿：dtb 465c4dc0 同源（Mu 免重编实证）+ ESP↔apk vmlinuz 56f6e340 同源 + va-macro ko 含 vdd-micb 串
+- 期望 uname #64（#N=pkgrel+1 第 12 证）；pmaports bd34bcd
+- M1 判据：录音时 audio_va_micbias enable≥1/gpio0 hi → mux-scan-r63.sh 逐值对拍
