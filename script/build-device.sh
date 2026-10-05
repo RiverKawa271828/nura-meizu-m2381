@@ -8,7 +8,7 @@ set -euo pipefail
 nura_precheck
 
 if [ -z "${INVOCATION_ID:-}" ]; then
-	exec systemd-run --user --unit=pmx-nura-device --quiet \
+	exec systemd-run --user --unit=pmx-nura-device --collect --quiet \
 		--working-directory="$NURA_ROOT" bash "$0" "$@"
 fi
 

@@ -20,7 +20,7 @@ PIN_TOOLS="${NURA_TOOLS_DIR:-~/work/meizu20/meizu20-m1/tools}"        # make-esp
 
 PIN_LINUX_GIT=""   # Phase-2: https://github.com/<you>/linux-mobile-ports
 PIN_MU_GIT=""      # Phase-2: https://github.com/<you>/Mu-Silicium (branch meizu20-mars-port)
-PIN_PMAPORTS_GIT=""# Phase-2: https://github.com/<you>/pmaports (branch: m2381)
+PIN_PMAPORTS_GIT="" # Phase-2: https://github.com/<you>/pmaports (branch: m2381)
 
 # ---- 包身份 ----
 PKGVER="7.3.0_rc3"

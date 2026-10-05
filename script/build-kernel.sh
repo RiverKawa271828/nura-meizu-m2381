@@ -25,7 +25,7 @@ done
 # 否则一律 systemd-run 重入（宿主 shell 里跑也安全，只是多一层单元）。
 if [ -z "${INVOCATION_ID:-}" ]; then
 	echo "[i] 经 systemd-run 在宿主执行（unit=pmx-nura-kernel）"
-	exec systemd-run --user --unit=pmx-nura-kernel --quiet \
+	exec systemd-run --user --unit=pmx-nura-kernel --collect --quiet \
 		--working-directory="$NURA_ROOT" bash "$0" "$@"
 fi
 

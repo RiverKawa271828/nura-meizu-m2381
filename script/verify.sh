@@ -49,9 +49,10 @@ fi
 
 echo "[3] apk 内容抽查"
 if [ -e "$APK" ]; then
-	tar -tzf "$APK" 2>/dev/null | grep -q "zram.ko" && echo "  ✓ zram.ko 在列" || { echo "  ✗ zram.ko 缺失"; FAIL=1; }
-	tar -tzf "$APK" 2>/dev/null | grep -q "zsmalloc.ko" && echo "  ✓ zsmalloc.ko 在列" || { echo "  ✗ zsmalloc.ko 缺失"; FAIL=1; }
-	tar -tzf "$APK" 2>/dev/null | grep -q "boot/vmlinuz-efi" && echo "  ✓ vmlinuz-efi 在列" || { echo "  ✗ vmlinuz-efi 缺失"; FAIL=1; }
+	LIST=$(tar -tzf "$APK" 2>/dev/null || true)
+	echo "$LIST" | grep "zram.ko" >/dev/null && echo "  ✓ zram.ko 在列" || { echo "  ✗ zram.ko 缺失"; FAIL=1; }
+	echo "$LIST" | grep "zsmalloc.ko" >/dev/null && echo "  ✓ zsmalloc.ko 在列" || { echo "  ✗ zsmalloc.ko 缺失"; FAIL=1; }
+	echo "$LIST" | grep "boot/vmlinuz-efi" >/dev/null && echo "  ✓ vmlinuz-efi 在列" || { echo "  ✗ vmlinuz-efi 缺失"; FAIL=1; }
 fi
 
 echo "[4] ESP ↔ apk vmlinuz 同源（如 ESP 存在）"

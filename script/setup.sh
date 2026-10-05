@@ -33,7 +33,7 @@ for f in "$ANCHOR_TB2" "$ANCHOR_ESP_V4D" "$ANCHOR_MU_R57"; do
 done
 
 echo "[宿主环境]"
-try "systemd user manager（systemd-run 长构建）" "systemctl is-system-running --user"
+try "systemd user manager（systemd-run 长构建）" "systemd-run --user --quiet --collect --unit=pmx-doctor-probe true"
 try "K30 wrapper 并发检查（共享 work dir 须串行）" "! pgrep -f pmbootstrap-phoenix >/dev/null"
 
 [ "$bad" = 0 ] && { echo "== 环境就绪 =="; exit 0; } || { echo "== 有缺项，见上 =="; exit 1; }
