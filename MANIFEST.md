@@ -2,18 +2,18 @@
 
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 
-## 现役产物（2026-10-06 @ T1 审计轮收口）
+## 现役产物（2026-10-06 @ r61 构建 + 项目首航后）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_rc3-r**60**（r61 待建：吃 yaml 修复 `82ecc62184c0`） | `.pmbootstrap/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc3-r60.apk` | — | 机上 apk add |
+| 内核 apk | 7.3.0_rc3-r**61**（吃 yaml 修复 `82ecc62184c0`；经本项目 build-kernel.sh 首航构建 10-06） | `.pmbootstrap/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc3-r61.apk` | — | 机上 apk add |
 | 设备包 apk | 1-r**37** | 同目录 `device-meizu-meizu20-1-r37.apk` | — | 机上 apk add |
 | 固件包 apk | 1-r**3** | 同目录 `firmware-meizu-meizu20-1-r3.apk` | — | 机上 apk add |
 | Mu 镜像 | r60 | `../meizu20/meizu20-m1/artifacts-uefi/mars-t-series/mu-r60-4b1b4315.img` | 4b1b4315 | boot_b |
-| ESP | v42 | `../meizu20/meizu20-m1/m1-work/arch-a/esp-recovery-v42.img` | 7373e097 | recovery_a |
-| 源码钉 | fork `82ecc62184c0` @meizu20-t4b ｜ Mu `98768952` @meizu20-mars-port ｜ pmaports `1669cdb` @phoenix | — | — | — |
+| ESP | v43 | `artifacts/esp-recovery-v43.img`（本仓；v42 在 ../meizu20/meizu20-m1/m1-work/arch-a/ 退役） | c0f7e6cb | recovery_a |
+| 源码钉 | fork `82ecc62184c0` @meizu20-t4b ｜ Mu `98768952` @meizu20-mars-port ｜ pmaports `711e3c2` @phoenix | — | — | — |
 
-期望 uname：`7.3.0_rc3-r60` → **#61**（r61 → #62）。
+期望 uname：`7.3.0_rc3-r61` → **#62**。
 
 ## 回滚锚（救命的三个文件，勿删勿挪；同 config.sh）
 
