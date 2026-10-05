@@ -31,7 +31,7 @@ APK_DIR="~/work/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64"
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="62"      # 已构建 apk 的 pkgrel（r62 构建后更新）
-REL_DEVICE_PKGREL="37"
+REL_DEVICE_PKGREL="39"
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r62-9f1e8f8d.img"
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v44.img"
