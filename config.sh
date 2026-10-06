@@ -35,13 +35,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64}"
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="65"      # 已构建 apk 的 pkgrel（r65 = pm8008 supply-only 载体，10-06）
+REL_LINUX_PKGREL="66"      # 已构建 apk 的 pkgrel（r66 = fsa4480 摘除+PSI=y 载体，10-07）
 REL_DEVICE_PKGREL="47"     # r47 = sndcard-bind guard autoprobe 修复，10-06
 REL_FW_PKGREL="3"
-REL_MU_IMG="$NURA_ROOT/artifacts/mu-r64-686a4c0f.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v46.img"
-REL_KERNEL_VER="#65"       # 当前在机 uname（r64 内核，ESP v46 引导）；下次 ESP 重刷
-                           # 会带上 r65 的 vmlinuz-efi → 期望 #66（模块腿 r65 已同车）
+REL_MU_IMG="$NURA_ROOT/artifacts/mu-r66-9033a734.img"
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v47.img"
+REL_KERNEL_VER="#67"       # 下次上机 uname 期望（r66 内核 + #N=pkgrel+1 定律）
 
 # ---- 回滚锚（刷坏救命的三个文件；路径变动必须同步 FLASHING.md）----
 ANCHOR_TB2="$NURA_WORK/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img"
