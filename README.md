@@ -26,6 +26,9 @@ XBL → ABL → boot_b: Mu-UEFI (m2381Pkg) ──送核──→ 主线内核 (E
 
 ## 快速开始（本机现役布局）
 
+> 前提：设备须为 **Flyme 12.6（最新 OTA）+ slot b 活动**——这是唯一验证过的基线；
+> 其他 Flyme 版本未验证，上一版 OTA 实测起不来。详见 [docs/FLASHING.md](docs/FLASHING.md) §1。
+
 ```bash
 script/setup.sh            # 环境体检（钉子/工具链/回滚锚）
 script/build-kernel.sh --bump   # 内核 rN+1（tarball→checksum→build）

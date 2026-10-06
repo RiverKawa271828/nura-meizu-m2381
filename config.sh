@@ -8,26 +8,31 @@
 
 # ---- 工作区 ----
 NURA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# 他机复刻只改这一个根（export NURA_WORK=/path 或改下行默认）；本机 = ~/work
+NURA_WORK="${NURA_WORK:-~/work}"
 
-# ---- 源码树（本地现役；Phase-2 填公共 clone URL）----
-PIN_LINUX_DIR="${NURA_LINUX_DIR:-~/work/linux-mobile-ports}"          # fork 内核树
+# ---- 源码树（本地现役；公共 clone URL 见下方 PIN_*_GIT）----
+PIN_LINUX_DIR="${NURA_LINUX_DIR:-$NURA_WORK/linux-mobile-ports}"          # fork 内核树
 PIN_LINUX_BRANCH="meizu20-t4b"
-PIN_MU_DIR="${NURA_MU_DIR:-~/work/meizu20/mu-uefi/Mu-Silicium-new}"   # Mu 树
+PIN_MU_DIR="${NURA_MU_DIR:-$NURA_WORK/meizu20/mu-uefi/Mu-Silicium-new}"   # Mu 树
 PIN_MU_BRANCH="meizu20-mars-port"
-PIN_PMAPORTS="${NURA_PMAPORTS_DIR:-~/work/pmos_linux/pmos/pmaports}"
-PIN_PMB_WRAPPER="${NURA_PMB_WRAPPER:-~/work/pmos_linux/pmos/pmbootstrap-meizu.sh}"
-PIN_TOOLS="${NURA_TOOLS_DIR:-~/work/meizu20/meizu20-m1/tools}"        # make-esp-recovery.sh / devsh.py
+PIN_PMAPORTS="${NURA_PMAPORTS_DIR:-$NURA_WORK/pmos_linux/pmos/pmaports}"
+PIN_PMAPORTS_BRANCH="phoenix"
+PIN_PMB_WRAPPER="${NURA_PMB_WRAPPER:-$NURA_WORK/pmos_linux/pmos/pmbootstrap-meizu.sh}"
+PIN_TOOLS="${NURA_TOOLS_DIR:-$NURA_WORK/meizu20/meizu20-m1/tools}"        # make-esp-recovery.sh / devsh.py
 
-PIN_LINUX_GIT=""   # Phase-2: https://github.com/<you>/linux-mobile-ports
-PIN_MU_GIT=""      # Phase-2: https://github.com/<you>/Mu-Silicium (branch meizu20-mars-port)
-PIN_PMAPORTS_GIT="" # Phase-2: https://github.com/<you>/pmaports (branch: m2381)
+# ---- 公共仓 URL（Phase-2；setup.sh --clone 按此摆位，空 = 不启用）----
+PIN_LINUX_GIT=""       # fork torvalds/linux → 推分支 meizu20-t4b（基点 58785836 = 主线 7.3 merge window，只传 78 个增量 commit）
+PIN_MU_GIT=""          # fork Project-Silicium/Mu-Silicium → 推分支 meizu20-mars-port（= 1 silime 中间件 + 23 我方 commit）
+PIN_MU_BINARIES_GIT="" # fork Project-Silicium/Device-Binaries → 推 Binaries 钉住的 036ba9f7（"mars: Initial support"，不在上游 main）
+PIN_PMAPORTS_GIT=""    # 新建独立仓整条推 phoenix（.git 仅 69MB）；或 fork GitHub postmarketOS 镜像再推分支
 
 # ---- 包身份 ----
 PKGVER="7.3.0_rc3"
 PKG_LINUX="linux-meizu-meizu20"
 PKG_DEVICE="device-meizu-meizu20"
 PKG_FIRMWARE="firmware-meizu-meizu20"
-APK_DIR="~/work/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64"
+APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64}"
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="65"      # 已构建 apk 的 pkgrel（r65 = pm8008 supply-only 载体，10-06）
@@ -39,11 +44,11 @@ REL_KERNEL_VER="#65"       # 当前在机 uname（r64 内核，ESP v46 引导）
                            # 会带上 r65 的 vmlinuz-efi → 期望 #66（模块腿 r65 已同车）
 
 # ---- 回滚锚（刷坏救命的三个文件；路径变动必须同步 FLASHING.md）----
-ANCHOR_TB2="~/work/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img"
+ANCHOR_TB2="$NURA_WORK/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img"
 ANCHOR_TB2_SHA="d4928661"
-ANCHOR_ESP_V4D="~/work/meizu20/meizu20-m1/m1-work/arch-a/esp-recovery-v4d.img"
+ANCHOR_ESP_V4D="$NURA_WORK/meizu20/meizu20-m1/m1-work/arch-a/esp-recovery-v4d.img"
 ANCHOR_ESP_V4D_SHA="3b106f07"
-ANCHOR_MU_R57="~/work/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/mu-r57-4640ebb5.img"
+ANCHOR_MU_R57="$NURA_WORK/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/mu-r57-4640ebb5.img"
 ANCHOR_MU_R57_SHA="4640ebb5"
 
 # ---- 设备通道 ----

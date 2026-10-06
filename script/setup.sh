@@ -1,11 +1,38 @@
 #!/usr/bin/env bash
 # setup.sh — 工作区检查/摆位（本机体检 + Phase-2 他机复刻入口）
 #
-# 用法: setup.sh [--doctor]
+# 用法: setup.sh [--doctor] | [--clone]
 #   --doctor  只做依赖与钉子体检（默认行为）
-#   （Phase-2：PIN_*_GIT 填公共 URL 后，本脚本补 clone 四仓到规范相对布局）
+#   --clone   先按 config.sh 的 PIN_*_GIT 复刻四仓，再跑体检
+#             新机器第一步：clone 本仓拿到 script/ → 跑本脚本 --clone
+#             （URL 留空的仓跳过；已存在的目录不动；Mu 的 Binaries
+#             submodule 会按 PIN_MU_BINARIES_GIT 改指并拉全）
 set -euo pipefail
 . "$(dirname "$0")/../config.sh"
+
+if [ "${1:-}" = "--clone" ]; then
+	echo "== Phase-2 复刻：按 PIN_*_GIT 拉取源码树 =="
+	clone_repo() { # <名> <URL> <目录> <分支>
+		local name="$1" url="$2" dir="$3" branch="$4"
+		if [ -z "$url" ]; then echo "  - $name：PIN URL 未填，跳过"; return 0; fi
+		if [ -e "$dir/.git" ]; then echo "  ✓ $name 已在位：$dir"; return 0; fi
+		mkdir -p "$(dirname "$dir")"
+		git clone -q --branch "$branch" "$url" "$dir" || nura_die "$name clone 失败：$url"
+		echo "  ✓ $name → $dir（$branch）"
+	}
+	clone_repo "fork 内核" "$PIN_LINUX_GIT"   "$PIN_LINUX_DIR" "$PIN_LINUX_BRANCH"
+	clone_repo "pmaports"  "$PIN_PMAPORTS_GIT" "$PIN_PMAPORTS"  "$PIN_PMAPORTS_BRANCH"
+	clone_repo "Mu"        "$PIN_MU_GIT"       "$PIN_MU_DIR"    "$PIN_MU_BRANCH"
+	if [ -n "$PIN_MU_GIT" ] && [ ! -e "$PIN_MU_DIR/Binaries/.git" ]; then
+		[ -n "$PIN_MU_BINARIES_GIT" ] || nura_die "Mu Binaries：PIN_MU_BINARIES_GIT 未填（钉住的 036ba9f7 不在上游 Device-Binaries main）"
+		git -C "$PIN_MU_DIR" submodule set-url Binaries "$PIN_MU_BINARIES_GIT"
+		git -C "$PIN_MU_DIR" submodule update --init --recursive
+		echo "  ✓ Mu submodules（Binaries → $PIN_MU_BINARIES_GIT）"
+	fi
+	# wrapper/tools/回滚锚不在 clone 面：wrapper 待收编本仓 script/；
+	# tools 与锚为 Phase-2 Release 资产（见 AGENTS.md / PIPELINE.md）。
+	echo
+fi
 
 echo "== nura-meizu-m2381 setup doctor =="
 ok=0; bad=0

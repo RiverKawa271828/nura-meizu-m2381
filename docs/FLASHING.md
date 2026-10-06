@@ -24,6 +24,11 @@
 
 ## 1. 前置检查
 
+**适用基线（2026-10-06 定，先对上再动手）**：
+- 全流程只在 **stock Flyme 12.6（最新 OTA）+ slot b 活动** 的零售机上验证过；
+- 其他 Flyme 版本**未验证**——上一版 OTA 实测**起不来**（启动链绑 12.6 的 XBL/ABL 固件基线）；
+- 动手前先把设备 OTA 到 12.6 并确认 b 槽活动（`fastboot getvar current-slot` → `b`）；a 槽激活态/旧版机行为未知，勿当小白鼠。
+
 ```bash
 script/setup.sh          # 钉子/工具链/回滚锚全绿才继续
 fastboot devices         # 空输出 = 设备还没进 fastboot（看 §2）
