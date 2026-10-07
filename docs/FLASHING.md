@@ -67,6 +67,9 @@ fastboot reboot
 - 验收清单照 **§5** 过一遍（本轮期望 `uname -v` = `7.3.0_rc3-r66` → `#67`）。
 - 蜂窝/NFC 用户态默认摘除 = 拍板形态（README 状态表）；`systemctl --failed` 里
   MANIFEST「已知非回归失败」三件不用慌。
+- **正常直刷不需要动 misc**：ABL 重试计数在 boot_x 的 GPT 属性位（`set_active b`
+  已重置预算；机上 qbootctl 起机后自动 mark successful），misc 与直刷链路无关。
+  只有「循环落 fastboot」时才按 §6 阶梯清 misc（清 bootonce）——平时勿写。
 - 回滚（锚三件在手，30 秒回家）：
 
 ```bash
