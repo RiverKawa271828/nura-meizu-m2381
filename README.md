@@ -110,11 +110,22 @@ bloff 工程解默认兜底）｜IR/UWB（身份未定）。硬件不存在：3.
 
 设计细节与 #N 定律原理 → [docs/DESIGN.md](docs/DESIGN.md)；现役各件对应哪版 → [MANIFEST.md](MANIFEST.md)。
 
-## 布局原则
+## 布局原则与源码仓库
 
-本仓只聚**控制面**（脚本 + 文档 + 锚点清单）。源码树原地不动、按 `config.sh` 钉子引用：
-fork 内核（linux-mobile-ports）、Mu 固件树、pmaports 三包、厂商资产（meizu20_linux，永不入 git）。
-Phase-2（公开发布）时在 `config.sh` 填四个公共 URL，`setup.sh` 即可在任何机器复刻布局。
+本仓只聚**控制面**（脚本 + 文档 + 锚点清单）。源码树原地不动、按 `config.sh` 钉子引用；
+厂商资产（meizu20_linux，~29G）永不入 git。
+
+| 仓 | 地址 | 内容 | 分支 |
+|---|---|---|---|
+| 本项目（控制面） | <https://github.com/RiverKawa271828/nura-meizu-m2381> | 构建/验证/刷写脚本 + 版本钉 + 文档 + Release | master |
+| fork 内核 | <https://github.com/RiverKawa271828/linux-mobile-ports> | fork torvalds/linux，魅族 20 增量 commit | meizu20-t4b |
+| Mu-UEFI 固件 | <https://github.com/RiverKawa271828/Mu-Silicium> | fork Project-Silicium/Mu-Silicium，m2381Pkg | meizu20-mars-port |
+| Mu Binaries | <https://github.com/RiverKawa271828/Device-Binaries> | Mu 设备二进制 submodule（钉 `036ba9f7`） | main |
+| pmaports | <https://github.com/RiverKawa271828/pmaports> | 内核/设备/固件三包 + hexagonrtc 补丁 | phoenix |
+
+工具链用官方 pmbootstrap（gitlab.postmarketos.org，`setup.sh --clone` 自动拉取）。
+复刻路径：clone 本仓 → `export NURA_WORK=/<工作根>` → `script/setup.sh --clone`（按
+`config.sh` 的 `PIN_*_GIT` 拉齐上述四仓 + pmbootstrap，回滚锚用 `--fetch-release` 补齐）。
 
 ## 治理
 
