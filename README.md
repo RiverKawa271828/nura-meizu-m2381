@@ -79,6 +79,28 @@ bloff 工程解默认兜底）｜IR/UWB（身份未定）。硬件不存在：3.
 2. **不碰的分区**：xbl/abl/tz/modem、dtbo_b、super、modemst1/2、persist、misc（除非按配方清零）。
 3. **两腿铁律**：换内核 = apk（模块）+ ESP（引导）同轮；只刷一条腿 = 半死状态。
 
+## 免责与救砖（刷机前必读）
+
+- **免责**：本项目按现状提供。刷机写入系统分区存在**变砖与数据全丢**风险，bootloader
+  解锁本身也有安全与保修影响；验证过的基线只有 Flyme 12.6.0.0A + slot b 一种，其他版本
+  行为未知。动手前请完整阅读 [docs/FLASHING.md](docs/FLASHING.md)，风险自负——作者不对
+  任何设备损坏或数据损失负责。
+- **救砖镜像自备**：刷机前先从 Release 页下载**锚三件**（`t-b2-*.img` /
+  `esp-recovery-v4d.img` / `mu-r57-*.img`，均为实测已知好的历史版本）。刷坏回不进系统时，
+  fastboot 重刷锚三件即可回家（30 秒配方 → FLASHING §6）；**不备锚件 = 出事只剩 EDL
+  线刷一条高危路**。
+
+## 版本号怎么看（Release 文件名速查）
+
+| 记号 | 例子 | 含义 |
+|---|---|---|
+| `r66` | `mu-r66-*.img`、`meizu-meizu20-r66.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮 |
+| `v47` | `esp-recovery-v47.img.gz` | **ESP 版本**，独立计数，每换一次内核腿 +1（与 r 轮无换算关系，v47 恰好陪 r66） |
+| `#67` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #67 = r66 内核真的在跑 |
+| `9033a734` | `mu-r66-9033a734.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |
+
+设计细节与 #N 定律原理 → [docs/DESIGN.md](docs/DESIGN.md)；现役各件对应哪版 → [MANIFEST.md](MANIFEST.md)。
+
 ## 布局原则
 
 本仓只聚**控制面**（脚本 + 文档 + 锚点清单）。源码树原地不动、按 `config.sh` 钉子引用：

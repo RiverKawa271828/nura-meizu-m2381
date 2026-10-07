@@ -1,6 +1,8 @@
 # 刷机教程（Meizu 20 / m2381 · Nura 线）
 
 > 原则：**每一步都带「怎么确认成功了」**；刷写时长不算证据，只看读回。
+> ⚠ 刷机写入系统分区，存在变砖与数据全丢风险——动手前把 A-1 的锚三件（救砖镜像）
+> 下载好，风险自负（完整免责见 README「免责与救砖」）。
 > 命令里的路径以 `config.sh` / `MANIFEST.md` 为准；脚本都在 `script/`。
 
 ---
@@ -41,7 +43,7 @@
 | 5 | 下载 Release 三件 + `SHA256SUMS`：boot（`mu-r*.img`）/ recovery（`esp-recovery-*.img.gz`）/ rootfs（`meizu-meizu20-*.img.gz`） | `sha256sum -c SHA256SUMS` 全 OK 才继续 |
 | 6 | 解压两个 gz | `gunzip esp-recovery-*.img.gz meizu-meizu20-*.img.gz` |
 | 7 | ⚠ **刷 userdata = 清空全部数据**，要保数据先备份 | rootfs gz 1.1G / 裸 ~4.4G，刷写约 2 分钟，途中别拔线 |
-| 8 | （可选，强烈建议）顺带下载锚三件：`t-b2-*.img` / `esp-recovery-v4d.img` / `mu-r57-*.img` | 救砖保险（回滚命令见 A-3） |
+| 8 | **（救砖保险，强烈建议）顺带下载锚三件**：`t-b2-*.img` / `esp-recovery-v4d.img` / `mu-r57-*.img` | 刷坏 30 秒回家（A-3/§6）；不备锚件 = 出事只剩 EDL 线刷（高危） |
 
 ### A-2 三件齐刷
 
