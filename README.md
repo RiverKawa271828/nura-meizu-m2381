@@ -2,6 +2,21 @@
 
 > 一句话：把 Nura（postmarketOS edge + 主线内核）完整跑在魅族 20（m2381 / SM8550 / kalama）上的全流程项目——源码在哪、用哪个工具出哪个镜像、刷到哪个分区、怎么回滚，四件事一张图说完。
 
+## 免责与救砖（刷机前必读）
+
+- **免责**：本项目按现状提供。刷机写入系统分区存在**变砖与数据全丢**风险，bootloader
+  解锁本身也有安全与保修影响；验证过的基线只有 Flyme 12.6.0.0A + slot b 一种，其他版本
+  行为未知。动手前请完整阅读 [docs/FLASHING.md](docs/FLASHING.md)，风险自负——作者不对
+  任何设备损坏或数据损失负责。
+- **救砖镜像自备**：刷机前先从 Release 页下载**锚三件**（`t-b2-*.img` /
+  `esp-recovery-v4d.img` / `mu-r57-*.img`，均为实测已知好的历史版本）。刷坏回不进系统时，
+  fastboot 重刷锚三件即可回家（30 秒配方 → FLASHING §6）；**不备锚件 = 出事只剩 EDL
+  线刷一条高危路**。
+- **锚三件 ≠ 原厂镜像，刷完也不回 Flyme**：三件全是本项目自建链（Mu-UEFI 固件 + ESP）
+  的历史好版本，刷完回到的是**旧一版的 Nura/pmOS**。魅族原厂层（XBL/ABL/super 里的
+  Flyme）本项目从不触碰、也不随锚恢复；想回原厂 Flyme 需自备官方完整线刷包走原厂
+  通道，本项目不提供。
+
 ## 快速开始
 
 镜像 = **Nura（postmarketOS edge）+ plasma-mobile 桌面**（内置默认），刷完即完整系统：
@@ -18,7 +33,12 @@ fastboot flash userdata    meizu-meizu20-r66.img  # rootfs（⚠清空全部数�
 fastboot set_active b && fastboot reboot
 ```
 
-约 1 分钟起 plasma 桌面。刷机前准备八项（BL 解锁 / Flyme 基线 / 回滚锚）与逐条验证、
+约 1 分钟起 plasma 桌面。**首启必做**：进桌面后打开「电源管理 → 节电」，**把自动
+睡眠/空闲挂起关掉**——本移植 suspend 必死，放着不管会在空闲后睡死假重启（系统
+重启后一切正常，但每次空闲都会再来一次）；熄屏走屏幕熄灭（DPMS）即可。
+（本机此前不睡，是使用者在电源设置里手动关的；新装的 rootfs 恢复默认开启。）
+
+刷机前准备八项（BL 解锁 / Flyme 基线 / 回滚锚）与逐条验证、
 回滚救砖 → **[docs/FLASHING.md](docs/FLASHING.md)「快速路径 A：Release 直刷」**。
 
 **路径 B：自己构建**（想改源码 / 出新一轮）：
@@ -78,21 +98,6 @@ bloff 工程解默认兜底）｜IR/UWB（身份未定）。硬件不存在：3.
 1. **刷机需用户在场**：所有写分区动作走 `flash-batch.sh --i-am-present` / `rollback.sh --i-am-present`。
 2. **不碰的分区**：xbl/abl/tz/modem、dtbo_b、super、modemst1/2、persist、misc（除非按配方清零）。
 3. **两腿铁律**：换内核 = apk（模块）+ ESP（引导）同轮；只刷一条腿 = 半死状态。
-
-## 免责与救砖（刷机前必读）
-
-- **免责**：本项目按现状提供。刷机写入系统分区存在**变砖与数据全丢**风险，bootloader
-  解锁本身也有安全与保修影响；验证过的基线只有 Flyme 12.6.0.0A + slot b 一种，其他版本
-  行为未知。动手前请完整阅读 [docs/FLASHING.md](docs/FLASHING.md)，风险自负——作者不对
-  任何设备损坏或数据损失负责。
-- **救砖镜像自备**：刷机前先从 Release 页下载**锚三件**（`t-b2-*.img` /
-  `esp-recovery-v4d.img` / `mu-r57-*.img`，均为实测已知好的历史版本）。刷坏回不进系统时，
-  fastboot 重刷锚三件即可回家（30 秒配方 → FLASHING §6）；**不备锚件 = 出事只剩 EDL
-  线刷一条高危路**。
-- **锚三件 ≠ 原厂镜像，刷完也不回 Flyme**：三件全是本项目自建链（Mu-UEFI 固件 + ESP）
-  的历史好版本，刷完回到的是**旧一版的 Nura/pmOS**。魅族原厂层（XBL/ABL/super 里的
-  Flyme）本项目从不触碰、也不随锚恢复；想回原厂 Flyme 需自备官方完整线刷包走原厂
-  通道，本项目不提供。
 
 ## 版本号怎么看（Release 文件名速查）
 
