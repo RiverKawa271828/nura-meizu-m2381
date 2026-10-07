@@ -12,9 +12,11 @@
 | 固件包 apk | 1-r**3** | 同目录 `firmware-meizu-meizu20-1-r3.apk` | — | 机上 apk add |
 | Mu 镜像 | r66 | `artifacts/mu-r66-9033a734.img` | 9033a734 | boot_b |
 | ESP | v47（仓内 `.img.gz`；刷写/verify 自动解压） | `artifacts/esp-recovery-v47.img.gz` | a0455923（裸镜像） | recovery_a |
-| rootfs 镜像 | r66 同轮（内含内核 r66 apk + 设备包 r52） | Release 分发件（⬜ 待产出/上传；本地 = `build-rootfs.sh` 产物） | — | userdata |
-| 源码钉 | fork `f42761da35ab` @meizu20-t4b ｜ Mu `14692e56822c` @meizu20-mars-port ｜ pmaports `c3cf153cd6c4` @phoenix（2026-10-07 推送前敏感信息清扫：三树历史中性化过 WiFi SSID/本地路径，hash 相应重写；DTS 注释级改动不影响编译产物） | — | — | — |
+| rootfs 镜像 | r66 同轮（内含内核 r66 apk + 设备包 r52；纯官方预装，机上后装件不在内） | Release 分发件 `meizu-meizu20-r66.img.gz`（1.10GiB，sha8 90961230） | 90961230 | userdata |
+| 源码钉 | fork `f42761da35ab` @meizu20-t4b ｜ Mu `14692e56822c` @meizu20-mars-port ｜ pmaports `c3cf153cd6c4` @phoenix ｜ Binaries fork main=`036ba9f7`——**四仓已推 GitHub（2026-10-07 推送窗口）**；推送前敏感信息清扫：三树历史中性化过 WiFi SSID/本地路径，hash 相应重写；DTS 注释级改动不影响编译产物 | — | — | — |
 
+**Release r66 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r66>**（2026-10-07
+推送窗口上传）：直刷三件 + 锚三件 + 固件 tarball（自建者用）+ `SHA256SUMS`。
 **Release 直刷三件（boot / recovery / rootfs）必须同轮配对**——外人路径 = FLASHING「快速路径 A」。
 
 期望 uname：`7.3.0_rc3-r66` → **#67**。10-07 上机已实证（#N=pkgrel+1 第 13 证）；
@@ -30,8 +32,8 @@
 | mu-r57 | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/mu-r57-4640ebb5.img` | 4640ebb5 | boot_b 最近已知好（r57 时代） |
 
 30 秒回滚 = `script/rollback.sh --i-am-present`（前两个锚）。
-⚠ 锚三件 = Release 资产（未上传前仅存在于原工作区；他机 `setup.sh` 会对缺失报警告，
-跑 rollback 前必须先补齐）。当前时代的次级回退对（手动刷，非 rollback.sh）：
+⚠ 锚三件 = Release r66 资产（已上传）；他机一键拉齐 = `setup.sh --fetch-release`，
+本机缺失时也会在 `setup.sh` 体检里报警告。当前时代的次级回退对（手动刷，非 rollback.sh）：
 `artifacts/mu-r64-686a4c0f.img`（686a4c0f）+ `artifacts/esp-recovery-v46.img.gz`（裸 0d4796ed）+ device r51。
 
 ## 已知非回归失败（首 boot 看到**不用慌**）
