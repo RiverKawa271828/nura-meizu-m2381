@@ -53,6 +53,13 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 - **▶ 剩余 = 干净机首航**（发布面成立判据：第二台机器/容器从零 setup→build→flash）；
   候补小件 = hexagonrtc 包仓 r7/r8 双版本漂移收敛（APKBUILD pkgrel=7 vs 本地包仓
   r8 并存，低优）｜ 7.3 stable rebase 挂观察（主档排程）。
+- **⏸ suspend 睡死修复实验（10-07 实证，用户拍板先不修）**：s2idle 睡入不能唤醒已
+  **实机复现两连**（powerdevil 自动睡眠触发 1 次 + 手动 `echo mem` 1 次；journal 停在
+  suspend entry 无 resume；reboot-reason=0x00 排除软件重启/插电开机）。**新 rootfs 上
+  powerdevil 自动睡眠默认开启 = 空闲必睡死假重启**，首启必做手动关（README/FLASHING
+  已写）。低垂果实候选 = 睡前限制 cpuidle 深度（cluster power-collapse 假说）1-2 轮，
+  醒了即得缓解形态 + 死因层定位，全败归 MPM/AOSS 大后期维持原判；每轮代价 = 睡死
+  一次需长按电源救机。
 
 ## 工作流卡
 
