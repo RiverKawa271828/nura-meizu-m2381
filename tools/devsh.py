@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""devsh.py — 经 USB 网络与设备 shell 通信（强制绑接口，绕开 TUN 代理 TUN 劫持）。
+"""devsh.py — 经 USB 网络与设备 shell 通信（强制绑接口，绕开宿主 TUN 劫持）。
 
 用法：
   devsh.py '<shell 命令>'                  # 单条命令（默认 172.16.42.1:23）
   devsh.py --port 22 --raw '<cmd>'         # 其它端口（22 需设备侧是 ssh，本工具不做 ssh 协议）
   环境：DEVSHELL_IF 指定接口名（默认自动挑带 172.16.42.x 的接口）
 
-背景：宿主的策略路由把 172.16.42.1 指向 TUN 代理 TUN，普通 socket 打不到设备；
+背景：宿主的策略路由把 172.16.42.1 指向 TUN 代理，普通 socket 打不到设备；
 SO_BINDTODEVICE 直接绑定网卡可绕过（与 ping -I 同理）。
 """
 import argparse

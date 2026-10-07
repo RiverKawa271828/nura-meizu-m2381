@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""devpush.py — 从宿主推文件到设备（绕过 TUN 代理：连接套接字绑 USB 网卡）。
+"""devpush.py — 从宿主推文件到设备（绕过宿主 TUN 代理：连接套接字绑 USB 网卡）。
 
 与 devpull.py 对称。设备侧配合：busybox nc -l -p <PORT> > <设备上的文件>
 

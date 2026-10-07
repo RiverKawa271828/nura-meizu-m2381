@@ -33,7 +33,7 @@ fi
 
 echo "[2/3] build_uefi.py -d m2381（clang 需 linuxbrew PATH；约 1-7 分钟增量）"
 cd "$PIN_MU_DIR"
-export PATH="~/ubuntu/.linuxbrew/bin:$PATH"
+export PATH="${NURA_LINUXBREW:-$HOME/ubuntu/.linuxbrew/bin:$HOME/.linuxbrew/bin}:$PATH"
 # build_uefi.py 依赖 coloredlogs 等 = 只在树内 .venv 有（系统 python3 缺）
 [ -x .venv/bin/python ] || nura_die ".venv/bin/python 不存在（Mu 树 venv 未建）"
 .venv/bin/python build_uefi.py -d m2381 -r RELEASE

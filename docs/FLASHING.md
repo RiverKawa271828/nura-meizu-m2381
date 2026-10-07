@@ -126,7 +126,7 @@ ssh user@172.16.42.1 'systemctl --failed'          # ④ 已知三件非回归�
                                                    #    uim-selection start-limit / zram(若 r<r60)
 journalctl -b | grep -iE "error|fail" | head       # ⑤ 无新红
 ```
-触摸划两下、音量键、WiFi 连 现网5G。全过 = 收工；有红 = 记 journal，回滚，慢慢查。
+触摸划两下、音量键、WiFi 能连上。全过 = 收工；有红 = 记 journal，回滚，慢慢查。
 
 ## 6. 回滚与救砖阶梯
 
@@ -151,7 +151,7 @@ script/rollback.sh --i-am-present   # 30 秒：boot_b←t-b2 + recovery_a←v4d 
 | ssh | `sshpass -p 1234 ssh user@172.16.42.1`（doas 免密） |
 | 推/拉文件 | `tools/devpush.py` / `devpull.py`（devsh 嵌 heredoc 会产空文件，别用） |
 | 插墙充时 | RNDIS 断，走 WiFi（IP 会变，路由器后台看） |
-| ping 不通 | 先查宿主 TUN 代理 TUN 劫持：`ping -I <接口>` 绑接口绕过 |
+| ping 不通 | 先查宿主 TUN 代理劫持（代理把流量抢走）：`ping -I <接口>` 绑接口绕过 |
 
 ## 8. 禁令（不解释，照做）
 

@@ -8,8 +8,8 @@
 
 # ---- 工作区 ----
 NURA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# 他机复刻只改这一个根（export NURA_WORK=/path 或改下行默认）；本机 = ~/work
-NURA_WORK="${NURA_WORK:-~/work}"
+# 他机复刻只改这一个根（export NURA_WORK=/path 或改下行默认）；默认 = ~/work
+NURA_WORK="${NURA_WORK:-$HOME/work}"
 
 # ---- 源码树（本地现役；公共 clone URL 见下方 PIN_*_GIT）----
 PIN_LINUX_DIR="${NURA_LINUX_DIR:-$NURA_WORK/linux-mobile-ports}"          # fork 内核树

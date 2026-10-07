@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""devpull.py — 从设备拉文件到宿主（绕过 TUN 代理：监听套接字绑 USB 网卡）。
+"""devpull.py — 从设备拉文件到宿主（绕过宿主 TUN 代理：监听套接字绑 USB 网卡）。
 
 设备侧配合：busybox nc 172.16.42.2 <PORT> < <设备上的文件>
 
