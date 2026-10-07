@@ -26,3 +26,19 @@ OUT="$PMB_WORK/chroot_native/home/pmos/rootfs/meizu-meizu20.img"
 echo "[✓] 产物: $OUT"
 echo "    刷写: fastboot flash userdata $OUT（⚠ 全量重刷 = 机上手工补装件清零，"
 echo "          四件套/rmtfs drop-in/uim 补丁/discover-backend 重装清单见指纹表）"
+
+# ---- Release 件固化：gz（<2GiB = GitHub Release 单件上限）+ SHA256SUMS 行刷新 ----
+# rN 后缀从本地内核 apk 包名推导（linux-meizu-meizu20-7.3.0_rc3-r66.apk → r66）
+KN="$(basename "$(ls "$APK_DIR/$PKG_LINUX-"*.apk | sort -V | tail -1)")"
+REL_TAG="r${KN##*-r}"; REL_TAG="${REL_TAG%.apk}"
+REL_DIR="$NURA_ROOT/artifacts"
+OUT_GZ="$REL_DIR/meizu-meizu20-$REL_TAG.img.gz"
+gzip -c "$OUT" > "$OUT_GZ"
+SZ="$(stat -c%s "$OUT_GZ")"
+[ "$SZ" -lt 2147483648 ] || nura_die "$OUT_GZ = $SZ 字节 ≥ 2GiB（GitHub Release 单件上限，需 sparse/分卷再议）"
+SUMS="$REL_DIR/SHA256SUMS"
+touch "$SUMS"
+grep -vF "  $(basename "$OUT_GZ")" "$SUMS" > "$SUMS.tmp" || true
+( cd "$REL_DIR" && sha256sum "$(basename "$OUT_GZ")" ) >> "$SUMS.tmp"
+mv "$SUMS.tmp" "$SUMS"
+echo "[✓] Release 件: $OUT_GZ（$(du -h "$OUT_GZ" | cut -f1)）+ SHA256SUMS 已刷新"

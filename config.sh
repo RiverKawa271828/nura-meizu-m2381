@@ -26,8 +26,11 @@ PIN_TOOLS="${NURA_TOOLS_DIR:-$NURA_ROOT/tools}"                                #
 # ---- 公共仓 URL（Phase-2；setup.sh --clone 按此摆位，空 = 不启用）----
 PIN_LINUX_GIT="https://github.com/RiverKawa271828/linux-mobile-ports"        # fork torvalds/linux → 推分支 meizu20-t4b（基点 58785836 = 主线 7.3 merge window，只传 79 个增量 commit）
 PIN_MU_GIT="https://github.com/RiverKawa271828/Mu-Silicium"                  # fork Project-Silicium/Mu-Silicium → 推分支 meizu20-mars-port
-PIN_MU_BINARIES_GIT="https://github.com/RiverKawa271828/Device-Binaries"     # ⚠待建仓：fork Project-Silicium/Device-Binaries → 推 Binaries 钉住的 036ba9f7（不在上游 main）
-PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # ⚠待建仓：新建独立仓整条推 phoenix（.git 仅 69MB；pmOS 官方在 GitLab，GitHub 无镜像 fork 可用）
+PIN_MU_BINARIES_GIT="https://github.com/RiverKawa271828/Device-Binaries"     # 已建 fork；main 已强推至钉住的 036ba9f7（= silime「mars: Initial support」，10-07 推送窗口）
+PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # 已建独立仓；phoenix 整条已推（10-07 推送窗口；pmOS 官方在 GitLab，GitHub 无镜像 fork 可用）
+
+# ---- Release（Phase-2；setup.sh --fetch-release 按此拉现役件/锚三件）----
+PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r66"
 
 # ---- 包身份 ----
 PKGVER="7.3.0_rc3"

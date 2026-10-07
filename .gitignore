@@ -2,3 +2,8 @@
 artifacts/esp-recovery-v*.img
 # 退役镜像留本地盘归档，不入 git
 artifacts/mu-r62-9f1e8f8d.img
+
+# rootfs Release 大件与 Release SUMS 属上传面产物，不入 git（build-rootfs.sh 产出）
+artifacts/meizu-meizu20-*.img.gz
+artifacts/meizu-meizu20-*.img
+artifacts/SHA256SUMS
