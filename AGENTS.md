@@ -99,6 +99,7 @@ sha512 重算，source= 保持本地文件名）②**Release tag `r66`**（用�
 | 想干什么 | 看哪 |
 |---|---|
 | 第一次上手 / 刷机 | README.md → docs/FLASHING.md |
+| 启动链原理 / 镜像组成详解 | docs/DESIGN.md |
 | 出一车产物 | docs/PIPELINE.md + script/ |
 | 查现在该刷哪个版本 | MANIFEST.md（config.sh 为准） |
 | 硬定律 / 战役叙事 / 队列 | 私有工作区仓（未公开）的 AGENTS.md + experiment-log |

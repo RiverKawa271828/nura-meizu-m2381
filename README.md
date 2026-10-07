@@ -15,6 +15,8 @@ XBL → ABL → boot_b: Mu-UEFI (m2381Pkg) ──送核──→ 主线内核 (E
 - **apk（模块腿）**：内核包 = vmlinuz + /usr/lib/modules。**刷 ESP ≠ 换模块，两腿必须同轮走**。
 - **userdata（rootfs）**：pmOS 根文件系统，日常不动。
 
+为什么长这样、每件镜像内部是什么 → **[docs/DESIGN.md](docs/DESIGN.md)**（启动链原理与镜像解剖）。
+
 ## 硬件状态（2026-10-07 @ r66；本表只保现态，进度叙事在私有工作区 experiment-log）
 
 **✅ 可工作**
@@ -56,7 +58,7 @@ script/flash-batch.sh --i-am-present   # 一车刷（需人在设备旁）
 > 这是唯一验证过的基线；其他 Flyme 版本未验证，上一版 OTA 实测起不来（FLASHING §1）。
 
 刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**。
-构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
+构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；启动原理与镜像解剖 → [docs/DESIGN.md](docs/DESIGN.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
 
 ## 三条红线（先读再动手）
 

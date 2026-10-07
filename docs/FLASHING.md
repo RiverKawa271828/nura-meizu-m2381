@@ -15,6 +15,8 @@
 | `device/firmware-*.apk` | 用户态胶水 + 固件 blob | 机上 `apk add` | 改了包内容 |
 | `meizu-meizu20.img` | pmOS rootfs（含同轮内核+设备包，刷完即完整系统） | **userdata** | 重装系统；Release 直刷随包提供（gz） |
 
+> 每件产物内部组成与构建方式详解 → [DESIGN.md](DESIGN.md)；构建命令 → [PIPELINE.md](PIPELINE.md)。
+
 启动链：`XBL → ABL → boot_b(Mu) → 内核 → rootfs`；recovery_a 是 Mu 的备援引导（MsBootPolicy 标准路径）。
 
 **两腿铁律**：换内核 = ESP 腿 + apk 模块腿，同轮完成。只刷 ESP 不装 apk = 内核新模块旧；
