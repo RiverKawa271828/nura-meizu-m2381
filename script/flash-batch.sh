@@ -26,8 +26,18 @@ done
 [ -e "$ESPIMG" ]  || nura_die "recovery_a 镜像不存在: $ESPIMG"
 fastboot devices | grep -q . || nura_die "fastboot 无设备（软进 = 机上 systemctl reboot --reboot-argument=bootloader；硬进 = 电源+音量减，18d1:d00d）"
 
+# ESP 仓内为 gz（100MiB 上限规避）；刷写/对 sha 都用解压后的裸镜像
+if [ "${ESPIMG##*.}" = "gz" ]; then
+	ESPDIR=$(mktemp -d)
+	trap 'rm -rf "$ESPDIR"' EXIT
+	gunzip -c "$ESPIMG" > "$ESPDIR/esp.img"
+	FLASH_ESP="$ESPDIR/esp.img"
+else
+	FLASH_ESP="$ESPIMG"
+fi
+
 BOOT_SHA=$(sha256sum "$BOOTIMG" | cut -d' ' -f1)
-ESP_SHA=$(sha256sum "$ESPIMG" | cut -d' ' -f1)
+ESP_SHA=$(sha256sum "$FLASH_ESP" | cut -d' ' -f1)
 echo "======== 刷写计划 ========"
 echo "  boot_b     ← $BOOTIMG  (${BOOT_SHA:0:8})"
 echo "  recovery_a ← $ESPIMG   (${ESP_SHA:0:8})"
@@ -39,9 +49,10 @@ read -r -p "继续？(yes/no) " ANS
 echo "[1/2] flash boot_b"
 fastboot flash boot_b "$BOOTIMG"
 echo "[2/2] flash recovery_a"
-fastboot flash recovery_a "$ESPIMG"
+fastboot flash recovery_a "$FLASH_ESP"
 
-PKGREL=$(grep -m1 '^pkgrel=' "$PIN_PMAPORTS/device/downstream/$PKG_LINUX/APKBUILD" | cut -d= -f2)
+PKGREL=$(grep -m1 '^pkgrel=' "$PIN_PMAPORTS/device/downstream/$PKG_LINUX/APKBUILD" 2>/dev/null | cut -d= -f2 || true)
+PKGREL="${PKGREL:-?}"
 cat <<EOF
 
 [✓] 刷写完成。接下来（详见 docs/FLASHING.md §3）：

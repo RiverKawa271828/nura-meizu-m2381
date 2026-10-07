@@ -10,7 +10,7 @@
 | 产物 | 是什么 | 刷到哪 | 什么时候需要动 |
 |---|---|---|---|
 | `mu-rXX-YYYYYYYY.img` | Mu-UEFI 固件镜像（内含设备树 FdtBlob） | **boot_b** | 设备树/Mu 代码变了 |
-| `esp-recovery-vNN.img` | 100MiB FAT32 ESP，`BOOTAA64.EFI` = 内核 | **recovery_a** | 每次换内核 |
+| `esp-recovery-vNN.img.gz` | 100MiB FAT32 ESP，`BOOTAA64.EFI` = 内核（仓内 gz 化，刷写自动解压） | **recovery_a** | 每次换内核 |
 | `linux-meizu-meizu20-*.apk` | 内核 vmlinuz + 全部模块 | 机上 `apk add` | 每次换内核（与 ESP 同轮！） |
 | `device/firmware-*.apk` | 用户态胶水 + 固件 blob | 机上 `apk add` | 改了包内容 |
 | `meizu-meizu20.img` | pmOS rootfs | **userdata** | 重装系统（日常不动） |
@@ -30,10 +30,12 @@
 - 动手前先把设备 OTA 到 12.6 并确认 b 槽活动（`fastboot getvar current-slot` → `b`）；a 槽激活态/旧版机行为未知，勿当小白鼠。
 
 ```bash
-script/setup.sh          # 钉子/工具链/回滚锚全绿才继续
+script/setup.sh          # 钉子/工具链全绿才继续；回滚锚缺失 = ⚠ 警告（救砖前必须补齐，§6）
 fastboot devices         # 空输出 = 设备还没进 fastboot（看 §2）
 ```
 
+- 他机复刻：`export NURA_WORK=/<你的工作根>` 后跑 `script/setup.sh --clone`
+  （四仓 + 官方 pmbootstrap 自动摆位；回滚锚从 Release 下载放到 `config.sh` 指的路径）。
 - 电量 >20%（刷一半没电 = 直接进 §6 救砖）。
 - 数据线插宿主 USB 口（NCM 通道在系统侧，fastboot 在 bootloader 侧，都走这根线）。
 - 确认回滚锚在位（`config.sh` 三个 ANCHOR_*，`setup.sh` 会查）。
@@ -93,9 +95,14 @@ script/readback.sh <boot_b_sha> <recovery_a_sha>
 
 ### 3.5 首轮特殊补装（仅重刷 userdata 后）
 
-全量重刷 rootfs 会洗掉机上手工补装件，按 pmos_linux 指纹表补：
-蜂窝四件套 apk + rmtfs drop-in + uim-selection 补丁（pd-mapper 内建无需装）、
-discover-backend-apk（device r36+ 已烤进 depends 可略）。
+全量重刷 rootfs 会洗掉机上手工补装件。r52 起设备包已自带 NFC/蜂窝用户态的
+摘除 mask（装包即到位）；若要**启用**蜂窝再补：
+
+```bash
+doas apk add rmtfs qmi-utils uim-selection soc-qcom-modem-systemd  # 蜂窝四件套（Alpine 仓）
+# 另需：rmtfs StartLimitIntervalSec=0 drop-in + uim-selection deactivate 容错行
+#       （补丁内容一行级，明细在私有工作区指纹表，未公开）
+```
 
 ### 3.6 读回对不上？
 
@@ -129,9 +136,10 @@ script/rollback.sh --i-am-present   # 30 秒：boot_b←t-b2 + recovery_a←v4d 
 阶梯（从轻到重）：
 1. 软进 fastboot 重刷出事的那条腿；
 2. `rollback.sh` 回双锚；
-3. 循环落 fastboot → `fastboot flash misc misc-zero.img`；
+3. 循环落 fastboot → `fastboot flash misc misc-zero.img`（misc-zero.img 自制：
+   `fastboot getvar partition-size:misc` 拿大小 → `truncate -s <size> misc-zero.img` 全零即可）；
 4. 黑屏无 USB → 硬进（电源+音量减）；
-5. 9008/EDL = 最后通道（线刷配方在 meizu20 仓，**9008 进出必须叫用户**）。
+5. 9008/EDL = 最后通道（线刷配方在私有工作区仓，**9008 进出必须叫用户**）。
 
 > 灭屏纪律：无人值守任务才灭屏（AMOLED 烧屏保护）；刷机是有人在场的活，屏幕亮着正常。
 

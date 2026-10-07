@@ -18,14 +18,16 @@ PIN_MU_DIR="${NURA_MU_DIR:-$NURA_WORK/meizu20/mu-uefi/Mu-Silicium-new}"   # Mu �
 PIN_MU_BRANCH="meizu20-mars-port"
 PIN_PMAPORTS="${NURA_PMAPORTS_DIR:-$NURA_WORK/pmos_linux/pmos/pmaports}"
 PIN_PMAPORTS_BRANCH="phoenix"
-PIN_PMB_WRAPPER="${NURA_PMB_WRAPPER:-$NURA_WORK/pmos_linux/pmos/pmbootstrap-meizu.sh}"
-PIN_TOOLS="${NURA_TOOLS_DIR:-$NURA_WORK/meizu20/meizu20-m1/tools}"        # make-esp-recovery.sh / devsh.py
+PIN_PMB_WRAPPER="${NURA_PMB_WRAPPER:-$NURA_ROOT/script/pmbootstrap-meizu.sh}"  # 已收编本仓
+PMB_CHECKOUT="${NURA_PMB_CHECKOUT:-$NURA_WORK/pmos_linux/pmos/pmbootstrap}"    # 官方 pmbootstrap（setup.sh --clone 补齐）
+PMB_WORK="${NURA_PMB_WORK:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap}"           # work dir（本机与 K30 wrapper 共享，须串行）
+PIN_TOOLS="${NURA_TOOLS_DIR:-$NURA_ROOT/tools}"                                # make-esp-recovery.sh / devsh 三件（已收编本仓）
 
 # ---- 公共仓 URL（Phase-2；setup.sh --clone 按此摆位，空 = 不启用）----
-PIN_LINUX_GIT=""       # fork torvalds/linux → 推分支 meizu20-t4b（基点 58785836 = 主线 7.3 merge window，只传 78 个增量 commit）
-PIN_MU_GIT=""          # fork Project-Silicium/Mu-Silicium → 推分支 meizu20-mars-port（= 1 silime 中间件 + 23 我方 commit）
-PIN_MU_BINARIES_GIT="" # fork Project-Silicium/Device-Binaries → 推 Binaries 钉住的 036ba9f7（"mars: Initial support"，不在上游 main）
-PIN_PMAPORTS_GIT=""    # 新建独立仓整条推 phoenix（.git 仅 69MB）；或 fork GitHub postmarketOS 镜像再推分支
+PIN_LINUX_GIT="https://github.com/RiverKawa271828/linux-mobile-ports"        # fork torvalds/linux → 推分支 meizu20-t4b（基点 58785836 = 主线 7.3 merge window，只传 79 个增量 commit）
+PIN_MU_GIT="https://github.com/RiverKawa271828/Mu-Silicium"                  # fork Project-Silicium/Mu-Silicium → 推分支 meizu20-mars-port
+PIN_MU_BINARIES_GIT="https://github.com/RiverKawa271828/Device-Binaries"     # ⚠待建仓：fork Project-Silicium/Device-Binaries → 推 Binaries 钉住的 036ba9f7（不在上游 main）
+PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # ⚠待建仓：新建独立仓整条推 phoenix（.git 仅 69MB；pmOS 官方在 GitLab，GitHub 无镜像 fork 可用）
 
 # ---- 包身份 ----
 PKGVER="7.3.0_rc3"
@@ -36,10 +38,10 @@ APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/a
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="66"      # 已构建 apk 的 pkgrel（r66 = fsa4480 摘除+PSI=y 载体，10-07）
-REL_DEVICE_PKGREL="47"     # r47 = sndcard-bind guard autoprobe 修复，10-06
+REL_DEVICE_PKGREL="52"     # r52 = NFC 摘除 + 蜂窝用户态摘除（设备日（七十三），10-07）
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r66-9033a734.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v47.img"
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v47.img.gz"  # 仓内 gz 化（100MiB 裸镜像不过 GitHub 上限）；刷写/verify 自动解压
 REL_KERNEL_VER="#67"       # 下次上机 uname 期望（r66 内核 + #N=pkgrel+1 定律）
 
 # ---- 回滚锚（刷坏救命的三个文件；路径变动必须同步 FLASHING.md）----

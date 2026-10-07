@@ -21,7 +21,7 @@ fi
 echo "[i] pmbootstrap install（plasma-mobile / 密码 1234；~10-20 分钟）"
 "$PIN_PMB_WRAPPER" install --password 1234
 
-OUT="~/work/pmos_linux/pmos/.pmbootstrap/chroot_native/home/pmos/rootfs/meizu-meizu20.img"
+OUT="$PMB_WORK/chroot_native/home/pmos/rootfs/meizu-meizu20.img"
 [ -e "$OUT" ] || nura_die "找不到 rootfs 产物: $OUT"
 echo "[✓] 产物: $OUT"
 echo "    刷写: fastboot flash userdata $OUT（⚠ 全量重刷 = 机上手工补装件清零，"

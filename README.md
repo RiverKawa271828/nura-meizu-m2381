@@ -22,7 +22,7 @@ XBL → ABL → boot_b: Mu-UEFI (m2381Pkg) ──送核──→ 主线内核 (E
 ◐ 蜂窝数据/语音（S3 卡 RF init）、BT 音频小声、录音。
 ✗ 相机、指纹、花屏真睡后 wake（bloff 工程解兜底）、深睡。
 
-全表 → pmos_linux 仓 `docs/meizu20/status-inventory.md`；战役叙事 → `docs/meizu20/experiment-log.md`。
+全表与战役叙事在私有工作区仓（未公开）：`docs/meizu20/status-inventory.md` / `docs/meizu20/experiment-log.md`。
 
 ## 快速开始（本机现役布局）
 
@@ -35,6 +35,9 @@ script/build-kernel.sh --bump   # 内核 rN+1（tarball→checksum→build）
 script/verify.sh           # 交付链对拍（dtb↔FdtBlob 同源等）
 script/flash-batch.sh --i-am-present   # 一车刷（需人在设备旁）
 ```
+
+他机复刻（拿到公共仓后从零摆布局）：`export NURA_WORK=/<你的工作根>` → `script/setup.sh --clone`
+（按 `config.sh` 的 PIN_*_GIT 拉四仓 + 官方 pmbootstrap）。
 
 刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**。
 构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
@@ -54,5 +57,5 @@ Phase-2（公开发布）时在 `config.sh` 填四个公共 URL，`setup.sh` 即
 ## 治理
 
 - 版本纪律：`#N = pkgrel + 1`（上机 `uname -v` 直接对）；包状态随改随提交；构建前 checksum。
-- 硬定律与操作纪律的单一事实源在 pmos_linux 仓 `AGENTS.md`，本仓不复制、只引用。
+- 硬定律与操作纪律的单一事实源在私有工作区仓的 AGENTS.md（未公开），本仓不复制、只引用。
 - 项目名 `nura-meizu-m2381`（全小写 kebab；机器引用一律此名，人读标题随意）。

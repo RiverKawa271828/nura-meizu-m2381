@@ -56,10 +56,14 @@ if [ -e "$APK" ]; then
 fi
 
 echo "[4] ESP ↔ apk vmlinuz 同源（如 ESP 存在）"
-if [ -e "$REL_ESP_IMG" ] && [ -e "$APK" ]; then
+ESP="$REL_ESP_IMG"
+case "$ESP" in
+	*.gz) gunzip -c "$ESP" > "$WORK/esp.img" && ESP="$WORK/esp.img" ;;
+esac
+if [ -e "$ESP" ] && [ -e "$APK" ]; then
 	tar -xzf "$APK" -C "$WORK" boot/vmlinuz-efi 2>/dev/null || true
 	if [ -e "$WORK/boot/vmlinuz-efi" ]; then
-		mcopy -i "$REL_ESP_IMG" ::/EFI/BOOT/BOOTAA64.EFI "$WORK/BOOTAA64.EFI" 2>/dev/null
+		mcopy -i "$ESP" ::/EFI/BOOT/BOOTAA64.EFI "$WORK/BOOTAA64.EFI" 2>/dev/null
 		K=$(sha256sum "$WORK/boot/vmlinuz-efi" | cut -d' ' -f1)
 		E=$(sha256sum "$WORK/BOOTAA64.EFI" | cut -d' ' -f1)
 		[ "$K" = "$E" ] && echo "  ✓ ESP 内核 = apk vmlinuz-efi (${K:0:8})" || { echo "  ✗ ESP 与 apk 不同源（ESP 旧了？重跑 build-esp.sh）"; FAIL=1; }

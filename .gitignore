@@ -1,0 +1,4 @@
+# ESP 裸镜像恰 100MiB = GitHub 单文件上限临界，不入 git；仓库只收 .img.gz
+artifacts/esp-recovery-v*.img
+# 退役镜像留本地盘归档，不入 git
+artifacts/mu-r62-9f1e8f8d.img

@@ -19,23 +19,29 @@
 config.sh        唯一定位点：三树路径 + 现役版本(REL_*) + 回滚锚(ANCHOR_*) + 设备通道
 script/          build-kernel / build-device / build-esp / build-mu / build-rootfs
                  verify（交付链对拍）/ flash-batch / readback / rollback / setup（体检）
+                 + pmbootstrap-meizu.sh（wrapper，官方工具组合器）+ 配套 cfg
+tools/           make-esp-recovery.sh + devsh/devpush/devpull（设备通道三件，收编自私有工作区）
 docs/FLASHING.md 刷机教程（每步带验证点）——动手前必读
-docs/PIPELINE.md 构建管线 + Phase-2 发布清单（未启用）
+docs/PIPELINE.md 构建管线 + Phase-2 发布清单
 MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 boot 看到别慌的三件）
-artifacts/       本仓自产产物（esp-recovery-v43.img 起）
+artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态一句话（2026-10-06 更；新会话从这里接）
+## 现态一句话（2026-10-07 更；新会话从这里接）
 
-- **首航完成**：`build-kernel.sh` 实弹跑通（ccache 2.5min）→ **r61 apk**（吃 yaml
-  修复 `82ecc62184c0`）+ **ESP v43**（c0f7e6cb，本仓 artifacts/）；verify 全绿；
-  **r61 dtb ↔ Mu FdtBlob 同源（2d01bf32）= Mu 免重编**。期望 uname **#62**。
-- 现役四件 = r61 apk + device r37 apk + mu-r60（boot_b，仍有效）+ esp-v43。
-- **T3 一车刷待两条件**：T2 统一命名拍板（全 m2381 系 or 全 MEIZU20 系；若改
-  model 行 → 同脚本增量出 r62）+ 用户在场。之后开修音频⓪（零刷机可先行）。
-- Phase-2 公共发布：**未启用**（用户拍板「先做完项目再一起上传」）；发布面现状 =
-  外人不可构建（四仓零公共 remote、tarball 被 pmaports .gitignore），清单在
-  PIPELINE.md §Phase-2。
+- **Phase-2 清理轮收官（上传窗口预备）**：wrapper（pmbootstrap-meizu.sh + cfg）与
+  tools（make-esp-recovery + devsh 三件）**已收编本仓**；`PIN_*_GIT` 已填
+  （linux-mobile-ports / Mu-Silicium 两 fork 在位；pmaports / Device-Binaries **待建仓**）；
+  `setup.sh --clone` = 四仓 + 官方 pmbootstrap（gitlab）自动摆位，回滚锚缺失降为警告。
+  **ESP 自 v47 起仓内 gz 化**（裸镜像恰 100MiB 压 GitHub 单文件上限；v43–v45 裸镜像
+  已出史），flash-batch/verify 自动解压。config/MANIFEST 现役对齐
+  **r66 / device r52 / ESP v47 / mu-r66 / 期望 #67**。
+- **▶ 本轮 = 上传**（顺序）：①linux-mobile-ports 推 `meizu20-t4b` ②Mu-Silicium 推
+  `meizu20-mars-port` ③建 Device-Binaries fork 推钉住的 `036ba9f7` ④建 pmaports 仓推
+  `phoenix` ⑤本仓推 master。⚠本机 SSH key 未被 GitHub 接受（publickey denied）=
+  推送阻塞点；⚠nura 本地历史已经 filter-branch 洗过 100MiB blob（旧 hash 全变，勿引用旧 hash）。
+- Phase-2 剩余（推送后）：APKBUILD 固件 tarball 挂 Release（licensing 待拍板）+
+  回滚锚三件传 Release + **干净机首航**（发布面成立判据）。
 
 ## 工作流卡
 
@@ -75,12 +81,15 @@ artifacts/       本仓自产产物（esp-recovery-v43.img 起）
    （`setup.sh` 已带该检查）。
 7. 仓库命名纪律：全小写 kebab `nura-meizu-m2381`；机器引用一律此名。
 
-## Phase-2 发布面（未启用，触发 = 用户拍板）
+## Phase-2 发布面（已启用，2026-10-07 清理轮落地大半）
 
-要点：四仓推 GitHub（fork 内核/pmaports 分支/Mu 分支/本仓）→ APKBUILD `source=`
-切 Release URL（tarball 不塞 git）→ 固件 tarball 挂 Release（licensing 照 silime
-先例，需用户确认）→ 成品镜像挂 Release → `setup.sh` 补 clone 逻辑 → **干净机
-首航验证一次才算发布面成立**。细节 = PIPELINE.md §Phase-2。
+已完成：PIN_*_GIT 填充 → setup.sh --clone（四仓 + pmbootstrap 自动摆位）→
+wrapper/tools 收编 → ESP gz 化 → 现役表对齐。
+待办（推送后）：①内核 tarball **无需 Release**（build-kernel.sh 每轮从 fork 现打 +
+sha512 重算，source= 保持本地文件名）②固件 tarball（81MB，meizu20_linux 厂商资产）
+挂 Release（licensing 照 silime 先例，需用户确认）③回滚锚三件传 Release +
+config.sh/FLASHING 的 ANCHOR 路径给下载指引 ④**干净机首航验证一次才算发布面成立**。
+细节 = PIPELINE.md §Phase-2。
 
 ## 文档地图
 

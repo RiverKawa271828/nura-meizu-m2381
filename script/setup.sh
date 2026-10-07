@@ -29,8 +29,15 @@ if [ "${1:-}" = "--clone" ]; then
 		git -C "$PIN_MU_DIR" submodule update --init --recursive
 		echo "  ✓ Mu submodules（Binaries → $PIN_MU_BINARIES_GIT）"
 	fi
-	# wrapper/tools/回滚锚不在 clone 面：wrapper 待收编本仓 script/；
-	# tools 与锚为 Phase-2 Release 资产（见 AGENTS.md / PIPELINE.md）。
+	# pmbootstrap = 官方工具（gitlab.postmarketos.org），拉到钉子位供 wrapper 优先使用；
+	# 已有树内 checkout 或 PATH 安装（pipx/pip）则跳过
+	if [ ! -f "$PMB_CHECKOUT/pmbootstrap.py" ] && ! command -v pmbootstrap >/dev/null 2>&1; then
+		git clone -q --depth 1 https://gitlab.postmarketos.org/postmarketOS/pmbootstrap.git "$PMB_CHECKOUT" \
+			|| nura_die "pmbootstrap clone 失败：gitlab.postmarketos.org 不可达？"
+		echo "  ✓ pmbootstrap → $PMB_CHECKOUT"
+	fi
+	# wrapper/tools/回滚锚不在 clone 面：wrapper 与 tools 已收编本仓（script/ tools/）；
+	# 回滚锚为 Release 资产——缺失只警告，跑 rollback.sh 前必须补齐（FLASHING §6）。
 	echo
 fi
 
@@ -49,6 +56,7 @@ try "tools（ESP/devsh）"                   "[ -e '$PIN_TOOLS/make-esp-recovery
 
 echo "[工具链]"
 try "pmbootstrap（wrapper 可执行）"        "bash -n '$PIN_PMB_WRAPPER'"
+try "pmbootstrap 本体（树内 checkout 或 PATH）" "[ -f '$PMB_CHECKOUT/pmbootstrap.py' ] || command -v pmbootstrap"
 try "clang（内核 LLVM=1 / Mu）"            "command -v clang"
 try "mformat/mcopy（ESP 制作）"            "command -v mformat"
 try "fastboot（刷写）"                     "command -v fastboot"
@@ -56,7 +64,8 @@ try "python3（bump/对拍）"                 "command -v python3"
 
 echo "[回滚锚]"
 for f in "$ANCHOR_TB2" "$ANCHOR_ESP_V4D" "$ANCHOR_MU_R57"; do
-	[ -e "$f" ] && echo "  ✓ $(basename "$f")" || { echo "  ✗ $(basename "$f")"; bad=1; }
+	[ -e "$f" ] && echo "  ✓ $(basename "$f")" \
+		|| echo "  ⚠ $(basename "$f") 缺失——Release 资产，跑 rollback.sh 前必须补齐（FLASHING §6）"
 done
 
 echo "[宿主环境]"

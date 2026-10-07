@@ -13,7 +13,7 @@ linux-mobile-ports            build-kernel.sh ──→ linux apk（模块腿）
 Mu-Silicium-new               build-mu.sh ─────→ mu-rXX-YYYY.img ──→ boot_b
  (meizu20-mars-port)              │ build_uefi.py -d m2381
 pmos/pmaports 三包            build-device.sh ──→ device/firmware apk ─→ 机上 apk add
-pmbootstrap（meizu wrapper）  build-esp.sh ────→ esp-recovery-vNN.img ─→ recovery_a
+mtools + tools/make-esp…      build-esp.sh ────→ esp-recovery-vNN.img.gz ─→ recovery_a
                               build-rootfs.sh ──→ meizu-meizu20.img ───→ userdata
 
 verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留 / zram.ko 在列 / ESP↔apk 同源
@@ -49,12 +49,22 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
 - 每个发布轮：bump → checksum → build → verify → **MANIFEST.md 更新现役行**；
 - 产物命名：`mu-r<PKGREL>-<sha8前8位>.img`、`esp-recovery-v<N>.img`。
 
-## Phase-2（公开发布，用户拍板后）
+## Phase-2（公开发布，2026-10-07 清理轮已落地大半）
 
-1. fork 内核树 → GitHub（`PIN_LINUX_GIT`）；pmaports phoenix 分支 → GitHub fork（`PIN_PMAPORTS_GIT`）；
-2. Mu meizu20-mars-port 分支 → GitHub fork（`PIN_MU_GIT`），Binaries 子模块改指公共仓；
-3. 内核 tarball 不塞 git（.gitignore 是对的）→ APKBUILD `source=` 切 GitHub Release URL；
-4. 固件 tarball 挂 Release（licensing 照 silime 先例，待拍板）；sha512 已钉 APKBUILD；
-5. 成品镜像（mu/esp）挂本仓 Release——外人可直刷不构建；
-6. `setup.sh` 补 clone 逻辑（按 `PIN_*_GIT` 摆规范布局）；
-7. **干净机首航**：找一台第二机器/容器从零跑通 setup→build→flash，发布面才算成立。
+1. ✅ `PIN_LINUX_GIT` = RiverKawa271828/linux-mobile-ports（fork torvalds/linux；
+   推分支 `meizu20-t4b`——基点 58785836 = 主线 7.3 merge window，fork 自带全史，只传增量）；
+2. ✅ `PIN_MU_GIT` = RiverKawa271828/Mu-Silicium（fork Project-Silicium；推
+   `meizu20-mars-port`）；`PIN_MU_BINARIES_GIT` = RiverKawa271828/Device-Binaries
+   （**待建仓**：fork 后推 Binaries 钉住的 `036ba9f7`，不在上游 main）；
+3. ✅ `PIN_PMAPORTS_GIT` = RiverKawa271828/pmaports（**待建仓**；pmOS 官方在
+   GitLab、GitHub 无镜像可 fork，独立仓整条推 `phoenix`，.git 仅 69MB）；
+4. 内核 tarball **无需 Release**：build-kernel.sh 每轮从 fork 现打（git archive）+
+   checksum 重算，APKBUILD `source=` 保持本地文件名——外人 clone 后自给自足；
+5. ⬜ 固件 tarball（81MB，meizu20_linux 厂商资产，永不入 git）挂本仓 Release
+   （licensing 照 silime 先例，待拍板）；sha512 已钉 APKBUILD；
+6. ✅ 成品镜像：现役对在仓（mu 裸 1.1MB + esp .img.gz ~14MB）；ESP 裸镜像
+   （恰 100MiB）不入 git（v43–v45 已 filter-branch 出史）；
+7. ✅ `setup.sh --clone`：四仓 + 官方 pmbootstrap（gitlab.postmarketos.org）自动摆位；
+   wrapper（script/pmbootstrap-meizu.sh + cfg）与 tools（tools/）已收编本仓；
+   回滚锚三件 = Release 资产（⬜ 待传，缺失时 setup 只警告）；
+8. ⬜ **干净机首航**：找一台第二机器/容器从零跑通 setup→build→flash，发布面才算成立。

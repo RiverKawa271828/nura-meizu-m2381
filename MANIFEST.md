@@ -1,29 +1,35 @@
 # MANIFEST — 现役产物 / 回滚锚 / 版本钉
 
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
+> 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 现役产物（2026-10-06 @ r61 构建 + 项目首航后）
+## 现役产物（2026-10-07 @ 设备日（七十三）后）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_rc3-r**61**（吃 yaml 修复 `82ecc62184c0`；经本项目 build-kernel.sh 首航构建 10-06） | `.pmbootstrap/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc3-r61.apk` | — | 机上 apk add |
-| 设备包 apk | 1-r**37** | 同目录 `device-meizu-meizu20-1-r37.apk` | — | 机上 apk add |
+| 内核 apk | 7.3.0_rc3-r**66**（fsa4480 摘除 DTB + CONFIG_PSI=y；fork `f56a9783d245`） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc3-r66.apk` | — | 机上 apk add |
+| 设备包 apk | 1-r**52**（NFC 摘除 + 蜂窝用户态摘除随包 mask） | 同目录 `device-meizu-meizu20-1-r52.apk` | — | 机上 apk add |
 | 固件包 apk | 1-r**3** | 同目录 `firmware-meizu-meizu20-1-r3.apk` | — | 机上 apk add |
-| Mu 镜像 | r60 | `../meizu20/meizu20-m1/artifacts-uefi/mars-t-series/mu-r60-4b1b4315.img` | 4b1b4315 | boot_b |
-| ESP | v43 | `artifacts/esp-recovery-v43.img`（本仓；v42 在 ../meizu20/meizu20-m1/m1-work/arch-a/ 退役） | c0f7e6cb | recovery_a |
-| 源码钉 | fork `82ecc62184c0` @meizu20-t4b ｜ Mu `98768952` @meizu20-mars-port ｜ pmaports `711e3c2` @phoenix | — | — | — |
+| Mu 镜像 | r66 | `artifacts/mu-r66-9033a734.img` | 9033a734 | boot_b |
+| ESP | v47（仓内 `.img.gz`；刷写/verify 自动解压） | `artifacts/esp-recovery-v47.img.gz` | a0455923（裸镜像） | recovery_a |
+| 源码钉 | fork `f56a9783d245` @meizu20-t4b ｜ Mu `d53165b3` @meizu20-mars-port ｜ pmaports `607eeed` @phoenix | — | — | — |
 
-期望 uname：`7.3.0_rc3-r61` → **#62**。
+期望 uname：`7.3.0_rc3-r66` → **#67**。10-07 上机已实证（#N=pkgrel+1 第 13 证）；
+当轮战果（typec 首亮 / pm8008 ×14 撤除 / Docker e2e 全绿 / 空转清剿第一轮 / NFC 摘除）
+= 私有工作区 experiment-log（七十三）。
 
 ## 回滚锚（救命的三个文件，勿删勿挪；同 config.sh）
 
 | 锚 | 文件 | sha8 | 用途 |
 |---|---|---|---|
-| t-b2 | `artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img` | d4928661 | boot_b 兜底（UEFI 基线） |
-| esp-v4d | `m1-work/arch-a/esp-recovery-v4d.img` | 3b106f07 | recovery_a 兜底 |
-| mu-r57 | `artifacts-uefi/mars-t-series/mu-r57-4640ebb5.img` | 4640ebb5 | boot_b 最近已知好（r57 时代） |
+| t-b2 | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img` | d4928661 | boot_b 兜底（UEFI 基线） |
+| esp-v4d | `<NURA_WORK>/meizu20/meizu20-m1/m1-work/arch-a/esp-recovery-v4d.img` | 3b106f07 | recovery_a 兜底 |
+| mu-r57 | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/mu-r57-4640ebb5.img` | 4640ebb5 | boot_b 最近已知好（r57 时代） |
 
 30 秒回滚 = `script/rollback.sh --i-am-present`（前两个锚）。
+⚠ 锚三件 = Release 资产（未上传前仅存在于原工作区；他机 `setup.sh` 会对缺失报警告，
+跑 rollback 前必须先补齐）。当前时代的次级回退对（手动刷，非 rollback.sh）：
+`artifacts/mu-r64-686a4c0f.img`（686a4c0f）+ `artifacts/esp-recovery-v46.img.gz`（裸 0d4796ed）+ device r51。
 
 ## 已知非回归失败（首 boot 看到**不用慌**）
 
@@ -31,23 +37,15 @@
 |---|---|---|
 | rmtfs | activating | 封印态存活模式（drop-in 生效中） |
 | uim-selection | start-limit-hit | 在役同款（deactivate 容错补丁在机） |
-| postmarketos-zram-swap | failed（r<60 内核） | 无 CONFIG_ZRAM=m；r60 起修复 |
+| postmarketos-zram-swap | failed（仅 r<60 内核） | 无 CONFIG_ZRAM=m；r60 起修复 |
 
 ## 通道速查
 
 - root devshell：`tools/devsh.py`（NCM + nc :23）｜ ssh：`user@172.16.42.1` / 1234 / doas 免密
 - 软进 fastboot：`systemctl reboot --reboot-argument=bootloader`（18d1:d00d）
-- 宿主长构建：systemd-run（脚本已内置）；与 K30 wrapper 串行（共享 work dir）
+- 宿主长构建：systemd-run（脚本已内置）；与 K30 wrapper 串行（共享 work dir，仅本机布局）
 
-## 2026-10-06 录音轮（（六十六））
+## 历史轮次
 
-- 三件：linux r62 apk + mu-r62-9f1e8f8d.img（FdtBlob 465c4dc0 同源）+ esp-recovery-v44.img（d3ad95fa）
-- 一车刷毕：dd 读回双全等；uname #63；device r39 模块腿免刷上机（capture 固化）
-- 产物核验 = verify.sh / readback.sh 配方照旧
-
-## 2026-10-06 录音收尾 M0（r63 + v45，DTS 零改动 Mu 免重编）
-
-- 两件：linux r63 apk（fork 1ddcdfde44d8 = va-macro vdd-micb 补线 + side-chat 搭车 config 五项[binder×2+legacy iptables×3]，pmaports b94c4f4）+ esp-recovery-v45.img（fee541eb029d，legacy 链三编版；前两版 c6a906a9/f1cf3aa1 从未上机作废）
-- verify 全绿：dtb 465c4dc0 同源（Mu 免重编实证）+ ESP↔apk vmlinuz 56f6e340 同源 + va-macro ko 含 vdd-micb 串
-- 期望 uname #64（#N=pkgrel+1 第 12 证）✅ 已上机实证；pmaports bd34bcd+b94c4f4；device r40（bind unit drivers_probe 修复）
-- M1 判据：录音时 audio_va_micbias enable≥1/gpio0 hi → mux-scan-r63.sh 逐值对拍
+r61 首航（10-06）→ r63/r64 录音轮 → r65 pm8008 → r66 fsa4480 摘除（10-07）；
+逐轮产物/sha 明细见 git log。ESP 自 v47 起仓内 gz 化（v43–v45 裸镜像已退役出史）。

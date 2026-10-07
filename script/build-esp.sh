@@ -12,7 +12,7 @@ nura_precheck
 
 REL="${1:-}"
 if [ -z "$REL" ]; then
-	CUR=$(basename "$REL_ESP_IMG" | sed -E 's/.*v([0-9]+)\.img/\1/')
+	CUR=$(basename "$REL_ESP_IMG" | sed -E 's/.*v([0-9]+)\.img(\.gz)?/\1/')
 	REL=$((CUR + 1))
 fi
 
@@ -25,11 +25,14 @@ trap 'rm -rf "$WORK"' EXIT
 echo "[1/2] 从 apk 抽 boot/vmlinuz-efi"
 tar -xzf "$APK" -C "$WORK" boot/vmlinuz-efi 2>/dev/null
 
-OUT="$NURA_ROOT/artifacts/esp-recovery-v${REL}.img"
+OUT="$NURA_ROOT/artifacts/esp-recovery-v${REL}.img.gz"
+RAW="$WORK/esp-recovery-v${REL}.img"
 mkdir -p "$NURA_ROOT/artifacts"
-echo "[2/2] 造 ESP v${REL}"
-"$PIN_TOOLS/make-esp-recovery.sh" "$WORK/boot/vmlinuz-efi" "$OUT"
+echo "[2/2] 造 ESP v${REL}（裸镜像 100MiB，gz 入库——GitHub 单文件上限规避）"
+"$PIN_TOOLS/make-esp-recovery.sh" "$WORK/boot/vmlinuz-efi" "$RAW"
+gzip -9 -c "$RAW" > "$OUT"
 
 echo "[✓] 产物: $OUT"
-echo "    sha256: $(sha256sum "$OUT" | cut -c1-8)…（记入 MANIFEST.md）"
+echo "    裸镜像 sha256: $(sha256sum "$RAW" | cut -c1-8)…（readback/MANIFEST 用这个）"
+echo "    gz sha256: $(sha256sum "$OUT" | cut -c1-8)…"
 echo "    ⚠ 两腿铁律：刷这个 ESP 必须同轮装同 pkgrel 的 apk（模块腿）"
