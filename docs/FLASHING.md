@@ -40,7 +40,7 @@
 | 4 | 宿主装 Android platform-tools | 终端 `fastboot --version` 能跑即可 |
 | 5 | 下载 Release 三件 + `SHA256SUMS`：boot（`mu-r*.img`）/ recovery（`esp-recovery-*.img.gz`）/ rootfs（`meizu-meizu20-*.img.gz`） | `sha256sum -c SHA256SUMS` 全 OK 才继续 |
 | 6 | 解压两个 gz | `gunzip esp-recovery-*.img.gz meizu-meizu20-*.img.gz` |
-| 7 | ⚠ **刷 userdata = 清空全部数据**，要保数据先备份 | rootfs 8G 刷写需几分钟，途中别拔线 |
+| 7 | ⚠ **刷 userdata = 清空全部数据**，要保数据先备份 | rootfs gz 1.1G / 裸 ~4.4G，刷写约 2 分钟，途中别拔线 |
 | 8 | （可选，强烈建议）顺带下载锚三件：`t-b2-*.img` / `esp-recovery-v4d.img` / `mu-r57-*.img` | 救砖保险（回滚命令见 A-3） |
 
 ### A-2 三件齐刷
@@ -139,11 +139,11 @@ fastboot reboot
 # 通道：ssh user@172.16.42.1（密码 1234；host key 变了加 -o UserKnownHostsFile=/dev/null）
 scp linux-meizu-meizu20-7.3.0_rc3-rN.apk device-meizu-meizu20-1-rM.apk user@172.16.42.1:/tmp/
 ssh user@172.16.42.1
-doas apk add --allow-untrusted /tmp/linux-*.apk /tmp/device-*.apk
+sudo apk add --allow-untrusted /tmp/linux-*.apk /tmp/device-*.apk   # 提示输密码 = 1234
 ```
 
 > 纪律：**主包+子包同装**（只装主包会挤掉 -systemd/-udev 子包，unit 消失 = D-Bus 激活全灭）；
-> 装完 `doas systemctl daemon-reload`；设备 apk 仓库不可达告警属正常。
+> 装完 `sudo systemctl daemon-reload`；设备 apk 仓库不可达告警属正常。
 
 ### 3.4 dd 读回对 sha（刷写成功的唯一证据）
 
@@ -162,7 +162,7 @@ script/readback.sh <boot_b_sha> <recovery_a_sha>
 摘除 mask（装包即到位）；若要**启用**蜂窝再补：
 
 ```bash
-doas apk add rmtfs qmi-utils uim-selection soc-qcom-modem-systemd  # 蜂窝四件套（Alpine 仓）
+sudo apk add rmtfs qmi-utils uim-selection soc-qcom-modem-systemd  # 蜂窝四件套（Alpine 仓）
 # 另需：rmtfs StartLimitIntervalSec=0 drop-in + uim-selection deactivate 容错行
 #       （补丁内容一行级，明细在私有工作区指纹表，未公开）
 ```
@@ -212,7 +212,7 @@ script/rollback.sh --i-am-present   # 30 秒：boot_b←t-b2 + recovery_a←v4d 
 | 通道 | 用法 |
 |---|---|
 | root devshell | `tools/devsh.py`（NCM + nc :23，root，必须绑接口） |
-| ssh | `sshpass -p 1234 ssh user@172.16.42.1`（doas 免密） |
+| ssh | `sshpass -p 1234 ssh user@172.16.42.1`；root 命令走 `sudo`（密码 1234；**本机无 doas**） |
 | 推/拉文件 | `tools/devpush.py` / `devpull.py`（devsh 嵌 heredoc 会产空文件，别用） |
 | 插墙充时 | RNDIS 断，走 WiFi（IP 会变，路由器后台看） |
 | ping 不通 | 先查宿主 TUN 代理劫持（代理把流量抢走）：`ping -I <接口>` 绑接口绕过 |

@@ -2,6 +2,43 @@
 
 > 一句话：把 Nura（postmarketOS edge + 主线内核）完整跑在魅族 20（m2381 / SM8550 / kalama）上的全流程项目——源码在哪、用哪个工具出哪个镜像、刷到哪个分区、怎么回滚，四件事一张图说完。
 
+## 快速开始
+
+镜像 = **Nura（postmarketOS edge）+ plasma-mobile 桌面**（内置默认），刷完即完整系统：
+内核包 + 设备包已烤进 rootfs；登录用户 `user`，密码 `1234`（root 命令用 `sudo`，同密码）。
+
+**路径 A：下载即刷（推荐，无需构建）**——GitHub Release 下载三件套（boot + recovery + rootfs）
+与 `SHA256SUMS`，解压两个 gz 后四条命令：
+
+```bash
+sha256sum -c SHA256SUMS                 # 全 OK 才继续
+fastboot flash boot_b      mu-r66-9033a734.img    # Mu-UEFI 固件（含设备树）
+fastboot flash recovery_a  esp-recovery-v47.img   # ESP = 内核引导腿
+fastboot flash userdata    meizu-meizu20-r66.img  # rootfs（⚠清空全部数据）
+fastboot set_active b && fastboot reboot
+```
+
+约 1 分钟起 plasma 桌面。刷机前准备八项（BL 解锁 / Flyme 基线 / 回滚锚）与逐条验证、
+回滚救砖 → **[docs/FLASHING.md](docs/FLASHING.md)「快速路径 A：Release 直刷」**。
+
+**路径 B：自己构建**（想改源码 / 出新一轮）：
+
+```bash
+script/setup.sh            # 环境体检（钉子/工具链/回滚锚）
+script/build-kernel.sh --bump   # 内核 rN+1（tarball→checksum→build）
+script/verify.sh           # 交付链对拍（dtb↔FdtBlob 同源等）
+script/flash-batch.sh --i-am-present   # 一车刷（需人在设备旁）
+```
+
+他机复刻（从零摆构建布局）：`export NURA_WORK=/<你的工作根>` → `script/setup.sh --clone`
+（按 `config.sh` 的 PIN_*_GIT 拉四仓 + 官方 pmbootstrap）。
+
+> 两条路径共同前提：**bootloader 已解锁**（本项目不提供解锁 BL 方法，请自行研究）+ 设备为 **Flyme 12.6.0.0A + slot b 活动**——
+> 这是唯一验证过的基线（精确版本/官方下载/MD5 见 FLASHING §1）；其他 Flyme 版本未验证，上一版 OTA 实测起不来，更新版本同样勿盲升。
+
+刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**。
+构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；启动原理与镜像解剖 → [docs/DESIGN.md](docs/DESIGN.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
+
 ## 启动链 30 秒
 
 ```
@@ -34,31 +71,7 @@ Waydroid。
 DP 视频外接（板上未焊 fsa4480，判负终审）｜suspend/深睡（熄屏走 DPMS 替代；真深睡唤醒有花屏史，
 bloff 工程解默认兜底）｜IR/UWB（身份未定）。硬件不存在：3.5mm 耳机孔、SD 卡槽。
 
-> 蜂窝/NFC 默认摘除是省电与稳定性的**拍板形态**（设备包 r52 随包 mask），不是功能缺失。
-
-## 快速开始
-
-**路径 A：下载即刷（推荐，无需构建）**——GitHub Release 下载三件套（boot + recovery + rootfs，
-附 SHA256SUMS），fastboot 三条命令直刷，刷完即完整系统（内核包+设备包已烤进 rootfs）。
-前置准备与逐条命令 → **[docs/FLASHING.md](docs/FLASHING.md)「快速路径 A：Release 直刷」**。
-
-**路径 B：自己构建**（想改源码 / 出新一轮）：
-
-```bash
-script/setup.sh            # 环境体检（钉子/工具链/回滚锚）
-script/build-kernel.sh --bump   # 内核 rN+1（tarball→checksum→build）
-script/verify.sh           # 交付链对拍（dtb↔FdtBlob 同源等）
-script/flash-batch.sh --i-am-present   # 一车刷（需人在设备旁）
-```
-
-他机复刻（从零摆构建布局）：`export NURA_WORK=/<你的工作根>` → `script/setup.sh --clone`
-（按 `config.sh` 的 PIN_*_GIT 拉四仓 + 官方 pmbootstrap）。
-
-> 两条路径共同前提：**bootloader 已解锁**（本项目不提供解锁 BL 方法，请自行研究）+ 设备为 **Flyme 12.6.0.0A + slot b 活动**——
-> 这是唯一验证过的基线（精确版本/官方下载/MD5 见 FLASHING §1）；其他 Flyme 版本未验证，上一版 OTA 实测起不来，更新版本同样勿盲升。
-
-刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**。
-构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；启动原理与镜像解剖 → [docs/DESIGN.md](docs/DESIGN.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
+> 蜂窝/NFC 默认摘除是省电与稳定性的**拍板形态**（设备包随包 mask），不是功能缺失。
 
 ## 三条红线（先读再动手）
 

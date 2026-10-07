@@ -35,17 +35,24 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   `setup.sh --clone` = 四仓 + 官方 pmbootstrap（gitlab）自动摆位，回滚锚缺失降为警告。
   ESP 自 v47 起仓内 gz 化（裸镜像恰 100MiB 压 GitHub 单文件上限），flash-batch/verify
   自动解压。config/MANIFEST 现役对齐 **r66 / device r52 / ESP v47 / mu-r66 / 期望 #67**。
-- **▶ 排程（用户 10-07 拍板）**：各项目 AGENTS 瘦身轮已收官（10-07，含本仓：
-  排程推进 + 隐私复扫零命中）→ **下会话 = 四仓推送**：linux-mobile-ports
-  `meizu20-t4b` → Mu-Silicium `meizu20-mars-port` → Device-Binaries（补推钉住的
-  `036ba9f7`，若 fork 里没有）→ pmaports（新建空仓后推 `phoenix`）→ 本仓 master。
-- 剩余：Release tag `r66`（**四件 = boot + recovery + rootfs 同轮配对**——rootfs 分发件
-  10-07 用户新增，gz 化压 GitHub 2GiB 单件上限 + 锚三件 + 固件 tarball[仅构建者]，
-  清单 = PIPELINE §Phase-2）+ **上传后脚本对齐**（build-rootfs 出 Release 件 gz+sha256 /
-  setup.sh 可选拉锚，PIPELINE §Phase-2 item 9）+ **干净机首航**（发布面成立判据）。
-  直刷文档已就绪（10-07）：FLASHING「快速路径 A」（前置准备八项+三件命令+验收回滚）+
-  README 硬件状态表（✅可工作/◐挂起/✗不可工作 三档）+ DESIGN.md（启动链原理+四件
-  产物解剖，硬定律细节留私有主档不复制）。
+- **✅ 本地仓全面复核 + Release rootfs 首航轮收官（10-07 下午，用户在场）**：
+  复核全绿（三树 tip 对钉 / remote 指向 / doctor+verify 全绿 / Release 七件 sha 逐件对拍）；
+  **Release rootfs 首刷暴雷两连，均已根治**：
+  ① `build-rootfs.sh` 漏 `--single-partition` → 产出 GPT 分区镜像，上机卡 Mu
+  （无 initramfs 内核 `root=/dev/sda22` 直挂 userdata 见 GPT 必败；experiment-log
+  「pmOS 系统首次上机」早有铁律）→ 脚本已固化参数；
+  ② device 包 depends 从未含 hexagonrtc 三件（老 rootfs 当年手工 apk add 掩盖）→
+  纯官方 rootfs 缺二进制缺 fastrpc 用户 = sensorspd Unknown-user 循环 +
+  sensors-barrier 干等 300s = 开机极慢 → **device r53** 补 depends，rootfs 重建
+  （sha8 `e4636bfe`）+ **Release r66 换件**（rootfs + SHA256SUMS --clobber）。
+  **终验全绿**：boot ~40s（barrier 正常放行）/ `#67` / MEIZU20 声卡 /
+  sensorspd+barrier+plasma 全 active / failed 零。
+  文档轮：README 重排（快速开始前置 + plasma-mobile 说明 + 密码 user/1234）+
+  FLASHING `doas`→`sudo` 实况修正（设备无 doas，root=sudo 同密码）+ 8G→~4.4G +
+  PIPELINE Phase-2 状态对齐 + DESIGN rootfs 解剖（裸 ext4 单分区）。
+- **▶ 剩余 = 干净机首航**（发布面成立判据：第二台机器/容器从零 setup→build→flash）；
+  候补小件 = hexagonrtc 包仓 r7/r8 双版本漂移收敛（APKBUILD pkgrel=7 vs 本地包仓
+  r8 并存，低优）｜ 7.3 stable rebase 挂观察（主档排程）。
 
 ## 工作流卡
 

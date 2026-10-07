@@ -8,12 +8,12 @@
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
 | 内核 apk | 7.3.0_rc3-r**66**（fsa4480 摘除 DTB + CONFIG_PSI=y；fork `f42761da35ab`） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc3-r66.apk` | — | 机上 apk add |
-| 设备包 apk | 1-r**52**（NFC 摘除 + 蜂窝用户态摘除随包 mask） | 同目录 `device-meizu-meizu20-1-r52.apk` | — | 机上 apk add |
+| 设备包 apk | 1-r**53**（r52 = NFC+蜂窝用户态摘除随包 mask；r53 = **depends + hexagonrtc 三件**——Release rootfs 首航暴雷修复，传感器 PD 守护链随 rootfs 带齐） | 同目录 `device-meizu-meizu20-1-r53.apk` | — | 机上 apk add |
 | 固件包 apk | 1-r**3** | 同目录 `firmware-meizu-meizu20-1-r3.apk` | — | 机上 apk add |
 | Mu 镜像 | r66 | `artifacts/mu-r66-9033a734.img` | 9033a734 | boot_b |
 | ESP | v47（仓内 `.img.gz`；刷写/verify 自动解压） | `artifacts/esp-recovery-v47.img.gz` | a0455923（裸镜像） | recovery_a |
-| rootfs 镜像 | r66 同轮（内含内核 r66 apk + 设备包 r52；纯官方预装，机上后装件不在内） | Release 分发件 `meizu-meizu20-r66.img.gz`（1.10GiB，sha8 90961230） | 90961230 | userdata |
-| 源码钉 | fork `f42761da35ab` @meizu20-t4b ｜ Mu `14692e56822c` @meizu20-mars-port ｜ pmaports `c3cf153cd6c4` @phoenix ｜ Binaries fork main=`036ba9f7`——**四仓已推 GitHub（2026-10-07 推送窗口）**；推送前敏感信息清扫：三树历史中性化过 WiFi SSID/本地路径，hash 相应重写；DTS 注释级改动不影响编译产物 | — | — | — |
+| rootfs 镜像 | r66 同轮（**--single-partition 修复版 10-07 换件**；内含内核 r66 apk + 设备包 r53 + hexagonrtc 依赖链；纯官方预装，机上后装件不在内） | Release 分发件 `meizu-meizu20-r66.img.gz`（1.10GiB，sha8 **e4636bfe**；首版 90961230 漏 `--single-partition` 上机暴雷已撤换） | e4636bfe | userdata |
+| 源码钉 | fork `f42761da35ab` @meizu20-t4b ｜ Mu `14692e56822c` @meizu20-mars-port ｜ pmaports `222f0c5` @phoenix（r53 depends 修复轮） ｜ Binaries fork main=`036ba9f7`——**四仓已推 GitHub**；推送前敏感信息清扫：三树历史中性化过 WiFi SSID/本地路径，hash 相应重写；DTS 注释级改动不影响编译产物 | — | — | — |
 
 **Release r66 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r66>**（2026-10-07
 推送窗口上传）：直刷三件 + 锚三件 + 固件 tarball（自建者用）+ `SHA256SUMS`。
@@ -46,7 +46,7 @@
 
 ## 通道速查
 
-- root devshell：`tools/devsh.py`（NCM + nc :23）｜ ssh：`user@172.16.42.1` / 1234 / doas 免密
+- root devshell：`tools/devsh.py`（NCM + nc :23）｜ ssh：`user@172.16.42.1` / 1234 / root 走 `sudo`（密码 1234，本机无 doas）
 - 软进 fastboot：`systemctl reboot --reboot-argument=bootloader`（18d1:d00d）
 - 宿主长构建：systemd-run（脚本已内置）；与 K30 wrapper 串行（共享 work dir，仅本机布局）
 

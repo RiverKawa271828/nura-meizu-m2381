@@ -19,7 +19,11 @@ if [ -z "${NURA_INSIDE_UNIT:-}" ]; then
 fi
 
 echo "[i] pmbootstrap install（plasma-mobile / 密码 1234；~10-20 分钟）"
-"$PIN_PMB_WRAPPER" install --password 1234
+# ⚠ --single-partition 是铁律（experiment-log「pmOS 系统首次上机」）：默认 split 布局
+# 产出 GPT 分区镜像 + fstab 假 /boot 条目；本机无 initramfs、内核 root=/dev/sda22
+# 直挂 userdata 整块，GPT 镜像必挂载失败（kernel panic 停 Mu 画面）。
+# 2026-10-07 实锤：Release r66 rootfs 漏此参数上机暴雷，本行即为修复。
+"$PIN_PMB_WRAPPER" install --password 1234 --single-partition
 
 OUT="$PMB_WORK/chroot_native/home/pmos/rootfs/meizu-meizu20.img"
 [ -e "$OUT" ] || nura_die "找不到 rootfs 产物: $OUT"

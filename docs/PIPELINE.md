@@ -40,7 +40,11 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
 - 每版 +1（vNN），sha 记 MANIFEST.md。
 
 ### rootfs（build-rootfs.sh）
-- pmbootstrap install（plasma-mobile / 密码 1234）；
+- pmbootstrap install（plasma-mobile / 密码 1234）——**⚠ `--single-partition` 铁律**
+  （脚本已固化）：不加它产出 GPT 分区镜像 + fstab 假 /boot 条目，无 initramfs 内核
+  `root=/dev/sda22` 直挂 userdata 必挂载失败（2026-10-07 Release r66 rootfs 首航
+  暴雷实锤，坏件已从 Release 撤换）。产物 = 裸 ext4（~4.4G，首启自动扩满 464G）。
+- 设备包 r53 起 depends 含 hexagonrtc 三件（传感器 PD 守护链）——rootfs 自动带齐。
 - 替代路线：L2 快照锚复原（mkfs.ext4 -d 直出，experiment-log（六十二）），Arch 线遗产、已验证。
 
 ## 版本与提交纪律
@@ -55,30 +59,31 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
    推分支 `meizu20-t4b`——基点 58785836 = 主线 7.3 merge window，fork 自带全史，只传增量）；
 2. ✅ `PIN_MU_GIT` = RiverKawa271828/Mu-Silicium（fork Project-Silicium；推
    `meizu20-mars-port`）；`PIN_MU_BINARIES_GIT` = RiverKawa271828/Device-Binaries
-   （**待建仓**：fork 后推 Binaries 钉住的 `036ba9f7`，不在上游 main）；
-3. ✅ `PIN_PMAPORTS_GIT` = RiverKawa271828/pmaports（**待建仓**；pmOS 官方在
-   GitLab、GitHub 无镜像可 fork，独立仓整条推 `phoenix`，.git 仅 69MB）；
+   （fork 已建，main 钉在 `036ba9f7`）；
+3. ✅ `PIN_PMAPORTS_GIT` = RiverKawa271828/pmaports（独立仓已建整条推 `phoenix`）；
 4. 内核 tarball **无需 Release**：build-kernel.sh 每轮从 fork 现打（git archive）+
    checksum 重算，APKBUILD `source=` 保持本地文件名——外人 clone 后自给自足；
-5. ⬜ 固件 tarball（81MB，meizu20_linux 厂商资产，永不入 git）挂本仓 Release
-   （licensing 照 silime 先例，待拍板）；sha512 已钉 APKBUILD；
+5. ✅ 固件 tarball（81MB，meizu20_linux 厂商资产，永不入 git）已上 Release
+   （用户 10-07 拍板上传，licensing 照 silime 先例）；sha512 已钉 APKBUILD；
 6. ✅ 成品镜像：现役对在仓（mu 裸 1.1MB + esp .img.gz ~14MB）；ESP 裸镜像
    （恰 100MiB）不入 git（v43–v45 已 filter-branch 出史）；
 7. ✅ `setup.sh --clone`：四仓 + 官方 pmbootstrap（gitlab.postmarketos.org）自动摆位；
    wrapper（script/pmbootstrap-meizu.sh + cfg）与 tools（tools/）已收编本仓；
-   回滚锚三件 = Release 资产（⬜ 待传，缺失时 setup 只警告）；
+   回滚锚三件 = Release 资产（✅ 已上传，缺失时 setup 只警告）；
 8. ⬜ **干净机首航**：找一台第二机器/容器从零跑通 setup→build→flash，发布面才算成立。
-9. ⬜ **上传后脚本对齐**（文档先行已落地 10-07）：①`build-rootfs.sh` 出 Release 件
-   （`meizu-meizu20-rN.img.gz` + SHA256SUMS 一并生成）②`setup.sh` 可选从 Release
-   拉锚三件/现役件 ③直刷命令里的文件名与实际 Release 页对一遍。
+   （2026-10-07 本机已用 Release 资产完整重放直刷三件一轮：rootfs 两雷修复后
+   全绿，boot ~40s；但同机非干净机，此项仍开。）
+9. ✅ **上传后脚本对齐**：①`build-rootfs.sh` 出 Release 件（`meizu-meizu20-rN.img.gz`
+   + SHA256SUMS 一并生成）②`setup.sh --fetch-release` 拉锚三件/现役件 ③直刷命令
+   文件名与 Release 页已实刷对拍（10-07）。
 
-### Release 资产清单（用户 10-07 拍板：镜像分发一律走 Release 直刷，不入仓；tag 建议 `r66`）
+### Release 资产清单（2026-10-07 上线 <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r66>；当日 rootfs 换件一次：首版漏 `--single-partition` 上机暴雷，修复版 sha8 `e4636bfe`）
 
 | 件 | 文件 | 出处 |
 |---|---|---|
 | 现役 boot_b | `mu-r66-9033a734.img`（1.1MB） | 本仓 `artifacts/` |
-| 现役 recovery_a | `esp-recovery-v47.img`（裸 100MiB，已备好） | 本仓 `artifacts/` |
-| 现役 rootfs | `meizu-meizu20-r66.img.gz`（8G 裸镜像 gz 化——裸镜像超 GitHub Release 单件 2GiB 上限；**同轮产物，内含 r66 内核 apk + 设备包 r52**，刷完即完整系统） | `build-rootfs.sh`（Release 打包 gz+sha256 脚本待补，挂上传后） |
+| 现役 recovery_a | `esp-recovery-v47.img.gz`（gz 化，刷写自动解压） | 本仓 `artifacts/` |
+| 现役 rootfs | `meizu-meizu20-r66.img.gz`（1.1G gz；裸 ~4.4G 超无压力但 gz 化统一走 Release 单件 2GiB 规则；**同轮产物，内含 r66 内核 apk + 设备包 r53 + hexagonrtc 依赖链**，刷完即完整系统） | `build-rootfs.sh`（gz+SHA256SUMS 自动产出） |
 | 锚 t-b2 | `t-b2-m2381Pkg-RELEASE-d4928661.img` | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/` |
 | 锚 esp-v4d | `esp-recovery-v4d.img` | `<NURA_WORK>/meizu20/meizu20-m1/m1-work/arch-a/` |
 | 锚 mu-r57 | `mu-r57-4640ebb5.img` | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/` |

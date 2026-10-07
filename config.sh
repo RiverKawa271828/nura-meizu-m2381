@@ -41,7 +41,7 @@ APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/a
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="66"      # 已构建 apk 的 pkgrel（r66 = fsa4480 摘除+PSI=y 载体，10-07）
-REL_DEVICE_PKGREL="52"     # r52 = NFC 摘除 + 蜂窝用户态摘除（设备日（七十三），10-07）
+REL_DEVICE_PKGREL="53"     # r53 = depends + hexagonrtc 三件（Release rootfs 首航暴雷修复，10-07）；r52 = NFC/蜂窝用户态摘除
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r66-9033a734.img"
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v47.img.gz"  # 仓内 gz 化（100MiB 裸镜像不过 GitHub 上限）；刷写/verify 自动解压

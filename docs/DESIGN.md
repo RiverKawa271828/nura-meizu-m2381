@@ -89,7 +89,7 @@ XBL（原封）→ ABL（原封）→ boot_b: Mu-UEFI（我们构建）──标
   [MANIFEST.md](../MANIFEST.md)。发布 gz 化（100MiB 裸镜像超 GitHub 单文件上限），
   刷写 / verify 自动解压。
 
-### 2.3 userdata：`meizu-meizu20-rNN.img(.gz)`（pmOS rootfs，8G，首启自动扩满）
+### 2.3 userdata：`meizu-meizu20-rNN.img(.gz)`（pmOS rootfs，~4.4G，首启自动扩满）
 
 | 组成 | 是什么 |
 |---|---|
@@ -98,8 +98,10 @@ XBL（原封）→ ABL（原封）→ boot_b: Mu-UEFI（我们构建）──标
 | device-meizu-meizu20 apk | 用户态胶水全量（见 2.4） |
 | firmware-meizu-meizu20 apk | 厂商固件 blob（见 2.4） |
 
-- 构建：`build-rootfs.sh` = pmbootstrap install（本地 pmaports 三包烤入）→ 8G ext4 镜像，
-  发布 gz 化（同 GitHub 上限）。
+- 构建：`build-rootfs.sh` = pmbootstrap install **`--single-partition`**（铁律：默认
+  split 布局产 GPT 分区镜像，无 initramfs 内核直挂 userdata 必败——2026-10-07
+  Release 首航暴雷；`--single-partition` 出裸 ext4 单文件系统）→ 本地 pmaports 三包
+  烤入 → ~4.4G ext4 镜像，发布 gz 化（同 GitHub 上限）。
 - 出厂形态：登录 `user` / `1234`；首启自动扩容占满整盘；**蜂窝 / NFC 用户态默认摘除**
   （设备包随包 mask——省电与稳定性的拍板形态，非功能缺失，见 [README](../README.md) 状态表）。
 
@@ -108,7 +110,7 @@ XBL（原封）→ ABL（原封）→ boot_b: Mu-UEFI（我们构建）──标
 | 包 | 内容 | 什么时候动 |
 |---|---|---|
 | **linux** | `boot/vmlinuz-efi`（灌 ESP 用）+ 全部内核模块；`KBUILD_BUILD_VERSION=pkgrel+1` 实现 #N 定律 | 每轮内核（`--bump`） |
-| **device** | 音频（UCM / 拓扑 / 路由守卫重试环 / 默认 sink 自愈环）、传感器（barrier + udev 触发）、触控（定向绑定 service）、NFC/蜂窝用户态摘除 mask、boot 噪音治理（PAM stub / ddcutil / pulse drop-in）、Discover 后端依赖 | 用户态配置变更 |
+| **device** | 音频（UCM / 拓扑 / 路由守卫重试环 / 默认 sink 自愈环）、传感器（barrier + udev 触发；r53 起 depends 带 hexagonrtc 三件 = ADSP 传感器 PD 守护链本体 + fastrpc 用户 + 节点权限规则）、触控（定向绑定 service）、NFC/蜂窝用户态摘除 mask、boot 噪音治理（PAM stub / ddcutil / pulse drop-in）、Discover 后端依赖 | 用户态配置变更 |
 | **firmware** | Cirrus 双功放固件（per-amp）、ath12k 板卡数据、视频硬解 vpu 固件等 blob（sha512 钉在 APKBUILD） | 固件更新（罕见） |
 
 ---
