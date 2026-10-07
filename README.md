@@ -1,5 +1,7 @@
 # nura-meizu-m2381 — Nura (postmarketOS) on Meizu 20
 
+> English version: [README.en.md](README.en.md)
+
 > 一句话：把 Nura（postmarketOS edge + 主线内核）完整跑在魅族 20（m2381 / SM8550 / kalama）上的全流程项目——源码在哪、用哪个工具出哪个镜像、刷到哪个分区、怎么回滚，四件事一张图说完。
 
 ## 免责与救砖（刷机前必读）
