@@ -35,9 +35,10 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   `setup.sh --clone` = 四仓 + 官方 pmbootstrap（gitlab）自动摆位，回滚锚缺失降为警告。
   ESP 自 v47 起仓内 gz 化（裸镜像恰 100MiB 压 GitHub 单文件上限），flash-batch/verify
   自动解压。config/MANIFEST 现役对齐 **r66 / device r52 / ESP v47 / mu-r66 / 期望 #67**。
-- **▶ 下一会话 = 四仓推送**（顺序）：linux-mobile-ports `meizu20-t4b` → Mu-Silicium
-  `meizo20-mars-port` → Device-Binaries（补推钉住的 `036ba9f7`，若 fork 里没有）→
-  pmaports（新建空仓后推 `phoenix`）→ 本仓 master。
+- **▶ 排程（用户 10-07 拍板）**：下会话 = 各项目 AGENTS 文档检查+瘦身（隐私排查
+  + 去重，含本仓）→ 下下会话 = 四仓推送：linux-mobile-ports `meizu20-t4b` →
+  Mu-Silicium `meizu20-mars-port` → Device-Binaries（补推钉住的 `036ba9f7`，若
+  fork 里没有）→ pmaports（新建空仓后推 `phoenix`）→ 本仓 master。
 - 剩余：Release tag `r66`（现役对 + 锚三件 + 固件 tarball，清单 = PIPELINE §Phase-2）
   + **干净机首航**（发布面成立判据）。
 
