@@ -44,7 +44,8 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   清单 = PIPELINE §Phase-2）+ **上传后脚本对齐**（build-rootfs 出 Release 件 gz+sha256 /
   setup.sh 可选拉锚，PIPELINE §Phase-2 item 9）+ **干净机首航**（发布面成立判据）。
   直刷文档已就绪（10-07）：FLASHING「快速路径 A」（前置准备八项+三件命令+验收回滚）+
-  README 硬件状态表（✅可工作/◐挂起/✗不可工作 三档）。
+  README 硬件状态表（✅可工作/◐挂起/✗不可工作 三档）+ DESIGN.md（启动链原理+四件
+  产物解剖，硬定律细节留私有主档不复制）。
 
 ## 工作流卡
 
