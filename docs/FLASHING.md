@@ -34,7 +34,7 @@
 
 | # | 准备项 | 说明 / 确认方式 |
 |---|---|---|
-| 1 | 设备 = 魅族 20（m2381），**bootloader 已解锁** | 解锁走魅族官方流程，自行完成；未解锁 `fastboot flash` 会被拒 |
+| 1 | 设备 = 魅族 20（m2381），**bootloader（BL）已解锁** | **本项目不提供解锁 BL 方法，请自行研究**；未解锁时 `fastboot flash` 一律被拒 |
 | 2 | **Flyme 12.6 最新 OTA** 基线 + slot b 活动 | `fastboot getvar current-slot` → `b`；其他 Flyme 版本未验证（上一版实测起不来） |
 | 3 | 电量 > 20%；好线插宿主 USB 口 | 刷一半没电 = 直接 §6 救砖 |
 | 4 | 宿主装 Android platform-tools | 终端 `fastboot --version` 能跑即可 |
@@ -75,6 +75,7 @@ fastboot set_active b && fastboot reboot
 ## 1. 前置检查
 
 **适用基线（2026-10-06 定，先对上再动手）**：
+- **bootloader 已解锁**——本项目不提供解锁 BL 方法，请自行研究；未解锁时写分区一律被拒；
 - 全流程只在 **stock Flyme 12.6（最新 OTA）+ slot b 活动** 的零售机上验证过；
 - 其他 Flyme 版本**未验证**——上一版 OTA 实测**起不来**（启动链绑 12.6 的 XBL/ABL 固件基线）；
 - 动手前先把设备 OTA 到 12.6 并确认 b 槽活动（`fastboot getvar current-slot` → `b`）；a 槽激活态/旧版机行为未知，勿当小白鼠。

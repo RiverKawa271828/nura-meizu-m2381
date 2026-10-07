@@ -54,7 +54,7 @@ script/flash-batch.sh --i-am-present   # 一车刷（需人在设备旁）
 他机复刻（从零摆构建布局）：`export NURA_WORK=/<你的工作根>` → `script/setup.sh --clone`
 （按 `config.sh` 的 PIN_*_GIT 拉四仓 + 官方 pmbootstrap）。
 
-> 两条路径共同前提：**bootloader 已解锁** + 设备为 **Flyme 12.6（最新 OTA）+ slot b 活动**——
+> 两条路径共同前提：**bootloader 已解锁**（本项目不提供解锁 BL 方法，请自行研究）+ 设备为 **Flyme 12.6（最新 OTA）+ slot b 活动**——
 > 这是唯一验证过的基线；其他 Flyme 版本未验证，上一版 OTA 实测起不来（FLASHING §1）。
 
 刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**。
