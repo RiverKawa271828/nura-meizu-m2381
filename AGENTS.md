@@ -86,9 +86,9 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 已完成：PIN_*_GIT 填充 → setup.sh --clone（四仓 + pmbootstrap 自动摆位）→
 wrapper/tools 收编 → ESP gz 化 → 现役表对齐。
 待办（推送后）：①内核 tarball **无需 Release**（build-kernel.sh 每轮从 fork 现打 +
-sha512 重算，source= 保持本地文件名）②固件 tarball（81MB，meizu20_linux 厂商资产）
-挂 Release（licensing 照 silime 先例，需用户确认）③回滚锚三件传 Release +
-config.sh/FLASHING 的 ANCHOR 路径给下载指引 ④**干净机首航验证一次才算发布面成立**。
+sha512 重算，source= 保持本地文件名）②**Release tag `r66`**（用户 10-07 拍板：镜像
+分发一律走 Release 直刷）＝现役对 + 锚三件 + 固件 tarball，清单见 PIPELINE
+§Phase-2 ③**干净机首航验证一次才算发布面成立**。
 细节 = PIPELINE.md §Phase-2。
 
 ## 文档地图

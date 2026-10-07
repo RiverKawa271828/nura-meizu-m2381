@@ -68,3 +68,17 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
    wrapper（script/pmbootstrap-meizu.sh + cfg）与 tools（tools/）已收编本仓；
    回滚锚三件 = Release 资产（⬜ 待传，缺失时 setup 只警告）；
 8. ⬜ **干净机首航**：找一台第二机器/容器从零跑通 setup→build→flash，发布面才算成立。
+
+### Release 资产清单（用户 10-07 拍板：镜像分发一律走 Release 直刷，不入仓；tag 建议 `r66`）
+
+| 件 | 文件 | 出处 |
+|---|---|---|
+| 现役 boot_b | `mu-r66-9033a734.img`（1.1MB） | 本仓 `artifacts/` |
+| 现役 recovery_a | `esp-recovery-v47.img`（裸 100MiB，已备好） | 本仓 `artifacts/` |
+| 锚 t-b2 | `t-b2-m2381Pkg-RELEASE-d4928661.img` | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/` |
+| 锚 esp-v4d | `esp-recovery-v4d.img` | `<NURA_WORK>/meizu20/meizu20-m1/m1-work/arch-a/` |
+| 锚 mu-r57 | `mu-r57-4640ebb5.img` | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/` |
+| 固件 tarball | `firmware-meizu-meizu20.tar.gz`（81MB，仅构建者需要） | pmaports 包目录 |
+
+外人消费路径 = Release 下载 → 按 FLASHING.md 直刷（构建者才需要固件 tarball；
+锚缺失时 `setup.sh` 警告、下载后放回 `config.sh` 指的同布局路径即可）。
