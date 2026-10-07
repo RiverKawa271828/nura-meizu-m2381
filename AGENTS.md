@@ -27,21 +27,19 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态一句话（2026-10-07 更；新会话从这里接）
+## 现态（2026-10-07 更；新会话从这里接）
 
-- **Phase-2 清理轮收官（上传窗口预备）**：wrapper（pmbootstrap-meizu.sh + cfg）与
-  tools（make-esp-recovery + devsh 三件）**已收编本仓**；`PIN_*_GIT` 已填
-  （linux-mobile-ports / Mu-Silicium 两 fork 在位；pmaports / Device-Binaries **待建仓**）；
+- **Phase-2 清理轮收官（推送前预备完成）**：wrapper（pmbootstrap-meizu.sh + cfg）与
+  tools（make-esp-recovery + devsh 三件）已收编本仓；`PIN_*_GIT` 已填
+  （linux-mobile-ports / Mu-Silicium / Device-Binaries 三 fork 在位；pmaports 建仓后推）；
   `setup.sh --clone` = 四仓 + 官方 pmbootstrap（gitlab）自动摆位，回滚锚缺失降为警告。
-  **ESP 自 v47 起仓内 gz 化**（裸镜像恰 100MiB 压 GitHub 单文件上限；v43–v45 裸镜像
-  已出史），flash-batch/verify 自动解压。config/MANIFEST 现役对齐
-  **r66 / device r52 / ESP v47 / mu-r66 / 期望 #67**。
-- **▶ 本轮 = 上传**（顺序）：①linux-mobile-ports 推 `meizu20-t4b` ②Mu-Silicium 推
-  `meizu20-mars-port` ③建 Device-Binaries fork 推钉住的 `036ba9f7` ④建 pmaports 仓推
-  `phoenix` ⑤本仓推 master。⚠本机 SSH key 未被 GitHub 接受（publickey denied）=
-  推送阻塞点；⚠nura 本地历史已经 filter-branch 洗过 100MiB blob（旧 hash 全变，勿引用旧 hash）。
-- Phase-2 剩余（推送后）：APKBUILD 固件 tarball 挂 Release（licensing 待拍板）+
-  回滚锚三件传 Release + **干净机首航**（发布面成立判据）。
+  ESP 自 v47 起仓内 gz 化（裸镜像恰 100MiB 压 GitHub 单文件上限），flash-batch/verify
+  自动解压。config/MANIFEST 现役对齐 **r66 / device r52 / ESP v47 / mu-r66 / 期望 #67**。
+- **▶ 下一会话 = 四仓推送**（顺序）：linux-mobile-ports `meizu20-t4b` → Mu-Silicium
+  `meizo20-mars-port` → Device-Binaries（补推钉住的 `036ba9f7`，若 fork 里没有）→
+  pmaports（新建空仓后推 `phoenix`）→ 本仓 master。
+- 剩余：Release tag `r66`（现役对 + 锚三件 + 固件 tarball，清单 = PIPELINE §Phase-2）
+  + **干净机首航**（发布面成立判据）。
 
 ## 工作流卡
 
@@ -98,4 +96,4 @@ sha512 重算，source= 保持本地文件名）②**Release tag `r66`**（用�
 | 第一次上手 / 刷机 | README.md → docs/FLASHING.md |
 | 出一车产物 | docs/PIPELINE.md + script/ |
 | 查现在该刷哪个版本 | MANIFEST.md（config.sh 为准） |
-| 硬定律 / 战役叙事 / 队列 | pmos_linux 仓 AGENTS.md + docs/meizu20/experiment-log.md |
+| 硬定律 / 战役叙事 / 队列 | 私有工作区仓（未公开）的 AGENTS.md + experiment-log |
