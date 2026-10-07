@@ -12,7 +12,10 @@
 | 固件包 apk | 1-r**3** | 同目录 `firmware-meizu-meizu20-1-r3.apk` | — | 机上 apk add |
 | Mu 镜像 | r66 | `artifacts/mu-r66-9033a734.img` | 9033a734 | boot_b |
 | ESP | v47（仓内 `.img.gz`；刷写/verify 自动解压） | `artifacts/esp-recovery-v47.img.gz` | a0455923（裸镜像） | recovery_a |
+| rootfs 镜像 | r66 同轮（内含内核 r66 apk + 设备包 r52） | Release 分发件（⬜ 待产出/上传；本地 = `build-rootfs.sh` 产物） | — | userdata |
 | 源码钉 | fork `f42761da35ab` @meizu20-t4b ｜ Mu `14692e56822c` @meizu20-mars-port ｜ pmaports `c3cf153cd6c4` @phoenix（2026-10-07 推送前敏感信息清扫：三树历史中性化过 WiFi SSID/本地路径，hash 相应重写；DTS 注释级改动不影响编译产物） | — | — | — |
+
+**Release 直刷三件（boot / recovery / rootfs）必须同轮配对**——外人路径 = FLASHING「快速路径 A」。
 
 期望 uname：`7.3.0_rc3-r66` → **#67**。10-07 上机已实证（#N=pkgrel+1 第 13 证）；
 当轮战果（typec 首亮 / pm8008 ×14 撤除 / Docker e2e 全绿 / 空转清剿第一轮 / NFC 摘除）

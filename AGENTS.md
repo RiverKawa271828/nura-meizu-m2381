@@ -39,8 +39,12 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   排程推进 + 隐私复扫零命中）→ **下会话 = 四仓推送**：linux-mobile-ports
   `meizu20-t4b` → Mu-Silicium `meizu20-mars-port` → Device-Binaries（补推钉住的
   `036ba9f7`，若 fork 里没有）→ pmaports（新建空仓后推 `phoenix`）→ 本仓 master。
-- 剩余：Release tag `r66`（现役对 + 锚三件 + 固件 tarball，清单 = PIPELINE §Phase-2）
-  + **干净机首航**（发布面成立判据）。
+- 剩余：Release tag `r66`（**四件 = boot + recovery + rootfs 同轮配对**——rootfs 分发件
+  10-07 用户新增，gz 化压 GitHub 2GiB 单件上限 + 锚三件 + 固件 tarball[仅构建者]，
+  清单 = PIPELINE §Phase-2）+ **上传后脚本对齐**（build-rootfs 出 Release 件 gz+sha256 /
+  setup.sh 可选拉锚，PIPELINE §Phase-2 item 9）+ **干净机首航**（发布面成立判据）。
+  直刷文档已就绪（10-07）：FLASHING「快速路径 A」（前置准备八项+三件命令+验收回滚）+
+  README 硬件状态表（✅可工作/◐挂起/✗不可工作 三档）。
 
 ## 工作流卡
 

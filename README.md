@@ -15,19 +15,32 @@ XBL → ABL → boot_b: Mu-UEFI (m2381Pkg) ──送核──→ 主线内核 (E
 - **apk（模块腿）**：内核包 = vmlinuz + /usr/lib/modules。**刷 ESP ≠ 换模块，两腿必须同轮走**。
 - **userdata（rootfs）**：pmOS 根文件系统，日常不动。
 
-## 现在能干什么（速览）
+## 硬件状态（2026-10-07 @ r66；本表只保现态，进度叙事在私有工作区 experiment-log）
 
-✅ 显示/触控/GPU、WiFi 5G、蓝牙、充电（PD）、传感器四类+自动亮度+转屏、扬声器+听筒立体声、
-震动（AW8697）、NFC probe、视频硬解、zram（r60 起）、蜂窝控制面（QMI 全注册，全球首个 SM8550 pmOS 蜂窝）。
-◐ 蜂窝数据/语音（S3 卡 RF init）、BT 音频小声、录音。
-✗ 相机、指纹、花屏真睡后 wake（bloff 工程解兜底）、深睡。
+**✅ 可工作**
+显示（120Hz OLED + 背光/自动亮度）｜触控｜GPU 加速｜WiFi 双频含 5G｜蓝牙（含音频输出）｜
+充电（PD）+ 电池电量计｜扬声器播放（直驱路径，干净无杂音；听筒留通话）｜视频硬解（H.264）｜
+传感器四类 + 转屏｜震动（AW8697）｜zram｜Docker 容器｜NCM USB 网络（调试通道）。
 
-全表与战役叙事在私有工作区仓（未公开）：`docs/meizu20/status-inventory.md` / `docs/meizu20/experiment-log.md`。
+**◐ 挂起（战役冻结、判决与素材都在档，复燃有路径）**
+蜂窝数据/短信/语音（控制面已点亮 = 全球首个 SM8550 pmOS 蜂窝；卡在 S3 RF init，**用户态默认摘除**）｜
+NFC（芯片应答、NCI init 不完成；**用户态默认摘除**）｜USB-C host/扩展坞（typec 栈已点亮，整机实测随手验）｜
+Waydroid。
 
-## 快速开始（本机现役布局）
+**✗ 不可工作**
+录音/麦克风（SWR 域 bring-up，大后期）｜相机（平台已开放，传感器驱动未做）｜指纹｜GNSS（随蜂窝）｜
+DP 视频外接（板上未焊 fsa4480，判负终审）｜suspend/深睡（熄屏走 DPMS 替代；真深睡唤醒有花屏史，
+bloff 工程解默认兜底）｜IR/UWB（身份未定）。硬件不存在：3.5mm 耳机孔、SD 卡槽。
 
-> 前提：设备须为 **Flyme 12.6（最新 OTA）+ slot b 活动**——这是唯一验证过的基线；
-> 其他 Flyme 版本未验证，上一版 OTA 实测起不来。详见 [docs/FLASHING.md](docs/FLASHING.md) §1。
+> 蜂窝/NFC 默认摘除是省电与稳定性的**拍板形态**（设备包 r52 随包 mask），不是功能缺失。
+
+## 快速开始
+
+**路径 A：下载即刷（推荐，无需构建）**——GitHub Release 下载三件套（boot + recovery + rootfs，
+附 SHA256SUMS），fastboot 三条命令直刷，刷完即完整系统（内核包+设备包已烤进 rootfs）。
+前置准备与逐条命令 → **[docs/FLASHING.md](docs/FLASHING.md)「快速路径 A：Release 直刷」**。
+
+**路径 B：自己构建**（想改源码 / 出新一轮）：
 
 ```bash
 script/setup.sh            # 环境体检（钉子/工具链/回滚锚）
@@ -36,8 +49,11 @@ script/verify.sh           # 交付链对拍（dtb↔FdtBlob 同源等）
 script/flash-batch.sh --i-am-present   # 一车刷（需人在设备旁）
 ```
 
-他机复刻（拿到公共仓后从零摆布局）：`export NURA_WORK=/<你的工作根>` → `script/setup.sh --clone`
+他机复刻（从零摆构建布局）：`export NURA_WORK=/<你的工作根>` → `script/setup.sh --clone`
 （按 `config.sh` 的 PIN_*_GIT 拉四仓 + 官方 pmbootstrap）。
+
+> 两条路径共同前提：**bootloader 已解锁** + 设备为 **Flyme 12.6（最新 OTA）+ slot b 活动**——
+> 这是唯一验证过的基线；其他 Flyme 版本未验证，上一版 OTA 实测起不来（FLASHING §1）。
 
 刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**。
 构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。

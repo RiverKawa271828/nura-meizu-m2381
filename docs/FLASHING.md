@@ -13,12 +13,60 @@
 | `esp-recovery-vNN.img.gz` | 100MiB FAT32 ESP，`BOOTAA64.EFI` = 内核（仓内 gz 化，刷写自动解压） | **recovery_a** | 每次换内核 |
 | `linux-meizu-meizu20-*.apk` | 内核 vmlinuz + 全部模块 | 机上 `apk add` | 每次换内核（与 ESP 同轮！） |
 | `device/firmware-*.apk` | 用户态胶水 + 固件 blob | 机上 `apk add` | 改了包内容 |
-| `meizu-meizu20.img` | pmOS rootfs | **userdata** | 重装系统（日常不动） |
+| `meizu-meizu20.img` | pmOS rootfs（含同轮内核+设备包，刷完即完整系统） | **userdata** | 重装系统；Release 直刷随包提供（gz） |
 
 启动链：`XBL → ABL → boot_b(Mu) → 内核 → rootfs`；recovery_a 是 Mu 的备援引导（MsBootPolicy 标准路径）。
 
 **两腿铁律**：换内核 = ESP 腿 + apk 模块腿，同轮完成。只刷 ESP 不装 apk = 内核新模块旧；
 只装 apk 不刷 ESP = 引导旧内核配新模块。两种半死状态都会让你怀疑人生。
+
+---
+
+## 快速路径 A：Release 直刷（下载即刷，无需构建）
+
+> 适用 = 只想把系统跑起来的人：GitHub Releases 下载三件套 → fastboot 三条命令 → 完整系统。
+> 三件是**同轮配对**（rootfs 内的内核模块 = ESP 里的内核 = 同一版），别混搭旧 Release 的件。
+> 想自己构建 / 改源码 → 走路径 B（§3 起）。
+
+### A-1 刷机前准备（逐项过完再插线）
+
+| # | 准备项 | 说明 / 确认方式 |
+|---|---|---|
+| 1 | 设备 = 魅族 20（m2381），**bootloader 已解锁** | 解锁走魅族官方流程，自行完成；未解锁 `fastboot flash` 会被拒 |
+| 2 | **Flyme 12.6 最新 OTA** 基线 + slot b 活动 | `fastboot getvar current-slot` → `b`；其他 Flyme 版本未验证（上一版实测起不来） |
+| 3 | 电量 > 20%；好线插宿主 USB 口 | 刷一半没电 = 直接 §6 救砖 |
+| 4 | 宿主装 Android platform-tools | 终端 `fastboot --version` 能跑即可 |
+| 5 | 下载 Release 三件 + `SHA256SUMS`：boot（`mu-r*.img`）/ recovery（`esp-recovery-*.img.gz`）/ rootfs（`meizu-meizu20-*.img.gz`） | `sha256sum -c SHA256SUMS` 全 OK 才继续 |
+| 6 | 解压两个 gz | `gunzip esp-recovery-*.img.gz meizu-meizu20-*.img.gz` |
+| 7 | ⚠ **刷 userdata = 清空全部数据**，要保数据先备份 | rootfs 8G 刷写需几分钟，途中别拔线 |
+| 8 | （可选，强烈建议）顺带下载锚三件：`t-b2-*.img` / `esp-recovery-v4d.img` / `mu-r57-*.img` | 救砖保险（回滚命令见 A-3） |
+
+### A-2 三件齐刷
+
+```bash
+fastboot devices                          # 有设备号才继续；空输出 = 还没进 fastboot（§2）
+fastboot flash boot_b      mu-r66-9033a734.img        # Mu-UEFI 固件（含设备树）
+fastboot flash recovery_a  esp-recovery-v47.img       # ESP = 内核引导腿
+fastboot flash userdata    meizu-meizu20-r66.img      # pmOS rootfs（模块腿已烤入，免 apk 步骤）
+fastboot set_active b                                 # 激活 b 槽
+fastboot reboot
+```
+
+> 文件名以 Release 页为准（tag 与 MANIFEST 现役轮对齐）。**只刷一腿或混旧版 = 半死状态**（§0 两腿铁律）。
+
+### A-3 刷完验收与回滚
+
+- 重启后 ~1 分钟 plasma 起来；首启自动扩容占满整盘属正常；登录 `user` / `1234`。
+- 验收清单照 **§5** 过一遍（本轮期望 `uname -v` = `7.3.0_rc3-r66` → `#67`）。
+- 蜂窝/NFC 用户态默认摘除 = 拍板形态（README 状态表）；`systemctl --failed` 里
+  MANIFEST「已知非回归失败」三件不用慌。
+- 回滚（锚三件在手，30 秒回家）：
+
+```bash
+fastboot flash boot_b      t-b2-m2381Pkg-RELEASE-d4928661.img
+fastboot flash recovery_a  esp-recovery-v4d.img
+fastboot set_active b && fastboot reboot
+```
 
 ---
 
@@ -133,6 +181,7 @@ journalctl -b | grep -iE "error|fail" | head       # ⑤ 无新红
 ```bash
 script/rollback.sh --i-am-present   # 30 秒：boot_b←t-b2 + recovery_a←v4d + set_active b
 ```
+（Release 直刷用户没有本仓脚本布局：直接用「快速路径 A」A-3 末尾的手动锚三件命令。）
 阶梯（从轻到重）：
 1. 软进 fastboot 重刷出事的那条腿；
 2. `rollback.sh` 回双锚；
