@@ -30,7 +30,7 @@ PIN_MU_BINARIES_GIT="https://github.com/RiverKawa271828/Device-Binaries"     # �
 PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # 已建独立仓；phoenix 整条已推（10-07 推送窗口；pmOS 官方在 GitLab，GitHub 无镜像 fork 可用）
 
 # ---- Release（Phase-2；setup.sh --fetch-release 按此拉现役件/锚三件）----
-PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r66"
+PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r72"
 
 # ---- 包身份 ----
 PKGVER="7.3.0_rc6"
@@ -41,7 +41,7 @@ APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/a
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="72"      # 已构建 apk 的 pkgrel（r72 = 内核 rebase v7.3-rc6 + cmdline no_console_suspend，10-08（七十七））
-REL_DEVICE_PKGREL="53"     # r53 = depends + hexagonrtc 三件（Release rootfs 首航暴雷修复，10-07）；r52 = NFC/蜂窝用户态摘除
+REL_DEVICE_PKGREL="54"     # r54 = 删 sleep-target 屏蔽（睡眠已修好 ⇒ 出厂即放开自动睡眠，10-08）；r53 = depends + hexagonrtc 三件
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v53.img.gz"  # 仓内 gz 化（100MiB 裸镜像不过 GitHub 上限）；刷写/verify 自动解压

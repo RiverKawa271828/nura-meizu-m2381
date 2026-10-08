@@ -73,6 +73,17 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   **发布面提醒**：**Release r66 的 rootfs + r66 内核仍是旧的**（无 `no_console_suspend`），
   给 r66 用户的「首启关自动睡眠」建议**继续有效**；rc6 修复随下个 Release 出去。
 
+## 发布轮（2026-10-08（七十七）：**r72 = 睡眠修好轮**）
+
+- **Release r72 已发**：<https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r72>
+  —— 配对三件 `mu-r69-97cdea20` + `esp-recovery-v53`（内核 7.3.0-rc6-r72 = #73）+
+  `meizu-meizu20-r72.img.gz`（设备包 **r54** / 固件 r3 烤入）；锚三件 + 固件 tarball + SHA256SUMS。
+- **设备包 r54 的意义 = 固化**：删掉 `meizu-sleepmask.conf`（sleep/suspend/hibernate 三 target 的
+  tmpfiles 屏蔽，属「睡眠必死」时代保险丝）⇒ **新装镜像出厂即：睡眠可用 + 桌面自动睡眠默认开**，
+  用户无需任何手动设置（旧 r66 及更早内核才需要首启关自动睡眠）。
+- 命令：`script/build-device.sh --bump-device` → `build-rootfs.sh`（rootfs 里烤内核 apk + 设备包）；
+  发布件资产 = `meizu20-m1/release-r72/`（含 release-notes.md）。
+
 ## 工作流卡
 
 ### 构建轮（标准循环，每次发布轮走一遍）

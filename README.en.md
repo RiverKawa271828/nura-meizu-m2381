@@ -38,21 +38,19 @@ rootfs. Log in as `user`, password `1234` (use `sudo` with the same password for
 
 ```bash
 sha256sum -c SHA256SUMS                 # all OK before continuing
-fastboot flash boot_b      mu-r66-9033a734.img    # Mu-UEFI firmware (device tree baked in)
-fastboot flash recovery_a  esp-recovery-v47.img   # ESP = kernel boot leg
-fastboot flash userdata    meizu-meizu20-r66.img  # rootfs (⚠ wipes all data)
+fastboot flash boot_b      mu-r69-97cdea20.img    # Mu-UEFI firmware (device tree baked in)
+fastboot flash recovery_a  esp-recovery-v53.img   # ESP = kernel boot leg (rc6 + no_console_suspend)
+fastboot flash userdata    meizu-meizu20-r72.img  # rootfs (⚠ wipes all data)
 fastboot set_active b && fastboot reboot
 ```
 
-The plasma desktop comes up in about a minute. **First boot must-do** (**r66 kernel of this
-release only**): open "Power Management → Energy Saving" and **turn off automatic suspend** —
-suspend is deadly on the r66 kernel; leaving it on will sleep-kill the device on idle (a fake-off
-that needs a forced reboot). Screen blanking (DPMS) works fine.
-**✅ Fixed in the next kernel (rc6 / r72 working state)**: the real culprit was an in-tree printk
-console-suspend regression (`console_suspend_all()`), fixed by adding `no_console_suspend` to the
-kernel cmdline; on the new kernel real sleep, power-key/RTC wake and automatic suspend have all
-been verified on hardware (residual: ath12k resume takes ~20 s, so the screen lights up late and
-WiFi needs a module reload after wake — proper fix pending).
+The plasma desktop comes up in about a minute. **From this release (r72 / rc6 kernel) sleep works
+and automatic suspend is ON by default**: the device sleeps on idle at the desktop power-management
+threshold and wakes on the **power button** (RTC alarm also works) — no manual setup needed.
+(The culprit was an in-tree printk console-suspend regression, `console_suspend_all()`, fixed by
+adding `no_console_suspend` to the kernel cmdline. Residual: ath12k resume takes ~20 s — the screen
+lights up late and WiFi needs a module reload after wake; proper fix pending. **Older r66-and-earlier
+kernels still need automatic suspend switched off on first boot**, see that release's notes.)
 
 Pre-flight checklist (unlocked bootloader / Flyme baseline / anchors), step-by-step
 verification, and brick recovery → **[docs/FLASHING.md](docs/FLASHING.md)** (Chinese).
@@ -138,10 +136,10 @@ unconfirmed). Hardware absent: 3.5mm jack, SD slot.
 
 | Mark | Example | Meaning |
 |---|---|---|
-| `r66` | `mu-r66-*.img`, `meizu-meizu20-r66.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds |
-| `v47` | `esp-recovery-v47.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v47 happens to pair with r66) |
+| `r72` | `mu-r69-*.img`, `meizu-meizu20-r72.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds |
+| `v53` | `esp-recovery-v53.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v53 happens to pair with r72) |
 | `#67` | `uname -v` on device | Kernel build number = **r + 1** (pkgrel+1 baked into the kernel). First verification point on device: seeing #67 proves the r66 kernel is really running |
-| `9033a734` | `mu-r66-9033a734.img` | First 8 hex of the image's sha256 — anti-tamper + dd read-back comparison |
+| `97cdea20` | `mu-r69-97cdea20.img` | First 8 hex of the image's sha256 — anti-tamper + dd read-back comparison |
 
 Design details and the #N law → [docs/DESIGN.md](docs/DESIGN.md) (Chinese); which
 version is current → [MANIFEST.md](MANIFEST.md) (Chinese).

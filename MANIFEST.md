@@ -3,14 +3,19 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-08 @ （七十七）rc6 轮 —— **在机就是这套**）
+## 工作态 = **Release r72 发布件**（2026-10-08 @ （七十七）rc6 轮；在机就是这套）
+
+> **Release r72 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r72>**
+> 主题 = **睡眠修好**（cmdline `no_console_suspend` + 设备包 r54 删掉 sleep 屏蔽 ⇒ 出厂即
+> 自动睡眠可用）；内核 rebase v7.3-rc6；残留 = ath12k 睡醒恢复 ~20s（屏幕迟亮 + WiFi 睡后需
+> 重载模块，治本挂下轮）。
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
 | 内核 apk | 7.3.0_**rc6**-r**72**（qcom DTS 相对 rc3 零改动 ⇒ DTB 不变；cmdline 加 `no_console_suspend` = 睡死修复；fork `2431440968fe` @meizu20-t4b） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r72.apk` | 67069cb8 | 机上 apk add |
 | Mu 镜像 | r69 | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
 | ESP | v53（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v53.img.gz` | c8d07289（裸镜像） | recovery_a |
-| 设备包 / 固件包 | r53 / r3（同发布面） | 同目录 | — | 机上 apk add |
+| 设备包 / 固件包 | **r54**（删 sleep-target 屏蔽 ⇒ 出厂即放开自动睡眠）/ r3 | 同目录 | — | 机上 apk add |
 | 上机期望 | `uname -v` = `7.3.0-rc6` → **#73**；`/proc/cmdline` 含 `no_console_suspend` | — | — | — |
 
 **rc6 轮实测**（10-08）：failed 0 / boot 29.5s / 音频·触控·传感器·显示全绿 / 功放 IRQ 零增长 /
