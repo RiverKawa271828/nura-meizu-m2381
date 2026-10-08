@@ -40,12 +40,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64}"
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="74"      # 已构建 apk 的 pkgrel（r74 = ath12k 唤醒链：搬上游 2026-02 mhi.c suspend 补丁 + resume 等待有界 ATH12K_RESUME_TIMEOUT_HZ=5s（resume 25.7s→9.0s），10-09 凌晨；r73 首试方向已撤）
+REL_LINUX_PKGREL="77"      # r77 = ath12k 暖重连挂点修正（resume_early 恢复中断面+complete，不等 QMI；腿 A M3 已 revert 判负）；resume 6.2s（vs r74 9.0s），WiFi 睡后死未解（service-ready 死结，FINDINGS 轮 10）
 REL_DEVICE_PKGREL="54"     # r54 = 删 sleep-target 屏蔽（睡眠已修好 ⇒ 出厂即放开自动睡眠，10-08）；r53 = depends + hexagonrtc 三件
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v55.img.gz"  # 仓内 gz 化（100MiB 裸镜像不过 GitHub 上限）；刷写/verify 自动解压；v55 = r74 内核（裸 sha 35bb1307；v54=r73 裸件留 meizu20-m1/esp-v54-raw.img 6b46bca9）
-REL_KERNEL_VER="#75"       # 下次上机 uname 期望（r74/rc6 内核 + #N=pkgrel+1 定律）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v58.img.gz"  # v58 = r77 内核（裸 sha a1ba94dc）；v55=r74 裸件留 meizu20-m1/esp-v55-raw.img 35bb1307
+REL_KERNEL_VER="#78"       # 下次上机 uname 期望（r77/rc6 内核 + #N=pkgrel+1 定律）
 
 # ---- 回滚锚（刷坏救命的三个文件；路径变动必须同步 FLASHING.md）----
 ANCHOR_TB2="$NURA_WORK/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img"
