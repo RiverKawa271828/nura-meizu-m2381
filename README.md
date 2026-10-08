@@ -29,17 +29,20 @@
 
 ```bash
 sha256sum -c SHA256SUMS                 # 全 OK 才继续
-fastboot flash boot_b      mu-r69-97cdea20.img    # Mu-UEFI 固件（含设备树）
-fastboot flash recovery_a  esp-recovery-v53.img   # ESP = 内核引导腿（rc6 + no_console_suspend）
-fastboot flash userdata    meizu-meizu20-r72.img  # rootfs（⚠清空全部数据）
+fastboot flash boot_b      mu-r66-9033a734.img    # Mu-UEFI 固件（含设备树）
+fastboot flash recovery_a  esp-recovery-v47.img   # ESP = 内核引导腿
+fastboot flash userdata    meizu-meizu20-r66.img  # rootfs（⚠清空全部数据）
 fastboot set_active b && fastboot reboot
 ```
 
-约 1 分钟起 plasma 桌面。**本版（r72 / rc6 内核）起睡眠已修好、自动睡眠默认开**：空闲到桌面
-电源管理的阈值后自行入睡，**按电源键唤醒**（RTC 闹钟亦可），无需任何手动设置。
-（真凶 = in-tree printk 的 console 挂起路径回归 `console_suspend_all()`，修法 = cmdline 加
-`no_console_suspend`；已知残留 = ath12k 睡醒恢复约 20s（屏幕迟亮、WiFi 睡后需重载模块），
-治本挂后续。**旧版 r66 及更早内核仍需首启关掉自动睡眠**，见该版 Release 说明。）
+约 1 分钟起 plasma 桌面。**首启必做**：进桌面后打开「电源管理 → 节电」，**把自动睡眠/空闲
+挂起关掉**——本 Release（r66 内核）suspend 必死，放着不管会在空闲后睡死假重启（系统重启后
+一切正常，但每次空闲都会再来一次）；熄屏走屏幕熄灭（DPMS）即可。
+（**睡眠修复已就绪、待重发**：真凶 = in-tree printk 的 console 挂起路径回归
+`console_suspend_all()`，修法 = cmdline 加 `no_console_suspend`；rc6 工作态内核上真睡 +
+唤醒已实测通过。**r72 首传的 rootfs 被抓到「上传了半截流」已整体撤回**，修好后再发。
+已知残留 = ath12k 睡醒恢复约 20s（屏幕迟亮、WiFi 睡后需重载模块）；另首次睡眠后
+**电源键唤醒不稳（拔插 USB 可唤醒）**，一并治本后再发。—— MANIFEST/AGENTS）
 
 刷机前准备八项（BL 解锁 / Flyme 基线 / 回滚锚）与逐条验证、
 回滚救砖 → **[docs/FLASHING.md](docs/FLASHING.md)「快速路径 A：Release 直刷」**。
@@ -107,10 +110,10 @@ DP 视频外接（板上未焊 fsa4480，判负终审）｜深睡 MPM/AOSS（大
 
 | 记号 | 例子 | 含义 |
 |---|---|---|
-| `r72` | `mu-r69-*.img`、`meizu-meizu20-r72.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮 |
-| `v53` | `esp-recovery-v53.img.gz` | **ESP 版本**，独立计数，每换一次内核腿 +1（与 r 轮无换算关系，v53 恰好陪 r72） |
-| `#73` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #73 = r72 内核真的在跑 |
-| `97cdea20` | `mu-r69-97cdea20.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |
+| `r66` | `mu-r66-*.img`、`meizu-meizu20-r66.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮 |
+| `v47` | `esp-recovery-v47.img.gz` | **ESP 版本**，独立计数，每换一次内核腿 +1（与 r 轮无换算关系，v47 恰好陪 r66） |
+| `#67` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #67 = r66 内核真的在跑 |
+| `9033a734` | `mu-r66-9033a734.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |
 
 设计细节与 #N 定律原理 → [docs/DESIGN.md](docs/DESIGN.md)；现役各件对应哪版 → [MANIFEST.md](MANIFEST.md)。
 

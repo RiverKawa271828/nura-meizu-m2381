@@ -48,11 +48,11 @@ if [ "${1:-}" = "--fetch-release" ]; then
 	[ -n "${PIN_RELEASE_BASE:-}" ] || nura_die "PIN_RELEASE_BASE 未填（config.sh）"
 	command -v curl >/dev/null 2>&1 || nura_die "缺 curl"
 	mkdir -p "$NURA_ROOT/artifacts"
-	for f in SHA256SUMS mu-r69-97cdea20.img esp-recovery-v53.img.gz meizu-meizu20-r72.img.gz \
+	for f in SHA256SUMS mu-r66-9033a734.img esp-recovery-v47.img.gz meizu-meizu20-r66.img.gz \
 		t-b2-m2381Pkg-RELEASE-d4928661.img esp-recovery-v4d.img mu-r57-4640ebb5.img; do
 		if [ -e "$NURA_ROOT/artifacts/$f" ]; then echo "  - $f 已在位，跳过"; continue; fi
 		curl -fSL --retry 3 -o "$NURA_ROOT/artifacts/$f" "$PIN_RELEASE_BASE/$f" \
-			|| nura_die "下载失败：$f（Release 页是否存在 tag r72？）"
+			|| nura_die "下载失败：$f（Release 页是否存在 tag r66？）"
 		echo "  ✓ $f"
 	done
 	( cd "$NURA_ROOT/artifacts" && sha256sum -c SHA256SUMS ) || nura_die "SHA256 校验不过，勿用"
