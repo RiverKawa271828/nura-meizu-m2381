@@ -41,7 +41,7 @@ APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/a
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="77"      # r77 = ath12k 暖重连挂点修正（resume_early 恢复中断面+complete，不等 QMI；腿 A M3 已 revert 判负）；resume 6.2s（vs r74 9.0s），WiFi 睡后死未解（service-ready 死结，FINDINGS 轮 10）
-REL_DEVICE_PKGREL="56"     # r56 = WoWLAN（meizu-wowlan.service + preset + depends iw）⇒ 睡=不断连（wow 路径 5 发实测，FINDINGS 轮 11）；r55 = unit 首版（iw dev 语法非法，弃）；r54 = 删 sleep-target 屏蔽；r53 = depends + hexagonrtc 三件
+REL_DEVICE_PKGREL="57"     # r57 = wowlan unit 补 sleep 封条自愈（老装机升级路径 unmask；自愈实测）；r56 = WoWLAN（meizu-wowlan.service + preset + depends iw）⇒ 睡=不断连（wow 路径 7 发实测，FINDINGS 轮 11）；r55 = unit 首版（iw dev 语法非法，弃）；r54 = 删 sleep-target 屏蔽；r53 = depends + hexagonrtc 三件
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v58.img.gz"  # v58 = r77 内核（裸 sha a1ba94dc）；v55=r74 裸件留 meizu20-m1/esp-v55-raw.img 35bb1307
