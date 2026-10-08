@@ -10,10 +10,22 @@
 #
 # 本机注记：默认路径经 NURA_WORK 推导后与私有工作区原布局重合（work dir 与
 # K30 wrapper 共享，须串行）；他机复刻 = NURA_WORK 指到任意可写根即可。
+#
+# 可选桌面环境：NURA_UI=<ui> 覆盖 cfg 的 ui= 行（默认 plasma-mobile；
+# NURA_UI=phosh = pmOS 官方 phosh 包集，2026-10-09 构建上机验证）。pmbootstrap
+# 的 ui 只能来自 cfg 文件，故按 UI 生成临时 cfg（/tmp，pmbootstrap 自读）。
+# ⚠ 换 UI 后构建前须 `pmbootstrap zap` 清 rootfs chroot——chroot 复用会把
+#   旧 UI 的 world 原样保留（2026-10-09 实锤：phosh 构建混入整套 plasma）。
 set -euo pipefail
 NURA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 . "$NURA_ROOT/config.sh"
-CFG="$NURA_ROOT/script/pmbootstrap-meizu.cfg"
+CFG_SRC="$NURA_ROOT/script/pmbootstrap-meizu.cfg"
+NURA_UI="${NURA_UI:-plasma-mobile}"
+case "$NURA_UI" in
+	*[!a-z0-9_-]*) echo "FATAL: NURA_UI 非法: $NURA_UI" >&2; exit 1 ;;
+esac
+CFG="$(mktemp /tmp/pmx-meizu-cfg-${NURA_UI}.XXXXXX.ini)"
+sed "s/^ui = .*/ui = ${NURA_UI}/" "$CFG_SRC" > "$CFG"
 
 if [ -f "$PMB_CHECKOUT/pmbootstrap.py" ]; then
 	exec python3 "$PMB_CHECKOUT/pmbootstrap.py" \
