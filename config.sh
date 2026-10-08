@@ -33,7 +33,7 @@ PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # �
 PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r66"
 
 # ---- 包身份 ----
-PKGVER="7.3.0_rc3"
+PKGVER="7.3.0_rc6"
 PKG_LINUX="linux-meizu-meizu20"
 PKG_DEVICE="device-meizu-meizu20"
 PKG_FIRMWARE="firmware-meizu-meizu20"
