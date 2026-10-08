@@ -3,7 +3,22 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 现役产物（2026-10-07 @ 设备日（七十三）后）
+## 工作态（2026-10-08 @ （七十七）rc6 轮 —— **在机就是这套**）
+
+| 件 | 版本 | 路径 | sha8 | 刷写目标 |
+|---|---|---|---|---|
+| 内核 apk | 7.3.0_**rc6**-r**72**（qcom DTS 相对 rc3 零改动 ⇒ DTB 不变；cmdline 加 `no_console_suspend` = 睡死修复；fork `2431440968fe` @meizu20-t4b） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r72.apk` | 67069cb8 | 机上 apk add |
+| Mu 镜像 | r69 | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
+| ESP | v53（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v53.img.gz` | c8d07289（裸镜像） | recovery_a |
+| 设备包 / 固件包 | r53 / r3（同发布面） | 同目录 | — | 机上 apk add |
+| 上机期望 | `uname -v` = `7.3.0-rc6` → **#73**；`/proc/cmdline` 含 `no_console_suspend` | — | — | — |
+
+**rc6 轮实测**（10-08）：failed 0 / boot 29.5s / 音频·触控·传感器·显示全绿 / 功放 IRQ 零增长 /
+真睡 + 电源键·RTC 唤醒通过 / **自动睡眠已放开**（powerdevil 5min，t+300s 入睡实证）。
+已知残留 = ath12k 睡醒恢复 21.2s（屏幕迟亮 + WiFi 睡后死，治本挂下轮）。
+两腿刷新法：`build-kernel.sh` → `build-esp.sh 53` → 刷；**Mu 不用重编（DTB 未变）**。
+
+## 发布面现役产物（2026-10-07 @ 设备日（七十三）后；= Release r66，已发布）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
@@ -13,7 +28,12 @@
 | Mu 镜像 | r66 | `artifacts/mu-r66-9033a734.img` | 9033a734 | boot_b |
 | ESP | v47（仓内 `.img.gz`；刷写/verify 自动解压） | `artifacts/esp-recovery-v47.img.gz` | a0455923（裸镜像） | recovery_a |
 | rootfs 镜像 | r66 同轮（**--single-partition 修复版 10-07 换件**；内含内核 r66 apk + 设备包 r53 + hexagonrtc 依赖链；纯官方预装，机上后装件不在内） | Release 分发件 `meizu-meizu20-r66.img.gz`（1.10GiB，sha8 **e4636bfe**；首版 90961230 漏 `--single-partition` 上机暴雷已撤换） | e4636bfe | userdata |
-| 源码钉 | fork `f42761da35ab` @meizu20-t4b ｜ Mu `14692e56822c` @meizu20-mars-port ｜ pmaports `222f0c5` @phoenix（r53 depends 修复轮） ｜ Binaries fork main=`036ba9f7`——**四仓已推 GitHub**；推送前敏感信息清扫：三树历史中性化过 WiFi SSID/本地路径，hash 相应重写；DTS 注释级改动不影响编译产物 | — | — | — |
+| 源码钉（发布轮 r66 时） | fork `f42761da35ab` @meizu20-t4b ｜ Mu `14692e56822c` @meizu20-mars-port ｜ pmaports `222f0c5` @phoenix（r53 depends 修复轮） ｜ Binaries fork main=`036ba9f7`——**四仓已推 GitHub**；推送前敏感信息清扫：三树历史中性化过 WiFi SSID/本地路径，hash 相应重写；DTS 注释级改动不影响编译产物 | — | — | — |
+
+**源码钉（工作态 2026-10-08 推）**：内核 fork `2431440968fe` @meizu20-t4b（**v7.3-rc6 重放**；
+`master` 已同步到 rc6 基线提交 `a90ee4305c4a` ⇒ 公开页面显示「领先 84 提交」= 恰好板级内容；
+历史线归档 tag：`archive/pre-rc6-meizu20-t4b` / `archive/meizu20-7.3-T3` / `archive/meizu20-m2381-local`）
+｜ Mu `bdea825c` @meizu20-mars-port（r69 FdtBlob）｜ pmaports `959c775` @phoenix（rc6 + cmdline）。
 
 **Release r66 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r66>**（2026-10-07
 推送窗口上传）：直刷三件 + 锚三件 + 固件 tarball（自建者用）+ `SHA256SUMS`。

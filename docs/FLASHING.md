@@ -61,9 +61,14 @@ fastboot reboot
 ### A-3 刷完验收与回滚
 
 - 重启后 ~1 分钟 plasma 起来；首启自动扩容占满整盘属正常；登录 `user` / `1234`。
-- **首启必做：关自动睡眠**——「电源管理 → 节电」里把空闲挂起/自动睡眠关掉。本移植
-  suspend 必死：不关的话设备空闲后会睡死假重启（表现为莫名重启一次，重启后正常）。
-  三条 sleep target 的 mask 只是兜底，挡不住桌面电源管理的自动睡眠请求。
+- **首启必做：关自动睡眠**（**仅 Release r66 及更早内核**）——「电源管理 → 节电」里把
+  空闲挂起/自动睡眠关掉。这些内核 suspend 必死：不关的话设备空闲后会睡死假重启（表现为
+  莫名重启一次，重启后正常）；三条 sleep target 的 mask 只是兜底，挡不住桌面电源管理的
+  自动睡眠请求。真凶已查明 = in-tree printk 的 console 挂起路径回归
+  （`console_suspend_all()`，见本仓 AGENTS「suspend 已结案」节）。
+  **✅ rc6+ 内核（r72 起，含下个 Release）已修**：cmdline 带 `no_console_suspend`，
+  真睡 + 电源键/RTC 唤醒 + 自动睡眠（powerdevil 5min）均已实测通过 ⇒ **用新内核时不用关
+  自动睡眠**；已知残留 = ath12k 睡醒恢复 ~20s（屏幕迟亮、WiFi 睡后需重载模块），治本挂下轮。
 - 验收清单照 **§5** 过一遍（本轮期望 `uname -v` = `7.3.0_rc3-r66` → `#67`）。
 - 蜂窝/NFC 用户态默认摘除 = 拍板形态（README 状态表）；`systemctl --failed` 里
   MANIFEST「已知非回归失败」三件不用慌。

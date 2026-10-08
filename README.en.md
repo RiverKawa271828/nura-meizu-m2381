@@ -44,11 +44,15 @@ fastboot flash userdata    meizu-meizu20-r66.img  # rootfs (⚠ wipes all data)
 fastboot set_active b && fastboot reboot
 ```
 
-The plasma desktop comes up in about a minute. **First boot must-do**: open
-"Power Management → Energy Saving" and **turn off automatic suspend** — suspend is
-deadly on this port; leaving it on will sleep-kill the device on idle (a fake-off that
-needs a forced reboot). Screen blanking (DPMS) works fine.
-(This behavior is new-install default; long-time users always had it switched off by hand.)
+The plasma desktop comes up in about a minute. **First boot must-do** (**r66 kernel of this
+release only**): open "Power Management → Energy Saving" and **turn off automatic suspend** —
+suspend is deadly on the r66 kernel; leaving it on will sleep-kill the device on idle (a fake-off
+that needs a forced reboot). Screen blanking (DPMS) works fine.
+**✅ Fixed in the next kernel (rc6 / r72 working state)**: the real culprit was an in-tree printk
+console-suspend regression (`console_suspend_all()`), fixed by adding `no_console_suspend` to the
+kernel cmdline; on the new kernel real sleep, power-key/RTC wake and automatic suspend have all
+been verified on hardware (residual: ath12k resume takes ~20 s, so the screen lights up late and
+WiFi needs a module reload after wake — proper fix pending).
 
 Pre-flight checklist (unlocked bootloader / Flyme baseline / anchors), step-by-step
 verification, and brick recovery → **[docs/FLASHING.md](docs/FLASHING.md)** (Chinese).
@@ -113,9 +117,10 @@ plug-test pending) | Waydroid.
 **✗ Not working**
 Recording/microphone (SWR domain bring-up, late-stage) | camera (platform open, sensor
 driver not written) | fingerprint | GNSS (follows cellular) | DP alt-mode video out
-(fsa4480 not populated on board — judged dead after final review) | suspend/deep sleep
-(screen blank = DPMS instead; real sleep always hard-hangs, see the first-boot must-do)
-| IR/UWB (identity unconfirmed). Hardware absent: 3.5mm jack, SD slot.
+(fsa4480 not populated on board — judged dead after final review) | deep sleep / MPM-AOSS
+(late-stage; **plain sleep is fixed and automatic suspend enabled in the rc6/r72 working state** —
+the r66 kernel of this release still needs the first-boot must-do above) | IR/UWB (identity
+unconfirmed). Hardware absent: 3.5mm jack, SD slot.
 
 > Cellular/NFC removal by default is a deliberate power/stability decision (masked by
 > the device package), not a missing feature.

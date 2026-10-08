@@ -40,12 +40,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64}"
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="66"      # 已构建 apk 的 pkgrel（r66 = fsa4480 摘除+PSI=y 载体，10-07）
+REL_LINUX_PKGREL="72"      # 已构建 apk 的 pkgrel（r72 = 内核 rebase v7.3-rc6 + cmdline no_console_suspend，10-08（七十七））
 REL_DEVICE_PKGREL="53"     # r53 = depends + hexagonrtc 三件（Release rootfs 首航暴雷修复，10-07）；r52 = NFC/蜂窝用户态摘除
 REL_FW_PKGREL="3"
-REL_MU_IMG="$NURA_ROOT/artifacts/mu-r66-9033a734.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v47.img.gz"  # 仓内 gz 化（100MiB 裸镜像不过 GitHub 上限）；刷写/verify 自动解压
-REL_KERNEL_VER="#67"       # 下次上机 uname 期望（r66 内核 + #N=pkgrel+1 定律）
+REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v53.img.gz"  # 仓内 gz 化（100MiB 裸镜像不过 GitHub 上限）；刷写/verify 自动解压
+REL_KERNEL_VER="#73"       # 下次上机 uname 期望（r72/rc6 内核 + #N=pkgrel+1 定律）
 
 # ---- 回滚锚（刷坏救命的三个文件；路径变动必须同步 FLASHING.md）----
 ANCHOR_TB2="$NURA_WORK/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img"

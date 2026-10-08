@@ -70,6 +70,10 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
 7. ✅ `setup.sh --clone`：四仓 + 官方 pmbootstrap（gitlab.postmarketos.org）自动摆位；
    wrapper（script/pmbootstrap-meizu.sh + cfg）与 tools（tools/）已收编本仓；
    回滚锚三件 = Release 资产（✅ 已上传，缺失时 setup 只警告）；
+8. ✅ **推送状态（2026-10-08 （七十七）rc6 轮）**：内核 fork `meizu20-t4b` 已 force-push 到
+   `2431440968fe`（**v7.3-rc6 重放**，84 提交），`master` 同步到 rc6 基线提交 `a90ee4305c4a`
+   ⇒ 公开页面「领先 84 提交」= 恰好板级内容；3 个历史分支已改挂 tag（`archive/*`）并推送；
+   GitHub 默认分支 = `meizu20-t4b`。⚠ **分支规范：分支只留「现役 + 上游镜像」，历史落 tag**。
 8. ⬜ **干净机首航**：找一台第二机器/容器从零跑通 setup→build→flash，发布面才算成立。
    （2026-10-07 本机已用 Release 资产完整重放直刷三件一轮：rootfs 两雷修复后
    全绿，boot ~40s；但同机非干净机，此项仍开。）

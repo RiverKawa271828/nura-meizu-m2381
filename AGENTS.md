@@ -27,14 +27,15 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-07 更；新会话从这里接）
+## 现态（2026-10-08 更；新会话从这里接）
 
 - **Phase-2 清理轮收官（推送前预备完成）**：wrapper（pmbootstrap-meizu.sh + cfg）与
   tools（make-esp-recovery + devsh 三件）已收编本仓；`PIN_*_GIT` 已填
   （linux-mobile-ports / Mu-Silicium / Device-Binaries 三 fork 在位；pmaports 建仓后推）；
   `setup.sh --clone` = 四仓 + 官方 pmbootstrap（gitlab）自动摆位，回滚锚缺失降为警告。
   ESP 自 v47 起仓内 gz 化（裸镜像恰 100MiB 压 GitHub 单文件上限），flash-batch/verify
-  自动解压。config/MANIFEST 现役对齐 **r66 / device r52 / ESP v47 / mu-r66 / 期望 #67**。
+  自动解压。config/MANIFEST 现役对齐 **r66 / device r52 / ESP v47 / mu-r66 / 期望 #67**（发布面；
+  **工作态已更到 r72 / device r53 / ESP v53 / mu-r69 / #73 @ rc6**，见 MANIFEST「工作态」表）。
 - **✅ 本地仓全面复核 + Release rootfs 首航轮收官（10-07 下午，用户在场）**：
   复核全绿（三树 tip 对钉 / remote 指向 / doctor+verify 全绿 / Release 七件 sha 逐件对拍）；
   **Release rootfs 首刷暴雷两连，均已根治**：
@@ -53,13 +54,24 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 - **▶ 剩余 = 干净机首航**（发布面成立判据：第二台机器/容器从零 setup→build→flash）；
   候补小件 = hexagonrtc 包仓 r7/r8 双版本漂移收敛（APKBUILD pkgrel=7 vs 本地包仓
   r8 并存，低优）｜ 7.3 stable rebase 挂观察（主档排程）。
-- **⏸ suspend 睡死修复实验（10-07 实证，用户拍板先不修）**：s2idle 睡入不能唤醒已
-  **实机复现两连**（powerdevil 自动睡眠触发 1 次 + 手动 `echo mem` 1 次；journal 停在
-  suspend entry 无 resume；reboot-reason=0x00 排除软件重启/插电开机）。**新 rootfs 上
-  powerdevil 自动睡眠默认开启 = 空闲必睡死假重启**，首启必做手动关（README/FLASHING
-  已写）。低垂果实候选 = 睡前限制 cpuidle 深度（cluster power-collapse 假说）1-2 轮，
-  醒了即得缓解形态 + 死因层定位，全败归 MPM/AOSS 大后期维持原判；每轮代价 = 睡死
-  一次需长按电源救机。
+- **✅ suspend「睡死」已结案并修复（10-08（七十七）轮；全量 = 私有工作区
+  meizu20-m1/suspend-test-20261008/FINDINGS「轮 4/5」）**：真凶**不是驱动**，是 in-tree
+  `printk` 的 console 挂起路径 —— `console_suspend_all()`（printk.c:2789+）在
+  `console_suspend` 默认 Y 时会把系统挂死（挂死点 = 它打的
+  `printk: Suspending console(s) (use no_console_suspend to debug)` 之后，Y-only 段含
+  `synchronize_srcu(&console_srcu)`），外部看门狗复位 = 用户看到的「睡死假重启」。
+  上游已知回归（`9e70a5e109a4 "printk: Add per-console suspended state"`，LKML 在查）。
+  **修复 = 内核 cmdline 加 `no_console_suspend`（r72/rc6 起随包）**。
+  **本仓现役内核已 rebase 到 v7.3-rc6**（`meizu20-t4b` @ `2431440968fe`，84 提交零冲突重放）：
+  真睡 + 电源键/RTC 唤醒实测通过、**自动睡眠（powerdevil 5 分钟）已放开并验证**
+  （t+300s 自动入睡、电源键唤醒、`stats` 逐轮递增、failed 0、无花屏）。
+  ⚠**已知残留（治本挂下轮）**：睡醒恢复段卡在 **ath12k 21.2 秒超时**
+  （`resume async: -22` → `resume core: -110` + 恢复后 `fail to start mac operations ret -108`）
+  ⇒ **屏幕在这 21 秒不回来（用户「狂按电源键才亮」的真因）**，且 WiFi 睡后死（需重载模块）；
+  本机 WiFi 未配置故日常无感。修法候选 = 追上游 ath12k 修复 / 睡眠 hook 先 rmmod ath12k /
+  查平台 PCIe·genpd 挂起顺序。
+  **发布面提醒**：**Release r66 的 rootfs + r66 内核仍是旧的**（无 `no_console_suspend`），
+  给 r66 用户的「首启关自动睡眠」建议**继续有效**；rc6 修复随下个 Release 出去。
 
 ## 工作流卡
 

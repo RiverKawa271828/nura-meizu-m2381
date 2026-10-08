@@ -35,10 +35,13 @@ fastboot flash userdata    meizu-meizu20-r66.img  # rootfs（⚠清空全部数�
 fastboot set_active b && fastboot reboot
 ```
 
-约 1 分钟起 plasma 桌面。**首启必做**：进桌面后打开「电源管理 → 节电」，**把自动
-睡眠/空闲挂起关掉**——本移植 suspend 必死，放着不管会在空闲后睡死假重启（系统
-重启后一切正常，但每次空闲都会再来一次）；熄屏走屏幕熄灭（DPMS）即可。
-（本机此前不睡，是使用者在电源设置里手动关的；新装的 rootfs 恢复默认开启。）
+约 1 分钟起 plasma 桌面。**首启必做**（**仅本 Release 的 r66 内核**）：进桌面后打开
+「电源管理 → 节电」，**把自动睡眠/空闲挂起关掉**——r66 内核 suspend 必死，放着不管会在
+空闲后睡死假重启（系统重启后一切正常，但每次空闲都会再来一次）；熄屏走屏幕熄灭（DPMS）即可。
+**✅ 已在下一版内核（rc6 / r72 工作态）修好**：真凶 = in-tree printk 的 console 挂起路径
+回归（`console_suspend_all()`），修法 = cmdline 加 `no_console_suspend`；新内核上真睡、
+电源键/RTC 唤醒、自动睡眠均已实测通过（残留：ath12k 睡醒恢复约 20s，屏幕迟亮且 WiFi 需
+重载模块，治本挂后续）。
 
 刷机前准备八项（BL 解锁 / Flyme 基线 / 回滚锚）与逐条验证、
 回滚救砖 → **[docs/FLASHING.md](docs/FLASHING.md)「快速路径 A：Release 直刷」**。
@@ -90,8 +93,9 @@ Waydroid。
 
 **✗ 不可工作**
 录音/麦克风（SWR 域 bring-up，大后期）｜相机（平台已开放，传感器驱动未做）｜指纹｜GNSS（随蜂窝）｜
-DP 视频外接（板上未焊 fsa4480，判负终审）｜suspend/深睡（熄屏走 DPMS 替代；真深睡唤醒有花屏史，
-bloff 工程解默认兜底）｜IR/UWB（身份未定）。硬件不存在：3.5mm 耳机孔、SD 卡槽。
+DP 视频外接（板上未焊 fsa4480，判负终审）｜深睡 MPM/AOSS（大后期；**普通 sleep 已在 rc6/r72
+工作态修好并放开自动睡眠**，本 Release 的 r66 内核仍按上文关自动睡眠）｜IR/UWB（身份未定）。
+硬件不存在：3.5mm 耳机孔、SD 卡槽。
 
 > 蜂窝/NFC 默认摘除是省电与稳定性的**拍板形态**（设备包随包 mask），不是功能缺失。
 
