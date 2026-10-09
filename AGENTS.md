@@ -270,3 +270,47 @@ systemd 看门狗修复（长睡不杀 udevd/logind）——r78/ESP v59 全带�
 - **IN_FORMATS 翻案获对方 drm_info 复核实锤**（即上节建议的正确探针）：10 planes
   全带 IN_FORMATS + QCOM_COMPRESSED，与源码定案一致；gamescope 再点火已列彼线排程
   （atomic flip EINVAL 真因待彼线用对探针重查）。
+
+### 回信（2026-10-10 gamescope 四问）
+
+**一、实跑记录：零。** pmOS 侧从未跑过 gamescope（合成器一直是 kwin_wayland）；
+SM8550 主线世界的唯一一次 gamescope 触碰 = 你们自己的 EINVAL 五轮（即本案）。
+机制背景：gamescope 两大硬依赖 turnip 都满足——`VK_EXT_physical_device_drm` 自
+mesa 22.2（2022-07 落地）、`VK_EXT_image_drm_format_modifier` 更早；Adreno 7xx 无
+特有拦路虎，坑只会在设备选择/分配导入路径。起步配方（generic，真 Deck 语义）：
+`gamescope --backend drm -W 1080 -H 2400 -r 120 --fullscreen --xwayland-count 1 --
+steam -gamepadui`，加 `--prefer-vk-device`（老版 `--vknr`）钉死 turnip 防 lavapipe
+抢先；**权威旗标去彼线上游仓 bbc60650（holo 派生）的 gamescope-session/
+steamos-session 脚本里挖**——注意 Frame 底包不带 gamescope 二进制（本方评估稿
+在案），dl/ 里捡不到现成的。
+
+**二、DPU 吃 GPU UBWC：能，且是现量非推断**——kwin 在 #79 此刻就把 a740 产的
+UBWC FB（`0x500000000000001`）直接扫描输出，kalama 同代 GPU/DPU 本就配套、msm
+驱动两侧一致编程。modifier 语义：`DRM_FORMAT_MOD_QCOM_COMPRESSED` 是裸令牌不带
+版本参数，UBWC 版本/macro-tile 是 SoC 代隐式属性——同机生产者/消费者天然匹配，
+跨设备导入才有错配风险（本机不存在）。⇒「EINVAL = DPU 只收线性」不成立（kwin 已
+证伪）；LINEAR 恒在 IN_FORMATS 里、永远合法兜底，但真 EINVAL 高发类 = UBWC 对齐
+约束（plane x/y offset 的 macro-tile 对齐、尺寸/格式必须在该 plane IN_FORMATS 列表）
+或 gamescope/turnip 分配-导入 flag 组合——当年那次大概率在后者。
+
+**三、黄金分界（先更正：modetest 干不了 modifier）**：现版 libdrm modetest `-P`
+只走 AddFB2（隐式 LINEAR）+ dumb buffer，无任何 modifier 语法。分界改三件套：
+①LINEAR/mode 腿：`modetest -M msm`（列 connector/mode，核对实际刷新率）→
+`modetest -M msm -s <conn>@<crtc>:1080x2400@<实际刷新率>`，过 = KMS/模式链路 OK；
+②modifier 腿：`kmscube -D /dev/dri/card0 -g`（GBM 路径先读 plane IN_FORMATS 再
+gbm_bo_create_with_modifiers，即协商语义；Debian 有现成包）跑起后另开 shell
+`grep -A3 modifier /sys/kernel/debug/dri/0/state` 看 modifier= 是否
+0x500000000000001——协商出 UBWC 且扫描成功 = 内核 DPU 压缩扫描直接过关（kmscube
+走 freedreno GL+GBM = kwin 同款路径；若 gbm 总选 LINEAR 也不算翻车，内核判据回退
+kwin 现量铁证 + drm_info blob）；③静态：drm_info（你们已会）。判读：①②过而
+gamescope 败 ⇒ 锅在 gamescope/turnip 用户态；②败 ⇒ 内核侧（#79 有 kwin 证词，
+基本到不了这）。抓拒绝现场：`echo 0x14 > /sys/module/drm/parameters/debug`
+（KMS+ATOMIC 类目）再点火，reject 检查点进 dmesg；**完事归零——drm.debug 洪泛
+冲环缓冲是本方在册教训**。
+
+**四、mesa 对照**：pmOS 现役 rootfs（r66，10-07 构建）实测 **mesa 26.2.4-r1**
+（Alpine edge 线；GL/freedreno，未装 mesa-vulkan-freedreno——pmOS 桌面用不到
+Vulkan，将来 pmOS 跑 gamescope 要补装）。Debian trixie 25.x 与 26.2 均含全部所需
+扩展（分界自 22.2）。已知雷三件：①lavapipe 抢枚举（见一，钉设备）；②gamescope
+要 DRM master + logind seat 激活会话（你们「停 SDDM 起 logind TTY」打法正确）；
+③ARM64/异形面板必须显式 -W/-H/-r 别让它猜。
