@@ -52,6 +52,7 @@ if [ -e "$APK" ]; then
 	LIST=$(tar -tzf "$APK" 2>/dev/null || true)
 	echo "$LIST" | grep "zram.ko" >/dev/null && echo "  ✓ zram.ko 在列" || { echo "  ✗ zram.ko 缺失"; FAIL=1; }
 	echo "$LIST" | grep "zsmalloc.ko" >/dev/null && echo "  ✓ zsmalloc.ko 在列" || { echo "  ✗ zsmalloc.ko 缺失"; FAIL=1; }
+	echo "$LIST" | grep "uinput.ko" >/dev/null && echo "  ✓ uinput.ko 在列（r78 起，Steam Input 主诉求）" || { echo "  ✗ uinput.ko 缺失"; FAIL=1; }
 	echo "$LIST" | grep "boot/vmlinuz-efi" >/dev/null && echo "  ✓ vmlinuz-efi 在列" || { echo "  ✗ vmlinuz-efi 缺失"; FAIL=1; }
 fi
 

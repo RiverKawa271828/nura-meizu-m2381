@@ -27,7 +27,7 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-08 更；新会话从这里接）
+## 现态（2026-10-10 更；新会话从这里接）
 
 - **Phase-2 清理轮收官（推送前预备完成）**：wrapper（pmbootstrap-meizu.sh + cfg）与
   tools（make-esp-recovery + devsh 三件）已收编本仓；`PIN_*_GIT` 已填
@@ -35,7 +35,16 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   `setup.sh --clone` = 四仓 + 官方 pmbootstrap（gitlab）自动摆位，回滚锚缺失降为警告。
   ESP 自 v47 起仓内 gz 化（裸镜像恰 100MiB 压 GitHub 单文件上限），flash-batch/verify
   自动解压。config/MANIFEST 现役对齐 **r66 / device r52 / ESP v47 / mu-r66 / 期望 #67**（发布面；
-  **工作态已更到 r72 / device r53 / ESP v53 / mu-r69 / #73 @ rc6**，见 MANIFEST「工作态」表）。
+  r72 首传撤回后回退。**工作态 = r78 / device r59 / ESP v59 / mu-r69 / #79 @ rc6（10-10
+  uinput 轮）**，见 MANIFEST「工作态」表）。
+- **✅ uinput 轮（10-10，steamos 线带话）**：内核 r78 = `CONFIG_INPUT_UINPUT=m`
+  （config-only，DTS/驱动零改动 ⇒ DTB/Mu 不动）+ 设备包 r59 = uaccess 规则 +
+  modules-load.d；verify 全绿；**r78 uinput.ko 在 Debian v5 盒（r77/#78 同 vermagic）
+  insmod/rmmod 实机预演通过**。顺带办结 IN_FORMATS 查证：**steamos 的
+  `grep in_formats state` 是假探针（state dump 不打该属性，恒 0）**，实际 DPU 平面
+  自 mainline 2019 就带 IN_FORMATS（QCOM_COMPRESSED+LINEAR），上机实探 kwin 正用
+  UBWC 扫出——「msm 只吃线性」前提作废，gamescope 翻案方向成立，判词与平移清单见
+  文末「带话」节回信。
 - **✅ 本地仓全面复核 + Release rootfs 首航轮收官（10-07 下午，用户在场）**：
   复核全绿（三树 tip 对钉 / remote 指向 / doctor+verify 全绿 / Release 七件 sha 逐件对拍）；
   **Release rootfs 首刷暴雷两连，均已根治**：
@@ -196,3 +205,55 @@ meizu20-t4b 现打的本地 tarball——r77 含完整 m2381 音频块，pmOS �
    {wmfw,bin}` 共 6 件；ADSP 本体 = `qcom/sm8550/meizu/adsp.*`）——无需固件新版；
    且现行出声路径 = 直驱绕 DSP，wmfw 非必需。
 4. 收到，不阻塞。可先行对接现役 r77；等 7.3 stable rebase（~10 月中）随车同步亦可。
+
+### 回信（2026-10-10 uinput 轮，逐条答两件 + s2idle）
+
+**判词**：主诉求**已随 r78 落地并在你们的盒子上实机预演通过**；IN_FORMATS 查证
+**翻案成立——但你们原来那条探针是假的，当时「in_formats=0」的读数从未测过 IN_FORMATS**。
+
+**一、uinput（主诉求，已办结）**
+
+- 内核 **r78** = `CONFIG_INPUT_UINPUT=m`（config-only 轮：DTS/驱动源码零改动，
+  DTB 与 Mu 完全不动，风险面 = 一行 config）。verify 全绿。
+- **实机预演（就在你们 v5 盒上做的，在跑 r77/#78，与 r78 同 vermagic）**：
+  从 r78 apk 抽 `uinput.ko` → `insmod` → `/dev/uinput` 出现（10:223，root:root 600，
+  与你们报的默认态一致）→ `rmmod` → 节点消失、零残留。模块本体已实测可用。
+- **用户态配套（pmOS 设备包 r59，两件照单平移 Debian 层即可）**：
+  ① `60-meizu20-uinput.rules`（编号必须 <70，systemd 的 70-uaccess.rules 要消费 tag）：
+     `KERNEL=="uinput", TAG+="uaccess", OPTIONS+="static_node=uinput"`
+     ——uaccess = logind 给活动会话用户挂 ACL（Steam 非特权跑）；static_node 有内核
+     别名支撑（`MODULE_ALIAS("devname:uinput")`），非 cargo cult。
+  ② `/usr/lib/modules-load.d/meizu20-uinput.conf` 内容一行 `uinput`
+     ——misc 设备**没有 open 时自动加载**，不开机加载的话节点永远是死的
+     （Steam 客户端自己会试 modprobe，但别赌它）。
+- 交付配对（两腿铁律）：**ESP v59**（裸 sha `78f425ac` / gz `903bbf6b`）+ 内核 apk
+  **r78** + 设备包 **r59** 必须同轮；上机期望 `uname -v` → **#79**。Debian 层直灌模块
+  时 uinput.ko 在 apk 的 `usr/lib/modules/7.3.0-rc6/kernel/drivers/input/misc/`，
+  整包 graft + depmod 即自动带上。
+
+**二、IN_FORMATS 查证（翻案成立 + 探针勘误，比预想的更有料）**
+
+- **探针勘误（先说这个，因为它改变了翻案性质）**：`grep -c in_formats
+  /sys/kernel/debug/dri/0/state` 在这套 drm 核心上**恒为 0**（大小写不敏感也是 0）——
+  state dump 的打印路径（`drm_atomic.c: drm_atomic_plane_print_state` +
+  `dpu_plane.c: dpu_plane_atomic_print_state`）**根本不打印 IN_FORMATS 属性**，
+  grep 到 0 与内核有没有毫无关系。五轮 A/B 里的「in_formats=0」是假读数；
+  「msm 只吃线性缓冲」的大前提从未被真正测过。
+- **源码定案**：`dpu_plane.c:91` `supported_format_modifiers[] = {QCOM_COMPRESSED,
+  LINEAR}`，经 `dpu_plane_init_common` 全平面传入 `drmm_universal_plane_alloc`；
+  drm 核心（`drm_plane.c: create_in_format_blob`）对 modifiers 非空必挂 IN_FORMATS。
+  该支持来自 mainline **`3ba25595e235`（2019-02，v5.1 窗口）**——远早于 rc6，
+  rc6/r77/r78 全都自带。
+- **上机实锤（你们盒子上实测，10 planes）**：state 里 kwin_wayland 的 FB =
+  `format=AR30 1080x2400, modifier=0x500000000000001` =
+  **DRM_FORMAT_MOD_QCOM_COMPRESSED（UBWC）**——桌面此刻就在用 UBWC 压缩缓冲扫描
+  输出。IN_FORMATS 是 Mesa/GBM modifier 协商的必经属性：能协商出 UBWC ⇒ 属性必在。
+- **对 gamescope 的判词**：翻案方向成立且比预期更好（可用面不只线性，UBWC 都在扫）；
+  但当时 atomic flip EINVAL 的真因**另在他处**（IN_FORMATS 缺失论作废），建议用对
+  探针重查：`drm_info`（用户态 drmModeObjectGetProperties 直接看 plane 的
+  IN_FORMATS blob）或 `modetest -p`（libdrm-tests），别再用 state grep。
+  gamescope 3.16.22 那发可以在现役内核上直接再点火。
+
+**三、s2idle**：pmOS 侧 r72 起已修（`no_console_suspend` 随包 cmdline）+ 设备包 r58
+systemd 看门狗修复（长睡不杀 udevd/logind）——r78/ESP v59 全带。你们同步后即可解锁
+电源键秒睡；唯一纪律还是两腿配对（ESP v59 ↔ apk r78 同轮）。

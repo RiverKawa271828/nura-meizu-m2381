@@ -3,31 +3,28 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（r72 **首传已撤回**，2026-10-08 @ （七十七）rc6 轮；在机就是这套）
+## 工作态（2026-10-10 @ uinput 轮；在机就是这套）
 
 > ⚠ **r72 Release 已整体撤回**（含 tag）：首传的 rootfs 资产被抓到是**「正在写入的半截流」**
 > （607,911,936 B，正确件 = 1,177,103,795 B）——上传与 gzip 落盘竞态所致；启停件本身未动。
 > **教训**：SHA256SUMS 只能证明传输一致，**不能证明生成时文件已写完** ⇒ 以后传大件必须
 > 「传完再下载回来做 `gzip -t` + sha 对拍」闭环。修好（外加 ath12k 唤醒残留）后再按新 tag 重发。
-> 本节的构建事实（rc6 / 设备包 r54 / #73）**仍然有效**，就是当前在机状态。
-
-> **Release r72 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r72>**
-> 主题 = **睡眠修好**（cmdline `no_console_suspend` + 设备包 r54 删掉 sleep 屏蔽 ⇒ 出厂即
-> 自动睡眠可用）；内核 rebase v7.3-rc6；残留 = ath12k 睡醒恢复 ~20s（屏幕迟亮 + WiFi 睡后需
-> 重载模块，治本挂下轮）。
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**72**（qcom DTS 相对 rc3 零改动 ⇒ DTB 不变；cmdline 加 `no_console_suspend` = 睡死修复；fork `2431440968fe` @meizu20-t4b） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r72.apk` | 67069cb8 | 机上 apk add |
+| 内核 apk | 7.3.0_**rc6**-r**78**（**config-only 轮：+CONFIG_INPUT_UINPUT=m**，steamos 线带话主诉求；DTS/驱动源码零改动 ⇒ DTB 不变、Mu 免重打；fork tip 同 r77 `02fe4629080a` @meizu20-t4b） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r78.apk` | — | 机上 apk add |
 | Mu 镜像 | r69 | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
-| ESP | v53（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v53.img.gz` | c8d07289（裸镜像） | recovery_a |
-| 设备包 / 固件包 | **r54**（删 sleep-target 屏蔽 ⇒ 出厂即放开自动睡眠）/ r3 | 同目录 | — | 机上 apk add |
-| 上机期望 | `uname -v` = `7.3.0-rc6` → **#73**；`/proc/cmdline` 含 `no_console_suspend` | — | — | — |
+| ESP | v59（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v59.img.gz` | 78f425ac（裸镜像）/ 903bbf6b（gz） | recovery_a |
+| 设备包 / 固件包 | **r59**（uinput 用户态胶水：`60-meizu20-uinput.rules` uaccess+static_node / `modules-load.d` 开机加载）/ r3 | 同目录 | — | 机上 apk add |
+| 上机期望 | `uname -v` = `7.3.0-rc6` → **#79**；`/dev/uinput` 存在（r78+ 装 r59 后） | — | — | — |
 
-**rc6 轮实测**（10-08）：failed 0 / boot 29.5s / 音频·触控·传感器·显示全绿 / 功放 IRQ 零增长 /
-真睡 + 电源键·RTC 唤醒通过 / **自动睡眠已放开**（powerdevil 5min，t+300s 入睡实证）。
-已知残留 = ath12k 睡醒恢复 21.2s（屏幕迟亮 + WiFi 睡后死，治本挂下轮）。
-两腿刷新法：`build-kernel.sh` → `build-esp.sh 53` → 刷；**Mu 不用重编（DTB 未变）**。
+**uinput 轮实测**（10-10）：verify 全绿（dtb 同源 c061acd9 / uinput.ko 在列 / ESP↔apk 同源 b5e13ca5）；
+**r78 `uinput.ko` 在 Debian v5 盒（在跑 r77/#78 内核）insmod 实机预演通过**——/dev/uinput 出现
+（root:root 600，与 steamos 线报的默认态一致 ⇒ uaccess 规则确有必要）、rmmod 零残留。
+IN_FORMATS 查证（steamos 线第二问）= **翻案成立**：DPU 平面自 mainline 2019 就带
+IN_FORMATS（QCOM_COMPRESSED+LINEAR），steamos 的 `grep in_formats state` 是假探针
+（state dump 不打该属性）；实探 kwin 正用 UBWC（modifier 0x0500…0001）扫出，判词见
+AGENTS「带话」节回信。
 
 ## 发布面现役产物（2026-10-07 @ 设备日（七十三）后；= Release r66，已发布）
 
@@ -41,10 +38,10 @@
 | rootfs 镜像 | r66 同轮（**--single-partition 修复版 10-07 换件**；内含内核 r66 apk + 设备包 r53 + hexagonrtc 依赖链；纯官方预装，机上后装件不在内） | Release 分发件 `meizu-meizu20-r66.img.gz`（1.10GiB，sha8 **e4636bfe**；首版 90961230 漏 `--single-partition` 上机暴雷已撤换） | e4636bfe | userdata |
 | 源码钉（发布轮 r66 时） | fork `f42761da35ab` @meizu20-t4b ｜ Mu `14692e56822c` @meizu20-mars-port ｜ pmaports `222f0c5` @phoenix（r53 depends 修复轮） ｜ Binaries fork main=`036ba9f7`——**四仓已推 GitHub**；推送前敏感信息清扫：三树历史中性化过 WiFi SSID/本地路径，hash 相应重写；DTS 注释级改动不影响编译产物 | — | — | — |
 
-**源码钉（工作态 2026-10-08 推）**：内核 fork `2431440968fe` @meizu20-t4b（**v7.3-rc6 重放**；
+**源码钉（工作态 2026-10-10 推）**：内核 fork `02fe4629080a` @meizu20-t4b（r77/r78 同 tip；
 `master` 已同步到 rc6 基线提交 `a90ee4305c4a` ⇒ 公开页面显示「领先 84 提交」= 恰好板级内容；
 历史线归档 tag：`archive/pre-rc6-meizu20-t4b` / `archive/meizu20-7.3-T3` / `archive/meizu20-m2381-local`）
-｜ Mu `bdea825c` @meizu20-mars-port（r69 FdtBlob）｜ pmaports `959c775` @phoenix（rc6 + cmdline）。
+｜ Mu `bdea825c` @meizu20-mars-port（r69 FdtBlob）｜ pmaports `77b235c` @phoenix（r78 uinput + r59 胶水）。
 
 **Release r66 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r66>**（2026-10-07
 推送窗口上传）：直刷三件 + 锚三件 + 固件 tarball（自建者用）+ `SHA256SUMS`。

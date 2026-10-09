@@ -40,12 +40,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64}"
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="77"      # r77 = ath12k 暖重连挂点修正（resume_early 恢复中断面+complete，不等 QMI；腿 A M3 已 revert 判负）；resume 6.2s（vs r74 9.0s），WiFi 睡后死未解（service-ready 死结，FINDINGS 轮 10）
-REL_DEVICE_PKGREL="58"     # r58 = s2idle×systemd 看门狗修复（udevd/logind WatchdogSec=0 + 14 内部服务放宽 30min + journald sync 30s）——治「长睡后 udevd/logind 被杀 ⇒ 屏黑+无输入」（FINDINGS 轮 11 补遗）；r57 = sleep 封条自愈；r56 = WoWLAN 睡=不断连；r55/r54/r53 历史
+REL_LINUX_PKGREL="78"      # r78 = CONFIG_INPUT_UINPUT=m（steamos 线带话主诉求：Steam Input 虚拟手柄）；config-only 轮，DTS/驱动源码零改动
+REL_DEVICE_PKGREL="59"     # r59 = uinput 用户态胶水（60-meizu20-uinput.rules uaccess+static_node / modules-load.d 开机加载）；r58 = s2idle×systemd 看门狗修复（udevd/logind WatchdogSec=0 + 14 内部服务放宽 30min + journald sync 30s）
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v58.img.gz"  # v58 = r77 内核（裸 sha a1ba94dc）；v55=r74 裸件留 meizu20-m1/esp-v55-raw.img 35bb1307
-REL_KERNEL_VER="#78"       # 下次上机 uname 期望（r77/rc6 内核 + #N=pkgrel+1 定律）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v59.img.gz"  # v59 = r78 内核（裸 sha 78f425ac）；v58=r77 裸件 a1ba94dc
+REL_KERNEL_VER="#79"       # 下次上机 uname 期望（r78/rc6 内核 + #N=pkgrel+1 定律）
 
 # ---- 回滚锚（刷坏救命的三个文件；路径变动必须同步 FLASHING.md）----
 ANCHOR_TB2="$NURA_WORK/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img"
