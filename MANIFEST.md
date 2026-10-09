@@ -21,9 +21,12 @@
 **uinput 轮实测**（10-10）：verify 全绿（dtb 同源 c061acd9 / uinput.ko 在列 / ESP↔apk 同源 b5e13ca5）；
 **r78 `uinput.ko` 在 Debian v5 盒（在跑 r77/#78 内核）insmod 实机预演通过**——/dev/uinput 出现
 （root:root 600，与 steamos 线报的默认态一致 ⇒ uaccess 规则确有必要）、rmmod 零残留。
-IN_FORMATS 查证（steamos 线第二问）= **翻案成立**：DPU 平面自 mainline 2019 就带
+**已刷（10-10 用户在场）**：唯一在机设备 = steamos/Debian 盒（与 pmOS 同交付链），flash-batch
+boot_b(mu-r69) + recovery_a(ESP v59) → **#79 上机一次点亮**，readback 双对（boot_b `97cdea20` /
+recovery_a `78f425ac`），kwin/UBWC 扫出零回归；其模块腿仍为 r77 graft（uinput.ko 待该线 graft
+补齐）。IN_FORMATS 查证（steamos 线第二问）= **翻案成立**：DPU 平面自 mainline 2019 就带
 IN_FORMATS（QCOM_COMPRESSED+LINEAR），steamos 的 `grep in_formats state` 是假探针
-（state dump 不打该属性）；实探 kwin 正用 UBWC（modifier 0x0500…0001）扫出，判词见
+（state dump 不打该属性）；#79 上机 kwin 正用 UBWC（modifier 0x0500…0001）扫出，判词见
 AGENTS「带话」节回信。
 
 ## 发布面现役产物（2026-10-07 @ 设备日（七十三）后；= Release r66，已发布）

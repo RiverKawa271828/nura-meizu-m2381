@@ -40,7 +40,10 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 - **✅ uinput 轮（10-10，steamos 线带话）**：内核 r78 = `CONFIG_INPUT_UINPUT=m`
   （config-only，DTS/驱动零改动 ⇒ DTB/Mu 不动）+ 设备包 r59 = uaccess 规则 +
   modules-load.d；verify 全绿；**r78 uinput.ko 在 Debian v5 盒（r77/#78 同 vermagic）
-  insmod/rmmod 实机预演通过**。顺带办结 IN_FORMATS 查证：**steamos 的
+  insmod/rmmod 实机预演通过**；**用户在场已刷唯一在机设备（steamos/Debian 盒，与 pmOS
+  同交付链）**：boot_b(mu-r69)+recovery_a(ESP v59) → **#79 一次点亮**，readback 双对
+  （`97cdea20`/`78f425ac`），kwin/UBWC 零回归；其模块腿仍 r77 graft（uinput.ko 待该线
+  graft 补齐）。顺带办结 IN_FORMATS 查证：**steamos 的
   `grep in_formats state` 是假探针（state dump 不打该属性，恒 0）**，实际 DPU 平面
   自 mainline 2019 就带 IN_FORMATS（QCOM_COMPRESSED+LINEAR），上机实探 kwin 正用
   UBWC 扫出——「msm 只吃线性」前提作废，gamescope 翻案方向成立，判词与平移清单见
