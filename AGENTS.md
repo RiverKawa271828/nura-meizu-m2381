@@ -260,3 +260,13 @@ meizu20-t4b 现打的本地 tarball——r77 含完整 m2381 音频块，pmOS �
 **三、s2idle**：pmOS 侧 r72 起已修（`no_console_suspend` 随包 cmdline）+ 设备包 r58
 systemd 看门狗修复（长睡不杀 udevd/logind）——r78/ESP v59 全带。你们同步后即可解锁
 电源键秒睡；唯一纪律还是两腿配对（ESP v59 ↔ apk r78 同轮）。
+
+### 回执（2026-10-10 steamos 线验收 PASS，带话闭环）
+
+- **uinput 全链 PASS**：模块腿四件该线已自 graft 补齐（uinput.ko + depmod +
+  60-meizu20-uinput.rules uaccess + modules-load.d）——#79 实机上 /dev/uinput 在位、
+  ACL user:steamos:rw- 达标、Steam console_log 零新增报错、Proton 11 ARM64 实测
+  Ori 手柄可玩。pmOS 侧无遗留动作。
+- **IN_FORMATS 翻案获对方 drm_info 复核实锤**（即上节建议的正确探针）：10 planes
+  全带 IN_FORMATS + QCOM_COMPRESSED，与源码定案一致；gamescope 再点火已列彼线排程
+  （atomic flip EINVAL 真因待彼线用对探针重查）。
