@@ -53,6 +53,7 @@ if [ -e "$APK" ]; then
 	echo "$LIST" | grep "zram.ko" >/dev/null && echo "  ✓ zram.ko 在列" || { echo "  ✗ zram.ko 缺失"; FAIL=1; }
 	echo "$LIST" | grep "zsmalloc.ko" >/dev/null && echo "  ✓ zsmalloc.ko 在列" || { echo "  ✗ zsmalloc.ko 缺失"; FAIL=1; }
 	echo "$LIST" | grep "uinput.ko" >/dev/null && echo "  ✓ uinput.ko 在列（r78 起，Steam Input 主诉求）" || { echo "  ✗ uinput.ko 缺失"; FAIL=1; }
+	echo "$LIST" | grep "uhid.ko" >/dev/null && echo "  ✓ uhid.ko 在列（r80 起，BLE HID/HOG）" || { echo "  ✗ uhid.ko 缺失"; FAIL=1; }
 	echo "$LIST" | grep "boot/vmlinuz-efi" >/dev/null && echo "  ✓ vmlinuz-efi 在列" || { echo "  ✗ vmlinuz-efi 缺失"; FAIL=1; }
 fi
 
