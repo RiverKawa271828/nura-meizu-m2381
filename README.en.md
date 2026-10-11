@@ -65,9 +65,11 @@ Replicating the workspace elsewhere: `export NURA_WORK=/<your work root>` →
 `config.sh`).
 
 > Common prerequisites for both paths: an **unlocked bootloader** (this project does not
-> provide unlock methods — research that yourself) and a device on **Flyme 12.6.0.0A
-> with slot b active** — the only validated baseline (exact version / official download /
-> MD5 in FLASHING §1). Other Flyme versions are unverified; do not OTA blindly.
+> provide unlock methods — research that yourself) and a device where the **latest Flyme
+> OTA has been fully applied (the OTA lands in slot b) with slot b active** — the only
+> validated boot configuration (validation device = 12.6.0.0A landed in slot b; exact
+> version / official download / MD5 in FLASHING §1). Slot-a boot, non-OTA devices and
+> older versions are unverified; newer OTAs are unverified too — do not OTA blindly.
 
 Full flashing tutorial (incl. brick recovery) → **[docs/FLASHING.md](docs/FLASHING.md)**
 (Chinese). Build pipeline → [docs/PIPELINE.md](docs/PIPELINE.md) (Chinese). Boot-chain

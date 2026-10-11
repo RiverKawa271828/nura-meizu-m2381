@@ -37,7 +37,7 @@
 | # | 准备项 | 说明 / 确认方式 |
 |---|---|---|
 | 1 | 设备 = 魅族 20（m2381），**bootloader（BL）已解锁** | **本项目不提供解锁 BL 方法，请自行研究**；未解锁时 `fastboot flash` 一律被拒 |
-| 2 | **Flyme 12.6.0.0A** 基线（项目验证版本）+ slot b 活动 | `fastboot getvar current-slot` → `b`；其他版本未验证勿盲升；OTA 下载/MD5 → §1 |
+| 2 | **最新 Flyme OTA 已整包更新（更新落在 b 槽）+ b 槽活动** | `fastboot getvar current-slot` → `b`；验证机 = 12.6.0.0A OTA 落 b 槽。a 槽启动/未 OTA/旧版形态均未验证勿盲试；OTA 下载/MD5 → §1 |
 | 3 | 电量 > 20%；好线插宿主 USB 口 | 刷一半没电 = 直接 §6 救砖 |
 | 4 | 宿主装 Android platform-tools | 终端 `fastboot --version` 能跑即可 |
 | 5 | 下载 Release 三件 + `SHA256SUMS`：boot（`mu-r*.img`）/ recovery（`esp-recovery-*.img.gz`）/ rootfs（`meizu-meizu20-*.img.gz`） | `sha256sum -c SHA256SUMS` 全 OK 才继续 |
@@ -85,11 +85,13 @@ fastboot set_active b && fastboot reboot
 
 ## 1. 前置检查
 
-**适用基线（2026-10-06 定，先对上再动手）**：
+**适用基线（先对上再动手）**：
 - **bootloader 已解锁**——本项目不提供解锁 BL 方法，请自行研究；未解锁时写分区一律被拒；
-- 全流程只在 **stock Flyme 12.6.0.0A + slot b 活动** 的零售机上验证过；
-- 其他 Flyme 版本**未验证**——上一版 OTA 实测**起不来**（启动链绑 12.6 的 XBL/ABL 固件基线）；更新的 OTA 版本同样未验证，**勿盲升**；
-- 动手前先把设备 OTA 到 12.6.0.0A 并确认 b 槽活动（`fastboot getvar current-slot` → `b`）；a 槽激活态/旧版机行为未知，勿当小白鼠。
+- 全流程只在 **「最新 Flyme OTA 已整包更新（OTA 落 b 槽）+ b 槽活动」** 的零售机上验证过
+  （验证机 = 12.6.0.0A）——关键不是版本号本身，而是「OTA 更新落 b 槽、从 b 槽启动」这个形态；
+- 其他形态**未验证**：a 槽启动、未 OTA 机型、回退旧版都没试过；上一版 OTA 实测**起不来**
+  （启动链绑 OTA 后的 XBL/ABL 固件基线）；更新的 OTA 版本同样未验证，**勿盲升**；
+- 动手前先把设备 OTA 到最新稳定版并确认 b 槽活动（`fastboot getvar current-slot` → `b`）；OTA 落 a 槽的机行为未知，勿当小白鼠。
 
 **基线 OTA 下载**（官方页）：<https://www.flyme.com/firmwarelist-195.html#3>
 
