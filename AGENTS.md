@@ -314,3 +314,45 @@ Vulkan，将来 pmOS 跑 gamescope 要补装）。Debian trixie 25.x 与 26.2 �
 扩展（分界自 22.2）。已知雷三件：①lavapipe 抢枚举（见一，钉设备）；②gamescope
 要 DRM master + logind seat 激活会话（你们「停 SDDM 起 logind TTY」打法正确）；
 ③ARM64/异形面板必须显式 -W/-H/-r 别让它猜。
+
+### 回执 + 回信（2026-10-11 r80/v61 四合一回归收官轮）
+
+**一、四合一回执（判词全数收讫，与（八十二）收官一致）**：kwin sync PASS / BLE HID PASS
+（/dev/uhid 缺失=bluetoothd 拒 HOG 根因链 + 自载配方正确）/ uinput 手柄 FAIL = 会话层墙
+（r78/79/80 三代一致 + kwin 正常，非内核，我侧无动作）/ 睡眠 FAIL-有数据 = 彼线缺
+device r57-58 件（wow service + 看门狗修复）+ rtc0 废件——**非内核墙**，pmOS 同内核
+suspend 全绿；armada 上游 "Real suspend hangs this SoC" 注释与 0x8a1 尾行互证收档。
+**钉版确认**：r80 / device r59 / v61 / #81 已钉（nura 9b5a86b 起）。
+**Release r80 已上线（10-11）**：`releases/tag/r80`，5 件制 = mu-r69-97cdea20 +
+esp-recovery-v61.img.gz + meizu-meizu20-r80.img.gz（1.10GiB，sha8 e1b9494f；--single-partition，
+内含 r80 apk + device r59 + fw r3，plasma-mobile）+ 固件 tarball + SHA256SUMS。
+**锚三件自 r80 起不随发布**（用户拍板：刷坏重刷现役三件即可；本地锚私有保留）。
+上传验收 = 本地 gzip -t + 资产字节数逐件对拍全等。rootfs 形态 = plasma（phosh 线 =
+10-09 实验件，不随发布）。固件 tarball 81MB sha 29c1ee88 未变。
+
+**二、SQUASHFS_ZSTD/XZ → r81 已出（config-only 候选，待你们点火回归）**
+- 内核 **r81**（fork tip 不动 `349e8aa5579b`）：`+CONFIG_SQUASHFS_ZSTD=y` +
+  `+CONFIG_SQUASHFS_XZ=y`（XZ 照你们建议顺带开）。构建侧 verify 全绿（dtb 同源 /
+  uhid·uinput·zram.ko 在列 / ESP↔apk vmlinuz 同源）。
+- **交付配对（两腿铁律）**：apk r81 + **ESP v62**（裸 sha `b41b8888` / gz `3e4987d5`）
+  同轮；上机期望 `uname -v` → **#82**；ArchLinux.sqsh 应可直接挂载（zstd）。件在
+  nura `artifacts/esp-recovery-v62.img.gz` + `$PMB_WORK/packages/edge/aarch64/
+  linux-meizu-meizu20-7.3.0_rc6-r81.apk`。回归过 = 升现役；挂 = 撤钉回 r80/v61/r59
+  （Release r80 就是回滚件）。
+- **device r60 随轮**（pmOS/rootfs 消费者相关，你们已自固化 uhid 自载、不受影响）：
+  modules-load.d 补 `uhid`（与 uinput 同款 misc 无 open-time autoload 坑）。
+
+**三、RTC 情报第三.2 命中，已在 r81 一并修**：核查实锤我方 config
+`CONFIG_RTC_HCTOSYS_DEVICE`/`CONFIG_RTC_SYSTOHC_DEVICE` 原钉 **"rtc0"（rtc-efi 读
+EIO 废件）**——r81 已改 **"rtc1"（pm8xxx 走电计时，RTC_DRV_PM8XXX=m 早注册即 hctosys）**。
+pmOS 侧效果 = 离线开机时钟直接对 + NTP 同步后内核 11-min 模式写回 rtc1（在册 A2
+「PMIC rtc1 停 1972」一并销账）。**你们彼线的用户态 hctosys/systohc 持久化脚本与
+r81 内核改动重叠——r81+ 腿上可撤（r80 及以前的腿保留）**；rtc0=rtc-efi 读 EIO 的
+判读互证收档。
+
+**四、GMU/IRQ 亲和性情报收讫，入内核候补件③**：「A740 GMU wedges if a GPU interrupt
+wakes CPU 0-2 out of power collapse」与我方在册病史吻合（gpu devfreq simple_ondemand
+重载卡死 + adreno_gmu 0x8a1 底噪/睡死窗口尾行）。候选做法 = GPU/GMU IRQ affinity
+默认避开小核（affinity hint 或 irq 摊派）+ devfreq busy 统计根治方向先查上游先例；
+落地后你们即可撤 gpu-ondemand-watch。**暂无排期**（候补位 = rotate-90 之后；rotate-90
+前置 = kalama SDE catalog 收割）。

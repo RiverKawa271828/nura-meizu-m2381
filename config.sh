@@ -30,7 +30,7 @@ PIN_MU_BINARIES_GIT="https://github.com/RiverKawa271828/Device-Binaries"     # �
 PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # 已建独立仓；phoenix 整条已推（10-07 推送窗口；pmOS 官方在 GitLab，GitHub 无镜像 fork 可用）
 
 # ---- Release（Phase-2；setup.sh --fetch-release 按此拉现役件/锚三件）----
-PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r80"  # 发布面（2026-10-11 r80 上线；r72 首传半截流撤回的教训已执行=上传后下载回读 gzip -t 对拍）
+PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r80"  # 发布面（2026-10-11 r80 上线；r72 半截流教训在册：大件上传验收 = 本地 gzip -t + 资产字节数逐件对拍，完整下载回读闭环可选）
 
 # ---- 包身份 ----
 PKGVER="7.3.0_rc6"
@@ -40,12 +40,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64}"
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="80"      # r79 = msm uAPI async page flips（349e8aa5579b，steamos 掌机线）；r80 = CONFIG_UHID=m（config-only，tip 不动）；r79 六发+四合一回归全 PASS；r80 = Release 轮（10-11 上线）
-REL_DEVICE_PKGREL="59"     # r59 = uinput 用户态胶水（60-meizu20-uinput.rules uaccess+static_node / modules-load.d 开机加载）；r58 = s2idle×systemd 看门狗修复（udevd/logind WatchdogSec=0 + 14 内部服务放宽 30min + journald sync 30s）
+REL_LINUX_PKGREL="81"      # r81 = SQUASHFS_ZSTD/XZ=y + RTC hctosys/systohc→rtc1（config-only 候选轮：steamos 线点名 FEX squashfs 腿 + 其 RTC 情报命中 rtc0 废件；tip 不动 349e8aa5579b，**待彼线点火回归**）；r80 = Release 轮（10-11 上线，async flip r79 + UHID=m r80）
+REL_DEVICE_PKGREL="60"     # r60 = modules-load.d 补 uhid 自载（BLE HID 无 open-time autoload）；r59 = uinput 用户态胶水（60-meizu20-uinput.rules uaccess+static_node / modules-load.d）；r58 = s2idle×systemd 看门狗修复（udevd/logind WatchdogSec=0 + 14 内部服务放宽 30min + journald sync 30s）
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v61.img.gz"  # v61 = r80 内核（裸 sha cb7f1e5a）；v60=r79 裸件 0ccfcf72
-REL_KERNEL_VER="#81"       # 下次上机 uname 期望（r80/rc6 内核 + #N=pkgrel+1 定律）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v62.img.gz"  # v62 = r81 内核（裸 sha b41b8888）；v61=r80 裸 cb7f1e5a（Release 轮）；v60=r79 裸 0ccfcf72
+REL_KERNEL_VER="#82"       # 下次上机 uname 期望（r81/rc6 内核 + #N=pkgrel+1 定律）；回滚配对 = r80/v61/#81/r59
 
 # ---- 回滚锚（仅私有工作区本地保留；2026-10-11 起不随 Release 上传——用户拍板：
 #      现役件可信，刷坏重刷现役三件即可；rollback.sh 自用）----

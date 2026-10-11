@@ -3,28 +3,20 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-11 @ async flip + uhid 轮 = Release r80；在机就是这套）
-
-> ⚠ **r72 Release 首传曾整体撤回**（含 tag）：rootfs 资产被抓到是**「正在写入的半截流」**
-> （上传与 gzip 落盘竞态）。**教训已固化为流程**：大件上传后必须「下载回来 `gzip -t` +
-> sha 对拍」闭环才算发布完成——r80（2026-10-11）起照此执行。
+## 工作态（2026-10-11 @ r81 config 候选轮；**未上机**——在机/发布面 = r80/v61/r59 = Release r80）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**80**（r79 = msm uAPI async page flips 三件套 + r80 = CONFIG_UHID=m；fork tip `349e8aa5579b` @meizu20-t4b，DTS 零改动 ⇒ Mu 免重打） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r80.apk` | — | 机上 apk add |
-| Mu 镜像 | r69 | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
-| ESP | v61（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v61.img.gz` | cb7f1e5a（裸镜像）/ 41e26583（gz） | recovery_a |
-| 设备包 / 固件包 | **r59**（uinput uaccess 规则 + modules-load.d）/ r3 | 同目录 | — | 机上 apk add |
-| 上机期望 | `uname -v` = `7.3.0-rc6` → **#81**；`/dev/uinput`（r78+r59）/ `/dev/uhid`（r80 BLE HID，modules-load.d 自载） | — | — | — |
+| 内核 apk | 7.3.0_**rc6**-r**81**（**候选**：CONFIG_SQUASHFS_ZSTD/XZ=y + RTC_HCTOSYS/SYSTOHC→rtc1；config-only，fork tip `349e8aa5579b` 不动 ⇒ DTB/Mu 免重打；**待 steamos 线点火回归**） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r81.apk` | — | 机上 apk add |
+| Mu 镜像 | r69（DTS 零改动沿用） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
+| ESP | v62（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v62.img.gz` | b41b8888（裸镜像）/ 3e4987d5（gz） | recovery_a |
+| 设备包 / 固件包 | **r60**（modules-load.d 补 uhid 自载）/ r3 | 同目录 | — | 机上 apk add |
+| 上机期望 | `uname -v` = `7.3.0-rc6` → **#82**；回归过 = 升现役，回归挂 = 撤钉回 r80/v61/r59 | — | — | — |
 
-**async flip + uhid 轮实测**（10-10/11，steamos 掌机线四合一回归回传）：kwin sync 扫 PASS
-（Plasma 8s 起、120Hz、零 DRM 报错）；MODE_ATOMIC 连发 ~113 次/s 全 0、cmd 模式帧持续推进；
-BLE HID PASS（/dev/uhid 缺失 = bluetoothd 拒收 HOG 根因，uhid 自载后 MCHOSE 鼠标出节点 +
-事件流验证）；uinput 手柄 FAIL = **会话层墙**（ARM steam 客户端焦点判定坏，r78/79/80 三代
-一致 + kwin 时代正常，非内核）；睡眠 FAIL-有数据 = 彼线缺 device r57-58（wow service + 看门狗
-修复件）+ rtc0 废件，**非内核墙**（pmOS 线同内核 suspend 全绿）。双腿对拍 apk b0c865b7 /
-ESP cb7f1e5a；**r80/v61 腿已在第二条 rootfs（armada-sheng/Fedora 底）全链服役 = 内核 base
-无关性双重验证**。
+**回滚配对（在机 = 已验证）**：内核 r80 + ESP v61（裸 cb7f1e5a）+ device r59 = **Release r80**
+（2026-10-11 上线：kwin sync / BLE HID / async flip 四合一回归全 PASS，steamos 线四合一回执）。
+**r81 轮实测**（构建侧）：verify 全绿（dtb 同源 / uhid·uinput·zram 在列 / ESP v62↔apk vmlinuz
+同源）；config-only 轮风险面 = 4 行 config。
 
 ## 发布面现役产物（2026-10-11 @ async flip + uhid 轮后；= Release r80，已发布）
 
@@ -39,7 +31,8 @@ ESP cb7f1e5a；**r80/v61 腿已在第二条 rootfs（armada-sheng/Fedora 底）�
 | 源码钉（发布轮 r80 时） | fork `349e8aa5579b` @meizu20-t4b ｜ Mu `bdea825c` @meizu20-mars-port（r69 FdtBlob，未变）｜ pmaports `850e86d` @phoenix（r80 UHID 轮）——**三树已推 GitHub** | — | — | — |
 
 **Release r80 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r80>**（2026-10-11
-上传，大件按 r72 教训做了「下载回读 gzip -t + sha 对拍」闭环）：直刷三件 + 固件
+上传；本地件 `gzip -t` 过 + 上传后资产字节数与本地逐件对拍全等——r72 半截流教训的完整
+「下载回读 gzip -t」闭环本轮由用户豁免）：直刷三件 + 固件
 tarball（自建者用）+ `SHA256SUMS`，共 5 件。**Release 直刷三件（boot / recovery / rootfs）
 必须同轮配对**——外人路径 = FLASHING「快速路径 A」。
 
