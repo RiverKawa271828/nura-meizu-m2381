@@ -7,8 +7,8 @@
 #             新机器第一步：clone 本仓拿到 script/ → 跑本脚本 --clone
 #             （URL 留空的仓跳过；已存在的目录不动；Mu 的 Binaries
 #             submodule 会按 PIN_MU_BINARIES_GIT 改指并拉全）
-#   --fetch-release  从 GitHub Release（PIN_RELEASE_BASE）拉现役件+锚三件
-#             到 artifacts/ 并 sha256 -c 全验；锚件目标目录在位时顺手摆位
+#   --fetch-release  从 GitHub Release（PIN_RELEASE_BASE）拉直刷三件+固件+SUMS
+#             到 artifacts/ 并 sha256 -c 全验（锚三件自 r80 起不随 Release 发布）
 set -euo pipefail
 . "$(dirname "$0")/../config.sh"
 
@@ -38,8 +38,8 @@ if [ "${1:-}" = "--clone" ]; then
 			|| nura_die "pmbootstrap clone 失败：gitlab.postmarketos.org 不可达？"
 		echo "  ✓ pmbootstrap → $PMB_CHECKOUT"
 	fi
-	# wrapper/tools/回滚锚不在 clone 面：wrapper 与 tools 已收编本仓（script/ tools/）；
-	# 回滚锚为 Release 资产——缺失只警告，跑 rollback.sh 前必须补齐（FLASHING §6）。
+	# wrapper/tools 不在 clone 面：已收编本仓（script/ tools/）；
+	# 回滚锚不随 Release（r80 起用户拍板：刷坏重刷现役三件）——缺失只警告，rollback.sh 私有自用。
 	echo
 fi
 
@@ -48,21 +48,15 @@ if [ "${1:-}" = "--fetch-release" ]; then
 	[ -n "${PIN_RELEASE_BASE:-}" ] || nura_die "PIN_RELEASE_BASE 未填（config.sh）"
 	command -v curl >/dev/null 2>&1 || nura_die "缺 curl"
 	mkdir -p "$NURA_ROOT/artifacts"
-	for f in SHA256SUMS mu-r66-9033a734.img esp-recovery-v47.img.gz meizu-meizu20-r66.img.gz \
-		t-b2-m2381Pkg-RELEASE-d4928661.img esp-recovery-v4d.img mu-r57-4640ebb5.img; do
+	for f in SHA256SUMS mu-r69-97cdea20.img esp-recovery-v61.img.gz meizu-meizu20-r80.img.gz \
+		firmware-meizu-meizu20.tar.gz; do
 		if [ -e "$NURA_ROOT/artifacts/$f" ]; then echo "  - $f 已在位，跳过"; continue; fi
 		curl -fSL --retry 3 -o "$NURA_ROOT/artifacts/$f" "$PIN_RELEASE_BASE/$f" \
-			|| nura_die "下载失败：$f（Release 页是否存在 tag r66？）"
+			|| nura_die "下载失败：$f（Release 页是否存在 tag r80？）"
 		echo "  ✓ $f"
 	done
 	( cd "$NURA_ROOT/artifacts" && sha256sum -c SHA256SUMS ) || nura_die "SHA256 校验不过，勿用"
-	for a in "$ANCHOR_TB2" "$ANCHOR_ESP_V4D" "$ANCHOR_MU_R57"; do
-		if [ -d "$(dirname "$a")" ] && [ ! -e "$a" ]; then
-			cp "$NURA_ROOT/artifacts/$(basename "$a")" "$a"
-			echo "  ✓ 锚件摆位 → $a"
-		fi
-	done
-	echo "== Release 资产就绪（sha256 全 OK）=="
+	echo "== Release 资产就绪（sha256 全 OK；锚三件自 r80 起不随发布，本地私有保留）=="
 	exit 0
 fi
 
@@ -90,7 +84,7 @@ try "python3（bump/对拍）"                 "command -v python3"
 echo "[回滚锚]"
 for f in "$ANCHOR_TB2" "$ANCHOR_ESP_V4D" "$ANCHOR_MU_R57"; do
 	[ -e "$f" ] && echo "  ✓ $(basename "$f")" \
-		|| echo "  ⚠ $(basename "$f") 缺失——Release 资产，跑 rollback.sh 前必须补齐（FLASHING §6）"
+		|| echo "  ⚠ $(basename "$f") 缺失——不随 Release 发布（r80 起），rollback.sh 需要时自私有工作区补"
 done
 
 echo "[宿主环境]"

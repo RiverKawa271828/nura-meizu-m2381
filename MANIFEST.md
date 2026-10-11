@@ -39,16 +39,20 @@ ESP cb7f1e5a；**r80/v61 腿已在第二条 rootfs（armada-sheng/Fedora 底）�
 | 源码钉（发布轮 r80 时） | fork `349e8aa5579b` @meizu20-t4b ｜ Mu `bdea825c` @meizu20-mars-port（r69 FdtBlob，未变）｜ pmaports `850e86d` @phoenix（r80 UHID 轮）——**三树已推 GitHub** | — | — | — |
 
 **Release r80 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r80>**（2026-10-11
-上传，大件按 r72 教训做了「下载回读 gzip -t + sha 对拍」闭环）：直刷三件 + 锚三件 + 固件
-tarball（自建者用）+ `SHA256SUMS`。**Release 直刷三件（boot / recovery / rootfs）必须同轮配对**
-——外人路径 = FLASHING「快速路径 A」。
+上传，大件按 r72 教训做了「下载回读 gzip -t + sha 对拍」闭环）：直刷三件 + 固件
+tarball（自建者用）+ `SHA256SUMS`，共 5 件。**Release 直刷三件（boot / recovery / rootfs）
+必须同轮配对**——外人路径 = FLASHING「快速路径 A」。
 
 期望 uname：`7.3.0_rc6-r80` → **#81**（#N=pkgrel+1）。本轮发布面新增用户可见项 =
 **suspend 可用**（空闲自动睡 + 电源键/RTC 唤醒 + WoWLAN 保 WiFi）+ BLE HID（uhid）；
 async flip（r79，uAPI 层）为 compositor 侧能力。当轮战果全量 = 私有工作区 experiment-log
 （八十二）+ steamos 线四合一回归回信。
 
-## 回滚锚（救命的三个文件，勿删勿挪；同 config.sh）
+## 回滚锚（私有工作区本地保留；r80 起不随 Release 发布）
+
+> 2026-10-11 用户拍板：现役件可信，**刷坏 = 重刷 Release 现役三件回家**，历史锚不再上传
+> （r66 页上的旧锚资产留档不删）。下表三件仅本机私有保留，`rollback.sh` / config.sh
+> ANCHOR_* 自用；公开 FLASHING §6 已改为现役件重刷阶梯。
 
 | 锚 | 文件 | sha8 | 用途 |
 |---|---|---|---|
@@ -56,9 +60,8 @@ async flip（r79，uAPI 层）为 compositor 侧能力。当轮战果全量 = �
 | esp-v4d | `<NURA_WORK>/meizu20/meizu20-m1/m1-work/arch-a/esp-recovery-v4d.img` | 3b106f07 | recovery_a 兜底 |
 | mu-r57 | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/mu-r57-4640ebb5.img` | 4640ebb5 | boot_b 最近已知好（r57 时代） |
 
-30 秒回滚 = `script/rollback.sh --i-am-present`（前两个锚）。
-⚠ 锚三件 = Release r66 资产（已上传）；他机一键拉齐 = `setup.sh --fetch-release`，
-本机缺失时也会在 `setup.sh` 体检里报警告。当前时代的次级回退对（手动刷，非 rollback.sh）：
+30 秒回滚 = `script/rollback.sh --i-am-present`（前两个锚，仅私有工作区布局可用）。
+当前时代的次级回退对（手动刷，非 rollback.sh）：
 `artifacts/mu-r64-686a4c0f.img`（686a4c0f）+ `artifacts/esp-recovery-v46.img.gz`（裸 0d4796ed）+ device r51。
 
 ## 已知非回归失败（首 boot 看到**不用慌**）

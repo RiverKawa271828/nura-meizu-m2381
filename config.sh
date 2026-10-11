@@ -47,7 +47,8 @@ REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v61.img.gz"  # v61 = r80 内核（裸 sha cb7f1e5a）；v60=r79 裸件 0ccfcf72
 REL_KERNEL_VER="#81"       # 下次上机 uname 期望（r80/rc6 内核 + #N=pkgrel+1 定律）
 
-# ---- 回滚锚（刷坏救命的三个文件；路径变动必须同步 FLASHING.md）----
+# ---- 回滚锚（仅私有工作区本地保留；2026-10-11 起不随 Release 上传——用户拍板：
+#      现役件可信，刷坏重刷现役三件即可；rollback.sh 自用）----
 ANCHOR_TB2="$NURA_WORK/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img"
 ANCHOR_TB2_SHA="d4928661"
 ANCHOR_ESP_V4D="$NURA_WORK/meizu20/meizu20-m1/m1-work/arch-a/esp-recovery-v4d.img"

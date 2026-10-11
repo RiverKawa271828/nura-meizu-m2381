@@ -14,17 +14,15 @@
   any other firmware version is unverified. Read [docs/FLASHING.md](docs/FLASHING.md)
   (Chinese) end to end before touching anything — you flash at your own risk, and the
   authors are not liable for any damage or data loss.
-- **Bring your own rescue images**: before flashing, download the three **anchor images**
-  from the Release page (`t-b2-*.img` / `esp-recovery-v4d.img` / `mu-r57-*.img`, all
-  previously verified-good builds). If a flash goes wrong, re-flashing the anchors via
-  fastboot gets you home in 30 seconds (recipe: FLASHING §6). **Without anchors, the only
-  remaining path is EDL flashing — high risk.**
-- **The anchors are NOT stock images, and flashing them does NOT return you to Flyme**:
-  all three are previously-known-good builds of this project's own chain (Mu-UEFI
-  firmware + ESP) — they land you on an **older Nura/pmOS**, not on Android. The stock
-  layers (XBL / ABL / Flyme inside super) are never touched by this project and are not
-  restored by the anchors. Returning to stock Flyme requires the official full firmware
-  package and is out of scope for this project.
+- **Rescue = reflash the same release**: if a flash goes wrong and the device won't boot,
+  re-flash the three images from the same Release via fastboot (all verified-good current
+  files; recipe: FLASHING §6). Historical rollback anchors are no longer published with
+  releases as of r80; EDL flashing remains a last-resort channel out of scope for this
+  project.
+- **This project never returns you to stock**: every image belongs to this project's own
+  chain (Mu-UEFI firmware + ESP + pmOS rootfs); the stock layers (XBL / ABL / Flyme
+  inside super) are never touched and never restored. Returning to stock Flyme requires
+  the official full firmware package via the vendor channel — out of scope here.
 
 ## Quick start
 

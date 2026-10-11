@@ -1,8 +1,8 @@
 # 刷机教程（Meizu 20 / m2381 · Nura 线）
 
 > 原则：**每一步都带「怎么确认成功了」**；刷写时长不算证据，只看读回。
-> ⚠ 刷机写入系统分区，存在变砖与数据全丢风险——动手前把 A-1 的锚三件（救砖镜像）
-> 下载好，风险自负（完整免责见 README「免责与救砖」）。
+> ⚠ 刷机写入系统分区，存在变砖与数据全丢风险——动手前把 Release 三件 + `SHA256SUMS`
+> 下载校验好，风险自负（完整免责见 README「免责与救砖」）。
 > 命令里的路径以 `config.sh` / `MANIFEST.md` 为准；脚本都在 `script/`。
 
 ---
@@ -42,8 +42,10 @@
 | 4 | 宿主装 Android platform-tools | 终端 `fastboot --version` 能跑即可 |
 | 5 | 下载 Release 三件 + `SHA256SUMS`：boot（`mu-r*.img`）/ recovery（`esp-recovery-*.img.gz`）/ rootfs（`meizu-meizu20-*.img.gz`） | `sha256sum -c SHA256SUMS` 全 OK 才继续 |
 | 6 | 解压两个 gz | `gunzip esp-recovery-*.img.gz meizu-meizu20-*.img.gz` |
-| 7 | ⚠ **刷 userdata = 清空全部数据**，要保数据先备份 | rootfs gz 1.1G / 裸 ~4.4G，刷写约 2 分钟，途中别拔线 |
-| 8 | **（救砖保险，强烈建议）顺带下载锚三件**：`t-b2-*.img` / `esp-recovery-v4d.img` / `mu-r57-*.img` | 刷坏 30 秒回家（A-3/§6）；不备锚件 = 出事只剩 EDL 线刷（高危） |
+| 7 | ⚠ **刷 userdata = 清空全部数据**，要保数据先备份 | rootfs gz ~1.1G / 裸 ~4.4G，刷写约 2 分钟，途中别拔线 |
+
+> 历史回滚锚件（`t-b2-*` / `esp-recovery-v4d` / `mu-r57-*`）自 r80 起不再随 Release
+> 发布——刷坏就重刷 Release 现役三件回家（A-3/§6）。
 
 ### A-2 三件齐刷
 
@@ -70,11 +72,12 @@ fastboot reboot
 - **正常直刷不需要动 misc**：ABL 重试计数在 boot_x 的 GPT 属性位（`set_active b`
   已重置预算；机上 qbootctl 起机后自动 mark successful），misc 与直刷链路无关。
   只有「循环落 fastboot」时才按 §6 阶梯清 misc（清 bootonce）——平时勿写。
-- 回滚（锚三件在手，30 秒回家）：
+- 刷坏了（起不来/读回对不上）：重刷 Release 现役件回家——单腿不对重刷单腿，整套不对
+  按 A-2 三件全重刷（阶梯见 §6）：
 
 ```bash
-fastboot flash boot_b      t-b2-m2381Pkg-RELEASE-d4928661.img
-fastboot flash recovery_a  esp-recovery-v4d.img
+fastboot flash boot_b      mu-r69-97cdea20.img
+fastboot flash recovery_a  esp-recovery-v61.img
 fastboot set_active b && fastboot reboot
 ```
 
@@ -109,7 +112,6 @@ fastboot devices         # 空输出 = 设备还没进 fastboot（看 §2）
   （四仓 + 官方 pmbootstrap 自动摆位；回滚锚从 Release 下载放到 `config.sh` 指的路径）。
 - 电量 >20%（刷一半没电 = 直接进 §6 救砖）。
 - 数据线插宿主 USB 口（NCM 通道在系统侧，fastboot 在 bootloader 侧，都走这根线）。
-- 确认回滚锚在位（`config.sh` 三个 ANCHOR_*，`setup.sh` 会查）。
 
 ## 2. 进 fastboot 的两条路
 
@@ -199,15 +201,19 @@ journalctl -b | grep -iE "error|fail" | head       # ⑤ 无新红
 ```
 触摸划两下、音量键、WiFi 能连上。全过 = 收工；有红 = 记 journal，回滚，慢慢查。
 
-## 6. 回滚与救砖阶梯
+## 6. 刷坏自救阶梯
+
+> 回滚锚件自 r80 起不随 Release 发布（刷坏 = 重刷现役三件回家，没必要退历史版本）；
+> 私有工作区仍保留本地锚与 `rollback.sh` 自用，公开路径用不到。
 
 ```bash
-script/rollback.sh --i-am-present   # 30 秒：boot_b←t-b2 + recovery_a←v4d + set_active b
+# 公开路径 = 用 Release 现役件重刷（A-2 同款，可单腿）：
+fastboot flash boot_b      mu-r69-97cdea20.img        # 或 recovery_a / userdata 对应件
 ```
-（Release 直刷用户没有本仓脚本布局：直接用「快速路径 A」A-3 末尾的手动锚三件命令。）
+
 阶梯（从轻到重）：
-1. 软进 fastboot 重刷出事的那条腿；
-2. `rollback.sh` 回双锚；
+1. 软进 fastboot，重刷出事的那条腿（读回验证，§3.6）；
+2. 整套不对劲 → 三件全重刷 + `set_active b`；
 3. 循环落 fastboot → `fastboot flash misc misc-zero.img`（misc-zero.img 自制：
    `fastboot getvar partition-size:misc` 拿大小 → `truncate -s <size> misc-zero.img` 全零即可）；
 4. 黑屏无 USB → 硬进（电源+音量减）；

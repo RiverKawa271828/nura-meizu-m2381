@@ -69,7 +69,8 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
    （恰 100MiB）不入 git（v43–v45 已 filter-branch 出史）；
 7. ✅ `setup.sh --clone`：四仓 + 官方 pmbootstrap（gitlab.postmarketos.org）自动摆位；
    wrapper（script/pmbootstrap-meizu.sh + cfg）与 tools（tools/）已收编本仓；
-   回滚锚三件 = Release 资产（✅ 已上传，缺失时 setup 只警告）；
+   ⚠ 回滚锚三件自 r80（2026-10-11）起**不随 Release 上传**（用户拍板：刷坏重刷现役三件
+   即可）——`--fetch-release` 只拉直刷三件+固件+SUMS，本地锚私有保留（rollback.sh 自用）；
 8. ✅ **推送状态（2026-10-08 （七十七）rc6 轮）**：内核 fork `meizu20-t4b` 已 force-push 到
    `2431440968fe`（**v7.3-rc6 重放**，84 提交），`master` 同步到 rc6 基线提交 `a90ee4305c4a`
    ⇒ 公开页面「领先 84 提交」= 恰好板级内容；3 个历史分支已改挂 tag（`archive/*`）并推送；
