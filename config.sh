@@ -44,7 +44,7 @@ REL_LINUX_PKGREL="81"      # r81 = SQUASHFS_ZSTD/XZ=y + RTC hctosys/systohc→rt
 REL_DEVICE_PKGREL="60"     # r60 = modules-load.d 补 uhid 自载（BLE HID 无 open-time autoload）；r59 = uinput 用户态胶水（60-meizu20-uinput.rules uaccess+static_node / modules-load.d）；r58 = s2idle×systemd 看门狗修复（udevd/logind WatchdogSec=0 + 14 内部服务放宽 30min + journald sync 30s）
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v62.img.gz"  # v62 = r81 内核（裸 sha b41b8888）；v61=r80 裸 cb7f1e5a（Release 轮）；v60=r79 裸 0ccfcf72
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v62.img.gz"  # v62 = r81 内核（裸 sha b41b8889——10-11 勘误：原记 b41b8888 是构建当拍坏读数，出货 gz 解压/彼侧实测均为 b41b8889cadf…；v61=r80 裸 cb7f1e5a（Release 轮）；v60=r79 裸 0ccfcf72）
 REL_KERNEL_VER="#82"       # 下次上机 uname 期望（r81/rc6 内核 + #N=pkgrel+1 定律）；回滚配对 = r80/v61/#81/r59
 
 # ---- 回滚锚（仅私有工作区本地保留；2026-10-11 起不随 Release 上传——用户拍板：

@@ -3,20 +3,24 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-11 @ r81 config 候选轮；**未上机**——在机/发布面 = r80/v61/r59 = Release r80）
+## 工作态（2026-10-11 晚 @ r81 升现役——彼线点火回归 PASS；在机 = 彼侧 armada-sheng #82；发布面 = Release r80）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**81**（**候选**：CONFIG_SQUASHFS_ZSTD/XZ=y + RTC_HCTOSYS/SYSTOHC→rtc1；config-only，fork tip `349e8aa5579b` 不动 ⇒ DTB/Mu 免重打；**待 steamos 线点火回归**） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r81.apk` | — | 机上 apk add |
+| 内核 apk | 7.3.0_**rc6**-r**81**（彼线回归 PASS：CONFIG_SQUASHFS_ZSTD/XZ=y + RTC_HCTOSYS/SYSTOHC→rtc1；config-only，fork tip `349e8aa5579b` 不动 ⇒ DTB/Mu 免重打） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r81.apk` | 1c31babe | 机上 apk add |
 | Mu 镜像 | r69（DTS 零改动沿用） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
-| ESP | v62（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v62.img.gz` | b41b8888（裸镜像）/ 3e4987d5（gz） | recovery_a |
+| ESP | v62（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v62.img.gz` | b41b8889（裸镜像，10-11 勘误※）/ 3e4987d5（gz） | recovery_a |
 | 设备包 / 固件包 | **r60**（modules-load.d 补 uhid 自载）/ r3 | 同目录 | — | 机上 apk add |
-| 上机期望 | `uname -v` = `7.3.0-rc6` → **#82**；回归过 = 升现役，回归挂 = 撤钉回 r80/v61/r59 | — | — | — |
+| 上机期望 | `uname -v` = `7.3.0-rc6` → **#82**（彼侧在役实测 ✓）；回滚 = r80/v61/r59（=Release r80） | — | — | — |
 
-**回滚配对（在机 = 已验证）**：内核 r80 + ESP v61（裸 cb7f1e5a）+ device r59 = **Release r80**
+**r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂
+（gzip 重压 workaround 撤）；RTC 用户态三件下线后时钟正确 + timedatectl 首次读出 RTC；
+彼侧 qbootctl v0.2.2 设备端现编落地（fastboot 停车根除，SLOT b Successful=1 重启重标 ✓）。
+※勘误：v62 裸镜像原记 b41b8888 为构建当拍坏读数，真值 b41b8889cadf…（出货 gz 解压/
+彼侧实测/make-esp 末行三方全等）；build-esp.sh 打印已改为出货 gz 反推。
+
+**回滚配对**：内核 r80 + ESP v61（裸 cb7f1e5a）+ device r59 = **Release r80**
 （2026-10-11 上线：kwin sync / BLE HID / async flip 四合一回归全 PASS，steamos 线四合一回执）。
-**r81 轮实测**（构建侧）：verify 全绿（dtb 同源 / uhid·uinput·zram 在列 / ESP v62↔apk vmlinuz
-同源）；config-only 轮风险面 = 4 行 config。
 
 ## 发布面现役产物（2026-10-11 @ async flip + uhid 轮后；= Release r80，已发布）
 

@@ -33,6 +33,6 @@ echo "[2/2] 造 ESP v${REL}（裸镜像 100MiB，gz 入库——GitHub 单文件
 gzip -9 -c "$RAW" > "$OUT"
 
 echo "[✓] 产物: $OUT"
-echo "    裸镜像 sha256: $(sha256sum "$RAW" | cut -c1-8)…（readback/MANIFEST 用这个）"
+echo "    裸镜像 sha256: $(gunzip -c "$OUT" | sha256sum | cut -c1-8)…（=出货 gz 解压反推真值，readback/MANIFEST 用这个）"
 echo "    gz sha256: $(sha256sum "$OUT" | cut -c1-8)…"
 echo "    ⚠ 两腿铁律：刷这个 ESP 必须同轮装同 pkgrel 的 apk（模块腿）"

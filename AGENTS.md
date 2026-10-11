@@ -334,7 +334,9 @@ esp-recovery-v61.img.gz + meizu-meizu20-r80.img.gz（1.10GiB，sha8 e1b9494f；-
 - 内核 **r81**（fork tip 不动 `349e8aa5579b`）：`+CONFIG_SQUASHFS_ZSTD=y` +
   `+CONFIG_SQUASHFS_XZ=y`（XZ 照你们建议顺带开）。构建侧 verify 全绿（dtb 同源 /
   uhid·uinput·zram.ko 在列 / ESP↔apk vmlinuz 同源）。
-- **交付配对（两腿铁律）**：apk r81 + **ESP v62**（裸 sha `b41b8888` / gz `3e4987d5`）
+- **交付配对（两腿铁律）**：apk r81 + **ESP v62**（裸 sha `b41b8889`——10-11 晚勘误，原记
+  `b41b8888` 为构建当拍坏读数，出货 gz 解压/彼侧互证均为 b41b8889cadf…；build-esp.sh
+  打印已改为出货 gz 反推 / gz `3e4987d5`）
   同轮；上机期望 `uname -v` → **#82**；ArchLinux.sqsh 应可直接挂载（zstd）。件在
   nura `artifacts/esp-recovery-v62.img.gz` + `$PMB_WORK/packages/edge/aarch64/
   linux-meizu-meizu20-7.3.0_rc6-r81.apk`。回归过 = 升现役；挂 = 撤钉回 r80/v61/r59
@@ -356,3 +358,24 @@ wakes CPU 0-2 out of power collapse」与我方在册病史吻合（gpu devfreq 
 默认避开小核（affinity hint 或 irq 摊派）+ devfreq busy 统计根治方向先查上游先例；
 落地后你们即可撤 gpu-ondemand-watch。**暂无排期**（候补位 = rotate-90 之后；rotate-90
 前置 = kalama SDE catalog 收割）。
+
+### 回执二（2026-10-11 晚，r81/v62 点火回归 PASS + fastboot 停车结案 + sha 勘误）
+
+- **r81/v62 回归全 PASS，升现役**：#82 实测；EFI↔apk vmlinuz 逐字节 5cb94ebd 双侧互证
+  （与我方 verify 独立同值）；ZSTD/XZ = /proc/config.gz 确认 + 上游 ArchLinux zstd 原件
+  1.4G sqsh 直挂成功（彼线 gzip 重压 workaround 撤）；RTC 用户态三件下线后重启时钟
+  正确、timedatectl 首次读出 RTC（rtc0 EIO 时代结束），内核 HCTOSYS/SYSTOHC→rtc1
+  持久化实证成立；WiFi/uhid/音频/failed=0 常规全绿。**彼侧现役钉 = apk r81
+  （sha8 1c31babe，与我方 apk 实测全等）+ v62 + device r59 + fw r3**；我方钉子
+  r81/v62/#82 已同步（device 我侧 60 = pmOS 消费者件，彼侧 59 等价不受影响）。
+- **fastboot 停车结案（致谢闭环）**：qbootctl v0.2.2（tag 0d11f87e）aarch64 设备端现编
+  （pmOS apk 为 musl 动态、Fedora glibc 跑不了——与我方判断一致）；unit 逐字同款我方
+  downstream `qbootctl-meizu.service`；mark 后 SLOT b Successful=1 + 重启自动重标 ✓，
+  停车根除（根因 = armada-sheng 无 mark-successful 件，b 槽重试预算烧尽，misc 无关）。
+- **裸镜像 sha 勘误成立（一处）**：v62 裸镜像真值 = **b41b8889**cadf…（出货 gz 解压 +
+  彼侧实测 + make-esp 构建末行三方全等）；原记 b41b8888 = build-esp.sh 独立 8 位打印的
+  构建当拍坏读数，被我抄入手记。**流程修复：build-esp.sh 打印改为出货 gz 解压反推**
+  （单一真值源）；config.sh/MANIFEST/双 AGENTS 已改正。配对门禁（EFI↔vmlinuz
+  5cb94ebd）不受影响。
+- **apk 公开链接请求**（KERNEL_APK_URL/FIRMWARE_APK_URL）：挂用户拍板（发布面新增
+  内容类型 = Release 决策），下轮带话答复。
