@@ -29,6 +29,20 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-12 更；新会话从这里接）
 
+- **✅ phosh 回归轮 + 发布面切换（10-12（八十七），用户在场验收全过）**：steamos「起不来」
+  = **竞争刷写污染**定谳（彼线并行 fastboot 互踩；新操作律 = **fastboot 单通道，两侧刷写
+  必须互斥**），boot 链无罪——nura 重刷三件（boot_b mu-r69 + recovery_a v65 + 新建
+  phosh rootfs[r84 apk+device r60+fw r3]）**#85 一次点亮回归全绿**（boot ~50s / failed 0 /
+  音频 T4c 直驱自动钉 / GPU 钳零件 busy_delta 恒 0 / 睡眠 rtcwake 51s resume 0.240s /
+  wowlan 武装 / 看门狗件全生效；带话回信见文末 2026-10-12 段）。**用户拍板「以后专注
+  phosh」**：**Release r84 上线**（7 件制，rootfs gz a2fdcd33 自回归通过 local.img 生成；
+  草稿上传字节数逐件对拍后发布）+ r66 已删 + r80 = plasma 末版存档；build-rootfs.sh
+  固化条件改 NURA_NO_RELEASE 开关（phosh 默认进发布面）；config/MANIFEST/README 中英/
+  FLASHING/setup 全对齐 r84+phosh；三树已推（fork `140e5a8e308a`/pmaports `b4e5147`/
+  nura `c06aa72`）。**升级口径入册：内核/设备包/固件 = apk 腿（rootfs 内 apk add）+ ESP
+  腿（recovery_a）原地升级，不重刷 userdata（数据保留）**；rootfs 全量重刷仅换 UI/换
+  发行版/从零装机。在机 = pmOS phosh #85（本地件）。
+
 - **✅ GPU/IFPC 轮收官更钉（10-12（八十六））**：r84/v65/#85 彼线点火回执判过
   （payload[0]=SUCCESS 但 ifpc 恒零 =「ack 不执行」[FW 行为态]，内核线收官；钳零会计件
   根治 busy 地板：真空闲 busy_delta 恒 0 + 静态 UI 220 单档 94.8% + GPU 温 39-41°C +

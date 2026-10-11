@@ -40,7 +40,7 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
 - 每版 +1（vNN），sha 记 MANIFEST.md。
 
 ### rootfs（build-rootfs.sh）
-- pmbootstrap install（plasma-mobile / 密码 1234）——**⚠ `--single-partition` 铁律**
+- pmbootstrap install（phosh / 密码 1234）——**⚠ `--single-partition` 铁律**
   （脚本已固化）：不加它产出 GPT 分区镜像 + fstab 假 /boot 条目，无 initramfs 内核
   `root=/dev/sda22` 直挂 userdata 必挂载失败（2026-10-07 Release r66 rootfs 首航
   暴雷实锤，坏件已从 Release 撤换）。产物 = 裸 ext4（~4.4G，首启自动扩满 464G）。

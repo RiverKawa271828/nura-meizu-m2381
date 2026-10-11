@@ -34,7 +34,7 @@ XBL（原封）→ ABL（原封）→ boot_b: Mu-UEFI（我们构建）──标
   （`MEIZU 20` / `m2381` 命名串的来源），然后按 UEFI 标准加载 ESP 上的
   `\EFI\BOOT\BOOTAA64.EFI`（= 内核本体）。
 - **内核以 EFI stub 接管**：从 UEFI 拿内存映射与运行时服务，cmdline（`root=/dev/sda22`
-  烤在内核里，**无 initramfs**）直挂 userdata 上的 pmOS rootfs → systemd → plasma-mobile。
+  烤在内核里，**无 initramfs**）直挂 userdata 上的 pmOS rootfs → systemd → phosh。
 
 ### 1.2 链上每一环怎么坏、怎么救
 
@@ -93,7 +93,7 @@ XBL（原封）→ ABL（原封）→ boot_b: Mu-UEFI（我们构建）──标
 
 | 组成 | 是什么 |
 |---|---|
-| Nura（postmarketOS edge）基础系统 | Alpine musl 用户态 + systemd + plasma-mobile |
+| Nura（postmarketOS edge）基础系统 | Alpine musl 用户态 + systemd + phosh |
 | linux-meizu-meizu20 apk | 内核模块腿（与 ESP 同轮） |
 | device-meizu-meizu20 apk | 用户态胶水全量（见 2.4） |
 | firmware-meizu-meizu20 apk | 厂商固件 blob（见 2.4） |
