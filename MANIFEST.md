@@ -36,8 +36,10 @@
 
 **Release r80 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r80>**（2026-10-11
 上传；本地件 `gzip -t` 过 + 上传后资产字节数与本地逐件对拍全等——r72 半截流教训的完整
-「下载回读 gzip -t」闭环本轮由用户豁免）：直刷三件 + 固件
-tarball（自建者用）+ `SHA256SUMS`，共 5 件。**Release 直刷三件（boot / recovery / rootfs）
+「下载回读 gzip -t」闭环本轮由用户豁免）：直刷三件 + 固件 tarball（自建者用）+
+`SHA256SUMS`，共 5 件；**同日晚增补 apk 两件**（linux r81 apk sha8 1c31babe / firmware
+r3 apk sha8 6e6dac0a——steamos 线 BUILD.env 的 KERNEL_APK_URL/FIRMWARE_APK_URL 钉此，
+用户拍板；以后每轮发布随件 apk）。**Release 直刷三件（boot / recovery / rootfs）
 必须同轮配对**——外人路径 = FLASHING「快速路径 A」。
 
 期望 uname：`7.3.0_rc6-r80` → **#81**（#N=pkgrel+1）。本轮发布面新增用户可见项 =

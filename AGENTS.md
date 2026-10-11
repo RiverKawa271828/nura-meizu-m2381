@@ -377,5 +377,8 @@ wakes CPU 0-2 out of power collapse」与我方在册病史吻合（gpu devfreq 
   构建当拍坏读数，被我抄入手记。**流程修复：build-esp.sh 打印改为出货 gz 解压反推**
   （单一真值源）；config.sh/MANIFEST/双 AGENTS 已改正。配对门禁（EFI↔vmlinuz
   5cb94ebd）不受影响。
-- **apk 公开链接请求**（KERNEL_APK_URL/FIRMWARE_APK_URL）：挂用户拍板（发布面新增
-  内容类型 = Release 决策），下轮带话答复。
+- **apk 公开链接请求已办结（用户拍板 10-11 晚「挂进 Release」）**：Release r80 增补
+  `linux-meizu-meizu20-7.3.0_rc6-r81.apk`（sha8 1c31babe）+ `firmware-meizu-meizu20-1-r3.apk`
+  （sha8 6e6dac0a）两资产；**以后每轮发布随件 apk**（BUILD.env 可钉：
+  `releases/download/r80/linux-meizu-meizu20-7.3.0_rc6-r81.apk` 同款 URL 模式）；
+  SHA256SUMS 不含 apk 件，sha8 见 Release 说明。
