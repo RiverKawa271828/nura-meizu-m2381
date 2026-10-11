@@ -5,7 +5,7 @@
 #   NURA_UI=phosh   可选桌面环境（默认 plasma-mobile；phosh=pmOS 官方包集，
 #                   2026-10-09 构建上机验证；换 UI 构建前脚本会要求 chroot 已
 #                   zap——见下方检查）
-#   NURA_NO_RELEASE=1  跳过 Release 件固化（非 plasma UI 自动跳过，不污染发布面）
+#   NURA_NO_RELEASE=1  跳过 Release 件固化（本地实验件）
 #
 # 产物 = .pmbootstrap/chroot_native/home/pmos/rootfs/meizu-meizu20.img
 #        非 plasma UI 另存 artifacts/meizu-meizu20-<ui>-local.img（本地刷写件）
@@ -46,17 +46,16 @@ echo "[✓] 产物: $OUT"
 echo "    刷写: fastboot flash userdata $OUT（⚠ 全量重刷 = 机上手工补装件清零，"
 echo "          四件套/rmtfs drop-in/uim 补丁/discover-backend 重装清单见指纹表）"
 
-# ---- 非 plasma UI：本地刷写件 + 不进发布面 ----
+# ---- 本地刷写件（非 plasma UI 另存一份裸镜像，便于免解压直刷）----
 if [ "$NURA_UI" != "plasma-mobile" ]; then
 	LOCAL_IMG="$NURA_ROOT/artifacts/meizu-meizu20-$NURA_UI-local.img"
 	cp "$OUT" "$LOCAL_IMG"
 	echo "[✓] 本地刷写件: $LOCAL_IMG（$(du -h "$LOCAL_IMG" | cut -f1)）"
-	echo "[i] 非 plasma UI 自动跳过 Release 件固化（不污染 artifacts/SHA256SUMS）"
-	exit 0
 fi
 
 # ---- Release 件固化：gz（<2GiB = GitHub Release 单件上限）+ SHA256SUMS 行刷新 ----
-# NURA_NO_RELEASE=1 跳过本段（本地实验件，不污染 artifacts/SHA256SUMS）
+# 2026-10-12 用户拍板「以后专注 phosh」：固化条件改为 NURA_NO_RELEASE 开关（UI 无关，
+# phosh 默认进发布面；原「非 plasma 自动跳过」逻辑作废）。NURA_NO_RELEASE=1 跳过。
 if [ -n "${NURA_NO_RELEASE:-}" ]; then
 	echo "[i] NURA_NO_RELEASE=1：跳过 Release 件固化（仅本地产物 $OUT）"
 	exit 0

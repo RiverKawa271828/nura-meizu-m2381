@@ -3,7 +3,7 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-12 @ r84 收官更钉——GPU/IFPC 轮判过 =（八十六）；在机 = 彼侧 armada-sheng #85；发布面 = Release r80 不变）
+## 工作态（2026-10-12 @（八十七）phosh 回归轮收官：发布面 = **Release r84（首个 phosh 发布面）**；在机 = pmOS phosh #85 本机实测全绿；用户拍板「以后专注 phosh」）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
@@ -28,30 +28,31 @@ b41b88889cadf6060e35…）**——「b41b8889cadf」系连排四个 8 丢一位�
 **回滚配对**：内核 r82 + ESP v63（裸 533f40d0；gz = 彼侧重压版 425ecd37，原打包件两侧
 均已断）+ device r60（= r82/v63/#83，彼侧在役回滚件）。
 
-## 发布面现役产物（2026-10-11 @ async flip + uhid 轮后；= Release r80，已发布）
+## 发布面现役产物（2026-10-12 @ r84；= Release r84 已发布；用户拍板「以后专注 phosh」：r66 已删，r80 = plasma 末版存档未删）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_rc6-r**80**（async flip 三件套 r79 + CONFIG_UHID=m r80；fork `349e8aa5579b`） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r80.apk` | — | 机上 apk add |
-| 设备包 apk | 1-r**59**（uinput uaccess + modules-load.d；r57/r58 = wowlan service + s2idle 看门狗修复随包） | 同目录 `device-meizu-meizu20-1-r59.apk` | — | 机上 apk add |
-| 固件包 apk | 1-r**3** | 同目录 `firmware-meizu-meizu20-1-r3.apk` | — | 机上 apk add |
+| 内核 apk | 7.3.0_rc6-r**84**（GPU/IFPC 轮收官：revert A 路 + 钳零防御 + payload 订阅；fork `140e5a8e308a`） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r84.apk` | b5dd7e62 | 机上 apk add |
+| 设备包 apk | 1-r**60**（uhid 自载；r57-59 = wowlan service + s2idle 看门狗修复 + uinput 随包历史） | 同目录 `device-meizu-meizu20-1-r60.apk` | — | 机上 apk add |
+| 固件包 apk | 1-r**3** | 同目录 `firmware-meizu-meizu20-1-r3.apk` | 6e6dac0a | 机上 apk add |
 | Mu 镜像 | r69（DTS 零改动自 r66 轮沿用） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
-| ESP | v61（仓内 `.img.gz`；刷写/verify 自动解压） | `artifacts/esp-recovery-v61.img.gz` | cb7f1e5a（裸镜像） | recovery_a |
-| rootfs 镜像 | r80 同轮（--single-partition；内含内核 r80 apk + 设备包 r59 + 固件 r3；纯官方预装，机上后装件不在内） | Release 分发件 `meizu-meizu20-r80.img.gz`（1.10GiB） | e1b9494f | userdata |
-| 源码钉（发布轮 r80 时） | fork `349e8aa5579b` @meizu20-t4b ｜ Mu `bdea825c` @meizu20-mars-port（r69 FdtBlob，未变）｜ pmaports `850e86d` @phoenix（r80 UHID 轮）——**三树已推 GitHub** | — | — | — |
+| ESP | v65（仓内 `.img.gz`；刷写/verify 自动解压） | `artifacts/esp-recovery-v65.img.gz` | 463efc45（裸）/ 00d2d5f9（gz） | recovery_a |
+| rootfs 镜像 | r84 同轮（--single-partition；内含内核 r84 apk + 设备包 r60 + 固件 r3；**phosh** 桌面 = pmOS 官方 phosh 包集） | Release 分发件 `meizu-meizu20-r84.img.gz`（1.04GiB） | a2fdcd33 | userdata |
+| 源码钉（发布轮 r84 时） | fork `140e5a8e308a` @meizu20-t4b ｜ Mu `bdea825c` @meizu20-mars-port（r69 FdtBlob，未变）｜ pmaports `b4e5147` @phoenix（pkgrel 84）——**三树已推 GitHub** | — | — | — |
 
-**Release r80 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r80>**（2026-10-11
-上传；本地件 `gzip -t` 过 + 上传后资产字节数与本地逐件对拍全等——r72 半截流教训的完整
-「下载回读 gzip -t」闭环本轮由用户豁免）：直刷三件 + 固件 tarball（自建者用）+
-`SHA256SUMS`，共 5 件；**同日晚增补 apk 两件**（linux r81 apk sha8 1c31babe / firmware
-r3 apk sha8 6e6dac0a——steamos 线 BUILD.env 的 KERNEL_APK_URL/FIRMWARE_APK_URL 钉此，
-用户拍板；以后每轮发布随件 apk）。**Release 直刷三件（boot / recovery / rootfs）
-必须同轮配对**——外人路径 = FLASHING「快速路径 A」。
+**Release r84 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r84>**（2026-10-12
+上传；本地件 `gzip -t` 过 + 上传后资产字节数与本地逐件对拍全等；gz 自回归通过的在机
+同款 local.img 生成 = 单一真值源）：直刷三件 + 固件 tarball + apk 两件 + `SHA256SUMS`
+共 7 件（r80 同构）。**直刷三件（boot / recovery / rootfs）必须同轮配对**——外人路径 =
+FLASHING「快速路径 A」。**r84 起 build-rootfs.sh 固化条件 = NURA_NO_RELEASE 开关**
+（UI 无关，phosh 默认进发布面；原「非 plasma 自动跳过」作废）。
 
-期望 uname：`7.3.0_rc6-r80` → **#81**（#N=pkgrel+1）。本轮发布面新增用户可见项 =
-**suspend 可用**（空闲自动睡 + 电源键/RTC 唤醒 + WoWLAN 保 WiFi）+ BLE HID（uhid）；
-async flip（r79，uAPI 层）为 compositor 侧能力。当轮战果全量 = 私有工作区 experiment-log
-（八十二）+ steamos 线四合一回归回信。
+期望 uname：`7.3.0_rc6-r84` → **#85**（10-12 本机 phosh 回归全绿实测 ✓ =（八十七）：
+boot ~50s / failed 0 / 音频 T4c 直驱自动钉 / GPU 钳零件 busy_delta 恒 0 / 睡眠 rtcwake
+51s resume 0.240s + wowlan 武装 / 看门狗修复件全生效）。本轮发布面变化：UI =
+plasma→**phosh**；**升级口径**：内核/设备包/固件 = **apk 腿（rootfs 内 apk add）+ ESP 腿
+（recovery_a）原地升级，不重刷 userdata**（/home 与配置全保留）；rootfs 全量重刷仅用于
+换 UI/换发行版/从零装机。r80 plasma 末版存档（Release 未删）。
 
 ## 回滚锚（私有工作区本地保留；r80 起不随 Release 发布）
 

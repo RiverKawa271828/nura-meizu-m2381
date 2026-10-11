@@ -17,7 +17,7 @@
 - **Rescue = reflash the same release**: if a flash goes wrong and the device won't boot,
   re-flash the three images from the same Release via fastboot (all verified-good current
   files; recipe: FLASHING §6). Historical rollback anchors are no longer published with
-  releases as of r80; EDL flashing remains a last-resort channel out of scope for this
+  releases as of r84; EDL flashing remains a last-resort channel out of scope for this
   project.
 - **This project never returns you to stock**: every image belongs to this project's own
   chain (Mu-UEFI firmware + ESP + pmOS rootfs); the stock layers (XBL / ABL / Flyme
@@ -26,7 +26,7 @@
 
 ## Quick start
 
-The image = **Nura (postmarketOS edge) + the plasma-mobile desktop** (built in), a
+The image = **Nura (postmarketOS edge) + the phosh desktop** (built in), a
 complete system out of the box: the kernel and device packages are baked into the
 rootfs. Log in as `user`, password `1234` (use `sudo` with the same password for root).
 
@@ -37,12 +37,12 @@ rootfs. Log in as `user`, password `1234` (use `sudo` with the same password for
 ```bash
 sha256sum -c SHA256SUMS                 # all OK before continuing
 fastboot flash boot_b      mu-r69-97cdea20.img    # Mu-UEFI firmware (device tree baked in)
-fastboot flash recovery_a  esp-recovery-v61.img   # ESP = kernel boot leg
-fastboot flash userdata    meizu-meizu20-r80.img  # rootfs (⚠ wipes all data)
+fastboot flash recovery_a  esp-recovery-v65.img   # ESP = kernel boot leg
+fastboot flash userdata    meizu-meizu20-r84.img  # rootfs (⚠ wipes all data)
 fastboot set_active b && fastboot reboot
 ```
 
-The plasma desktop comes up in about a minute. **Suspend works out of the box** (as of
+The phosh desktop comes up in about a minute. **Suspend works out of the box** (as of
 this release): automatic idle suspend is on by default (5 min), wake via power button /
 RTC, and **WoWLAN keeps the WiFi connection alive while asleep** (the device package
 ships the service — zero config). Known minor quirk: after wake, if you don't touch the
@@ -95,7 +95,7 @@ Four independently updatable legs: boot_b = Mu image | recovery_a = ESP | apk = 
 Why it looks this way, and what each image contains → **[docs/DESIGN.md](docs/DESIGN.md)**
 (Chinese).
 
-## Hardware status (2026-10-11 @ r80; current state only, history in the private experiment log)
+## Hardware status (2026-10-11 @ r84; current state only, history in the private experiment log)
 
 **✅ Working**
 Display (120Hz OLED + backlight/auto-brightness) | touch | GPU acceleration | WiFi
@@ -135,9 +135,9 @@ absent: 3.5mm jack, SD slot.
 
 | Mark | Example | Meaning |
 |---|---|---|
-| `r80` | `mu-r69-*.img`, `meizu-meizu20-r80.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds |
-| `v61` | `esp-recovery-v61.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v61 happens to pair with r80) |
-| `#81` | `uname -v` on device | Kernel build number = **r + 1** (pkgrel+1 baked into the kernel). First verification point on device: seeing #81 proves the r80 kernel is really running |
+| `r84` | `mu-r69-*.img`, `meizu-meizu20-r84.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds |
+| `v65` | `esp-recovery-v65.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v65 happens to pair with r84) |
+| `#85` | `uname -v` on device | Kernel build number = **r + 1** (pkgrel+1 baked into the kernel). First verification point on device: seeing #85 proves the r84 kernel is really running |
 | `97cdea20` | `mu-r69-97cdea20.img` | First 8 hex of the image's sha256 — anti-tamper + dd read-back comparison |
 
 Design details and the #N law → [docs/DESIGN.md](docs/DESIGN.md) (Chinese); which

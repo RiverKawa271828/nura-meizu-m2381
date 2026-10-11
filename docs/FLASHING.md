@@ -52,8 +52,8 @@
 ```bash
 fastboot devices                          # 有设备号才继续；空输出 = 还没进 fastboot（§2）
 fastboot flash boot_b      mu-r69-97cdea20.img        # Mu-UEFI 固件（含设备树）
-fastboot flash recovery_a  esp-recovery-v61.img       # ESP = 内核引导腿
-fastboot flash userdata    meizu-meizu20-r80.img      # pmOS rootfs（模块腿已烤入，免 apk 步骤）
+fastboot flash recovery_a  esp-recovery-v65.img       # ESP = 内核引导腿
+fastboot flash userdata    meizu-meizu20-r84.img      # pmOS rootfs（模块腿已烤入，免 apk 步骤）
 fastboot set_active b                                 # 激活 b 槽
 fastboot reboot
 ```
@@ -62,11 +62,11 @@ fastboot reboot
 
 ### A-3 刷完验收与回滚
 
-- 重启后 ~1 分钟 plasma 起来；首启自动扩容占满整盘属正常；登录 `user` / `1234`。
+- 重启后 ~1 分钟 phosh 起来；首启自动扩容占满整盘属正常；登录 `user` / `1234`。
 - **睡眠可直接用**（r77+ 内核 / r57+ 设备包起）：空闲自动睡默认开（5 分钟），电源键/RTC 唤醒，
   睡眠期间 WoWLAN 保持 WiFi 连接（设备包自带 `meizu-wowlan.service`，零配置）。已知小边角：
   唤醒后若无输入，桌面空闲自动睡不自动重新武装——给一次输入即恢复。
-- 验收清单照 **§5** 过一遍（本轮期望 `uname -v` = `7.3.0_rc6-r80` → `#81`）。
+- 验收清单照 **§5** 过一遍（本轮期望 `uname -v` = `7.3.0_rc6-r84` → `#85`）。
 - 蜂窝/NFC 用户态默认摘除 = 拍板形态（README 状态表）；`systemctl --failed` 里
   MANIFEST「已知非回归失败」三件不用慌。
 - **正常直刷不需要动 misc**：ABL 重试计数在 boot_x 的 GPT 属性位（`set_active b`
@@ -77,7 +77,7 @@ fastboot reboot
 
 ```bash
 fastboot flash boot_b      mu-r69-97cdea20.img
-fastboot flash recovery_a  esp-recovery-v61.img
+fastboot flash recovery_a  esp-recovery-v65.img
 fastboot set_active b && fastboot reboot
 ```
 
@@ -141,7 +141,7 @@ script/flash-batch.sh --i-am-present
 ```bash
 fastboot reboot
 ```
-确认：屏幕亮 → plasma 起来（首 boot ~1 分钟）。
+确认：屏幕亮 → phosh 起来（首 boot ~1 分钟）。
 
 ### 3.3 装 apk 双包（模块腿 + 用户态包）
 
