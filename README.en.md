@@ -95,7 +95,7 @@ Four independently updatable legs: boot_b = Mu image | recovery_a = ESP | apk = 
 Why it looks this way, and what each image contains → **[docs/DESIGN.md](docs/DESIGN.md)**
 (Chinese).
 
-## Hardware status (2026-10-11 @ r84; current state only, history in the private experiment log)
+## Hardware status (2026-10-12 @ r84; current state only, history in the private experiment log)
 
 **✅ Working**
 Display (120Hz OLED + backlight/auto-brightness) | touch | GPU acceleration | WiFi

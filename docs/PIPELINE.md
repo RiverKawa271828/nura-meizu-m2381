@@ -71,28 +71,35 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
    wrapper（script/pmbootstrap-meizu.sh + cfg）与 tools（tools/）已收编本仓；
    ⚠ 回滚锚三件自 r80（2026-10-11）起**不随 Release 上传**（用户拍板：刷坏重刷现役三件
    即可）——`--fetch-release` 只拉直刷三件+固件+SUMS，本地锚私有保留（rollback.sh 自用）；
-8. ✅ **推送状态（2026-10-08 （七十七）rc6 轮）**：内核 fork `meizu20-t4b` 已 force-push 到
-   `2431440968fe`（**v7.3-rc6 重放**，84 提交），`master` 同步到 rc6 基线提交 `a90ee4305c4a`
-   ⇒ 公开页面「领先 84 提交」= 恰好板级内容；3 个历史分支已改挂 tag（`archive/*`）并推送；
-   GitHub 默认分支 = `meizu20-t4b`。⚠ **分支规范：分支只留「现役 + 上游镜像」，历史落 tag**。
+8. ✅ **推送状态（2026-10-12 终态）**：内核 fork `meizu20-t4b` = `140e5a8e308a`（v7.3-rc6
+   重放 + r82-84 三轮，84+3 提交），pmaports `phoenix` = `b4e5147`（pkgrel 84），nura
+   `master` = `770c92f`（发布面切换 + 文档对齐）——三树全推清账；3 个历史分支已改挂 tag
+   （`archive/*`）；GitHub 默认分支 = `meizu20-t4b`。⚠ **分支规范：分支只留「现役 + 上游镜像」，历史落 tag**。
 8. ⬜ **干净机首航**：找一台第二机器/容器从零跑通 setup→build→flash，发布面才算成立。
    （2026-10-07 本机已用 Release 资产完整重放直刷三件一轮：rootfs 两雷修复后
    全绿，boot ~40s；但同机非干净机，此项仍开。）
 9. ✅ **上传后脚本对齐**：①`build-rootfs.sh` 出 Release 件（`meizu-meizu20-rN.img.gz`
-   + SHA256SUMS 一并生成）②`setup.sh --fetch-release` 拉锚三件/现役件 ③直刷命令
-   文件名与 Release 页已实刷对拍（10-07）。
+   + SHA256SUMS 一并生成；**2026-10-12 起固化条件 = NURA_NO_RELEASE 开关，phosh 默认
+   进发布面**）②`setup.sh --fetch-release` 拉现役件+固件+SUMS ③直刷命令文件名与
+   Release 页已实刷对拍（r66 首对拍；r84 = 10-12 本机 phosh 回归轮直刷全绿 =（八十七））。
+10. ✅ **发布面切换（2026-10-12，用户拍板「以后专注 phosh」）**：Release r84 = 首个
+    phosh 发布面（7 件制）；r66 已删；r80 = plasma 末版存档未删。**升级口径 = apk 腿
+    （rootfs 内 apk add）+ ESP 腿（recovery_a）原地升级，不重刷 userdata**——rootfs
+    全量重刷仅换 UI/换发行版/从零装机。
 
-### Release 资产清单（2026-10-07 上线 <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r66>；当日 rootfs 换件一次：首版漏 `--single-partition` 上机暴雷，修复版 sha8 `e4636bfe`）
+### Release 资产清单（现役 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r84>，2026-10-12 上线 = 首个 phosh 发布面；r66 已删，r80 = plasma 末版存档）
 
 | 件 | 文件 | 出处 |
 |---|---|---|
-| 现役 boot_b | `mu-r66-9033a734.img`（1.1MB） | 本仓 `artifacts/` |
-| 现役 recovery_a | `esp-recovery-v47.img.gz`（gz 化，刷写自动解压） | 本仓 `artifacts/` |
-| 现役 rootfs | `meizu-meizu20-r66.img.gz`（1.1G gz；裸 ~4.4G 超无压力但 gz 化统一走 Release 单件 2GiB 规则；**同轮产物，内含 r66 内核 apk + 设备包 r53 + hexagonrtc 依赖链**，刷完即完整系统） | `build-rootfs.sh`（gz+SHA256SUMS 自动产出） |
-| 锚 t-b2 | `t-b2-m2381Pkg-RELEASE-d4928661.img` | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/` |
-| 锚 esp-v4d | `esp-recovery-v4d.img` | `<NURA_WORK>/meizu20/meizu20-m1/m1-work/arch-a/` |
-| 锚 mu-r57 | `mu-r57-4640ebb5.img` | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/` |
+| 现役 boot_b | `mu-r69-97cdea20.img`（1.1MB） | 本仓 `artifacts/` |
+| 现役 recovery_a | `esp-recovery-v65.img.gz`（gz 化，刷写自动解压；裸 463efc45 / gz 00d2d5f9） | 本仓 `artifacts/` |
+| 现役 rootfs | `meizu-meizu20-r84.img.gz`（1.04G gz；**同轮产物，内含 r84 内核 apk + 设备包 r60 + 固件 r3，phosh 桌面 = pmOS 官方 phosh 包集**，刷完即完整系统） | `build-rootfs.sh`（gz+SHA256SUMS 自动产出） |
+| 附带 apk 两件 | `linux-meizu-meizu20-7.3.0_rc6-r84.apk`（sha8 b5dd7e62）+ `firmware-meizu-meizu20-1-r3.apk`（sha8 6e6dac0a） | `$PMB_WORK/packages/edge/aarch64/` |
 | 固件 tarball | `firmware-meizu-meizu20.tar.gz`（81MB，仅构建者需要） | pmaports 包目录 |
+| SHA256SUMS | 不含 apk 件（apk sha8 见 Release 页说明） | `build-rootfs.sh` |
+
+（历史：锚三件 t-b2/esp-v4d/mu-r57 自 r80 起**不随 Release 上传**——本地私有保留，
+`--fetch-release` 不拉、缺失时 `setup.sh` 只警告。）
 
 外人消费路径 = Release 下载三件（boot / recovery / rootfs）→ FLASHING.md「快速路径 A」
 直刷，**无需构建**（构建者才需要固件 tarball；锚三件 = 可选救砖件，下载后放回

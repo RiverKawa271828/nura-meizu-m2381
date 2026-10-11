@@ -70,13 +70,17 @@ plasma→**phosh**；**升级口径**：内核/设备包/固件 = **apk 腿（ro
 当前时代的次级回退对（手动刷，非 rollback.sh）：
 `artifacts/mu-r64-686a4c0f.img`（686a4c0f）+ `artifacts/esp-recovery-v46.img.gz`（裸 0d4796ed）+ device r51。
 
-## 已知非回归失败（首 boot 看到**不用慌**）
+## 已知非回归失败（首 boot 看到**不用慌**；=（八十七）phosh r84 实测清单）
 
-| unit | 形态 | 定性 |
+| 现象 | 形态 | 定性 |
 |---|---|---|
-| rmtfs | activating | 封印态存活模式（drop-in 生效中） |
-| uim-selection | start-limit-hit | 在役同款（deactivate 容错补丁在机） |
-| postmarketos-zram-swap | failed（仅 r<60 内核） | 无 CONFIG_ZRAM=m；r60 起修复 |
+| journal 早期时间戳 | 标着旧日期（如 Oct 06） | **rtc1 旧值未同步**：NTP 前内核时钟 = RTC 存值，早期日志全错标；勿当旧 boot 日志读。WiFi+NTP 后恢复；写回闭环待复验 |
+| DPU「no encoder found for crtc 0」 | *ERROR* ×2-3 条，仅 boot 早期 | 窗口性噪音：面板 cold-enable restart 自愈窗口撞上合成器 vblank 请求（dpu_crtc.c:192/282）；运行期零刷，勿追 |
+| a740_sqe.fw | failed with error -2 | 假警报（27s 后重试成功；silime 时代已定性） |
+| pmic-spmi 0-0c/0-0d | probe failed -5 | 在册已知（多轮 boot 一致，无功能影响） |
+
+（历史行留档：rmtfs activating / uim-selection start-limit-hit = 蜂窝用户态在役时代现象，
+现役 rootfs 蜂窝摘除态 + 未装四件套时不见；postmarketos-zram-swap failed 仅 r<60 内核，r60 起修复。）
 
 ## 通道速查
 
@@ -87,5 +91,5 @@ plasma→**phosh**；**升级口径**：内核/设备包/固件 = **apk 腿（ro
 ## 历史轮次
 
 r61 首航（10-06）→ r63/r64 录音轮 → r65 pm8008 → r66 fsa4480 摘除（10-07，首个 Release）→
-r72 首传半截流撤回（10-08，教训入流程）→ r80 async flip + uhid（10-11，Release 上线）；
+r72 首传半截流撤回（10-08，教训入流程）→ r80 async flip + uhid（10-11，Release 上线）→ r84 phosh 首个 phosh 发布面 + r66 删除（10-12，专注 phosh 拍板）；
 逐轮产物/sha 明细见 git log。ESP 自 v47 起仓内 gz 化（v43–v45 裸镜像已退役出史）。

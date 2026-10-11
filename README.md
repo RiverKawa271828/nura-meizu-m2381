@@ -75,7 +75,7 @@ XBL → ABL → boot_b: Mu-UEFI (m2381Pkg) ──送核──→ 主线内核 (E
 
 为什么长这样、每件镜像内部是什么 → **[docs/DESIGN.md](docs/DESIGN.md)**（启动链原理与镜像解剖）。
 
-## 硬件状态（2026-10-11 @ r84；本表只保现态，进度叙事在私有工作区 experiment-log）
+## 硬件状态（2026-10-12 @ r84；本表只保现态，进度叙事在私有工作区 experiment-log）
 
 **✅ 可工作**
 显示（120Hz OLED + 背光/自动亮度）｜触控｜GPU 加速｜WiFi 双频含 5G（睡眠保连接 WoWLAN）｜
