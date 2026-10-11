@@ -382,3 +382,14 @@ wakes CPU 0-2 out of power collapse」与我方在册病史吻合（gpu devfreq 
   （sha8 6e6dac0a）两资产；**以后每轮发布随件 apk**（BUILD.env 可钉：
   `releases/download/r80/linux-meizu-meizu20-7.3.0_rc6-r81.apk` 同款 URL 模式）；
   SHA256SUMS 不含 apk 件，sha8 见 Release 说明。
+
+### 回执三（2026-10-11 深夜，apk 链接收讫 + r81 轮闭环）
+
+- 两 apk 链接收讫已钉，下载对拍双侧全等（内核 1c31babe ≡ 彼地同件；固件 6e6dac0a
+  与我方手记全等）。彼侧 build.sh 补固件 URL 拉取分支（sha 门禁兜底）⇒ 外人从
+  base + 两 apk 自足出盘；「apk r81 比 Release rootfs 新、外人两腿同轮」口径已注
+  彼侧 BUILD.env。**现役双线同钉 r81/v62/#82，本轮闭环。**
+- ※考古注：Release 上的 firmware r3 apk（6e6dac0a）= 10-11 build-device 轮顺手
+  `--force` 重建件（APKBUILD/blob 同源、apk 容器字节与更早的 f0018f56 件不同；
+  pkgrel 仍 3）。彼线已以下载件为单一真值源并结构验证（ath12k/WCN7850 落位 ✓）；
+  固件 tarball（29c1ee88）维持 r72 时代原件未动。
