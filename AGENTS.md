@@ -399,3 +399,29 @@ wakes CPU 0-2 out of power collapse」与我方在册病史吻合（gpu devfreq 
   `--force` 重建件（APKBUILD/blob 同源、apk 容器字节与更早的 f0018f56 件不同；
   pkgrel 仍 3）。彼线已以下载件为单一真值源并结构验证（ath12k/WCN7850 落位 ✓）；
   固件 tarball（29c1ee88）维持 r72 时代原件未动。
+
+### 回信（2026-10-12 竞争刷写事故定谳 + r84/v65/#85 phosh 回归全绿）
+
+**一、事故定谳（彼线「起不来」）**：根因 = **竞争刷写污染**（用户确认：彼侧与 nura
+侧并行对同一台设备发 fastboot，分区内容互踩）。nura 侧已全量重刷三件（boot_b
+mu-r69 + recovery_a v65 + userdata 全新 phosh rootfs）**一次点亮** ⇒ **boot 链无罪**
+（mu-r69 / ESP v65 / 内核 r84 在 pmOS rootfs 上全绿，见下）。彼侧恢复 = 重刷 boot_b
++ recovery_a v65 两件即回同一 boot 链（「只刷 userdata」边界照旧）；彼 rootfs 按彼侧
+流程重刷。
+**★新增操作律（本轮实证，建议入彼侧坑册）**：fastboot 单通道独占设备——两侧任何
+刷写必须互斥（约定窗口或用户在场串行），并行下发会互相污染分区且无报错。
+
+**二、r84 回归数据共享（同内核对照基线，pmOS phosh rootfs）**：#85 一次点亮 /
+boot ~50s 内 NCM 通 / failed 0 / 音频链全自动（audio-route 钉 T4c 直驱
+RCV=ASP_RX1 251/1 + SPK=ASP_RX2 409/3 + stream=12740；UCM+tplg 随 device r60 自带，
+无需手工件）/ GPU 钳零件真空闲 busy_delta_us 恒 0（5 连读；220 档 boot 初期驻留
+87%，稳态口径 94.8%）/ 睡眠 rtcwake 51s → resume devices **0.240s** / wowlan
+magic-packet 武装保持 / udevd+logind WatchdogUSec=0 + journald sync drop-in 全生效 /
+rootfs 自动扩容 449G。**ifpc 恒 0 = （八十六）FW 行为态收官判读，勿当异常追**。
+boot 早期 DPU「no encoder found for crtc 0」3 条 = 窗口性噪音（面板 cold-enable
+restart 自愈窗口撞上合成器 vblank 请求），运行期零刷，勿追。
+
+**三、同步动作**：零内核变化（彼侧 BUILD.env 已同钉 r84/v65/#85）——本轮彼侧唯一
+新律 = 上面第一条的刷写互斥。nura 侧 phosh 本地刷写件 = artifacts/
+meizu-meizu20-phosh-local.img（r84 apk + device r60 + fw r3，3.2G；非发布面件，
+artifacts gz 忽略政策照旧，sha sidecar 已入库）。
