@@ -1,5 +1,11 @@
-# ESP 裸镜像恰 100MiB = GitHub 单文件上限临界，不入 git；仓库只收 .img.gz
+# ★2026-10-12 政策变更（审查轮管家项，待用户追认）：artifacts 大件不再入 git——
+# v56 起实际断档漂移半年，追认为新惯例；真值来源 = AGENTS/round 文档台账哈希
+# + GitHub Release + 彼侧/本机副本。反向 = 删除下行即可恢复「gz 入库」旧政策。
+artifacts/esp-recovery-*.img.gz
+
+# ESP 裸镜像恰 100MiB = GitHub 单文件上限临界，不入 git
 artifacts/esp-recovery-v*.img
+
 # 退役镜像留本地盘归档，不入 git
 artifacts/mu-r62-9f1e8f8d.img
 
