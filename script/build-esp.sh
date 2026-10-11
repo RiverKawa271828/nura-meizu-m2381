@@ -1,19 +1,26 @@
 #!/usr/bin/env bash
 # build-esp.sh — linux apk 里的 vmlinuz-efi → ESP 镜像（recovery_a 腿）
 #
-# 用法: build-esp.sh [vNN]      （版本号缺省 = 现役 REL_ESP 版本 +1）
+# 用法: build-esp.sh [NN]      （版本号纯数字；缺省 = artifacts 已有最大 vN + 1）
 #
 # 配方 = make-esp-recovery.sh（meizu20-m1/tools，v4d/v6 血统）：
 # 100MiB FAT32 512B，内核必须落 \EFI\BOOT\BOOTAA64.EFI。
 # ⚠ 刷 ESP ≠ 换模块：只刷 recovery_a 不装 apk = 模块腿没跟上（两腿铁律）。
+# ⚠ 覆盖雷（2026-10-11 r83 轮事故）：缺省版本号原取「现役钉子+1」，但钉子按流程
+#   滞后于最新候选（等彼线点火 PASS 才更）⇒ 撞回最新候选号把 v63 覆盖。
+#   现改为「artifacts 已有最大 vN + 1」，并对入参做纯数字校验。
 set -euo pipefail
 . "$(dirname "$0")/../config.sh"
 nura_precheck
 
 REL="${1:-}"
 if [ -z "$REL" ]; then
-	CUR=$(basename "$REL_ESP_IMG" | sed -E 's/.*v([0-9]+)\.img(\.gz)?/\1/')
+	CUR=$(ls "$NURA_ROOT"/artifacts/esp-recovery-v*.img* 2>/dev/null \
+		| sed -E 's/.*esp-recovery-v([0-9]+)\.img(\.gz)?$/\1/' | sort -n | tail -1)
+	[ -n "$CUR" ] || nura_die "artifacts 无既有 ESP 可推版本号，请显式传参"
 	REL=$((CUR + 1))
+elif ! [[ "$REL" =~ ^[0-9]+$ ]]; then
+	nura_die "版本号须为纯数字（build-esp.sh 64，不带 v），收到: $REL"
 fi
 
 PKGREL=$(grep -m1 '^pkgrel=' "$PIN_PMAPORTS/device/downstream/$PKG_LINUX/APKBUILD" | cut -d= -f2)
