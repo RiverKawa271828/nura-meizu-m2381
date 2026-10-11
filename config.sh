@@ -30,7 +30,7 @@ PIN_MU_BINARIES_GIT="https://github.com/RiverKawa271828/Device-Binaries"     # �
 PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # 已建独立仓；phoenix 整条已推（10-07 推送窗口；pmOS 官方在 GitLab，GitHub 无镜像 fork 可用）
 
 # ---- Release（Phase-2；setup.sh --fetch-release 按此拉现役件/锚三件）----
-PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r66"  # 发布面（r72 首传已撤回，见 MANIFEST）
+PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r80"  # 发布面（2026-10-11 r80 上线；r72 首传半截流撤回的教训已执行=上传后下载回读 gzip -t 对拍）
 
 # ---- 包身份 ----
 PKGVER="7.3.0_rc6"
@@ -40,7 +40,7 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64}"
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="80"      # r79 = msm uAPI async page flips（349e8aa5579b，steamos 掌机线）；r80 = CONFIG_UHID=m（config-only，tip 不动）；r79 六发+四合一回归全 PASS（10-10）
+REL_LINUX_PKGREL="80"      # r79 = msm uAPI async page flips（349e8aa5579b，steamos 掌机线）；r80 = CONFIG_UHID=m（config-only，tip 不动）；r79 六发+四合一回归全 PASS；r80 = Release 轮（10-11 上线）
 REL_DEVICE_PKGREL="59"     # r59 = uinput 用户态胶水（60-meizu20-uinput.rules uaccess+static_node / modules-load.d 开机加载）；r58 = s2idle×systemd 看门狗修复（udevd/logind WatchdogSec=0 + 14 内部服务放宽 30min + journald sync 30s）
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"

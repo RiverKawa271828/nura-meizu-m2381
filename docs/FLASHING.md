@@ -49,9 +49,9 @@
 
 ```bash
 fastboot devices                          # 有设备号才继续；空输出 = 还没进 fastboot（§2）
-fastboot flash boot_b      mu-r66-9033a734.img        # Mu-UEFI 固件（含设备树）
-fastboot flash recovery_a  esp-recovery-v47.img       # ESP = 内核引导腿
-fastboot flash userdata    meizu-meizu20-r66.img      # pmOS rootfs（模块腿已烤入，免 apk 步骤）
+fastboot flash boot_b      mu-r69-97cdea20.img        # Mu-UEFI 固件（含设备树）
+fastboot flash recovery_a  esp-recovery-v61.img       # ESP = 内核引导腿
+fastboot flash userdata    meizu-meizu20-r80.img      # pmOS rootfs（模块腿已烤入，免 apk 步骤）
 fastboot set_active b                                 # 激活 b 槽
 fastboot reboot
 ```
@@ -61,14 +61,10 @@ fastboot reboot
 ### A-3 刷完验收与回滚
 
 - 重启后 ~1 分钟 plasma 起来；首启自动扩容占满整盘属正常；登录 `user` / `1234`。
-- **首启必做：关自动睡眠**——「电源管理 → 节电」里把空闲挂起/自动睡眠关掉。本 Release
-  （r66 内核）suspend 必死：不关的话设备空闲后会睡死假重启（表现为莫名重启一次，重启后正常）。
-  三条 sleep target 的 mask 只是兜底，挡不住桌面电源管理的自动睡眠请求。
-  **（修复待发）** 真凶已查明 = in-tree printk 的 console 挂起路径回归（`console_suspend_all()`），
-  修法 = cmdline 加 `no_console_suspend`；rc6 工作态内核上真睡 + 唤醒已实测通过，但
-  **r72 首传 rootfs 为半截流已整体撤回**、且首次睡眠后电源键唤醒不稳（拔插 USB 可唤醒）⇒
-  **修好后再发新版，届时不必再关自动睡眠**。
-- 验收清单照 **§5** 过一遍（本轮期望 `uname -v` = `7.3.0_rc3-r66` → `#67`）。
+- **睡眠可直接用**（r77+ 内核 / r57+ 设备包起）：空闲自动睡默认开（5 分钟），电源键/RTC 唤醒，
+  睡眠期间 WoWLAN 保持 WiFi 连接（设备包自带 `meizu-wowlan.service`，零配置）。已知小边角：
+  唤醒后若无输入，桌面空闲自动睡不自动重新武装——给一次输入即恢复。
+- 验收清单照 **§5** 过一遍（本轮期望 `uname -v` = `7.3.0_rc6-r80` → `#81`）。
 - 蜂窝/NFC 用户态默认摘除 = 拍板形态（README 状态表）；`systemctl --failed` 里
   MANIFEST「已知非回归失败」三件不用慌。
 - **正常直刷不需要动 misc**：ABL 重试计数在 boot_x 的 GPT 属性位（`set_active b`
@@ -149,7 +145,7 @@ fastboot reboot
 
 ```bash
 # 通道：ssh user@172.16.42.1（密码 1234；host key 变了加 -o UserKnownHostsFile=/dev/null）
-scp linux-meizu-meizu20-7.3.0_rc3-rN.apk device-meizu-meizu20-1-rM.apk user@172.16.42.1:/tmp/
+scp linux-meizu-meizu20-7.3.0_rc6-rN.apk device-meizu-meizu20-1-rM.apk user@172.16.42.1:/tmp/
 ssh user@172.16.42.1
 sudo apk add --allow-untrusted /tmp/linux-*.apk /tmp/device-*.apk   # 提示输密码 = 1234
 ```

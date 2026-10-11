@@ -3,56 +3,50 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-10 @ uinput 轮；在机就是这套）
+## 工作态（2026-10-11 @ async flip + uhid 轮 = Release r80；在机就是这套）
 
-> ⚠ **r72 Release 已整体撤回**（含 tag）：首传的 rootfs 资产被抓到是**「正在写入的半截流」**
-> （607,911,936 B，正确件 = 1,177,103,795 B）——上传与 gzip 落盘竞态所致；启停件本身未动。
-> **教训**：SHA256SUMS 只能证明传输一致，**不能证明生成时文件已写完** ⇒ 以后传大件必须
-> 「传完再下载回来做 `gzip -t` + sha 对拍」闭环。修好（外加 ath12k 唤醒残留）后再按新 tag 重发。
+> ⚠ **r72 Release 首传曾整体撤回**（含 tag）：rootfs 资产被抓到是**「正在写入的半截流」**
+> （上传与 gzip 落盘竞态）。**教训已固化为流程**：大件上传后必须「下载回来 `gzip -t` +
+> sha 对拍」闭环才算发布完成——r80（2026-10-11）起照此执行。
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**78**（**config-only 轮：+CONFIG_INPUT_UINPUT=m**，steamos 线带话主诉求；DTS/驱动源码零改动 ⇒ DTB 不变、Mu 免重打；fork tip 同 r77 `02fe4629080a` @meizu20-t4b） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r78.apk` | — | 机上 apk add |
+| 内核 apk | 7.3.0_**rc6**-r**80**（r79 = msm uAPI async page flips 三件套 + r80 = CONFIG_UHID=m；fork tip `349e8aa5579b` @meizu20-t4b，DTS 零改动 ⇒ Mu 免重打） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r80.apk` | — | 机上 apk add |
 | Mu 镜像 | r69 | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
-| ESP | v59（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v59.img.gz` | 78f425ac（裸镜像）/ 903bbf6b（gz） | recovery_a |
-| 设备包 / 固件包 | **r59**（uinput 用户态胶水：`60-meizu20-uinput.rules` uaccess+static_node / `modules-load.d` 开机加载）/ r3 | 同目录 | — | 机上 apk add |
-| 上机期望 | `uname -v` = `7.3.0-rc6` → **#79**；`/dev/uinput` 存在（r78+ 装 r59 后） | — | — | — |
+| ESP | v61（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v61.img.gz` | cb7f1e5a（裸镜像）/ 41e26583（gz） | recovery_a |
+| 设备包 / 固件包 | **r59**（uinput uaccess 规则 + modules-load.d）/ r3 | 同目录 | — | 机上 apk add |
+| 上机期望 | `uname -v` = `7.3.0-rc6` → **#81**；`/dev/uinput`（r78+r59）/ `/dev/uhid`（r80 BLE HID，modules-load.d 自载） | — | — | — |
 
-**uinput 轮实测**（10-10）：verify 全绿（dtb 同源 c061acd9 / uinput.ko 在列 / ESP↔apk 同源 b5e13ca5）；
-**r78 `uinput.ko` 在 Debian v5 盒（在跑 r77/#78 内核）insmod 实机预演通过**——/dev/uinput 出现
-（root:root 600，与 steamos 线报的默认态一致 ⇒ uaccess 规则确有必要）、rmmod 零残留。
-**已刷（10-10 用户在场）**：唯一在机设备 = steamos/Debian 盒（与 pmOS 同交付链），flash-batch
-boot_b(mu-r69) + recovery_a(ESP v59) → **#79 上机一次点亮**，readback 双对（boot_b `97cdea20` /
-recovery_a `78f425ac`），kwin/UBWC 扫出零回归；其模块腿仍为 r77 graft（uinput.ko 待该线 graft
-补齐）。IN_FORMATS 查证（steamos 线第二问）= **翻案成立**：DPU 平面自 mainline 2019 就带
-IN_FORMATS（QCOM_COMPRESSED+LINEAR），steamos 的 `grep in_formats state` 是假探针
-（state dump 不打该属性）；#79 上机 kwin 正用 UBWC（modifier 0x0500…0001）扫出，判词见
-AGENTS「带话」节回信。
+**async flip + uhid 轮实测**（10-10/11，steamos 掌机线四合一回归回传）：kwin sync 扫 PASS
+（Plasma 8s 起、120Hz、零 DRM 报错）；MODE_ATOMIC 连发 ~113 次/s 全 0、cmd 模式帧持续推进；
+BLE HID PASS（/dev/uhid 缺失 = bluetoothd 拒收 HOG 根因，uhid 自载后 MCHOSE 鼠标出节点 +
+事件流验证）；uinput 手柄 FAIL = **会话层墙**（ARM steam 客户端焦点判定坏，r78/79/80 三代
+一致 + kwin 时代正常，非内核）；睡眠 FAIL-有数据 = 彼线缺 device r57-58（wow service + 看门狗
+修复件）+ rtc0 废件，**非内核墙**（pmOS 线同内核 suspend 全绿）。双腿对拍 apk b0c865b7 /
+ESP cb7f1e5a；**r80/v61 腿已在第二条 rootfs（armada-sheng/Fedora 底）全链服役 = 内核 base
+无关性双重验证**。
 
-## 发布面现役产物（2026-10-07 @ 设备日（七十三）后；= Release r66，已发布）
+## 发布面现役产物（2026-10-11 @ async flip + uhid 轮后；= Release r80，已发布）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_rc3-r**66**（fsa4480 摘除 DTB + CONFIG_PSI=y；fork `f42761da35ab`） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc3-r66.apk` | — | 机上 apk add |
-| 设备包 apk | 1-r**53**（r52 = NFC+蜂窝用户态摘除随包 mask；r53 = **depends + hexagonrtc 三件**——Release rootfs 首航暴雷修复，传感器 PD 守护链随 rootfs 带齐） | 同目录 `device-meizu-meizu20-1-r53.apk` | — | 机上 apk add |
+| 内核 apk | 7.3.0_rc6-r**80**（async flip 三件套 r79 + CONFIG_UHID=m r80；fork `349e8aa5579b`） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r80.apk` | — | 机上 apk add |
+| 设备包 apk | 1-r**59**（uinput uaccess + modules-load.d；r57/r58 = wowlan service + s2idle 看门狗修复随包） | 同目录 `device-meizu-meizu20-1-r59.apk` | — | 机上 apk add |
 | 固件包 apk | 1-r**3** | 同目录 `firmware-meizu-meizu20-1-r3.apk` | — | 机上 apk add |
-| Mu 镜像 | r66 | `artifacts/mu-r66-9033a734.img` | 9033a734 | boot_b |
-| ESP | v47（仓内 `.img.gz`；刷写/verify 自动解压） | `artifacts/esp-recovery-v47.img.gz` | a0455923（裸镜像） | recovery_a |
-| rootfs 镜像 | r66 同轮（**--single-partition 修复版 10-07 换件**；内含内核 r66 apk + 设备包 r53 + hexagonrtc 依赖链；纯官方预装，机上后装件不在内） | Release 分发件 `meizu-meizu20-r66.img.gz`（1.10GiB，sha8 **e4636bfe**；首版 90961230 漏 `--single-partition` 上机暴雷已撤换） | e4636bfe | userdata |
-| 源码钉（发布轮 r66 时） | fork `f42761da35ab` @meizu20-t4b ｜ Mu `14692e56822c` @meizu20-mars-port ｜ pmaports `222f0c5` @phoenix（r53 depends 修复轮） ｜ Binaries fork main=`036ba9f7`——**四仓已推 GitHub**；推送前敏感信息清扫：三树历史中性化过 WiFi SSID/本地路径，hash 相应重写；DTS 注释级改动不影响编译产物 | — | — | — |
+| Mu 镜像 | r69（DTS 零改动自 r66 轮沿用） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
+| ESP | v61（仓内 `.img.gz`；刷写/verify 自动解压） | `artifacts/esp-recovery-v61.img.gz` | cb7f1e5a（裸镜像） | recovery_a |
+| rootfs 镜像 | r80 同轮（--single-partition；内含内核 r80 apk + 设备包 r59 + 固件 r3；纯官方预装，机上后装件不在内） | Release 分发件 `meizu-meizu20-r80.img.gz`（1.10GiB） | e1b9494f | userdata |
+| 源码钉（发布轮 r80 时） | fork `349e8aa5579b` @meizu20-t4b ｜ Mu `bdea825c` @meizu20-mars-port（r69 FdtBlob，未变）｜ pmaports `850e86d` @phoenix（r80 UHID 轮）——**三树已推 GitHub** | — | — | — |
 
-**源码钉（工作态 2026-10-10 推）**：内核 fork `02fe4629080a` @meizu20-t4b（r77/r78 同 tip；
-`master` 已同步到 rc6 基线提交 `a90ee4305c4a` ⇒ 公开页面显示「领先 84 提交」= 恰好板级内容；
-历史线归档 tag：`archive/pre-rc6-meizu20-t4b` / `archive/meizu20-7.3-T3` / `archive/meizu20-m2381-local`）
-｜ Mu `bdea825c` @meizu20-mars-port（r69 FdtBlob）｜ pmaports `77b235c` @phoenix（r78 uinput + r59 胶水）。
+**Release r80 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r80>**（2026-10-11
+上传，大件按 r72 教训做了「下载回读 gzip -t + sha 对拍」闭环）：直刷三件 + 锚三件 + 固件
+tarball（自建者用）+ `SHA256SUMS`。**Release 直刷三件（boot / recovery / rootfs）必须同轮配对**
+——外人路径 = FLASHING「快速路径 A」。
 
-**Release r66 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r66>**（2026-10-07
-推送窗口上传）：直刷三件 + 锚三件 + 固件 tarball（自建者用）+ `SHA256SUMS`。
-**Release 直刷三件（boot / recovery / rootfs）必须同轮配对**——外人路径 = FLASHING「快速路径 A」。
-
-期望 uname：`7.3.0_rc3-r66` → **#67**。10-07 上机已实证（#N=pkgrel+1 第 13 证）；
-当轮战果（typec 首亮 / pm8008 ×14 撤除 / Docker e2e 全绿 / 空转清剿第一轮 / NFC 摘除）
-= 私有工作区 experiment-log（七十三）。
+期望 uname：`7.3.0_rc6-r80` → **#81**（#N=pkgrel+1）。本轮发布面新增用户可见项 =
+**suspend 可用**（空闲自动睡 + 电源键/RTC 唤醒 + WoWLAN 保 WiFi）+ BLE HID（uhid）；
+async flip（r79，uAPI 层）为 compositor 侧能力。当轮战果全量 = 私有工作区 experiment-log
+（八十二）+ steamos 线四合一回归回信。
 
 ## 回滚锚（救命的三个文件，勿删勿挪；同 config.sh）
 
@@ -83,5 +77,6 @@ AGENTS「带话」节回信。
 
 ## 历史轮次
 
-r61 首航（10-06）→ r63/r64 录音轮 → r65 pm8008 → r66 fsa4480 摘除（10-07）；
+r61 首航（10-06）→ r63/r64 录音轮 → r65 pm8008 → r66 fsa4480 摘除（10-07，首个 Release）→
+r72 首传半截流撤回（10-08，教训入流程）→ r80 async flip + uhid（10-11，Release 上线）；
 逐轮产物/sha 明细见 git log。ESP 自 v47 起仓内 gz 化（v43–v45 裸镜像已退役出史）。

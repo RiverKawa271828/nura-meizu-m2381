@@ -38,21 +38,17 @@ rootfs. Log in as `user`, password `1234` (use `sudo` with the same password for
 
 ```bash
 sha256sum -c SHA256SUMS                 # all OK before continuing
-fastboot flash boot_b      mu-r66-9033a734.img    # Mu-UEFI firmware (device tree baked in)
-fastboot flash recovery_a  esp-recovery-v47.img   # ESP = kernel boot leg
-fastboot flash userdata    meizu-meizu20-r66.img  # rootfs (⚠ wipes all data)
+fastboot flash boot_b      mu-r69-97cdea20.img    # Mu-UEFI firmware (device tree baked in)
+fastboot flash recovery_a  esp-recovery-v61.img   # ESP = kernel boot leg
+fastboot flash userdata    meizu-meizu20-r80.img  # rootfs (⚠ wipes all data)
 fastboot set_active b && fastboot reboot
 ```
 
-The plasma desktop comes up in about a minute. **First boot must-do**: open "Power Management →
-Energy Saving" and **turn off automatic suspend** — suspend is deadly on this release's r66 kernel
-(a fake-off that needs a forced reboot on idle).
-(**Sleep fix ready, pending re-release**: the real culprit was an in-tree printk console-suspend
-regression `console_suspend_all()`, fixed by adding `no_console_suspend` to the kernel cmdline —
-verified on the rc6 working kernel. **The first r72 rootfs upload was a truncated stream and the
-whole release has been withdrawn**; it will be re-published once fixed. Known residuals: ath12k
-resume takes ~20 s and the power-key wake is unreliable after the first sleep (re-plugging USB
-wakes it).)
+The plasma desktop comes up in about a minute. **Suspend works out of the box** (as of
+this release): automatic idle suspend is on by default (5 min), wake via power button /
+RTC, and **WoWLAN keeps the WiFi connection alive while asleep** (the device package
+ships the service — zero config). Known minor quirk: after wake, if you don't touch the
+device the desktop won't re-arm automatic suspend by itself — one input restores it.
 
 Pre-flight checklist (unlocked bootloader / Flyme baseline / anchors), step-by-step
 verification, and brick recovery → **[docs/FLASHING.md](docs/FLASHING.md)** (Chinese).
@@ -99,14 +95,16 @@ Four independently updatable legs: boot_b = Mu image | recovery_a = ESP | apk = 
 Why it looks this way, and what each image contains → **[docs/DESIGN.md](docs/DESIGN.md)**
 (Chinese).
 
-## Hardware status (2026-10-07 @ r66; current state only, history in the private experiment log)
+## Hardware status (2026-10-11 @ r80; current state only, history in the private experiment log)
 
 **✅ Working**
 Display (120Hz OLED + backlight/auto-brightness) | touch | GPU acceleration | WiFi
-dual-band incl. 5G | Bluetooth (incl. audio output) | charging (PD) + fuel gauge |
-speaker playback (direct-drive path, clean audio; earpiece reserved for calls) | video
-hard-decode (H.264) | four sensor classes + rotation | vibration (AW8697) | zram |
-Docker containers | NCM USB network (debug channel).
+dual-band incl. 5G (WoWLAN keeps the link while asleep) | Bluetooth (incl. audio output
++ BLE HID keyboards/mice/gamepads) | charging (PD) + fuel gauge | speaker playback
+(direct-drive path, clean audio; earpiece reserved for calls) | video hard-decode
+(H.264) | four sensor classes + rotation | vibration (AW8697) | zram | Docker containers
+| NCM USB network (debug channel) | **suspend (s2idle: automatic idle suspend + power
+button/RTC wake + WoWLAN keeps the link)**.
 
 **◐ Suspended (frozen battles with documented verdicts and revival paths)**
 Cellular data/SMS/voice (control plane lit = world's first SM8550 pmOS cellular; stuck
@@ -118,9 +116,8 @@ plug-test pending) | Waydroid.
 Recording/microphone (SWR domain bring-up, late-stage) | camera (platform open, sensor
 driver not written) | fingerprint | GNSS (follows cellular) | DP alt-mode video out
 (fsa4480 not populated on board — judged dead after final review) | deep sleep / MPM-AOSS
-(late-stage; **plain sleep is fixed and automatic suspend enabled in the rc6/r72 working state** —
-the r66 kernel of this release still needs the first-boot must-do above) | IR/UWB (identity
-unconfirmed). Hardware absent: 3.5mm jack, SD slot.
+(late-stage; plain sleep works, see ✅) | IR/UWB (identity unconfirmed). Hardware
+absent: 3.5mm jack, SD slot.
 
 > Cellular/NFC removal by default is a deliberate power/stability decision (masked by
 > the device package), not a missing feature.
@@ -138,10 +135,10 @@ unconfirmed). Hardware absent: 3.5mm jack, SD slot.
 
 | Mark | Example | Meaning |
 |---|---|---|
-| `r66` | `mu-r66-*.img`, `meizu-meizu20-r66.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds |
-| `v47` | `esp-recovery-v47.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v47 happens to pair with r66) |
-| `#67` | `uname -v` on device | Kernel build number = **r + 1** (pkgrel+1 baked into the kernel). First verification point on device: seeing #67 proves the r66 kernel is really running |
-| `9033a734` | `mu-r66-9033a734.img` | First 8 hex of the image's sha256 — anti-tamper + dd read-back comparison |
+| `r80` | `mu-r69-*.img`, `meizu-meizu20-r80.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds |
+| `v61` | `esp-recovery-v61.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v61 happens to pair with r80) |
+| `#81` | `uname -v` on device | Kernel build number = **r + 1** (pkgrel+1 baked into the kernel). First verification point on device: seeing #81 proves the r80 kernel is really running |
+| `97cdea20` | `mu-r69-97cdea20.img` | First 8 hex of the image's sha256 — anti-tamper + dd read-back comparison |
 
 Design details and the #N law → [docs/DESIGN.md](docs/DESIGN.md) (Chinese); which
 version is current → [MANIFEST.md](MANIFEST.md) (Chinese).

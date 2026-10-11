@@ -29,20 +29,15 @@
 
 ```bash
 sha256sum -c SHA256SUMS                 # 全 OK 才继续
-fastboot flash boot_b      mu-r66-9033a734.img    # Mu-UEFI 固件（含设备树）
-fastboot flash recovery_a  esp-recovery-v47.img   # ESP = 内核引导腿
-fastboot flash userdata    meizu-meizu20-r66.img  # rootfs（⚠清空全部数据）
+fastboot flash boot_b      mu-r69-97cdea20.img    # Mu-UEFI 固件（含设备树）
+fastboot flash recovery_a  esp-recovery-v61.img   # ESP = 内核引导腿
+fastboot flash userdata    meizu-meizu20-r80.img  # rootfs（⚠清空全部数据）
 fastboot set_active b && fastboot reboot
 ```
 
-约 1 分钟起 plasma 桌面。**首启必做**：进桌面后打开「电源管理 → 节电」，**把自动睡眠/空闲
-挂起关掉**——本 Release（r66 内核）suspend 必死，放着不管会在空闲后睡死假重启（系统重启后
-一切正常，但每次空闲都会再来一次）；熄屏走屏幕熄灭（DPMS）即可。
-（**睡眠修复已就绪、待重发**：真凶 = in-tree printk 的 console 挂起路径回归
-`console_suspend_all()`，修法 = cmdline 加 `no_console_suspend`；rc6 工作态内核上真睡 +
-唤醒已实测通过。**r72 首传的 rootfs 被抓到「上传了半截流」已整体撤回**，修好后再发。
-已知残留 = ath12k 睡醒恢复约 20s（屏幕迟亮、WiFi 睡后需重载模块）；另首次睡眠后
-**电源键唤醒不稳（拔插 USB 可唤醒）**，一并治本后再发。—— MANIFEST/AGENTS）
+约 1 分钟起 plasma 桌面。**睡眠可直接用**（本 Release 起）：空闲自动睡（默认 5 分钟）+
+电源键/RTC 唤醒，睡眠期间 **WoWLAN 保持 WiFi 连接**（设备包自带服务，零配置）。
+已知小边角：唤醒后若无输入，桌面的空闲自动睡不自动重新武装——给一次输入即恢复，日常无感。
 
 刷机前准备八项（BL 解锁 / Flyme 基线 / 回滚锚）与逐条验证、
 回滚救砖 → **[docs/FLASHING.md](docs/FLASHING.md)「快速路径 A：Release 直刷」**。
@@ -80,12 +75,13 @@ XBL → ABL → boot_b: Mu-UEFI (m2381Pkg) ──送核──→ 主线内核 (E
 
 为什么长这样、每件镜像内部是什么 → **[docs/DESIGN.md](docs/DESIGN.md)**（启动链原理与镜像解剖）。
 
-## 硬件状态（2026-10-07 @ r66；本表只保现态，进度叙事在私有工作区 experiment-log）
+## 硬件状态（2026-10-11 @ r80；本表只保现态，进度叙事在私有工作区 experiment-log）
 
 **✅ 可工作**
-显示（120Hz OLED + 背光/自动亮度）｜触控｜GPU 加速｜WiFi 双频含 5G｜蓝牙（含音频输出）｜
-充电（PD）+ 电池电量计｜扬声器播放（直驱路径，干净无杂音；听筒留通话）｜视频硬解（H.264）｜
-传感器四类 + 转屏｜震动（AW8697）｜zram｜Docker 容器｜NCM USB 网络（调试通道）。
+显示（120Hz OLED + 背光/自动亮度）｜触控｜GPU 加速｜WiFi 双频含 5G（睡眠保连接 WoWLAN）｜
+蓝牙（含音频输出 + BLE HID 键鼠/手柄）｜充电（PD）+ 电池电量计｜扬声器播放（直驱路径，干净
+无杂音；听筒留通话）｜视频硬解（H.264）｜传感器四类 + 转屏｜震动（AW8697）｜zram｜Docker 容器｜
+NCM USB 网络（调试通道）｜**suspend（s2idle：空闲自动睡 + 电源键/RTC 唤醒 + WoWLAN 保链路）**。
 
 **◐ 挂起（战役冻结、判决与素材都在档，复燃有路径）**
 蜂窝数据/短信/语音（控制面已点亮 = 全球首个 SM8550 pmOS 蜂窝；卡在 S3 RF init，**用户态默认摘除**）｜
@@ -94,8 +90,8 @@ Waydroid。
 
 **✗ 不可工作**
 录音/麦克风（SWR 域 bring-up，大后期）｜相机（平台已开放，传感器驱动未做）｜指纹｜GNSS（随蜂窝）｜
-DP 视频外接（板上未焊 fsa4480，判负终审）｜深睡 MPM/AOSS（大后期；**普通 sleep 已在 rc6/r72
-工作态修好并放开自动睡眠**，本 Release 的 r66 内核仍按上文关自动睡眠）｜IR/UWB（身份未定）。
+DP 视频外接（板上未焊 fsa4480，判负终审）｜深睡 MPM/AOSS（大后期；普通 sleep 已可用见 ✅）｜
+IR/UWB（身份未定）。
 硬件不存在：3.5mm 耳机孔、SD 卡槽。
 
 > 蜂窝/NFC 默认摘除是省电与稳定性的**拍板形态**（设备包随包 mask），不是功能缺失。
@@ -110,10 +106,10 @@ DP 视频外接（板上未焊 fsa4480，判负终审）｜深睡 MPM/AOSS（大
 
 | 记号 | 例子 | 含义 |
 |---|---|---|
-| `r66` | `mu-r66-*.img`、`meizu-meizu20-r66.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮 |
-| `v47` | `esp-recovery-v47.img.gz` | **ESP 版本**，独立计数，每换一次内核腿 +1（与 r 轮无换算关系，v47 恰好陪 r66） |
-| `#67` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #67 = r66 内核真的在跑 |
-| `9033a734` | `mu-r66-9033a734.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |
+| `r80` | `mu-r69-*.img`、`meizu-meizu20-r80.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮 |
+| `v61` | `esp-recovery-v61.img.gz` | **ESP 版本**，独立计数，每换一次内核腿 +1（与 r 轮无换算关系，v61 恰好陪 r80） |
+| `#81` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #81 = r80 内核真的在跑 |
+| `97cdea20` | `mu-r69-97cdea20.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |
 
 设计细节与 #N 定律原理 → [docs/DESIGN.md](docs/DESIGN.md)；现役各件对应哪版 → [MANIFEST.md](MANIFEST.md)。
 
