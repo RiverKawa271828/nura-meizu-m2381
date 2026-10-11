@@ -3,24 +3,30 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-11 晚 @ r81 升现役——彼线点火回归 PASS；在机 = 彼侧 armada-sheng #82；发布面 = Release r80）
+## 工作态（2026-10-12 @ r84 收官更钉——GPU/IFPC 轮判过 =（八十六）；在机 = 彼侧 armada-sheng #85；发布面 = Release r80 不变）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**81**（彼线回归 PASS：CONFIG_SQUASHFS_ZSTD/XZ=y + RTC_HCTOSYS/SYSTOHC→rtc1；config-only，fork tip `349e8aa5579b` 不动 ⇒ DTB/Mu 免重打） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r81.apk` | 1c31babe | 机上 apk add |
+| 内核 apk | 7.3.0_**rc6**-r**84**（GPU/IFPC 轮收官件：revert A 路 + 钳零防御 + payload 订阅；fork tip `140e5a8e308a`） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r84.apk` | b5dd7e62 | 机上 apk add |
 | Mu 镜像 | r69（DTS 零改动沿用） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
-| ESP | v62（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v62.img.gz` | b41b8889（裸镜像，10-11 勘误※）/ 3e4987d5（gz） | recovery_a |
+| ESP | v65（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v65.img.gz` | 463efc45（裸镜像）/ 00d2d5f9（gz） | recovery_a |
 | 设备包 / 固件包 | **r60**（modules-load.d 补 uhid 自载）/ r3 | 同目录 | — | 机上 apk add |
-| 上机期望 | `uname -v` = `7.3.0-rc6` → **#82**（彼侧在役实测 ✓）；回滚 = r80/v61/r59（=Release r80） | — | — | — |
+| 上机期望 | `uname -v` = `7.3.0-rc6` → **#85**（彼侧在役实测 ✓） | — | — | — |
 
 **r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂
 （gzip 重压 workaround 撤）；RTC 用户态三件下线后时钟正确 + timedatectl 首次读出 RTC；
 彼侧 qbootctl v0.2.2 设备端现编落地（fastboot 停车根除，SLOT b Successful=1 重启重标 ✓）。
-※勘误：v62 裸镜像原记 b41b8888 为构建当拍坏读数，真值 b41b8889cadf…（出货 gz 解压/
-彼侧实测/make-esp 末行三方全等）；build-esp.sh 打印已改为出货 gz 反推。
+※勘误（10-11 深夜定谳）：v62 裸镜像 8 位前缀 = **b41b8888（原手记无误，全量
+b41b88889cadf6060e35…）**——「b41b8889cadf」系连排四个 8 丢一位的转抄病，当轮勘误
+本身勘错，全谱手记已改回；build-esp.sh 出货 gz 反推（单一真值源）做法照旧。
 
-**回滚配对**：内核 r80 + ESP v61（裸 cb7f1e5a）+ device r59 = **Release r80**
-（2026-10-11 上线：kwin sync / BLE HID / async flip 四合一回归全 PASS，steamos 线四合一回执）。
+**r84 收官回执**（10-12，GPU/IFPC 轮 =（八十六）判过）：EFI↔apk vmlinuz 01ddbb77 双侧互证 +
+本机复核全等；真空闲钳零 PASS（busy_delta 恒 0）+ 静态 UI 220 单档 94.8% + GPU 温
+39-41°C + 七条回归全绿；payload[0]=SUCCESS 但 ifpc 恒零 =「ack 不执行」[FW 行为态]——
+内核线收官，全量 = pmos_linux `docs/meizu20/gpu-idle-devfreq-round-20261011.md` §13。
+
+**回滚配对**：内核 r82 + ESP v63（裸 533f40d0；gz = 彼侧重压版 425ecd37，原打包件两侧
+均已断）+ device r60（= r82/v63/#83，彼侧在役回滚件）。
 
 ## 发布面现役产物（2026-10-11 @ async flip + uhid 轮后；= Release r80，已发布）
 

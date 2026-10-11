@@ -27,8 +27,14 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-10 更；新会话从这里接）
+## 现态（2026-10-12 更；新会话从这里接）
 
+- **✅ GPU/IFPC 轮收官更钉（10-12（八十六））**：r84/v65/#85 彼线点火回执判过
+  （payload[0]=SUCCESS 但 ifpc 恒零 =「ack 不执行」[FW 行为态]，内核线收官；钳零会计件
+  根治 busy 地板：真空闲 busy_delta 恒 0 + 静态 UI 220 单档 94.8% + GPU 温 39-41°C +
+  七条回归绿）→ **config.sh 现役钉 = r84 / ESP v65 / 期望 #85**（回滚配对 r82/v63/#83；
+  r83/v64 冻结留档）；MANIFEST 工作态表已同步（含 v62 裸 sha 再勘对齐）。全量判词 =
+  pmos_linux `docs/meizu20/gpu-idle-devfreq-round-20261011.md` §13。
 - **Phase-2 清理轮收官（推送前预备完成）**：wrapper（pmbootstrap-meizu.sh + cfg）与
   tools（make-esp-recovery + devsh 三件）已收编本仓；`PIN_*_GIT` 已填
   （linux-mobile-ports / Mu-Silicium / Device-Binaries 三 fork 在位；pmaports 建仓后推）；

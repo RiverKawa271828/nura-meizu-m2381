@@ -40,12 +40,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64}"
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="81"      # r81 = SQUASHFS_ZSTD/XZ=y + RTC hctosys/systohc→rtc1（config-only 候选轮：steamos 线点名 FEX squashfs 腿 + 其 RTC 情报命中 rtc0 废件；tip 不动 349e8aa5579b，**待彼线点火回归**）；r80 = Release 轮（10-11 上线，async flip r79 + UHID=m r80）
+REL_LINUX_PKGREL="84"      # r84 = GPU/IFPC 轮收官件（10-12 彼线点火回执判过 =（八十六）；revert A 路 + 钳零防御 + payload 订阅，tip 140e5a8e308a）；r83 = 冻结留档未发货；r81 = SQUASHFS_ZSTD/XZ + RTC→rtc1；r80 = Release 轮（10-11 上线，async flip r79 + UHID=m r80）
 REL_DEVICE_PKGREL="60"     # r60 = modules-load.d 补 uhid 自载（BLE HID 无 open-time autoload）；r59 = uinput 用户态胶水（60-meizu20-uinput.rules uaccess+static_node / modules-load.d）；r58 = s2idle×systemd 看门狗修复（udevd/logind WatchdogSec=0 + 14 内部服务放宽 30min + journald sync 30s）
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v62.img.gz"  # v62 = r81 内核（裸 sha b41b8888——10-11 深夜再勘：原手记无误，全量 b41b88889cadf6060e35…本地 gzip -dc|sha256sum 盖章；「b41b8889cadf」系连排四个 8 丢位转抄病，当轮「勘误」本身勘错；v61=r80 裸 cb7f1e5a（Release 轮）；v60=r79 裸 0ccfcf72）
-REL_KERNEL_VER="#82"       # 下次上机 uname 期望（r81/rc6 内核 + #N=pkgrel+1 定律）；回滚配对 = r80/v61/#81/r59
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v65.img.gz"  # v65 = r84 内核（裸 463efc45 / gz 00d2d5f9；10-12 本机复核 + 两腿互证 01ddbb77 全等）；v64 = r83 冻结留档未发货（裸 68b32cec / gz c617b083）；v63 = r82（彼侧重压版 gz 425ecd37，裸 533f40d0——原打包件两侧均已断，round §9.4）；v62 = r81（裸 b41b8888——10-11 再勘定谳：原手记无误，「b41b8889cadf」系连排四个 8 丢位转抄病）；v61 = r80（裸 cb7f1e5a）；v60 = r79（裸 0ccfcf72）
+REL_KERNEL_VER="#85"       # 下次上机 uname 期望（r84/rc6 内核 + #N=pkgrel+1 定律）；回滚配对 = r82/v63/#83
 
 # ---- 回滚锚（仅私有工作区本地保留；2026-10-11 起不随 Release 上传——用户拍板：
 #      现役件可信，刷坏重刷现役三件即可；rollback.sh 自用）----
