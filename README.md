@@ -58,7 +58,7 @@ script/flash-batch.sh --i-am-present   # 一车刷（需人在设备旁）
 > 机型未验证；未来更新的 OTA 同样未验证，勿盲升。
 
 刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**；**已装机升级**（不刷 userdata、数据保留）→ **[docs/UPGRADE.md](docs/UPGRADE.md)**。
-构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；启动原理与镜像解剖 → [docs/DESIGN.md](docs/DESIGN.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
+构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；启动原理与镜像解剖 → [docs/DESIGN.md](docs/DESIGN.md)；启动链逆向深档（ABL 反汇编级 + 复现脚本）→ [docs/BOOT-CHAIN-RE.md](docs/BOOT-CHAIN-RE.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
 
 ## 已装机？升级不重刷（数据全保留）
 
@@ -79,7 +79,8 @@ XBL → ABL → boot_b: Mu-UEFI (m2381Pkg) ──送核──→ 主线内核 (E
 - **apk（模块腿）**：内核包 = vmlinuz + /usr/lib/modules。**刷 ESP ≠ 换模块，两腿必须同轮走**。
 - **userdata（rootfs）**：pmOS 根文件系统，日常不动。
 
-为什么长这样、每件镜像内部是什么 → **[docs/DESIGN.md](docs/DESIGN.md)**（启动链原理与镜像解剖）。
+为什么长这样、每件镜像内部是什么 → **[docs/DESIGN.md](docs/DESIGN.md)**（启动链原理与镜像解剖）；
+启动链完整逆向（stock ABL 反汇编级结论、为什么直刷必死、Mu/BootShim 如何工作、在你设备上的复现指南）→ **[docs/BOOT-CHAIN-RE.md](docs/BOOT-CHAIN-RE.md)**。
 
 ## 硬件状态（2026-10-12 @ r84；本表只保现态，进度叙事在私有工作区 experiment-log）
 

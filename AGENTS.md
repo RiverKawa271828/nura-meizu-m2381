@@ -21,6 +21,7 @@ script/          build-kernel / build-device / build-esp / build-mu / build-root
                  verify（交付链对拍）/ flash-batch / readback / rollback / setup（体检）
                  + pmbootstrap-meizu.sh（wrapper，官方工具组合器）+ 配套 cfg
 tools/           make-esp-recovery.sh + devsh/devpush/devpull（设备通道三件，收编自私有工作区）
+                 + abl-re/（启动链逆向复现脚本，2026-10-12 收编；配套 docs/BOOT-CHAIN-RE.md）
 docs/FLASHING.md 刷机教程（每步带验证点）——动手前必读
 docs/PIPELINE.md 构建管线 + Phase-2 发布清单
 MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 boot 看到别慌的三件）
@@ -178,6 +179,7 @@ sha512 重算，source= 保持本地文件名）②**Release tag `r66`**（用�
 |---|---|
 | 第一次上手 / 刷机 | README.md → docs/FLASHING.md |
 | 启动链原理 / 镜像组成详解 | docs/DESIGN.md |
+| 启动链逆向深档 / ABL RE / 复现脚本 | docs/BOOT-CHAIN-RE.md + tools/abl-re/（公开面；原始 dump 与 9008 备份私有仓保留，二进制不外发政策见该文 §8） |
 | 出一车产物 | docs/PIPELINE.md + script/ |
 | 查现在该刷哪个版本 | MANIFEST.md（config.sh 为准） |
 | 硬定律 / 战役叙事 / 队列 | 私有工作区仓（未公开）的 AGENTS.md + experiment-log |

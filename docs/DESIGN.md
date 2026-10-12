@@ -2,7 +2,9 @@
 
 > 回答两个问题：**这台机器怎么跑起来的**（上电到桌面的完整链路，以及为什么长这样）、
 > **每件产物里面是什么**（组成 / 构建 / 怎么验证）。
-> 构建命令 → [PIPELINE.md](PIPELINE.md)；刷写操作 → [FLASHING.md](FLASHING.md)。
+> 构建命令 → [PIPELINE.md](PIPELINE.md)；刷写操作 → [FLASHING.md](FLASHING.md)；
+> 启动链逆向深档（ABL 反汇编级结论 + BootShim/Mu 工作原理 + 复现脚本）→
+> [BOOT-CHAIN-RE.md](BOOT-CHAIN-RE.md)。
 
 ---
 
@@ -11,10 +13,14 @@
 ### 1.1 为什么不是"主线内核直接刷进 boot"（设计动机）
 
 高通设备的 Android 启动链是**验签的封闭链**：XBL → ABL 只认签过名的镜像，且 ABL 对
-"Linux 内核"的形态有隐含假设。实测把主线内核直接交给 ABL：`Start Kernel` 后极短时间
-内必死——ABL 的内核补丁器（KEP）特征扫描**误匹配 zboot 内核形态**，在退出版本引导
-服务时往活内核上写跳转导致秒崩。这条路在本机上被多轮判别实验钉死，也是整个
-「Mu 链载」方案存在的理由：**在 ABL 和内核之间插一层标准 UEFI**。
+"Linux 内核"的形态有隐含假设。实测把主线内核直接交给 ABL：`Start Kernel` 后 ~0 秒
+必死，且**第一秒零观测**（无 UART / USB / 日志通道）——7 组合排除 DT/cmdline/落点/
+交付形态，死因未定谳；后续 ABL 静态逆向进一步证明 ABL 侧无尺寸门、无重定位阶段，
+死亡在交接之后。四堵墙（验签熔丝 / 板级 DT 匹配 / dtbo 原封依赖 / 零观测）下既无法
+调试也无法绕过，这条路被多轮判别实验钉死，也是整个「Mu 链载」方案存在的理由：
+**在 ABL 和内核之间插一层标准 UEFI**。全量证据链与 ABL 反汇编级结论 →
+[BOOT-CHAIN-RE.md](BOOT-CHAIN-RE.md) §2/§5（KEP 误匹配 zboot 是后来在 Mu 链里破的
+另一颗雷，非 ABL 所为，见 §3.3）。
 
 ```
 XBL（原封）→ ABL（原封）→ boot_b: Mu-UEFI（我们构建）──标准 UEFI 引导──→ ESP 上的内核（EFI stub）
