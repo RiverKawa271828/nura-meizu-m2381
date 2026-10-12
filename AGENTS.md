@@ -11,13 +11,13 @@
 >    `docs/meizu20/experiment-log.md`（最新 =（八十八）（八十八·乙））。
 > 3. **任务链**（自包含两份计划）：①工作区内聚迁移 =
 >    pmos_linux 私有仓 `docs/meizu20/workspace-migration-plan-20261013.md`
->    —— **10-13 当日执行修订 = 零 mv**（用户拍板：源树全部保持独立仓库——内核/
->    pmaports/Mu = 多设备共享，pmbootstrap/.pmbootstrap = 通用基建；nura = 控制
->    面钉子表 + setup.sh --clone 远端复刻，物理嵌套不做）②云端构建 = 本仓
->    `docs/CLOUD-BUILD-RESEARCH.md` + `.github/workflows/build-release.yml`
->    （10-13 全量落地）。顺序 = workflow → 推送（**窗口 = 用户拍板**）→ 云构建
->    r85 → 设备日手动升级首验（uname #86 + waydroid 联网四连）。前置 =
->    pmaports r85 两提交（1d54efd/247be65）+ 本仓未推件。
+>    —— **10-13 已收官 = 零 mv**（源树全独立原地不动，nura = 控制面钉子表）。
+>    ②云端构建 = 本仓 `docs/CLOUD-BUILD-RESEARCH.md` +
+>    `.github/workflows/build-release.yml`——workflow 已落地，首跑两败三修后
+>    **三跑待验证**（r86 稿）。③设备日 = ✅**已收官（10-13）**：手动升级路径首验
+>    过（#87 + failed 0 + 读回逐字对拍）+ **waydroid 联网四连技术面全通**（r86 =
+>    v6 策略路由补全；应用内加载眼判待用户）。④剩 = 云构建草稿 r86 验收 +
+>    本地/云端一致性对比 + 发布窗口（用户拍板）。
 > 注：私有面（pmos_linux docs、meizu20-m1 取证）原地不动，路径照旧有效；旧文档里
 > 「pmbootstrap work dir 与 K30 共享须串行」已过时（K30 退役即失效；10-13 布局 v3
 > 零 mv 确认树不搬，只防本机并发）。
@@ -54,15 +54,24 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-13 更；新会话从这里接）
 
-- **▶ 2026-10-13 晚轮：云端构建 workflow 落地 + 布局 v3 零 mv 拍板**：
-  `.github/workflows/build-release.yml` 全量实现（草稿制发布=公网发布留用户拍板 /
-  上传后字节逐件对拍 / ccache 缓存 / 固件 tarball 自 Release 拉进包目录 /
-  Mu=linuxbrew+venv+`--no-sync` / ESP 版本显式传参防 clone 无历史撞号）；配套
-  脚本微调 = config.sh（v3 注记 + APK_DIR 随 PMB_WORK 推导）+ setup.sh
-  （NURA_SKIP_DOCTOR 逃生口 + 并发检查改通用）+ verify.sh（ESP 钉子缺席回落
-  artifacts 最新）+ wrapper cfg/脚本过时 K30 叙事清除。**待办链 = 推送窗口
-  （用户拍板：pmaports 2 提交 + nura 本轮提交）→ 云构建 r85 首跑 → 设备日
-  手动升级首验（uname #86 + waydroid 联网四连）**。
+- **▶ 2026-10-13 晚轮：布局 v3 零 mv + 云端构建上线 + 设备日 r86/waydroid 收官（一轮四事）**：
+  ①**零 mv 拍板落地**（用户三连：源树全部独立仓库——内核多设备分支制/pmaports 多设备包/
+  Mu fork/pmbootstrap+.pmbootstrap 通用基建；nura = 控制面钉子表 + clone 远端复刻；物理
+  嵌套不做）。②**build-release.yml 全量落地**（草稿制发布/字节逐件对拍/ccache/固件自
+  Release 拉进包目录/Mu=linuxbrew+venv+--no-sync）——**首跑两败三修**：一败 = CI 无
+  pmbootstrap work dir（修 = init 步）+ ESP 推导钉+1 误推 67（修 = 查已发布 Release 资产）；
+  二败 = init 校验 pmaports remote 须指官方 gitlab（修 = 补 remote）；三修 = ESP 推导改
+  max(release, pin)+1 防重号本地超前腿。三跑待验证。**CI 新增坑册**：systemd 无 →
+  NURA_INSIDE_UNIT；init 非交互 = yes 空行；树位 = NURA_*_DIR 重定向 /mnt。③**本地构建
+  全链通**：r85/v66 + rootfs r85（ec2acbb2）+ upgrade zip + verify 全绿；推送前隐私清扫
+  （接续卡 /home/ri 三处中性化 + 旧泄漏行删除）。④**设备日 = r86 手动升级首验全过**：
+  r85（#86）刷入后 waydroid netd addInterface 仍 EAFNOSUPPORT(97)——**v6 规则缺位实锤**
+  （（八十八·乙）只修了 v4 半层）→ **r86 = IPV6_MULTIPLE_TABLES/SUBTREES**（config-only）
+  两腿升级 → **#87 一次点亮 failed 0 + waydroid 联网四连技术面全通**（v4/v6 rule 各 15 +
+  default 路由表 + gw/外网 ping 0% loss + DNS 解析；CS validation failed = gstatic 探测
+  地域不可达，非栈缺陷；应用内加载眼判 = 用户在旁）。升级口径实测 = apk 腿+ESP 腿原地
+  升级零重刷 ✓（UPGRADE.md 流程首验）。在机 = #87/r86 + v67（读回 2ad63003 逐字对拍）。
+  **钉子 = r86/v67/#87**；回退 = r84/v65/#85（Release r84）。
 
 - **▶ 2026-10-13 三连（全量 = pmos_linux AGENTS 现态一句话 + experiment-log（八十八）（八十八·乙））**：
   ①**Waydroid 复活定谳（八十八）**= waydroid 1.6.3 自拉官方 `waydroid_arm64_only`

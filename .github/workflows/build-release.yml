@@ -57,7 +57,12 @@ jobs:
         run: NURA_SKIP_DOCTOR=1 bash script/setup.sh --clone
 
       - name: pmbootstrap init（CI 全新盘首建 work dir；cfg 已含全部答案 → 非交互）
-        run: bash -c "yes '' | bash script/pmbootstrap-meizu.sh init"
+        run: |
+          # pmbootstrap init 校验 pmaports remote 指官方 gitlab（二跑教训：CI clone 只有
+          # github fork → 'could not find remote name' 即死；本地仓 origin=gitlab 故无感）
+          git -C "$NURA_PMAPORTS_DIR" remote add pmos \
+            https://gitlab.postmarketos.org/postmarketOS/pmaports.git 2>/dev/null || true
+          bash -c "yes '' | bash script/pmbootstrap-meizu.sh init"
 
       - name: Firmware tarball from Release → pmaports package dir
         run: |

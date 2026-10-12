@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="85"      # r85 = waydroid netd 策略路由修复（（八十八·乙）config-only：IP_ADVANCED_ROUTER/IP_MULTIPLE_TABLES；fork tip 不动 140e5a8e308a；本地 apk sha8 c1d22119）；**待刷 = 手动升级首验 + 云端构建对照**；r84 = GPU/IFPC 轮收官（10-12 判过 =（八十六））现役回退件
+REL_LINUX_PKGREL="86"      # r86 = waydroid netd 策略路由补全（（八十八·乙）续：r85 开 v4 [IP_ADVANCED_ROUTER/IP_MULTIPLE_TABLES] 后 netd addInterface 走 v6 规则仍 EAFNOSUPPORT(97) 级联 → r86 补 IPV6_MULTIPLE_TABLES+SUBTREES；上机实测 = #87 一次点亮 failed 0 + waydroid rule×15/default 路由/gw·外网 0% loss/DNS 解析全通；config-only，fork tip 不动 140e5a8e308a；apk sha8 6e5dd1b8）；r85（apk c1d22119）= 同案 v4 半层，被 r86 取代；r84 = GPU/IFPC 收官（（八十六））回退件
 REL_DEVICE_PKGREL="60"     # r60 = modules-load.d 补 uhid 自载（BLE HID 无 open-time autoload）；r59 = uinput 用户态胶水（60-meizu20-uinput.rules uaccess+static_node / modules-load.d）；r58 = s2idle×systemd 看门狗修复（udevd/logind WatchdogSec=0 + 14 内部服务放宽 30min + journald sync 30s）
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v66.img.gz"  # v66 = r85 内核（裸 6ba496f5 / gz 327805aa；10-13 本地构建）；v65 = r84 回退件（裸 463efc45 / gz 00d2d5f9；两腿互证 01ddbb77）；v64 = r83 冻结留档未发货（裸 68b32cec / gz c617b083）；v63 = r82（彼侧重压版 gz 425ecd37，裸 533f40d0）；v62 = r81（裸 b41b8888，全量 b41b88889cadf6060e35…）；v61 = r80（裸 cb7f1e5a）；v60 = r79（裸 0ccfcf72）
-REL_KERNEL_VER="#86"       # 下次上机 uname 期望（r85/rc6 内核 + #N=pkgrel+1 定律）；交付 = 手动升级首验 + waydroid 联网四连（（八十八·乙））
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v67.img.gz"  # v67 = r86 内核（裸 2ad63003 / gz 444dec3f；10-13 本地构建+上机读回逐字对拍）；v66 = r85（裸 6ba496f5 / gz 327805aa）；v65 = r84 回退件（裸 463efc45 / gz 00d2d5f9）；v64 = r83 冻结留档未发货（裸 68b32cec / gz c617b083）；v63 = r82（彼侧重压版 gz 425ecd37，裸 533f40d0）；v62 = r81（裸 b41b8888，全量 b41b88889cadf6060e35…）；v61 = r80（裸 cb7f1e5a）；v60 = r79（裸 0ccfcf72）
+REL_KERNEL_VER="#87"       # 在机实测 ✓（10-13 #87 一次点亮 failed 0；#N=pkgrel+1 定律）；回退配对 = r84/v65/#85（=Release r84）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。
