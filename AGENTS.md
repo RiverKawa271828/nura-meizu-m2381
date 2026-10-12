@@ -1,5 +1,23 @@
 # nura-meizu-m2381 — 项目指南与状态（本仓单一事实源）
 
+> ★**接续卡（2026-10-13 起：会话根 = 本仓，用户拍板「只在 nura 推进适配」）**。
+> 在本仓目录开的**新会话首跑必做三件**：
+> 1. **记忆搬家**：本会话的记忆目录是空的（记忆按会话根绑定 key）。把旧库全量拷入：
+>    `cp -a /home/ri/ubuntu/.zcode/cli/memories/projects/pmos_linux-5c4d01f991bd6cb7/memory/. <本会话记忆目录>/`
+>    （本会话记忆目录路径 = 系统提示中的 memories 路径），拷完复核 MEMORY.md 条目数
+>    ≥40 才继续干活；**旧目录保留勿删（底档）**。
+> 2. **主档必读**：`/home/ri/work/pmos_linux/AGENTS.md` = 硬定律/硬性禁令/交互通道
+>    与操作纪律/坑册的单一事实源（本文不复制）；取证叙事 = 同仓
+>    `docs/meizu20/experiment-log.md`（最新 =（八十八）（八十八·乙））。
+> 3. **任务链**（自包含两份计划）：①工作区内聚迁移 =
+>    `/home/ri/work/pmos_linux/docs/meizu20/workspace-migration-plan-20261013.md`
+>    ②云端构建 = 本仓 `docs/CLOUD-BUILD-RESEARCH.md`（含 build-release.yml 骨架）。
+>    顺序 = 内聚 → workflow → 云构建 r85 → 设备日手动升级首验（uname #86 +
+>    waydroid 联网四连）。前置 = pmaports r85 两提交（1d54efd/247be65）+ 本仓
+>    未推件，**推送窗口 = 用户拍板**。
+> 注：私有面（pmos_linux docs、meizu20-m1 取证）原地不动，路径照旧有效；旧文档里
+> 「pmbootstrap work dir 与 K30 共享须串行」已过时（K30 退役 + 内聚后失效）。
+
 > 新会话入口顺序：先读 pmos_linux 仓 `AGENTS.md` 现态一句话（战役级）→ 再读本文
 > （本项目操作规则）。两档分工：**硬定律/操作纪律/战役叙事 = pmos_linux 主档**，
 > 本文不复制；**本仓管：控制面脚本怎么用、版本钉在哪、发布轮怎么走**。
@@ -28,7 +46,18 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-12 更；新会话从这里接）
+## 现态（2026-10-13 更；新会话从这里接）
+
+- **▶ 2026-10-13 三连（全量 = pmos_linux AGENTS 现态一句话 + experiment-log（八十八）（八十八·乙））**：
+  ①**Waydroid 复活定谳（八十八）**= waydroid 1.6.3 自拉官方 `waydroid_arm64_only`
+  纯 64 位镜像原生跑通零补丁；10-12 复燃四路/探针三件/旧补丁配方全作废。
+  ②**网络两层断因（八十八·乙）**= pmOS inet filter 无 waydroid0 放行（已修在机，
+  `/etc/nftables.d/52_waydroid.nft` + 四条运行态规则；⚠勿 restart nftables）×内核缺
+  `IP_ADVANCED_ROUTER/IP_MULTIPLE_TABLES`（netd 装不了 netId 规则）→ **r85 config-only
+  已建待刷**（pmaports 1d54efd/247be65，apk sha8 c1d22119），交付 = 手动升级路径首验。
+  ③**云端构建研究收官**（`docs/CLOUD-BUILD-RESEARCH.md`，c9abb63）+ **工作区迁移拍板**
+  （只在 nura 推进适配；接续卡见顶；蓝本在 pmos_linux 侧）。waydroid 深化适配 =
+  等 7.3 stable 再推（用户 10-13 拍板）。
 
 - **▶ 公开蒸馏队列进行中（10-12 用户拍板；执行卡 = pmos_linux docs/meizu20/public-distill-queue-20261012.md）**：
   先例 [docs/BOOT-CHAIN-RE.md](docs/BOOT-CHAIN-RE.md)（启动链逆向全集）+ [tools/abl-re/](tools/abl-re/)
