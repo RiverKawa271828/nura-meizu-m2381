@@ -72,24 +72,23 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # ESP 版本 = 最近一个已发布 Release 的 ESP 资产号 + 1。⚠ 勿用 config 钉 +1：
-          # 定版后钉子已指向当轮（首跑教训：钉 66 → 误推 67）。config 解析仅作
-          # 无 Release 时的兜底。
+          # ESP 版本 = max(最近已发布 Release 的 ESP 资产号, config 钉 ESP 号) + 1。
+          # 两源缺一不可：仅看 Release → 本地超前腿会被重号（二跑教训：钉 66 → 误推
+          # 67）；仅看钉 → 钉可滞后于发布（首跑教训）。
           LAST_TAG=$(gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --limit 5 \
             --json tagName --jq '.[0].tagName')
-          PREV=""
+          PREV_REL=""
           if [ -n "$LAST_TAG" ]; then
-            PREV=$(gh release view "$LAST_TAG" --repo "$GITHUB_REPOSITORY" --json assets \
+            PREV_REL=$(gh release view "$LAST_TAG" --repo "$GITHUB_REPOSITORY" --json assets \
               --jq '.assets[].name' | grep -oP '^esp-recovery-v\K[0-9]+' | sort -n | tail -1 || true)
           fi
-          if [ -z "$PREV" ]; then
-            PREV=$(bash -c '. ./config.sh && [[ $REL_ESP_IMG =~ esp-recovery-v([0-9]+)\.img ]] && echo "${BASH_REMATCH[1]}"')
-            echo "(i) 无可用 Release 资产，回落 config 钉解析"
-          fi
+          PREV_PIN=$(bash -c '. ./config.sh && [[ $REL_ESP_IMG =~ esp-recovery-v([0-9]+)\.img ]] && echo "${BASH_REMATCH[1]}"')
+          PREV=$(( ${PREV_REL:-0} > ${PREV_PIN:-0} ? PREV_REL : PREV_PIN ))
+          [ -n "$PREV" ] || { echo "!! ESP 版本两源皆空"; exit 1; }
           echo "ESP_VER=$((PREV+1))" >> "$GITHUB_ENV"
           LREL=$(grep -m1 '^pkgrel=' "$NURA_PMAPORTS_DIR/device/downstream/linux-meizu-meizu20/APKBUILD" | cut -d= -f2)
           echo "TAG=r$LREL" >> "$GITHUB_ENV"
-          echo "TAG=r$LREL  ESP=v$((PREV+1))（上一个已发布 ESP = v$PREV）"
+          echo "TAG=r$LREL  ESP=v$((PREV+1))（max: release=${PREV_REL:-无} pin=${PREV_PIN:-无}）"
 
       - name: Mu toolchain (linuxbrew clang + tree venv)
         run: |
