@@ -62,6 +62,9 @@ jobs:
           # github fork → 'could not find remote name' 即死；本地仓 origin=gitlab 故无感）
           git -C "$NURA_PMAPORTS_DIR" remote add pmos \
             https://gitlab.postmarketos.org/postmarketOS/pmaports.git 2>/dev/null || true
+          # channel 解析读官方 pmos/main 的 channels.cfg（三跑教训：fork 无 main 分支 →
+          # 'Failed to read channels.cfg' 即死；fetch 官方 main 建跟踪分支即解）
+          git -C "$NURA_PMAPORTS_DIR" fetch --depth 1 pmos main:refs/remotes/pmos/main
           bash -c "yes '' | bash script/pmbootstrap-meizu.sh init"
 
       - name: Firmware tarball from Release → pmaports package dir
