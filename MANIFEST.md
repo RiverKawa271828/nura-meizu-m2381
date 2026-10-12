@@ -78,6 +78,7 @@ plasma→**phosh**；**升级口径**：内核/设备包/固件 = **apk 腿（ro
 | DPU「no encoder found for crtc 0」 | *ERROR* ×2-3 条，仅 boot 早期 | 窗口性噪音：面板 cold-enable restart 自愈窗口撞上合成器 vblank 请求（dpu_crtc.c:192/282）；运行期零刷，勿追 |
 | a740_sqe.fw | failed with error -2 | 假警报（27s 后重试成功；silime 时代已定性） |
 | pmic-spmi 0-0c/0-0d | probe failed -5 | 在册已知（多轮 boot 一致，无功能影响） |
+| 应用商店「系统升级」提示 | 显示快照版本串如 v20260805-… | UI 噪音：滚动发行版无 distro upgrade，商店列不出（journal: failed to get upgrades），快照标签 vs edge 的版本串观感差；apk 实测升级/降级候选均 0。**忽略之，系统升级只走 UPGRADE.md** |
 
 （历史行留档：rmtfs activating / uim-selection start-limit-hit = 蜂窝用户态在役时代现象，
 现役 rootfs 蜂窝摘除态 + 未装四件套时不见；postmarketos-zram-swap failed 仅 r<60 内核，r60 起修复。）
