@@ -56,6 +56,9 @@ jobs:
       - name: Clone source trees (setup.sh --clone)
         run: NURA_SKIP_DOCTOR=1 bash script/setup.sh --clone
 
+      - name: pmbootstrap init（CI 全新盘首建 work dir；cfg 已含全部答案 → 非交互）
+        run: bash -c "yes '' | bash script/pmbootstrap-meizu.sh init"
+
       - name: Firmware tarball from Release → pmaports package dir
         run: |
           REL_BASE=$(bash -c '. ./config.sh && echo "$PIN_RELEASE_BASE"')
@@ -66,12 +69,27 @@ jobs:
           sha512sum "$PKGDIR/firmware-meizu-meizu20.tar.gz"   # APKBUILD 自验 sha512（不符即 build 报错）
 
       - name: Derive release vars (REL_BASE / ESP_VER / TAG)
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          V=$(bash -c '. ./config.sh && [[ $REL_ESP_IMG =~ esp-recovery-v([0-9]+)\.img ]] && echo "${BASH_REMATCH[1]}"')
-          echo "ESP_VER=$((V+1))" >> "$GITHUB_ENV"
+          # ESP 版本 = 最近一个已发布 Release 的 ESP 资产号 + 1。⚠ 勿用 config 钉 +1：
+          # 定版后钉子已指向当轮（首跑教训：钉 66 → 误推 67）。config 解析仅作
+          # 无 Release 时的兜底。
+          LAST_TAG=$(gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --limit 5 \
+            --json tagName --jq '.[0].tagName')
+          PREV=""
+          if [ -n "$LAST_TAG" ]; then
+            PREV=$(gh release view "$LAST_TAG" --repo "$GITHUB_REPOSITORY" --json assets \
+              --jq '.assets[].name' | grep -oP '^esp-recovery-v\K[0-9]+' | sort -n | tail -1 || true)
+          fi
+          if [ -z "$PREV" ]; then
+            PREV=$(bash -c '. ./config.sh && [[ $REL_ESP_IMG =~ esp-recovery-v([0-9]+)\.img ]] && echo "${BASH_REMATCH[1]}"')
+            echo "(i) 无可用 Release 资产，回落 config 钉解析"
+          fi
+          echo "ESP_VER=$((PREV+1))" >> "$GITHUB_ENV"
           LREL=$(grep -m1 '^pkgrel=' "$NURA_PMAPORTS_DIR/device/downstream/linux-meizu-meizu20/APKBUILD" | cut -d= -f2)
           echo "TAG=r$LREL" >> "$GITHUB_ENV"
-          echo "TAG=r$LREL  ESP=v$((V+1))"
+          echo "TAG=r$LREL  ESP=v$((PREV+1))（上一个已发布 ESP = v$PREV）"
 
       - name: Mu toolchain (linuxbrew clang + tree venv)
         run: |
