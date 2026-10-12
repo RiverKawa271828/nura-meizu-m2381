@@ -30,6 +30,10 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-12 更；新会话从这里接）
 
+- **▶ 公开蒸馏队列已立（10-12 用户拍板；执行卡 = pmos_linux docs/meizu20/public-distill-queue-20261012.md）**：
+  首篇 [docs/BOOT-CHAIN-RE.md](docs/BOOT-CHAIN-RE.md)（启动链逆向全集）+ [tools/abl-re/](tools/abl-re/)
+  五脚本已推（`39df1a0`）；下会话按队列续蒸馏：①睡眠/s2idle ②面板花屏 case 包 ③音频方法论
+  ④GPU/IFPC——纯宿主写作零设备，格式标准与 stock 件不外发政策红线见执行卡。
 - **✅ phosh 回归轮 + 发布面切换（10-12（八十七），用户在场验收全过）**：steamos「起不来」
   = **竞争刷写污染**定谳（彼线并行 fastboot 互踩；新操作律 = **fastboot 单通道，两侧刷写
   必须互斥**），boot 链无罪——nura 重刷三件（boot_b mu-r69 + recovery_a v65 + 新建
