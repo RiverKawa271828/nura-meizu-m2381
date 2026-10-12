@@ -69,8 +69,8 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
    （恰 100MiB）不入 git（v43–v45 已 filter-branch 出史）；
 7. ✅ `setup.sh --clone`：四仓 + 官方 pmbootstrap（gitlab.postmarketos.org）自动摆位；
    wrapper（script/pmbootstrap-meizu.sh + cfg）与 tools（tools/）已收编本仓；
-   ⚠ 回滚锚三件自 r80（2026-10-11）起**不随 Release 上传**（用户拍板：刷坏重刷现役三件
-   即可）——`--fetch-release` 只拉直刷三件+固件+SUMS，本地锚私有保留（rollback.sh 自用）；
+   ⚠ 回滚锚三件已删（2026-10-13 用户拍板：T 时代旧版 bug 多不再回滚；rollback.sh 一并删）——
+   `--fetch-release` 只拉直刷三件+固件+SUMS；救砖 = flash-batch.sh 重刷现役三件；
 8. ✅ **推送状态（2026-10-12 终态）**：内核 fork `meizu20-t4b` = `140e5a8e308a`（v7.3-rc6
    重放 + r82-84 三轮，84+3 提交），pmaports `phoenix` = `b4e5147`（pkgrel 84），nura
    `master` = `770c92f`（发布面切换 + 文档对齐）——三树全推清账；3 个历史分支已改挂 tag
@@ -98,9 +98,8 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
 | 固件 tarball | `firmware-meizu-meizu20.tar.gz`（81MB，仅构建者需要） | pmaports 包目录 |
 | SHA256SUMS | 不含 apk 件（apk sha8 见 Release 页说明） | `build-rootfs.sh` |
 
-（历史：锚三件 t-b2/esp-v4d/mu-r57 自 r80 起**不随 Release 上传**——本地私有保留，
-`--fetch-release` 不拉、缺失时 `setup.sh` 只警告。）
+（历史：锚三件 t-b2/esp-v4d/mu-r57 自 r80 起不随 Release 上传；2026-10-13 本地件与
+`rollback.sh` 一并删除——旧版 bug 多，不再回滚。）
 
 外人消费路径 = Release 下载三件（boot / recovery / rootfs）→ FLASHING.md「快速路径 A」
-直刷，**无需构建**（构建者才需要固件 tarball；锚三件 = 可选救砖件，下载后放回
-`config.sh` 指的同布局路径即可，缺失时 `setup.sh` 只警告）。
+直刷，**无需构建**（构建者才需要固件 tarball）。

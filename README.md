@@ -105,7 +105,7 @@ IR/UWB（身份未定）。
 
 ## 三条红线（先读再动手）
 
-1. **刷机需用户在场**：所有写分区动作走 `flash-batch.sh --i-am-present` / `rollback.sh --i-am-present`。
+1. **刷机需用户在场**：所有写分区动作走 `flash-batch.sh --i-am-present`。
 2. **不碰的分区**：xbl/abl/tz/modem、dtbo_b、super、modemst1/2、persist、misc（除非按配方清零）。
 3. **两腿铁律**：换内核 = apk（模块）+ ESP（引导）同轮；只刷一条腿 = 半死状态。
 

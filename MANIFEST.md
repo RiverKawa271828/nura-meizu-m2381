@@ -54,21 +54,14 @@ plasma→**phosh**；**升级口径**：内核/设备包/固件 = **apk 腿（ro
 （recovery_a）原地升级，不重刷 userdata**（/home 与配置全保留）；rootfs 全量重刷仅用于
 换 UI/换发行版/从零装机。r80 plasma 末版存档（Release 未删）。
 
-## 回滚锚（私有工作区本地保留；r80 起不随 Release 发布）
+## 回滚锚（已删，2026-10-13）
 
-> 2026-10-11 用户拍板：现役件可信，**刷坏 = 重刷 Release 现役三件回家**，历史锚不再上传
-> （r66 页上的旧锚资产留档不删）。下表三件仅本机私有保留，`rollback.sh` / config.sh
-> ANCHOR_* 自用；公开 FLASHING §6 已改为现役件重刷阶梯。
-
-| 锚 | 文件 | sha8 | 用途 |
-|---|---|---|---|
-| t-b2 | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img` | d4928661 | boot_b 兜底（UEFI 基线） |
-| esp-v4d | `<NURA_WORK>/meizu20/meizu20-m1/m1-work/arch-a/esp-recovery-v4d.img` | 3b106f07 | recovery_a 兜底 |
-| mu-r57 | `<NURA_WORK>/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/mu-r57-4640ebb5.img` | 4640ebb5 | boot_b 最近已知好（r57 时代） |
-
-30 秒回滚 = `script/rollback.sh --i-am-present`（前两个锚，仅私有工作区布局可用）。
-当前时代的次级回退对（手动刷，非 rollback.sh）：
-`artifacts/mu-r64-686a4c0f.img`（686a4c0f）+ `artifacts/esp-recovery-v46.img.gz`（裸 0d4796ed）+ device r51。
+> 2026-10-11 起锚三件不随 Release 发布；**2026-10-13 用户拍板：T 时代旧版 bug 太多，
+> 不再回滚——本地锚三件（t-b2 d4928661 / esp-v4d 3b106f07 / mu-r57 4640ebb5）与
+> `rollback.sh`、config.sh ANCHOR_* 一并删除**。
+> 救砖路径唯一 = 重刷现役三件（flash-batch.sh + r84 rootfs，见 FLASHING §6 阶梯）。
+> 当前时代的次级回退对（手动刷，文件在仓：`artifacts/mu-r64-686a4c0f.img` +
+> `artifacts/esp-recovery-v46.img.gz`（裸 0d4796ed）+ device r51）。
 
 ## 已知非回归失败（首 boot 看到**不用慌**；=（八十七）phosh r84 实测清单）
 

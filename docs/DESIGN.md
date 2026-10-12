@@ -47,8 +47,8 @@ XBL（原封）→ ABL（原封）→ boot_b: Mu-UEFI（我们构建）──标
 | 环节 | 死法 | 对策 |
 |---|---|---|
 | ABL 重试计数耗尽 | ~7 次开机后自动落 fastboot | 不是坏事，是救你；循环时 `fastboot flash misc misc-zero.img` 清 bootonce |
-| boot_b（Mu）坏 | 黑屏 / 卡 ABL | fastboot 重刷 boot_b；兜底 = 锚 t-b2 |
-| recovery_a（ESP）坏 | Mu 活但找不到内核 | fastboot 重刷 recovery_a；兜底 = 锚 esp-v4d |
+| boot_b（Mu）坏 | 黑屏 / 卡 ABL | fastboot 重刷 boot_b（现役件，锚已删） |
+| recovery_a（ESP）坏 | Mu 活但找不到内核 | fastboot 重刷 recovery_a（现役件，锚已删） |
 | 内核/模块错配 | 起来但半身不遂 | 两腿铁律（§2.2），同轮配对 |
 | userdata 坏 | 内核活、rootfs 起不来 | 重刷 rootfs 三件套 |
 | 全死（USB 全灭） | 9008/EDL | 最后通道，线刷（高危，谨慎） |

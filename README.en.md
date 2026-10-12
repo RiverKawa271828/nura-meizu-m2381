@@ -132,7 +132,7 @@ absent: 3.5mm jack, SD slot.
 ## Three red lines (read before touching anything)
 
 1. **Flashing requires a human present**: all partition writes go through
-   `flash-batch.sh --i-am-present` / `rollback.sh --i-am-present`.
+   `flash-batch.sh --i-am-present`.
 2. **Never touch**: xbl/abl/tz/modem, dtbo_b, super, modemst1/2, persist, misc (except
    per-recipe zeroing).
 3. **Two-leg rule**: a kernel change = apk (modules) + ESP (boot image) in the same

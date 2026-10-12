@@ -16,9 +16,9 @@
 ## 目录地图
 
 ```
-config.sh        唯一定位点：三树路径 + 现役版本(REL_*) + 回滚锚(ANCHOR_*) + 设备通道
+config.sh        唯一定位点：三树路径 + 现役版本(REL_*) + 设备通道（回滚锚已删 10-13）
 script/          build-kernel / build-device / build-esp / build-mu / build-rootfs
-                 verify（交付链对拍）/ flash-batch / readback / rollback / setup（体检）
+                 verify（交付链对拍）/ flash-batch / readback / setup（体检）
                  + pmbootstrap-meizu.sh（wrapper，官方工具组合器）+ 配套 cfg
 tools/           make-esp-recovery.sh + devsh/devpush/devpull（设备通道三件，收编自私有工作区）
                  + abl-re/（启动链逆向复现脚本，2026-10-12 收编；配套 docs/BOOT-CHAIN-RE.md）
@@ -146,7 +146,8 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 - `script/flash-batch.sh --i-am-present` → 装 apk 双包（主包+子包同装）→
   `script/readback.sh` 对 sha → FLASHING.md §5 首 boot 清单。
-- 出事 = `script/rollback.sh --i-am-present`（t-b2 + esp-v4d 双锚）。
+- 出事 = 重刷现役三件（flash-batch.sh 单腿/三件 + r84 rootfs，FLASHING §6 阶梯；
+  回滚锚与 rollback.sh 已删 10-13，旧版不再回滚）。
 
 ## 本仓工程规则（踩实的坑，勿重蹈）
 

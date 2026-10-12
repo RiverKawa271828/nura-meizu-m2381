@@ -47,14 +47,9 @@ REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v65.img.gz"  # v65 = r84 内核（裸 463efc45 / gz 00d2d5f9；10-12 本机复核 + 两腿互证 01ddbb77 全等）；v64 = r83 冻结留档未发货（裸 68b32cec / gz c617b083）；v63 = r82（彼侧重压版 gz 425ecd37，裸 533f40d0——原打包件两侧均已断，round §9.4）；v62 = r81（裸 b41b8888——10-11 再勘定谳：原手记无误，「b41b8889cadf」系连排四个 8 丢位转抄病）；v61 = r80（裸 cb7f1e5a）；v60 = r79（裸 0ccfcf72）
 REL_KERNEL_VER="#85"       # 下次上机 uname 期望（r84/rc6 内核 + #N=pkgrel+1 定律）；回滚配对 = r82/v63/#83
 
-# ---- 回滚锚（仅私有工作区本地保留；2026-10-11 起不随 Release 上传——用户拍板：
-#      现役件可信，刷坏重刷现役三件即可；rollback.sh 自用）----
-ANCHOR_TB2="$NURA_WORK/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/t-b2-m2381Pkg-RELEASE-d4928661.img"
-ANCHOR_TB2_SHA="d4928661"
-ANCHOR_ESP_V4D="$NURA_WORK/meizu20/meizu20-m1/m1-work/arch-a/esp-recovery-v4d.img"
-ANCHOR_ESP_V4D_SHA="3b106f07"
-ANCHOR_MU_R57="$NURA_WORK/meizu20/meizu20-m1/artifacts-uefi/mars-t-series/mu-r57-4640ebb5.img"
-ANCHOR_MU_R57_SHA="4640ebb5"
+# ---- 回滚锚 ----
+# 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。
+# 救砖路径唯一 = flash-batch.sh 重刷现役三件（boot_b mu-r69 + recovery_a v65 + r84 rootfs）。
 
 # ---- 设备通道 ----
 DEV_IP="172.16.42.1"

@@ -46,8 +46,8 @@
 | 6 | 解压两个 gz | `gunzip esp-recovery-*.img.gz meizu-meizu20-*.img.gz` |
 | 7 | ⚠ **刷 userdata = 清空全部数据**，要保数据先备份 | rootfs gz ~1.1G / 裸 ~4.4G，刷写约 2 分钟，途中别拔线 |
 
-> 历史回滚锚件（`t-b2-*` / `esp-recovery-v4d` / `mu-r57-*`）自 r80 起不再随 Release
-> 发布——刷坏就重刷 Release 现役三件回家（A-3/§6）。
+> 历史回滚锚件（`t-b2-*` / `esp-recovery-v4d` / `mu-r57-*`）已于 2026-10-13 删除
+> （用户拍板：旧版 bug 多，不再回滚）——刷坏就重刷 Release 现役三件回家（A-3/§6）。
 
 ### A-2 三件齐刷
 
@@ -108,12 +108,12 @@ fastboot set_active b && fastboot reboot
 > 从这个页面下到的就是全程验证用的那一份。下载后先 `md5sum <包>` 核对再动手。
 
 ```bash
-script/setup.sh          # 钉子/工具链全绿才继续；回滚锚缺失 = ⚠ 警告（救砖前必须补齐，§6）
+script/setup.sh          # 钉子/工具链全绿才继续
 fastboot devices         # 空输出 = 设备还没进 fastboot（看 §2）
 ```
 
 - 他机复刻：`export NURA_WORK=/<你的工作根>` 后跑 `script/setup.sh --clone`
-  （四仓 + 官方 pmbootstrap 自动摆位；回滚锚从 Release 下载放到 `config.sh` 指的路径）。
+  （四仓 + 官方 pmbootstrap 自动摆位）。
 - 电量 >20%（刷一半没电 = 直接进 §6 救砖）。
 - 数据线插宿主 USB 口（NCM 通道在系统侧，fastboot 在 bootloader 侧，都走这根线）。
 
@@ -184,7 +184,7 @@ sudo apk add rmtfs qmi-utils uim-selection soc-qcom-modem-systemd  # 蜂窝四�
 ### 3.6 读回对不上？
 
 只对不上的那一腿重刷（`--boot-b` 或 `--recovery-a` 单刷），再读回。连续两次对不上 = 换线/换口，
-再不行 §6 回滚锚先回家，别恋战。
+再不行按 §6 阶梯重刷现役三件回家，别恋战。
 
 ## 4. 两条短路径
 
@@ -207,8 +207,8 @@ journalctl -b | grep -iE "error|fail" | head       # ⑤ 无新红
 
 ## 6. 刷坏自救阶梯
 
-> 回滚锚件自 r80 起不随 Release 发布（刷坏 = 重刷现役三件回家，没必要退历史版本）；
-> 私有工作区仍保留本地锚与 `rollback.sh` 自用，公开路径用不到。
+> 回滚锚件（t-b2/esp-v4d/mu-r57 与 `rollback.sh`）已于 2026-10-13 删除——用户拍板
+> 旧版 bug 多，没必要退历史版本；救砖 = 重刷现役三件回家。
 
 ```bash
 # 公开路径 = 用 Release 现役件重刷（A-2 同款，可单腿）：

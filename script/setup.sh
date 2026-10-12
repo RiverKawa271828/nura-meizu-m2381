@@ -8,7 +8,7 @@
 #             （URL 留空的仓跳过；已存在的目录不动；Mu 的 Binaries
 #             submodule 会按 PIN_MU_BINARIES_GIT 改指并拉全）
 #   --fetch-release  从 GitHub Release（PIN_RELEASE_BASE）拉直刷三件+固件+SUMS
-#             到 artifacts/ 并 sha256 -c 全验（锚三件自 r80 起不随 Release 发布）
+#             到 artifacts/ 并 sha256 -c 全验
 set -euo pipefail
 . "$(dirname "$0")/../config.sh"
 
@@ -39,7 +39,7 @@ if [ "${1:-}" = "--clone" ]; then
 		echo "  ✓ pmbootstrap → $PMB_CHECKOUT"
 	fi
 	# wrapper/tools 不在 clone 面：已收编本仓（script/ tools/）；
-	# 回滚锚不随 Release（r80 起用户拍板：刷坏重刷现役三件）——缺失只警告，rollback.sh 私有自用。
+	# 回滚锚已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；救砖 = flash-batch.sh 重刷现役三件。
 	echo
 fi
 
@@ -56,7 +56,7 @@ if [ "${1:-}" = "--fetch-release" ]; then
 		echo "  ✓ $f"
 	done
 	( cd "$NURA_ROOT/artifacts" && sha256sum -c SHA256SUMS ) || nura_die "SHA256 校验不过，勿用"
-	echo "== Release 资产就绪（sha256 全 OK；锚三件自 r80 起不随发布，本地私有保留）=="
+	echo "== Release 资产就绪（sha256 全 OK）=="
 	exit 0
 fi
 
@@ -80,12 +80,6 @@ try "clang（内核 LLVM=1 / Mu）"            "command -v clang"
 try "mformat/mcopy（ESP 制作）"            "command -v mformat"
 try "fastboot（刷写）"                     "command -v fastboot"
 try "python3（bump/对拍）"                 "command -v python3"
-
-echo "[回滚锚]"
-for f in "$ANCHOR_TB2" "$ANCHOR_ESP_V4D" "$ANCHOR_MU_R57"; do
-	[ -e "$f" ] && echo "  ✓ $(basename "$f")" \
-		|| echo "  ⚠ $(basename "$f") 缺失——不随 Release 发布（r80 起），rollback.sh 需要时自私有工作区补"
-done
 
 echo "[宿主环境]"
 try "systemd user manager（systemd-run 长构建）" "systemd-run --user --quiet --collect --unit=pmx-doctor-probe true"

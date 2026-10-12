@@ -62,5 +62,5 @@ cat <<EOF
   3) script/readback.sh <boot_b 的 sha> <recovery_a 的 sha>   ← 设备侧 dd 读回对 sha
      （本机两个 sha: boot_b=${BOOT_SHA:0:8}… recovery_a=${ESP_SHA:0:8}…）
   4) FLASHING.md §5 首 boot 验收清单
-  出事 → script/rollback.sh（30 秒回滚锚）
+  出事 → 重刷现役件（单腿或三件，FLASHING §6 阶梯）
 EOF
