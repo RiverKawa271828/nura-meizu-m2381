@@ -11,12 +11,16 @@
 >    `docs/meizu20/experiment-log.md`（最新 =（八十八）（八十八·乙））。
 > 3. **任务链**（自包含两份计划）：①工作区内聚迁移 =
 >    `/home/ri/work/pmos_linux/docs/meizu20/workspace-migration-plan-20261013.md`
->    ②云端构建 = 本仓 `docs/CLOUD-BUILD-RESEARCH.md`（含 build-release.yml 骨架）。
->    顺序 = 内聚 → workflow → 云构建 r85 → 设备日手动升级首验（uname #86 +
->    waydroid 联网四连）。前置 = pmaports r85 两提交（1d54efd/247be65）+ 本仓
->    未推件，**推送窗口 = 用户拍板**。
+>    —— **10-13 当日执行修订 = 零 mv**（用户拍板：源树全部保持独立仓库——内核/
+>    pmaports/Mu = 多设备共享，pmbootstrap/.pmbootstrap = 通用基建；nura = 控制
+>    面钉子表 + setup.sh --clone 远端复刻，物理嵌套不做）②云端构建 = 本仓
+>    `docs/CLOUD-BUILD-RESEARCH.md` + `.github/workflows/build-release.yml`
+>    （10-13 全量落地）。顺序 = workflow → 推送（**窗口 = 用户拍板**）→ 云构建
+>    r85 → 设备日手动升级首验（uname #86 + waydroid 联网四连）。前置 =
+>    pmaports r85 两提交（1d54efd/247be65）+ 本仓未推件。
 > 注：私有面（pmos_linux docs、meizu20-m1 取证）原地不动，路径照旧有效；旧文档里
-> 「pmbootstrap work dir 与 K30 共享须串行」已过时（K30 退役 + 内聚后失效）。
+> 「pmbootstrap work dir 与 K30 共享须串行」已过时（K30 退役即失效；10-13 布局 v3
+> 零 mv 确认树不搬，只防本机并发）。
 
 > 新会话入口顺序：先读 pmos_linux 仓 `AGENTS.md` 现态一句话（战役级）→ 再读本文
 > （本项目操作规则）。两档分工：**硬定律/操作纪律/战役叙事 = pmos_linux 主档**，
@@ -24,12 +28,14 @@
 
 ## 这是什么 / 不是什么（边界，2026-10-06 定）
 
-- **是**：魅族 20（m2381）跑 Nura/pmOS 的**控制面聚合仓**——构建/验证/刷写/回滚
+- **是**：魅族 20（m2381）跑 Nura/pmOS 的**控制面聚合仓**——构建/验证/刷写
   的脚本 + 版本钉 + 产物清单 + 教程文档。
-- **不是**：源码仓（三棵树原地不动：fork 内核 `linux-mobile-ports`、Mu
-  `mu-uefi/Mu-Silicium-new`、pmaports——路径全钉在 `config.sh`）｜ 知识库
-  （叙事在 experiment-log，硬定律在主 AGENTS）｜ 可独立于 K30 的基建
-  （pmbootstrap work dir 双设备共享，必须串行）。
+- **不是**：源码仓。★布局 v3（2026-10-13 用户拍板；10-06 边界再确认升级）：源码树
+  全部**独立仓库零内聚**、原地不动——fork 内核 `linux-mobile-ports`（多设备分支制）/
+  Mu `meizu20/mu-uefi/Mu-Silicium-new` / pmaports（K30+魅族多设备包源）/
+  pmbootstrap + `.pmbootstrap`（通用基建），路径全钉在 `config.sh`；本仓的价值 =
+  钉子表 + `setup.sh --clone` 远端复刻（每树皆有公共 GitHub 远端，CI = 新机器）。
+  ｜ 知识库（叙事在 experiment-log，硬定律在主 AGENTS）。
 
 ## 目录地图
 
@@ -47,6 +53,16 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 ```
 
 ## 现态（2026-10-13 更；新会话从这里接）
+
+- **▶ 2026-10-13 晚轮：云端构建 workflow 落地 + 布局 v3 零 mv 拍板**：
+  `.github/workflows/build-release.yml` 全量实现（草稿制发布=公网发布留用户拍板 /
+  上传后字节逐件对拍 / ccache 缓存 / 固件 tarball 自 Release 拉进包目录 /
+  Mu=linuxbrew+venv+`--no-sync` / ESP 版本显式传参防 clone 无历史撞号）；配套
+  脚本微调 = config.sh（v3 注记 + APK_DIR 随 PMB_WORK 推导）+ setup.sh
+  （NURA_SKIP_DOCTOR 逃生口 + 并发检查改通用）+ verify.sh（ESP 钉子缺席回落
+  artifacts 最新）+ wrapper cfg/脚本过时 K30 叙事清除。**待办链 = 推送窗口
+  （用户拍板：pmaports 2 提交 + nura 本轮提交）→ 云构建 r85 首跑 → 设备日
+  手动升级首验（uname #86 + waydroid 联网四连）**。
 
 - **▶ 2026-10-13 三连（全量 = pmos_linux AGENTS 现态一句话 + experiment-log（八十八）（八十八·乙））**：
   ①**Waydroid 复活定谳（八十八）**= waydroid 1.6.3 自拉官方 `waydroid_arm64_only`

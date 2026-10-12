@@ -8,8 +8,9 @@
 # pmbootstrap 本体：PMB_CHECKOUT 有树内 checkout 就用（setup.sh --clone 会拉），
 # 否则回落 PATH（pipx/pip 安装均可）。宿主专用（沙箱会死于 sudo/losetup）。
 #
-# 本机注记：默认路径经 NURA_WORK 推导后与私有工作区原布局重合（work dir 与
-# K30 wrapper 共享，须串行）；他机复刻 = NURA_WORK 指到任意可写根即可。
+# 本机注记：布局 v3（2026-10-13）= 源树全部独立仓库零内聚，路径经 config.sh
+# 钉子表推导；K30 已退役，work dir 独占纪律只剩本机并发互斥。
+# 他机/CI 复刻 = NURA_WORK（或 NURA_*_DIR 各钉）指到任意可写根即可。
 #
 # 可选桌面环境：NURA_UI=<ui> 覆盖 cfg 的 ui= 行（默认 plasma-mobile；
 # NURA_UI=phosh = pmOS 官方 phosh 包集，2026-10-09 构建上机验证）。pmbootstrap

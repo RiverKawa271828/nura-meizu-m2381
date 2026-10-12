@@ -59,6 +59,12 @@ fi
 
 echo "[4] ESP ↔ apk vmlinuz 同源（如 ESP 存在）"
 ESP="$REL_ESP_IMG"
+# 钉子件缺席时回落 artifacts 最新 ESP（CI 新 clone 无历史 gz / 钉子定版滞后一版时，
+# 刚构建的当轮 ESP 就在 artifacts 里——勿静默跳过这条对拍）
+if [ ! -e "$ESP" ]; then
+	NEWEST=$(ls -t "$NURA_ROOT"/artifacts/esp-recovery-v*.img* 2>/dev/null | head -1)
+	[ -n "$NEWEST" ] && { ESP="$NEWEST"; echo "    (i) 钉子 ESP 不在，回落当轮 $NEWEST"; }
+fi
 case "$ESP" in
 	*.gz) gunzip -c "$ESP" > "$WORK/esp.img" && ESP="$WORK/esp.img" ;;
 esac

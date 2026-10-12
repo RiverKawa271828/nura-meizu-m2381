@@ -7,20 +7,24 @@
 # 本文件只被 source，不直接执行。
 
 # ---- 工作区 ----
+# ★布局 v3（2026-10-13 用户拍板）：源码树全部保持独立仓库（多设备共享/通用基建），
+#   零物理内聚——nura = 控制面（本钉子表 + script/ + docs/ + artifacts/），
+#   他机/CI 复刻 = setup.sh --clone 按 PIN_*_GIT 远端重建（每树皆有公共远端）。
 NURA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# 他机复刻只改这一个根（export NURA_WORK=/path 或改下行默认）；默认 = ~/work
+# 源树工作区根（export NURA_WORK=/path 或改下行默认）；默认 = ~/work。
+# 沙箱注意：沙箱 HOME ≠ 宿主 HOME，沙箱里跑依赖源树钉子的脚本须 export NURA_WORK=/home/ri/work
 NURA_WORK="${NURA_WORK:-$HOME/work}"
 
-# ---- 源码树（本地现役；公共 clone URL 见下方 PIN_*_GIT）----
-PIN_LINUX_DIR="${NURA_LINUX_DIR:-$NURA_WORK/linux-mobile-ports}"          # fork 内核树
+# ---- 源码树（独立仓库，本地现役路径；公共 clone URL 见下方 PIN_*_GIT）----
+PIN_LINUX_DIR="${NURA_LINUX_DIR:-$NURA_WORK/linux-mobile-ports}"          # fork 内核树（★独立多设备树，勿搬进本仓）
 PIN_LINUX_BRANCH="meizu20-t4b"
-PIN_MU_DIR="${NURA_MU_DIR:-$NURA_WORK/meizu20/mu-uefi/Mu-Silicium-new}"   # Mu 树
+PIN_MU_DIR="${NURA_MU_DIR:-$NURA_WORK/meizu20/mu-uefi/Mu-Silicium-new}"   # Mu 树（独立多设备树）
 PIN_MU_BRANCH="meizu20-mars-port"
-PIN_PMAPORTS="${NURA_PMAPORTS_DIR:-$NURA_WORK/pmos_linux/pmos/pmaports}"
+PIN_PMAPORTS="${NURA_PMAPORTS_DIR:-$NURA_WORK/pmos_linux/pmos/pmaports}"  # pmaports fork（K30+魅族多设备包源）
 PIN_PMAPORTS_BRANCH="phoenix"
 PIN_PMB_WRAPPER="${NURA_PMB_WRAPPER:-$NURA_ROOT/script/pmbootstrap-meizu.sh}"  # 已收编本仓
-PMB_CHECKOUT="${NURA_PMB_CHECKOUT:-$NURA_WORK/pmos_linux/pmos/pmbootstrap}"    # 官方 pmbootstrap（setup.sh --clone 补齐）
-PMB_WORK="${NURA_PMB_WORK:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap}"           # work dir（本机与 K30 wrapper 共享，须串行）
+PMB_CHECKOUT="${NURA_PMB_CHECKOUT:-$NURA_WORK/pmos_linux/pmos/pmbootstrap}"    # 官方 pmbootstrap（setup.sh --clone 补齐；通用工具独立树）
+PMB_WORK="${NURA_PMB_WORK:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap}"           # work dir（K30 已退役 10-09；单设备线独占，防本机并发即可）
 PIN_TOOLS="${NURA_TOOLS_DIR:-$NURA_ROOT/tools}"                                # make-esp-recovery.sh / devsh 三件（已收编本仓）
 
 # ---- 公共仓 URL（Phase-2；setup.sh --clone 按此摆位，空 = 不启用）----
@@ -37,7 +41,7 @@ PKGVER="7.3.0_rc6"
 PKG_LINUX="linux-meizu-meizu20"
 PKG_DEVICE="device-meizu-meizu20"
 PKG_FIRMWARE="firmware-meizu-meizu20"
-APK_DIR="${NURA_APK_DIR:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap/packages/edge/aarch64}"
+APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="84"      # r84 = GPU/IFPC 轮收官件（10-12 彼线点火回执判过 =（八十六）；revert A 路 + 钳零防御 + payload 订阅，tip 140e5a8e308a）；r83 = 冻结留档未发货；r81 = SQUASHFS_ZSTD/XZ + RTC→rtc1；r80 = Release 轮（10-11 上线，async flip r79 + UHID=m r80）

@@ -60,6 +60,9 @@ if [ "${1:-}" = "--fetch-release" ]; then
 	exit 0
 fi
 
+# CI（无 systemd user manager，doctor 的 systemd-run 探针必挂）= 跳过体检
+if [ -n "${NURA_SKIP_DOCTOR:-}" ]; then exit 0; fi
+
 echo "== nura-meizu-m2381 setup doctor =="
 ok=0; bad=0
 try() { if eval "$2" >/dev/null 2>&1; then echo "  ✓ $1"; else echo "  ✗ $1"; bad=1; fi }
@@ -83,6 +86,6 @@ try "python3（bump/对拍）"                 "command -v python3"
 
 echo "[宿主环境]"
 try "systemd user manager（systemd-run 长构建）" "systemd-run --user --quiet --collect --unit=pmx-doctor-probe true"
-try "K30 wrapper 并发检查（共享 work dir 须串行）" "! pgrep -f pmbootstrap-phoenix >/dev/null"
+try "pmbootstrap 并发检查（同 work dir 须串行）" "! pgrep -f 'pmbootstrap|apk\.static' >/dev/null"
 
 [ "$bad" = 0 ] && { echo "== 环境就绪 =="; exit 0; } || { echo "== 有缺项，见上 =="; exit 1; }

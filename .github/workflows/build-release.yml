@@ -1,0 +1,174 @@
+# build-release — nura 云端构建（2026-10-13 立项；研究 = docs/CLOUD-BUILD-RESEARCH.md）
+#
+# 产出（7 件制 + 第 8 件）= mu img + esp gz + rootfs gz(phosh) + 固件 tarball
+#   + 变更 apk（相对 config.sh 现役钉）+ SHA256SUMS + 手动升级包 upgrade-<tag>.zip。
+#   **发布形态 = DRAFT release**：上传+字节对拍全过后留草稿，公网发布 = 用户拍板
+#   （r80 教训：草稿中途被杀 = 公网不可见，安全）。
+# 触发 = workflow_dispatch 手动（发版窗口人为；CI 只构建 HEAD，勿在 CI bump）。
+# 布局 = 树全部独立仓库（布局 v3），CI 经 NURA_*_DIR 钉子摆到 /mnt（runner 根盘
+#   ~14GB 装不下 chroot+ccache，/mnt ~65GB）——本地与云端仅根不同，相对形状同构。
+name: build-release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-release
+  cancel-in-progress: false
+
+env:
+  NURA_INSIDE_UNIT: "1"          # 脚本语义 =「已在宿主环境」→ 跳过 systemd-run 重入（CI 无 systemd）
+  NURA_UI: phosh                 # 发布面 = phosh（2026-10-12 用户拍板「以后专注 phosh」）
+  NURA_LINUX_DIR: /mnt/nura-work/kernel
+  NURA_MU_DIR: /mnt/nura-work/mu/Mu-Silicium
+  NURA_PMAPORTS_DIR: /mnt/nura-work/pmaports
+  NURA_PMB_CHECKOUT: /mnt/nura-work/pmbootstrap
+  NURA_PMB_WORK: /mnt/nura-work/.pmbootstrap   # APK_DIR 随此推导
+  NURA_LINUXBREW: /home/linuxbrew/.linuxbrew/bin
+  CLANGPDB_AARCH64_PREFIX: aarch64-linux-gnu-
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare /mnt work root
+        run: sudo mkdir -p /mnt/nura-work && sudo chown "$USER":"$USER" /mnt/nura-work
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: /mnt/nura-work/.pmbootstrap/ccache
+          key: ccache-aarch64-${{ github.run_id }}
+          restore-keys: ccache-aarch64-
+
+      - name: Host deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y git python3 python3-venv curl mtools zip \
+            build-essential uuid-dev nasm lld gcc-aarch64-linux-gnu mono-devel
+
+      - name: Clone source trees (setup.sh --clone)
+        run: NURA_SKIP_DOCTOR=1 bash script/setup.sh --clone
+
+      - name: Firmware tarball from Release → pmaports package dir
+        run: |
+          REL_BASE=$(bash -c '. ./config.sh && echo "$PIN_RELEASE_BASE"')
+          PKGDIR="$NURA_PMAPORTS_DIR/device/downstream/firmware-meizu-meizu20"
+          mkdir -p "$PKGDIR"
+          curl -fsSL --retry 3 -o "$PKGDIR/firmware-meizu-meizu20.tar.gz" \
+            "$REL_BASE/firmware-meizu-meizu20.tar.gz"
+          sha512sum "$PKGDIR/firmware-meizu-meizu20.tar.gz"   # APKBUILD 自验 sha512（不符即 build 报错）
+
+      - name: Derive release vars (REL_BASE / ESP_VER / TAG)
+        run: |
+          V=$(bash -c '. ./config.sh && [[ $REL_ESP_IMG =~ esp-recovery-v([0-9]+)\.img ]] && echo "${BASH_REMATCH[1]}"')
+          echo "ESP_VER=$((V+1))" >> "$GITHUB_ENV"
+          LREL=$(grep -m1 '^pkgrel=' "$NURA_PMAPORTS_DIR/device/downstream/linux-meizu-meizu20/APKBUILD" | cut -d= -f2)
+          echo "TAG=r$LREL" >> "$GITHUB_ENV"
+          echo "TAG=r$LREL  ESP=v$((V+1))"
+
+      - name: Mu toolchain (linuxbrew clang + tree venv)
+        run: |
+          set -e
+          NONINTERACTIVE=1 /bin/bash -c \
+            "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          echo "/home/linuxbrew/.linuxbrew/bin" >> "$GITHUB_PATH"
+          # Mu venv：build-mu.sh 硬性要求 .venv/bin/python（coloredlogs 等）
+          cd "$NURA_MU_DIR"
+          python3 -m venv .venv
+          .venv/bin/pip install -r pip-requirements.txt
+          # 验证点（研究文档 §二.4）：clang 在 PATH 且 llvm-objcopy 随行（BootShim 需要）
+          /home/linuxbrew/.linuxbrew/bin/clang --version | head -1
+          /home/linuxbrew/.linuxbrew/bin/llvm-objcopy --version | head -1
+
+      - name: Kernel + device + ESP（顺序铁律：apk 先于 ESP；版本显式传参防 clone 无历史撞号）
+        run: |
+          bash script/build-kernel.sh
+          bash script/build-device.sh
+          bash script/build-esp.sh "$ESP_VER"
+
+      - name: Mu（r85 = config-only 轮 → --no-sync，FdtBlob 不换）
+        run: bash script/build-mu.sh --no-sync
+
+      - name: Rootfs（pmbootstrap install --single-partition 铁律在脚本内）
+        run: bash script/build-rootfs.sh
+
+      - name: Verify（交付链全对拍）
+        run: bash script/verify.sh
+
+      - name: Stage release assets + manual upgrade zip + SHA256SUMS
+        run: |
+          set -euo pipefail
+          STAGE="$GITHUB_WORKSPACE/staging"; mkdir -p "$STAGE"
+          ART="$NURA_ROOT/artifacts"
+          APK="$NURA_PMB_WORK/packages/edge/aarch64"
+          LDIR="$NURA_PMAPORTS_DIR/device/downstream/linux-meizu-meizu20"
+          DDIR="$NURA_PMAPORTS_DIR/device/downstream/device-meizu-meizu20"
+          FDIR="$NURA_PMAPORTS_DIR/device/downstream/firmware-meizu-meizu20"
+          gp() { grep -m1 '^pkgrel=' "$1/APKBUILD" | cut -d= -f2; }
+
+          MU_IMG=$(ls -t "$ART"/mu-r*.img | head -1)
+          ESP_GZ=$(ls "$ART"/esp-recovery-v"$ESP_VER".img.gz)
+          ROOTFS_GZ=$(ls "$ART"/meizu-meizu20-"$TAG".img.gz)
+          FW_TB="$FDIR/firmware-meizu-meizu20.tar.gz"
+          LREL=$(gp "$LDIR"); DREL=$(gp "$DDIR"); FREL=$(gp "$FDIR")
+          LIN_APK="$APK/linux-meizu-meizu20-$(grep -m1 '^pkgver=' "$LDIR/APKBUILD" | cut -d= -f2)-r$LREL.apk"
+          cp -v "$MU_IMG" "$ESP_GZ" "$ROOTFS_GZ" "$FW_TB" "$LIN_APK" "$STAGE/"
+
+          # 升级包 = linux apk + ESP gz（+ 本轮相对现役钉有变的 device/fw apk）+ UPGRADE.md 抄本
+          . ./config.sh   # 取 REL_*_PKGREL 现役钉（source 进本步 shell，子壳不回传）
+          UP="$STAGE/upgrade-$TAG"; mkdir -p "$UP"
+          cp "$LIN_APK" "$ESP_GZ" docs/UPGRADE.md "$UP/"
+          if [ "$DREL" -gt "$REL_DEVICE_PKGREL" ]; then cp "$APK/device-meizu-meizu20-1-r$DREL.apk" "$UP/"; fi
+          if [ "$FREL" -gt "$REL_FW_PKGREL" ];     then cp "$APK/firmware-meizu-meizu20-1-r$FREL.apk" "$UP/"; fi
+          (cd "$STAGE" && zip -qr "upgrade-$TAG.zip" "upgrade-$TAG")
+
+          (cd "$STAGE" && sha256sum mu-r*.img esp-recovery-v*.img.gz \
+            meizu-meizu20-*.img.gz firmware-meizu-meizu20.tar.gz \
+            linux-meizu-meizu20-*.apk upgrade-*.zip > SHA256SUMS)
+
+          # 发布真值 = 本 SHA256SUMS（apk/rootfs/Mu 非字节确定构建，本地 sha8 不外推）
+          cat "$STAGE/SHA256SUMS"
+          {
+            echo "## $TAG（云端构建草稿 — 公网发布前须用户验收）"
+            echo
+            echo "配对：mu $(basename "$MU_IMG") + ESP $(basename "$ESP_GZ") + 内核 apk r$LREL（期望 uname #=$((LREL+1))）"
+            echo "- 升级（数据保留）：下载 \`upgrade-$TAG.zip\`，两步法见包内 UPGRADE.md"
+            echo "- 全新装机：README → FLASHING 快速路径 A（三件直刷）"
+            echo "- 上传验收：草稿上传后资产字节数逐件对拍全等（r72 教训）；发布真值 = SHA256SUMS"
+          } > "$STAGE/notes.md"
+
+      - name: Upload workflow artifacts（发布兜底：草稿未发也可取件）
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-staging-${{ env.TAG }}
+          path: staging/*
+          if-no-files-found: error
+
+      - name: Draft release + upload + byte-count acceptance（草稿制；公网发布 = 用户拍板）
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          STAGE="$GITHUB_WORKSPACE/staging"
+          gh release delete "$TAG" --yes --cleanup-tag 2>/dev/null || true   # 幂等重跑
+          gh release create "$TAG" --draft --title "$TAG" --notes-file "$STAGE/notes.md"
+          gh release upload "$TAG" "$STAGE"/mu-r*.img "$STAGE"/esp-recovery-v*.img.gz \
+            "$STAGE"/meizu-meizu20-*.img.gz "$STAGE"/firmware-meizu-meizu20.tar.gz \
+            "$STAGE"/linux-meizu-meizu20-*.apk "$STAGE"/upgrade-*.zip "$STAGE"/SHA256SUMS
+          # r72 教训闭环：上传后逐件字节数对拍（gzip -t 已在生成时内建）
+          gh release view "$TAG" --json assets --jq '.assets[] | [.name, .size] | @tsv' > /tmp/uploaded.tsv
+          while IFS=$'\t' read -r name size; do
+              local_size=$(stat -c%s "$STAGE/$name")
+              if [ "$size" != "$local_size" ]; then
+                echo "✗ 字节不符: $name 远端=$size 本地=$local_size"; exit 1
+              fi
+              echo "✓ $name = $size"
+          done < /tmp/uploaded.tsv
+          echo "== DRAFT $TAG 就绪（公网不可见）；发布 = 用户在 Releases 页拍板 =="

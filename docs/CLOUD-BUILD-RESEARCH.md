@@ -109,6 +109,12 @@ jobs:
 
 ## 四、工作目录/构建目录转移（用户问：应该转移吗？）
 
+> ★10-13 当日定谳（用户拍板）：内聚改为**零 mv**——源树全部独立（内核多设备分支
+> 制 + pmaports 多设备包源 + Mu fork + pmbootstrap/.pmbootstrap 通用基建），
+> nura = 控制面钉子表。本节「建议转移」**作废**；上文「云端不依赖本地转移」结论
+> 不变且成为终态。workflow 已落地 = `.github/workflows/build-release.yml`
+> （CI 布局 = NURA_*_DIR 钉子重定向 `/mnt/nura-work`，见 §二.2）。
+
 现状：NURA_ROOT（项目仓）在 `~/work/nura-meizu-m2381`，构建基建
 （pmaports / pmbootstrap / .pmbootstrap）在 `~/work/pmos_linux/pmos/`——
 后者是 K30 时代共享遗存（wrapper cfg 注释自己写着「与 K30 共享…须串行」，
