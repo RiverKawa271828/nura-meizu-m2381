@@ -60,12 +60,18 @@ script/flash-batch.sh --i-am-present   # 一车刷（需人在设备旁）
 刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**；**已装机升级**（不刷 userdata、数据保留）→ **[docs/UPGRADE.md](docs/UPGRADE.md)**。
 构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；启动原理与镜像解剖 → [docs/DESIGN.md](docs/DESIGN.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
 
+## 已装机？升级不重刷（数据全保留）
+
+日常升级 = **两条腿原地升级**：装新内核 apk（模块腿）+ fastboot 刷 ESP（引导腿），
+**userdata 不动**——/home、WiFi 配置、装过的应用全保留。全量重刷 userdata 只用于
+首次安装 / 换 UI / 换发行版 / 救砖。两步命令与回滚 → **[docs/UPGRADE.md](docs/UPGRADE.md)**。
+
 ## 启动链 30 秒
 
 ```
 XBL → ABL → boot_b: Mu-UEFI (m2381Pkg) ──送核──→ 主线内核 (EFI stub/zboot)
                  ↘ recovery_a: ESP (BOOTAA64.EFI = 内核，U-Boot 式备援)    root = /dev/sda22 (userdata, ext4)
-四条腿各自独立更新：boot_b = Mu 镜像 ｜ recovery_a = ESP ｜ apk = 内核模块腿 ｜ userdata = rootfs
+四条腿各自独立更新：boot_b = Mu 镜像 ｜ recovery_a = ESP ｜ apk = 内核模块腿 ｜ userdata = rootfs（日常升级只动 ESP + apk 两条 → UPGRADE.md）
 ```
 
 - **boot_b（Mu 镜像）**：链载 UEFI 固件，内含我们的设备树（FdtBlob）。DT 变了才需要重刷。

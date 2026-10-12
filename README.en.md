@@ -76,6 +76,13 @@ Full flashing tutorial (incl. brick recovery) → **[docs/FLASHING.md](docs/FLAS
 design & image anatomy → [docs/DESIGN.md](docs/DESIGN.md) (Chinese). Current releases &
 anchors → [MANIFEST.md](MANIFEST.md) (Chinese).
 
+## Already installed? Upgrade without wiping (data preserved)
+
+Day-to-day upgrades = **two-leg in-place upgrade**: install the new kernel apk (modules leg)
++ fastboot-flash the ESP (kernel leg). **userdata stays untouched** — /home, WiFi config and
+installed apps are all preserved. A full userdata flash is only for first install / UI switch /
+distro switch / brick recovery. The two commands and rollback → **[docs/UPGRADE.md](docs/UPGRADE.md)** (Chinese).
+
 ## Boot chain in 30 seconds
 
 ```
