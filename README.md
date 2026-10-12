@@ -58,7 +58,7 @@ script/flash-batch.sh --i-am-present   # 一车刷（需人在设备旁）
 > 机型未验证；未来更新的 OTA 同样未验证，勿盲升。
 
 刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**；**已装机升级**（不刷 userdata、数据保留）→ **[docs/UPGRADE.md](docs/UPGRADE.md)**。
-构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；启动原理与镜像解剖 → [docs/DESIGN.md](docs/DESIGN.md)；启动链逆向深档（ABL 反汇编级 + 复现脚本）→ [docs/BOOT-CHAIN-RE.md](docs/BOOT-CHAIN-RE.md)；睡眠/s2idle 破案全集（printk 挂死 / 取证通道 / 唤醒链 / WoWLAN）→ [docs/SUSPEND-S2IDLE.md](docs/SUSPEND-S2IDLE.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
+构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；启动原理与镜像解剖 → [docs/DESIGN.md](docs/DESIGN.md)；启动链逆向深档（ABL 反汇编级 + 复现脚本）→ [docs/BOOT-CHAIN-RE.md](docs/BOOT-CHAIN-RE.md)；睡眠/s2idle 破案全集（printk 挂死 / 取证通道 / 唤醒链 / WoWLAN）→ [docs/SUSPEND-S2IDLE.md](docs/SUSPEND-S2IDLE.md)；面板花屏 case 包（掉电唤醒马赛克 / 移植者排雷表）→ [docs/PANEL-CORRUPTION.md](docs/PANEL-CORRUPTION.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
 
 ## 已装机？升级不重刷（数据全保留）
 

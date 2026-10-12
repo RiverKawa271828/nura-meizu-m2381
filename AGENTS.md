@@ -33,8 +33,8 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 - **▶ 公开蒸馏队列进行中（10-12 用户拍板；执行卡 = pmos_linux docs/meizu20/public-distill-queue-20261012.md）**：
   先例 [docs/BOOT-CHAIN-RE.md](docs/BOOT-CHAIN-RE.md)（启动链逆向全集）+ [tools/abl-re/](tools/abl-re/)
   五脚本已推（`39df1a0`）；**队列① [docs/SUSPEND-S2IDLE.md](docs/SUSPEND-S2IDLE.md)（睡眠/s2idle
-  破案全集）已推（10-12）**；待续：②面板花屏 case 包 ③音频方法论 ④GPU/IFPC——纯宿主写作零设备，
-  格式标准与 stock 件不外发政策红线见执行卡。
+  破案全集）+ ② [docs/PANEL-CORRUPTION.md](docs/PANEL-CORRUPTION.md)（面板花屏 case 包）已推（10-12）**；
+  待续：③音频方法论 ④GPU/IFPC——纯宿主写作零设备，格式标准与 stock 件不外发政策红线见执行卡。
 - **✅ phosh 回归轮 + 发布面切换（10-12（八十七），用户在场验收全过）**：steamos「起不来」
   = **竞争刷写污染**定谳（彼线并行 fastboot 互踩；新操作律 = **fastboot 单通道，两侧刷写
   必须互斥**），boot 链无罪——nura 重刷三件（boot_b mu-r69 + recovery_a v65 + 新建
@@ -186,6 +186,7 @@ sha512 重算，source= 保持本地文件名）②**Release tag `r66`**（用�
 | 启动链原理 / 镜像组成详解 | docs/DESIGN.md |
 | 启动链逆向深档 / ABL RE / 复现脚本 | docs/BOOT-CHAIN-RE.md + tools/abl-re/（公开面；原始 dump 与 9008 备份私有仓保留，二进制不外发政策见该文 §8） |
 | 睡眠/s2idle 破案（printk 挂死 / 取证通道 / 唤醒链 / WoWLAN） | docs/SUSPEND-S2IDLE.md（公开蒸馏队列①，2026-10-12） |
+| 面板花屏 case 包（掉电唤醒马赛克 / 排雷表 / bloff 工程解 / 档案假说） | docs/PANEL-CORRUPTION.md（公开蒸馏队列②，2026-10-12） |
 | 出一车产物 | docs/PIPELINE.md + script/ |
 | 查现在该刷哪个版本 | MANIFEST.md（config.sh 为准） |
 | 硬定律 / 战役叙事 / 队列 | 私有工作区仓（未公开）的 AGENTS.md + experiment-log |
