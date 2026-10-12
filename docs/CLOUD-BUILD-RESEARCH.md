@@ -123,6 +123,9 @@ K30 已退役）。
   （pmaports 的 git remote 不受目录影响；.pmbootstrap 可 mv 或冷重建——
   冷重建代价 = 首轮全量内核编译 ~12 分钟）+ wrapper cfg 注释更新。半小时级。
 - 顺序建议：下会话第一步先定稿 CI 布局默认值，本地照抄同构，再写 workflow。
+- **详版迁移计划（私有面/全谱路径/会话根与记忆方案）= pmos_linux 仓
+  `docs/meizu20/workspace-migration-plan-20261013.md`**（用户 10-13 拍板方向：
+  之后只在 nura 推进适配——本仓即主战场）。
 
 ## 五、前置清单（云端构建 r85 之前）
 
