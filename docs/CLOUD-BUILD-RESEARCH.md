@@ -48,8 +48,8 @@
    sha512 由 APKBUILD 自验）。setup.sh `--fetch-release` 拉的是 Release→artifacts，
    位置不合 pmbootstrap source 解析，**CI 直接拉到包目录**更简。
 4. **Mu 段（新活，steamos 没有）**：
-   - clang：build-mu.sh 取 `$HOME/{ubuntu/}.linuxbrew/bin` 的 clang。
-     CI 装 linuxbrew（官方一行）最省事；备选 = apt clang 版本兼容性验证
+   - clang：build-mu.sh 取本机 `$HOME` 下 linuxbrew 的 clang（确切查找序见
+     build-mu.sh）。CI 装 linuxbrew（官方一行）最省事；备选 = apt clang 版本兼容性验证
      （**验证点**：build_uefi.py = CLANGPDB 模式）。
    - venv：Mu 树有 `pip-requirements.txt` → `python3 -m venv .venv &&
      .venv/bin/pip install -r pip-requirements.txt`。

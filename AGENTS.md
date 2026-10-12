@@ -3,14 +3,14 @@
 > ★**接续卡（2026-10-13 起：会话根 = 本仓，用户拍板「只在 nura 推进适配」）**。
 > 在本仓目录开的**新会话首跑必做三件**：
 > 1. **记忆搬家**：本会话的记忆目录是空的（记忆按会话根绑定 key）。把旧库全量拷入：
->    `cp -a /home/ri/ubuntu/.zcode/cli/memories/projects/pmos_linux-5c4d01f991bd6cb7/memory/. <本会话记忆目录>/`
->    （本会话记忆目录路径 = 系统提示中的 memories 路径），拷完复核 MEMORY.md 条目数
+>    `cp -a <旧记忆库目录>/. <本会话记忆目录>/`（两个目录的绝对路径 =
+>    系统提示中的 memories 路径，**勿写进公开文档**），拷完复核 MEMORY.md 条目数
 >    ≥40 才继续干活；**旧目录保留勿删（底档）**。
-> 2. **主档必读**：`/home/ri/work/pmos_linux/AGENTS.md` = 硬定律/硬性禁令/交互通道
+> 2. **主档必读**：pmos_linux 私有仓 `AGENTS.md` = 硬定律/硬性禁令/交互通道
 >    与操作纪律/坑册的单一事实源（本文不复制）；取证叙事 = 同仓
 >    `docs/meizu20/experiment-log.md`（最新 =（八十八）（八十八·乙））。
 > 3. **任务链**（自包含两份计划）：①工作区内聚迁移 =
->    `/home/ri/work/pmos_linux/docs/meizu20/workspace-migration-plan-20261013.md`
+>    pmos_linux 私有仓 `docs/meizu20/workspace-migration-plan-20261013.md`
 >    —— **10-13 当日执行修订 = 零 mv**（用户拍板：源树全部保持独立仓库——内核/
 >    pmaports/Mu = 多设备共享，pmbootstrap/.pmbootstrap = 通用基建；nura = 控制
 >    面钉子表 + setup.sh --clone 远端复刻，物理嵌套不做）②云端构建 = 本仓

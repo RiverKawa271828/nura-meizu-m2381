@@ -17,5 +17,8 @@ artifacts/SHA256SUMS
 # 固件 tarball 属 Release 上传面产物（81MB），本地 release-r66/r72 有留底
 artifacts/firmware-meizu-meizu20.tar.gz
 
+# 手动升级包属 Release 上传面产物（内含 apk+ESP，CI 同配方生成）
+artifacts/upgrade-*.zip
+
 # Python 缓存
 __pycache__/

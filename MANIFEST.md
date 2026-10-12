@@ -3,15 +3,15 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-12 @（八十七）phosh 回归轮收官：发布面 = **Release r84（首个 phosh 发布面）**；在机 = pmOS phosh #85 本机实测全绿；用户拍板「以后专注 phosh」）
+## 工作态（2026-10-13 @（八十八·乙）waydroid 网络轮：**r85 config-only 候选已建待刷**——交付 = 手动升级首验（uname #86 + waydroid 联网四连）+ 云端构建对照；在机 = pmOS phosh #85（r84 代）；发布面 = Release r84）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**84**（GPU/IFPC 轮收官件：revert A 路 + 钳零防御 + payload 订阅；fork tip `140e5a8e308a`） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r84.apk` | b5dd7e62 | 机上 apk add |
+| 内核 apk | 7.3.0_**rc6**-r**85**（waydroid netd 策略路由：IP_ADVANCED_ROUTER/IP_MULTIPLE_TABLES；config-only，fork tip `140e5a8e308a` 不动） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r85.apk` | c1d22119 | 机上 apk add |
 | Mu 镜像 | r69（DTS 零改动沿用） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
-| ESP | v65（内核腿；仓内 `.img.gz`） | `artifacts/esp-recovery-v65.img.gz` | 463efc45（裸镜像）/ 00d2d5f9（gz） | recovery_a |
-| 设备包 / 固件包 | **r60**（modules-load.d 补 uhid 自载）/ r3 | 同目录 | — | 机上 apk add |
-| 上机期望 | `uname -v` = `7.3.0-rc6` → **#85**（彼侧在役实测 ✓） | — | — | — |
+| ESP | **v66**（r85 内核腿；仓内 `.img.gz`；10-13 本地构建） | `artifacts/esp-recovery-v66.img.gz` | 6ba496f5（裸镜像）/ 327805aa（gz） | recovery_a |
+| 设备包 / 固件包 | **r60**（modules-load.d 补 uhid 自载）/ r3（r85 轮零改动） | 同目录 | — | 机上 apk add |
+| 上机期望 | `uname -v` = `7.3.0-rc6` → **#86**（待首验；验收加 waydroid 联网四连） | — | — | — |
 
 **r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂
 （gzip 重压 workaround 撤）；RTC 用户态三件下线后时钟正确 + timedatectl 首次读出 RTC；
@@ -25,8 +25,8 @@ b41b88889cadf6060e35…）**——「b41b8889cadf」系连排四个 8 丢一位�
 39-41°C + 七条回归全绿；payload[0]=SUCCESS 但 ifpc 恒零 =「ack 不执行」[FW 行为态]——
 内核线收官，全量 = pmos_linux `docs/meizu20/gpu-idle-devfreq-round-20261011.md` §13。
 
-**回滚配对**：内核 r82 + ESP v63（裸 533f40d0；gz = 彼侧重压版 425ecd37，原打包件两侧
-均已断）+ device r60（= r82/v63/#83，彼侧在役回滚件）。
+**回退配对**：内核 r84 + ESP v65（裸 463efc45 / gz 00d2d5f9）+ device r60（= r84/v65/#85，
+= Release r84 在役件；r85 首验通过前勿销）。
 
 ## 发布面现役产物（2026-10-12 @ r84；= Release r84 已发布；用户拍板「以后专注 phosh」：r66 已删，r80 = plasma 末版存档未删）
 
@@ -80,10 +80,11 @@ plasma→**phosh**；**升级口径**：内核/设备包/固件 = **apk 腿（ro
 
 - root devshell：`tools/devsh.py`（NCM + nc :23）｜ ssh：`user@172.16.42.1` / 1234 / root 走 `sudo`（密码 1234，本机无 doas）
 - 软进 fastboot：`systemctl reboot --reboot-argument=bootloader`（18d1:d00d）
-- 宿主长构建：systemd-run（脚本已内置）；与 K30 wrapper 串行（共享 work dir，仅本机布局）
+- 宿主长构建：systemd-run（脚本已内置；K30 已退役，work dir 独占，防本机并发即可）
 
 ## 历史轮次
 
 r61 首航（10-06）→ r63/r64 录音轮 → r65 pm8008 → r66 fsa4480 摘除（10-07，首个 Release）→
-r72 首传半截流撤回（10-08，教训入流程）→ r80 async flip + uhid（10-11，Release 上线）→ r84 phosh 首个 phosh 发布面 + r66 删除（10-12，专注 phosh 拍板）；
+r72 首传半截流撤回（10-08，教训入流程）→ r80 async flip + uhid（10-11，Release 上线）→ r84 phosh 首个 phosh 发布面 + r66 删除（10-12，专注 phosh 拍板）→
+r85 waydroid netd 策略路由（10-13，config-only；交付 = 手动升级首验 + 云端构建对照）；
 逐轮产物/sha 明细见 git log。ESP 自 v47 起仓内 gz 化（v43–v45 裸镜像已退役出史）。

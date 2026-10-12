@@ -12,7 +12,8 @@
 #   他机/CI 复刻 = setup.sh --clone 按 PIN_*_GIT 远端重建（每树皆有公共远端）。
 NURA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # 源树工作区根（export NURA_WORK=/path 或改下行默认）；默认 = ~/work。
-# 沙箱注意：沙箱 HOME ≠ 宿主 HOME，沙箱里跑依赖源树钉子的脚本须 export NURA_WORK=/home/ri/work
+# 沙箱注意：沙箱 HOME ≠ 宿主 HOME，沙箱里跑依赖源树钉子的脚本须 export
+# NURA_WORK=<宿主工作区根>（systemd-run 重入单元内 HOME 正确，自愈）。
 NURA_WORK="${NURA_WORK:-$HOME/work}"
 
 # ---- 源码树（独立仓库，本地现役路径；公共 clone URL 见下方 PIN_*_GIT）----
@@ -44,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="84"      # r84 = GPU/IFPC 轮收官件（10-12 彼线点火回执判过 =（八十六）；revert A 路 + 钳零防御 + payload 订阅，tip 140e5a8e308a）；r83 = 冻结留档未发货；r81 = SQUASHFS_ZSTD/XZ + RTC→rtc1；r80 = Release 轮（10-11 上线，async flip r79 + UHID=m r80）
+REL_LINUX_PKGREL="85"      # r85 = waydroid netd 策略路由修复（（八十八·乙）config-only：IP_ADVANCED_ROUTER/IP_MULTIPLE_TABLES；fork tip 不动 140e5a8e308a；本地 apk sha8 c1d22119）；**待刷 = 手动升级首验 + 云端构建对照**；r84 = GPU/IFPC 轮收官（10-12 判过 =（八十六））现役回退件
 REL_DEVICE_PKGREL="60"     # r60 = modules-load.d 补 uhid 自载（BLE HID 无 open-time autoload）；r59 = uinput 用户态胶水（60-meizu20-uinput.rules uaccess+static_node / modules-load.d）；r58 = s2idle×systemd 看门狗修复（udevd/logind WatchdogSec=0 + 14 内部服务放宽 30min + journald sync 30s）
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v65.img.gz"  # v65 = r84 内核（裸 463efc45 / gz 00d2d5f9；10-12 本机复核 + 两腿互证 01ddbb77 全等）；v64 = r83 冻结留档未发货（裸 68b32cec / gz c617b083）；v63 = r82（彼侧重压版 gz 425ecd37，裸 533f40d0——原打包件两侧均已断，round §9.4）；v62 = r81（裸 b41b8888——10-11 再勘定谳：原手记无误，「b41b8889cadf」系连排四个 8 丢位转抄病）；v61 = r80（裸 cb7f1e5a）；v60 = r79（裸 0ccfcf72）
-REL_KERNEL_VER="#85"       # 下次上机 uname 期望（r84/rc6 内核 + #N=pkgrel+1 定律）；回滚配对 = r82/v63/#83
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v66.img.gz"  # v66 = r85 内核（裸 6ba496f5 / gz 327805aa；10-13 本地构建）；v65 = r84 回退件（裸 463efc45 / gz 00d2d5f9；两腿互证 01ddbb77）；v64 = r83 冻结留档未发货（裸 68b32cec / gz c617b083）；v63 = r82（彼侧重压版 gz 425ecd37，裸 533f40d0）；v62 = r81（裸 b41b8888，全量 b41b88889cadf6060e35…）；v61 = r80（裸 cb7f1e5a）；v60 = r79（裸 0ccfcf72）
+REL_KERNEL_VER="#86"       # 下次上机 uname 期望（r85/rc6 内核 + #N=pkgrel+1 定律）；交付 = 手动升级首验 + waydroid 联网四连（（八十八·乙））
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。
