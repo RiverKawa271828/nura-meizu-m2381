@@ -57,7 +57,7 @@ script/flash-batch.sh --i-am-present   # 一车刷（需人在设备旁）
 > （验证机 = 12.6.0.0A 落 b 槽；精确版本/官方下载/MD5 见 FLASHING §1）。a 槽启动/未 OTA
 > 机型未验证；未来更新的 OTA 同样未验证，勿盲升。
 
-刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**。
+刷机详细教程（含回滚救砖）→ **[docs/FLASHING.md](docs/FLASHING.md)**；**已装机升级**（不刷 userdata、数据保留）→ **[docs/UPGRADE.md](docs/UPGRADE.md)**。
 构建管线详解 → [docs/PIPELINE.md](docs/PIPELINE.md)；启动原理与镜像解剖 → [docs/DESIGN.md](docs/DESIGN.md)；现役产物与锚点 → [MANIFEST.md](MANIFEST.md)。
 
 ## 启动链 30 秒
@@ -111,7 +111,7 @@ IR/UWB（身份未定）。
 | `#85` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #85 = r84 内核真的在跑 |
 | `97cdea20` | `mu-r69-97cdea20.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |
 
-设计细节与 #N 定律原理 → [docs/DESIGN.md](docs/DESIGN.md)；现役各件对应哪版 → [MANIFEST.md](MANIFEST.md)。
+设计细节与 #N 定律原理 → [docs/DESIGN.md](docs/DESIGN.md)；现役各件对应哪版 → [MANIFEST.md](MANIFEST.md)；**升级操作 → [docs/UPGRADE.md](docs/UPGRADE.md)**。
 
 ## 布局原则与源码仓库
 

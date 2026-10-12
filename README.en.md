@@ -49,7 +49,7 @@ ships the service — zero config). Known minor quirk: after wake, if you don't 
 device the desktop won't re-arm automatic suspend by itself — one input restores it.
 
 Pre-flight checklist (unlocked bootloader / Flyme baseline / anchors), step-by-step
-verification, and brick recovery → **[docs/FLASHING.md](docs/FLASHING.md)** (Chinese).
+verification, and brick recovery → **[docs/FLASHING.md](docs/FLASHING.md)** (Chinese). **Upgrading an installed device** (no userdata wipe, data preserved) → **docs/UPGRADE.md** (Chinese).
 
 **Path B: build it yourself** (to modify sources / cut a new release):
 
