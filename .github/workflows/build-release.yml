@@ -52,11 +52,20 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y git python3 python3-venv curl mtools zip \
             build-essential uuid-dev nasm lld gcc-aarch64-linux-gnu mono-devel
-          # pmbootstrap 预铺 = GitHub 官方镜像（六跑教训：pmbootstrap 不在 PyPI；
-          # 五跑教训：gitlab.postmarketos.org 从 runner 反复挂死）。depth-1 铺到
-          # 钉子位后，setup.sh 见 pmbootstrap.py 在位即跳过其 gitlab clone。
-          timeout 600 git clone --depth 1 \
-            https://github.com/postmarketOS/pmbootstrap "$NURA_PMB_CHECKOUT"
+          # pmbootstrap 唯一正源 = gitlab.postmarketos.org（无 GitHub 官方镜像、不在
+          # PyPI、第三方镜像全过期——#7 定谳）。#4/#5 的挂死 = gitlab 坏窗口
+          # （#1-#3 同一时段可用），处置 = 有界 clone + 三次重试 + 快速失败：
+          # 最坏分钟级可见错误，不再无限挂死。
+          OK=0
+          for i in 1 2 3; do
+            if timeout 240 git clone --depth 1 \
+                https://gitlab.postmarketos.org/postmarketOS/pmbootstrap.git \
+                "$NURA_PMB_CHECKOUT"; then OK=1; break; fi
+            rm -rf "$NURA_PMB_CHECKOUT"
+            echo "(i) gitlab clone 第 $i 次失败/超时，20s 后重试"; sleep 20
+          done
+          [ "$OK" = 1 ] || { echo "!! pmbootstrap 三次获取失败（gitlab 不可达？）"; exit 1; }
+          python3 "$NURA_PMB_CHECKOUT/pmbootstrap.py" --version
 
       - name: Clone source trees (setup.sh --clone)
         run: timeout 900 env NURA_SKIP_DOCTOR=1 bash script/setup.sh --clone
