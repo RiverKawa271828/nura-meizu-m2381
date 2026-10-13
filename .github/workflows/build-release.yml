@@ -232,6 +232,7 @@ jobs:
       - name: Stage release assets + manual upgrade zip + SHA256SUMS
         run: |
           set -euo pipefail
+          . ./config.sh   # NURA_ROOT/REL_* 钉子（#20：未 source 前直接引用 = unbound）
           STAGE="$GITHUB_WORKSPACE/staging"; mkdir -p "$STAGE"
           ART="$NURA_ROOT/artifacts"
           APK="$NURA_PMB_WORK/packages/edge/aarch64"
@@ -249,7 +250,6 @@ jobs:
           cp -v "$MU_IMG" "$ESP_GZ" "$ROOTFS_GZ" "$FW_TB" "$LIN_APK" "$STAGE/"
 
           # 升级包 = linux apk + ESP gz（+ 本轮相对现役钉有变的 device/fw apk）+ UPGRADE.md 抄本
-          . ./config.sh   # 取 REL_*_PKGREL 现役钉（source 进本步 shell，子壳不回传）
           UP="$STAGE/upgrade-$TAG"; mkdir -p "$UP"
           cp "$LIN_APK" "$ESP_GZ" docs/UPGRADE.md "$UP/"
           if [ "$DREL" -gt "$REL_DEVICE_PKGREL" ]; then cp "$APK/device-meizu-meizu20-1-r$DREL.apk" "$UP/"; fi
