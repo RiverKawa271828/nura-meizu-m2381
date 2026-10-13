@@ -153,8 +153,14 @@ jobs:
           # 验证假绿的通道。
           /home/linuxbrew/.linuxbrew/bin/brew install llvm
           export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+          # 十三跑定谳：新 brew llvm（23.x）bin 里没有 lld-link 符号链接（本地旧版
+          # brew llvm 有，故本地从未踩），EDK2 CLANGPDB 的 LLINK 恰是它。lld 按
+          # argv0 多路分派，从 ld.lld 补链即可。
+          LLB=/home/linuxbrew/.linuxbrew/bin
+          [ -e "$LLB/lld-link" ] || ln -s ld.lld "$LLB/lld-link"
           clang --version
           llvm-objcopy --version
+          lld-link --version
           # Mu venv：build-mu.sh 硬性要求 .venv/bin/python（coloredlogs 等）
           cd "$NURA_MU_DIR"
           python3 -m venv .venv
