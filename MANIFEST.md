@@ -3,14 +3,14 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-13 @（八十八·乙）waydroid 网络轮收官：**r86 = v6 策略路由补全上机全通**——在机 = pmOS phosh **#87**（r86 代，手动升级路径首验 ✓ failed 0）；发布面 = Release r84（r86 发布件随云构建出）
+## 工作态（2026-10-14 @ waydroid 固化轮：**device r61 = waydroid 五件 + 网络修复入包**——重刷即用不再机上收编；在机 = plasma 本地段 10-14 重刷 + **#87** 内核不变（boot 链没动），机上 device 仍 r60+在线件，r61 随下轮构建生效；发布面 = Release r84（r86 发布件随云构建出）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
 | 内核 apk | 7.3.0_**rc6**-r**86**（waydroid netd 双族策略路由：IP_ADVANCED_ROUTER/IP_MULTIPLE_TABLES[r85] + IPV6_MULTIPLE_TABLES/SUBTREES[r86]；config-only，fork tip `140e5a8e308a` 不动） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r86.apk` | 6e5dd1b8 | 机上 apk add |
 | Mu 镜像 | r69（DTS 零改动沿用） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
 | ESP | **v67**（r86 内核腿；仓内 `.img.gz`；10-13 上机读回逐字对拍 ✓） | `artifacts/esp-recovery-v67.img.gz` | 2ad63003（裸镜像）/ 444dec3f（gz） | recovery_a |
-| 设备包 / 固件包 | **r60**（modules-load.d 补 uhid 自载）/ r3（r85/r86 轮零改动） | 同目录 | — | 机上 apk add |
+| 设备包 / 固件包 | **r61**（waydroid 固化：depends +waydroid/waydroid-pyc/waydroid-systemd/gbinder-python/libgbinder + 52_waydroid.nft 入包 + preset disable waydroid-container 按需启动；镜像不入包 = init 在线自拉或离线恢复）/ r3（r85/r86 轮零改动） | 同目录 | — | 机上 apk add |
 | 上机期望 | `uname -v` = `7.3.0-rc6` → **#87**（10-13 实测 ✓；waydroid 联网四连技术面全通：rule×15+default 路由+gw/外网 0% loss+DNS 解析） | — | — | — |
 
 **r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂
