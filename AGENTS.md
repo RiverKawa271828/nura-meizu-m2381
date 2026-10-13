@@ -69,9 +69,14 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   （（八十八·乙）只修了 v4 半层）→ **r86 = IPV6_MULTIPLE_TABLES/SUBTREES**（config-only）
   两腿升级 → **#87 一次点亮 failed 0 + waydroid 联网四连技术面全通**（v4/v6 rule 各 15 +
   default 路由表 + gw/外网 ping 0% loss + DNS 解析；CS validation failed = gstatic 探测
-  地域不可达，非栈缺陷；应用内加载眼判 = 用户在旁）。升级口径实测 = apk 腿+ESP 腿原地
+  地域不可达，非栈缺陷）。升级口径实测 = apk 腿+ESP 腿原地
   升级零重刷 ✓（UPGRADE.md 流程首验）。在机 = #87/r86 + v67（读回 2ad63003 逐字对拍）。
-  **钉子 = r86/v67/#87**；回退 = r84/v65/#85（Release r84）。
+  **钉子 = r86/v67/#87**；回退 = r84/v65/#85（Release r84）。⑤**waydroid MTU 黑洞层
+  收官（用户酷安图片实证）**：路由通后应用仍「文字通图片死」= 上游 PPPoE 级路径
+  MTU<1500（DF 1452 通/1472 死）+ frag-needed 在 NAT 路径回不来 ⇒ 未钳位 TCP 大段
+  黑洞；修复 = **MSS clamp 1400**（`table ip waydroid_mss` 自持 postrouting/mangle 链，
+  运行态+持久入 52_waydroid.nft；ping 类 ICMP 不受 clamp 影响属预期）。⚠设备重启后
+  NCM 网段会漂（172.16.42.x→10.42.0.x），devsh 硬编码地址失效时绑接口直连新网段 :23。
 
 - **▶ 2026-10-13 三连（全量 = pmos_linux AGENTS 现态一句话 + experiment-log（八十八）（八十八·乙））**：
   ①**Waydroid 复活定谳（八十八）**= waydroid 1.6.3 自拉官方 `waydroid_arm64_only`
