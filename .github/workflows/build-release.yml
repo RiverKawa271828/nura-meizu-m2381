@@ -171,11 +171,15 @@ jobs:
           LLCELL=$(dirname "$(readlink -f "$LLB/clang")")
           LTGT=$(readlink -f "$LLB/lld-link")
           for d in "$LLB" "$LLCELL"; do
-            [ -e "$d/lld-link.exe" ] || ln -s "$LTGT" "$d/lld-link.exe"
+            for n in lld-link lld-link.exe; do
+              [ -e "$d/$n" ] || ln -s "$LTGT" "$d/$n"
+            done
           done
           clang --version
           llvm-objcopy --version
           "$LLB/lld-link" --version
+          "$LLCELL/lld-link" --version
+          "$LLB/lld-link.exe" --version
           "$LLCELL/lld-link.exe" --version
           # Mu venv：build-mu.sh 硬性要求 .venv/bin/python（coloredlogs 等）
           cd "$NURA_MU_DIR"
