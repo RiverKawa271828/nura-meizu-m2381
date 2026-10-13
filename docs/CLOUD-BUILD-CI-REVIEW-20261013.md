@@ -21,7 +21,15 @@
 | #10 | checksum | `work folder version needs to be migrated (from '' to 8)`——**纯 mkdir 缺 version 标记**，pmbootstrap 拒迁移 | 种子步补 `echo 8 > $WORK/version`（pmb/config work_version=8，本地 work dir 实证） | ✅已验（#11 绿） |
 | #11 | build-device | `apk add crossdirect g++-x86_64 gcc-x86_64 …` 退出码 2——**pmbootstrap 依赖队列给依赖排队只传 cross 不传 arch**（_package.py queue_build），`arch="all"` 依赖（temp/hexagonrpcd，CI 冷包仓必现编）被 autodetect 成宿主原生 arch ⇒ CROSSDIRECT 组合装 gcc-x86_64（native 仓索引无此包）；本地有现成 apk 走 is_cached 跳过从不踩。旁证：同轮显式目标路径的固件/内核全绿 | build-device 加 hexagonrpcd 显式 `build --arch aarch64` 预编（[2/4] 步；有 apk 自动跳过）；**ccache 改 restore+save(always)**——败轮也落袋（#11 内核冷链 2h23m 白烧教训） | ✅已验（#12 预编走 aarch64 buildroot 正路，设备包全绿） |
 | #12 | Mu toolchain | `make: llvm-objcopy: No such file or directory`——**fresh Homebrew bin 只有 brew 本体**，clang/llvm-objcopy 需显式 `brew install llvm`（本机能过 = 本地 brew 早年装过 llvm）；工具链步「验证」**假绿**：`x --version | head -1` 管道早退假阴性（工程规则#2），clang 退出 127 被 head 的 0 吞掉，日志留有 `No such file or directory` 铁证。另 ccache save 报「路径不存在」= **路径写错**（真实 = `$WORK/cache_ccache_<arch>`，非 `.pmbootstrap/ccache`） | workflow 工具链步补 `brew install llvm` + 验证去管道（裸 `clang --version`）+ 步界 30min；ccache restore/save 路径改 `cache_ccache_aarch64`+`cache_ccache_x86_64` | ✅已验（#13：brew llvm 23.1.3 装上、验证真过、ccache `Cache saved` 落袋） |
-| #13 | Mu build | EDK2 CLANGPDB 构建 14 秒连败 5 模块：`/Cellar/llvm/23.1.3_1/bin/lld-link: not found`——**新 brew llvm 不再带 lld-link 符号链接**（EDK2 CLANGPDB 的 LLINK 恰是它；本地旧版 brew llvm 在 `$HOME/ubuntu/.linuxbrew` 自带 lld-link，故本地从未踩）。clang 本体本轮已验证真过（Cellar 全路径编译成功） | 工具链步补 `ln -s ld.lld lld-link`（lld 按 argv0 多路分派）+ 裸 `lld-link --version` 验证 | 🔶已修未验（#14 首验；**#13 ccache 已落袋 ⇒ #14 内核热起**） |
+| #13 | Mu build | EDK2 CLANGPDB 构建 14 秒连败 5 模块：`/Cellar/llvm/23.1.3_1/bin/lld-link: not found`——**新 brew llvm 不再带 lld-link 符号链接**（EDK2 CLANGPDB 的 LLINK 恰是它；本地旧版 brew llvm 在 `$HOME/ubuntu/.linuxbrew` 自带 lld-link，故本地从未踩）。clang 本体本轮已验证真过（Cellar 全路径编译成功） | 工具链步补 `ln -s ld.lld lld-link`（lld 按 argv0 多路分派）+ 裸 `lld-link --version` 验证 | ✅方向对但层深（见 #14-#19 lld 四格矩阵系列） |
+| #14 | kernel(热) | **ccache 热恢复链路首验通过**（restore 命中 #13 缓存），内核步 76s 秒败但真错误只在 pmbootstrap 内层 log.txt，runner 销毁=失明，本轮无法定谳 | 内核/设备/ESP 步败时自动吐 log.txt 尾部 | ✅基建（#15/16 两轮迭代成定向取证） |
+| #15 | kernel(热) | 同 #14 秒败型；die() tail-100 被 make -j 并行输出顶穿，只见 `__sub-make Error 2` | die() 升级=定向 grep 错误行+df/free/dmesg OOM 三件套 | ✅基建（#16 定谳全靠它） |
+| #16 | kernel(热) | **die() 定向取证定谳**：`ccache: Permission denied`（写 `/home/pmos/.ccache/tmp`）——actions/cache 恢复后属主=runner 用户，pmbootstrap chroot 构建用户（映射 uid 不同）无写权限；#13 前不踩=缓存当轮自建属主正确 | restore 后对 cache_ccache_{aarch64,x86_64} 递归 a+rwX | ✅已验（#17 内核热编过） |
+| #17 | Mu build | lld 深一层：**brew 把 lld 拆独立配方**+EDK2 CI 全新 Conf 要 **`lld-link.exe`（带 .exe）**@Cellar 路径；#13 修只补 bin/lld-link 单名单位。本地不踩=本地树老 Conf 老模板 | bin+Cellar 双位 × 双名补链（初版 ld.lld 目标） | 层剥进 #18 |
+| #18 | Mu toolchain | llvm 配方**连 ld.lld 都不带**（lld 独立配方）⇒ #17 的链接悬空，exec 落到 **Ubuntu apt lld 18.1.3 冒名应答** `lld-link --version` 假绿；Cellar 直查 `lld-link.exe` ENOENT=127 截停（验证链首功） | `brew install lld` 正源 + readlink 真身补链 + **绝对路径直查验证**（封 PATH fallback 假绿） | ✅方法立住（#19 BootShim 过） |
+| #19 | Mu build | brew lld+.exe 链生效（BootShim 过），EDK2 GNUmakefile 链 WatchdogTimer.dll 还要 **Cellar 无后缀 lld-link**——四格矩阵（bin×Cellar × 无缀/.exe）缺最后一格 | 2×2 全补+四路绝对路径验证 | ✅已验（#20 Mu 全过） |
+| #20 | Stage | **Mu/Rootfs/Verify 全链首次穿越**（lld 收官+verify 全绿），死于从未走到的 staging 步：`NURA_ROOT: unbound variable`——该步直接引用未 source 的 config.sh 变量（本地不踩=脚本自带 source） | Stage 步顶部 `. ./config.sh` | ✅已验（#21 全绿） |
+| #21 | — | **首绿**（全程 24 分钟：热缓存内核 ~10min + Mu ~5min + rootfs + verify + staging + 草稿+字节对拍） | — | 🎉 |
 
 另：#10 暴露 **ESP_VER 公式 bug**：`max(release,pin)+1` 在「设备日已定版」阶段算出 68
 （正确 = 钉子 67）。修 = 三态生命周期公式（见 workflow Derive 步注释）：
@@ -66,6 +74,16 @@ build-kernel 冷链**（native chroot bootstrap + cross aarch64 工具链 + 全�
    （verify 只查 DTB 同源 ✓），不逐字节（政策已有：发布真值=CI SHA256SUMS）。
 
 ## 三、一致性对比规程（#11 出草稿后执行）
+> **执行结果（#21 首绿草稿，2026-10-14）：三层全过。**
+> - **结构层**：7 件齐（mu-r86-61401ac7 + esp-v67 gz + rootfs r86-phosh gz[新命名] + 固件
+>   tarball + linux apk r86 + upgrade-r86.zip + SHA256SUMS）；SUMS 自洽（下载件全 OK）；
+>   升级包 = apk+ESP+UPGRADE.md 三件同构（device r60/fw r3 与钉同号不重复 ✓）。
+> - **语义层**：apk DTB CI≡本地逐字节（`c061acd9…`=现役 FdtBlob 同源）⇒ CI mu-r86 内嵌
+>   同 FdtBlob=语义等价；vmlinuz(-efi) 不同 = 构建时间戳（预期），CI ESP 与 CI apk 配对
+>   （CI verify ESP↔apk 门绿）；固件 tarball sha `29c1ee88…` ≡ r84 时代原件逐字节。
+> - **版本层**：TAG=r86 / ESP=v67 / 期望 `#87`。
+> - **CI 真值（SHA256SUMS @ r86 draft）**：mu `61401ac7…` / esp gz `dc8bed66…` / rootfs gz
+>   `1e171d8e…` / fw `29c1ee88…` / apk `695569a6…` / upgrade zip `28b18d45…`。
 1. 下载 CI 草稿资产清单（`gh release view r86 --json assets`）。
 2. 对照本地 `artifacts/`（apk r86 `6e5dd1b8` / esp v67 裸 `2ad63003` gz `444dec3f`）：
    - **结构层**：资产清单一致（8 件制）+ SHA256SUMS 自洽（`sha256sum -c`）；
