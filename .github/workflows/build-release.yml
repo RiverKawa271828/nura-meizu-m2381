@@ -170,8 +170,19 @@ jobs:
         timeout-minutes: 180
         run: |
           # 十四跑教训：pmbootstrap 失败时控制台只有一行总结，真错误在 log.txt，
-          # runner 销毁即失明——败时必吐尾部。
-          die() { rc=$?; echo "=== pmbootstrap log.txt tail ==="; tail -100 "$NURA_PMB_WORK/log.txt" 2>/dev/null; exit "$rc"; }
+          # runner 销毁即失明——败时必吐尾部。十五跑补课：make -j 并行会把报错行
+          # 顶出 tail 窗口，改为定向抓错误行 + 系统态三件套（盘/内存/OOM）。
+          die() {
+            rc=$?
+            echo "=== log.txt error lines (tail 40) ==="
+            grep -inE "error:|error |killed|no space|warning:|undefined|cannot find|failed" "$NURA_PMB_WORK/log.txt" 2>/dev/null | tail -40
+            echo "=== log.txt tail 30 ==="
+            tail -30 "$NURA_PMB_WORK/log.txt" 2>/dev/null
+            echo "=== df /mnt ==="; df -h /mnt | tail -1
+            echo "=== free ==="; free -m | head -2
+            echo "=== oom-kill? ==="; sudo dmesg 2>/dev/null | grep -iE "killed process|out of memory" | tail -5
+            exit "$rc"
+          }
           bash script/build-kernel.sh || die
           bash script/build-device.sh || die
           bash script/build-esp.sh "$ESP_VER" || die
