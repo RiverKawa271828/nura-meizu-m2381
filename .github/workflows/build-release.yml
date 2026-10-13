@@ -43,7 +43,9 @@ jobs:
       - name: Restore ccache
         uses: actions/cache/restore@v4
         with:
-          path: /mnt/nura-work/.pmbootstrap/ccache
+          path: |
+            /mnt/nura-work/.pmbootstrap/cache_ccache_aarch64
+            /mnt/nura-work/.pmbootstrap/cache_ccache_x86_64
           key: ccache-aarch64-${{ github.run_id }}
           restore-keys: ccache-aarch64-
 
@@ -139,19 +141,24 @@ jobs:
           echo "TAG=r$LREL  ESP=v$ESP（release=$PREV_REL pin=$PREV_PIN）"
 
       - name: Mu toolchain (linuxbrew clang + tree venv)
-        timeout-minutes: 20
+        timeout-minutes: 30
         run: |
           set -e
           NONINTERACTIVE=1 /bin/bash -c \
             "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           echo "/home/linuxbrew/.linuxbrew/bin" >> "$GITHUB_PATH"
+          # 十二跑定谳：fresh Homebrew bin 只有 brew 本体，clang/llvm-objcopy 必须
+          # 显式 brew install llvm（本机能过 = 本地 brew 早年装过）。验证一律不用
+          # 管道——`x --version | head -1` 管道早退假阴性（工程规则#2）就是十二跑
+          # 验证假绿的通道。
+          /home/linuxbrew/.linuxbrew/bin/brew install llvm
+          export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+          clang --version
+          llvm-objcopy --version
           # Mu venv：build-mu.sh 硬性要求 .venv/bin/python（coloredlogs 等）
           cd "$NURA_MU_DIR"
           python3 -m venv .venv
           .venv/bin/pip install -r pip-requirements.txt
-          # 验证点（研究文档 §二.4）：clang 在 PATH 且 llvm-objcopy 随行（BootShim 需要）
-          /home/linuxbrew/.linuxbrew/bin/clang --version | head -1
-          /home/linuxbrew/.linuxbrew/bin/llvm-objcopy --version | head -1
 
       - name: Kernel + device + ESP（顺序铁律：apk 先于 ESP；版本显式传参防 clone 无历史撞号）
         timeout-minutes: 180
@@ -165,7 +172,9 @@ jobs:
         continue-on-error: true
         uses: actions/cache/save@v4
         with:
-          path: /mnt/nura-work/.pmbootstrap/ccache
+          path: |
+            /mnt/nura-work/.pmbootstrap/cache_ccache_aarch64
+            /mnt/nura-work/.pmbootstrap/cache_ccache_x86_64
           key: ccache-aarch64-${{ github.run_id }}
 
       - name: Mu（r85 = config-only 轮 → --no-sync，FdtBlob 不换）
