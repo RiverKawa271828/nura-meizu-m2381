@@ -94,14 +94,22 @@ build-kernel 冷链**（native chroot bootstrap + cross aarch64 工具链 + 全�
 3. 字节差异 = 预期（非确定构建），记录入 MANIFEST 备注（CI 真值口径）。
 
 ## 四、下会话执行蓝本
-> **执行进度（2026-10-13）**：步骤 1-2 已执行 = #11 点火（run 38391060584）——
-> version 种子/checksum/内核冷链全验绿，败于 §一 #11 新败因（hexagonrpcd），修正已入
-> （build-device 预编 + ccache save-always），重触发 = #12；冷编 #12 仍需 ~2.5h（#11
-> 败轮 ccache 未落袋），此后败轮不再丢。
+> **执行进度（2026-10-14 更）**：#21 **首绿**（全程 24 分钟）→ §三 三层对比**全过**
+> （含 rootfs 内容级 debugfs 检查 = r86/r60/r3/phosh33 + 模块钉 + clang 23.1.3 双侧同源
+> 版本戳）→ **CI 草稿 r86 在库待发**。诚实未验只剩两件 = CI vmlinuz / CI rootfs 未上真机。
+> **下会话 = 硬件验收（用户已拍板）**：
+> 1. 拉 CI 三件（草稿 release 持久在库，重下即可；/tmp/r86draft/ 有全套当期副本）：
+>    `mu-r86-61401ac7.img` → boot_b；`esp-recovery-v67.img.gz` → recovery_a；
+>    `meizu-meizu20-r86-phosh.img.gz` → userdata。
+>    `flash-batch.sh --i-am-present --boot-b <CI mu> --recovery-a <CI esp gz>` + 手动
+>    `fastboot flash userdata <CI rootfs gz 解压>`；⚠ fastboot 单通道律；⚠ 覆盖 plasma
+>    玩具态（可回滚：artifacts/meizu-meizu20-plasma-mobile-local.img + waydroid 镜像
+>    备份 + 52_waydroid.nft 存档全在，恢复配方 = 本仓 waydroid-images/device-state-harvest-20261014）。
+> 2. FLASHING §5 首 boot 清单（uname 期望戳 = `#87-meizu-meizu20 SMP PREEMPT`，
+>    CI/本地双证）+ dd 读回对 sha（readback.sh）。
+> 3. 全绿 → `gh release edit r86 --draft=false` 公网发布（用户在场拍板）。
+> 4. 收官三写：config/MANIFEST 发布面切 r86 + AGENTS 现态 + experiment-log 叙事。
 1. `git pull`（本审查 + workflow 批量修正已提交推送）。
-2. `gh workflow run build-release`（一次点火）→ 盯 §二.🔶 清单顺序过关。
-3. 过关 → §三 一致性对比 → **草稿 r86 验收 → 公网发布 = 用户拍板**。
-4. 收官三写：config/MANIFEST 发布面切 r86 + AGENTS 现态 + experiment-log 叙事
-   （十跑战役全量）。
-5. 若 checksum/build-kernel 超时：§三.1 方案 C（本地 ccache 种子）后重触发
-   （save-always 入列后此预案降级为观察项：正常败轮也会留下 ccache）。
+2. ~~`gh workflow run build-release`~~（已完成 = #21 绿）。
+3. ~~§三 一致性对比~~（已完成 = 三层全过，见 §三 执行结果）。
+4. **硬件验收（本蓝本当前步）→ 发布 = 用户拍板 → 收官三写**。

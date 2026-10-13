@@ -12,13 +12,18 @@
 > 3. **任务链**（自包含两份计划）：①工作区内聚迁移 =
 >    pmos_linux 私有仓 `docs/meizu20/workspace-migration-plan-20261013.md`
 >    —— **10-13 已收官 = 零 mv**（源树全独立原地不动，nura = 控制面钉子表）。
->    ②云端构建 = **十跑审计收官（docs/CLOUD-BUILD-CI-REVIEW-20261013.md = 下会话
->    蓝本）**：#1-#10 逐败因全定谳、workflow 批量修正已入（version 种子/ESP 三态
->    公式/step 级超时/浅 clone/job 360min），**下会话 = 按蓝本 §四一次点火**。
+>    ②云端构建 = **#21 首绿（10-14，全程 24min 热缓存）+ §三 三层对比全过**（DTB≡
+>    c061acd9/固件≡29c1ee88/rootfs 内容级 debugfs 验 r86+r60+r3+phosh33/clang 23.1.3
+>    双侧同源；CI 真值 SHA256SUMS 入蓝本 §三），**CI 草稿 r86 在库待发**；#11-#21 逐败
+>    因全定谳入蓝本 §一（hexagonrpcd 依赖队列 arch 病/ccache 恢复属权/brew lld 拆配方
+>    +EDK2 lld 四格矩阵/staging unbound）；**下会话 = 硬件验收**（刷 CI 三件走 FLASHING
+>    §5，蓝本 §四 已备命令；⚠ 覆盖 plasma 玩具态，回滚件全在）→ 发布（用户拍板）→
+>    收官三写。
 >    ③设备日 = ✅**已收官（10-13）**：手动升级首验过（#87 + failed 0）+ waydroid
 >    网络三层全闭（v4 策略路由/v6 补全/MTU clamp，酷安眼判 ✓）。
->    ④剩 = 云构建 #11 首绿 → 一致性对比（蓝本 §三）→ 草稿 r86 验收 → 发布
->    （用户拍板）。
+>    ③·乙 plasma 玩具机 = ✅（10-14）：本地构建 plasma-mobile rootfs 刷机一次点亮
+>    （#87/failed 0）+ waydroid 复活全链（在线装件/备份镜像 sha 全等恢复/nft 归位/
+>    容器联网 0% loss）；在机 = plasma + waydroid 玩具态，可随时刷回。
 > 注：私有面（pmos_linux docs、meizu20-m1 取证）原地不动，路径照旧有效；旧文档里
 > 「pmbootstrap work dir 与 K30 共享须串行」已过时（K30 退役即失效；10-13 布局 v3
 > 零 mv 确认树不搬，只防本机并发）。
