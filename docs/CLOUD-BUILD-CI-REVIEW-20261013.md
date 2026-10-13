@@ -18,7 +18,8 @@
 | #7 | deps | `could not read Username for 'https://github.com'`——**postmarketOS org 无镜像仓 404**（第三方 LibrePhone=2019/pasyn=2025-11 均不可用） | 唯一正源=gitlab，有界 clone 240s×3 重试快速失败 | ✅已验（#8/#10 deps 绿） |
 | #8 | clone | 卡 50min：`timeout 900` 包 bash 时孙进程 git **孤儿化握死日志管道，timeout 形同虚设** | 全部步骤改 GitHub 原生 step 级 `timeout-minutes`（runner 管进程树）；内核树改 **--depth 1 浅 clone**（全史 ~2GB=慢根源；git archive 不受影响） | ✅已验（#9/#10 clone 绿且快） |
 | #9 | init | 卡 25min 被 step 界处决：init 向导走深后，**ask_for_device 尾部下游确认 `confirm()` 空 Enter=拒绝 → 136 万次重问循环**（日志 1080 万行） | 十修：弃 init 向导 | 见 #10 |
-| #10 | checksum | `work folder version needs to be migrated (from '' to 8)`——**纯 mkdir 缺 version 标记**，pmbootstrap 拒迁移 | 种子步补 `echo 8 > $WORK/version`（pmb/config work_version=8，本地 work dir 实证） | 🔶已修未验 |
+| #10 | checksum | `work folder version needs to be migrated (from '' to 8)`——**纯 mkdir 缺 version 标记**，pmbootstrap 拒迁移 | 种子步补 `echo 8 > $WORK/version`（pmb/config work_version=8，本地 work dir 实证） | ✅已验（#11 绿） |
+| #11 | build-device | `apk add crossdirect g++-x86_64 gcc-x86_64 …` 退出码 2——**pmbootstrap 依赖队列给依赖排队只传 cross 不传 arch**（_package.py queue_build），`arch="all"` 依赖（temp/hexagonrpcd，CI 冷包仓必现编）被 autodetect 成宿主原生 arch ⇒ CROSSDIRECT 组合装 gcc-x86_64（native 仓索引无此包）；本地有现成 apk 走 is_cached 跳过从不踩。旁证：同轮显式目标路径的固件/内核全绿 | build-device 加 hexagonrpcd 显式 `build --arch aarch64` 预编（[2/4] 步；有 apk 自动跳过）；**ccache 改 restore+save(always)**——败轮也落袋（#11 内核冷链 2h23m 白烧教训） | 🔶已修未验 |
 
 另：#10 暴露 **ESP_VER 公式 bug**：`max(release,pin)+1` 在「设备日已定版」阶段算出 68
 （正确 = 钉子 67）。修 = 三态生命周期公式（见 workflow Derive 步注释）：
@@ -26,27 +27,26 @@
 
 ## 二、全流程分级审计（run #10 时的绿基线 + 剩余链路逐段）
 
-### ✅ 已实测定绿（#10，绿到第 10 步）
+### ✅ 已实测定绿（#11，绿到内核 apk 产出）
 checkout / /mnt 摆位 / ccache 挂载 / deps（apt + gitlab 有界 clone×3）/ **浅 clone**
-（depth-1 五树 + setup.sh --clone 收尾[submodule/pmbootstrap 跳过]）/ **work dir 种子**
-（至 #10 版本；version 文件为增量修正）/ 固件 tarball 自 Release 拉进包目录 /
-**Derive**（TAG=r86 ✓）/ **Mu 工具链（linuxbrew + venv 全绿）**。
+（depth-1 五树 + setup.sh --clone 收尾[submodule/pmbootstrap 跳过]）/ **work dir 种子
+version=8**（#10 修法 #11 实测过 checksum 门）/ 固件 tarball 自 Release 拉进包目录 /
+**Derive**（TAG=r86 ✓）/ **Mu 工具链（linuxbrew + venv 全绿）**/ **checksum +
+build-kernel 冷链**（native chroot bootstrap + cross aarch64 工具链 + 全量冷编
+**2h23m** 产出 r86 apk，远在 180min 步界内）/ 固件包构建。
 
-### 🔶 已修未验（#11 跑首验清单）
-1. **version 文件种子**（本文 §一 #10 修法）→ checksum/build 不再拒迁。
-2. **checksum + build-kernel 冷链**：native chroot（x86_64）bootstrap + cross
-   aarch64 工具链（pmbootstrap 自动 crossbuild，非全 qemu）——pmOS 官方 CI 同形态
-   先例背书；风险 = 首轮冷编时长（见 §三.1）。
-3. **build-device + build-esp**：设备包/固件包小构建 + mtools 造 ESP（宿主态秒级）。
-4. **Mu --no-sync 构建**：edk2 BaseTools 宿主 gcc 原生 + brew clang cross aarch64
+### 🔶 已修未验（#12 跑首验清单）
+1. **hexagonrpcd 显式预编**（本文 §一 #11 修法）→ 设备包构建不再撞依赖队列 arch 病。
+2. **build-esp**：mtools 造 ESP（宿主态秒级）。
+3. **Mu --no-sync 构建**：edk2 BaseTools 宿主 gcc 原生 + brew clang cross aarch64
    （非模拟）+ BootShim make；上游 CI 同款 ✓。
-5. **rootfs**：pmbootstrap install --single-partition（aarch64 rootfs chroot = qemu
+4. **rootfs**：pmbootstrap install --single-partition（aarch64 rootfs chroot = qemu
    模拟包安装，慢段）+ losetup 镜像组装（runner 允许 loop，社区先例多）。
-6. **verify**：ESP 对拍走「钉子缺席→artifacts 最新」回落（v65 钉不在 CI，回落当轮
+5. **verify**：ESP 对拍走「钉子缺席→artifacts 最新」回落（v65 钉不在 CI，回落当轮
    v67）——此路径已本地验证过同款逻辑。
-7. **staging + 升级包**：device r60==钉60 / fw r3==钉3 → 升级包只含 linux apk+ESP+
+6. **staging + 升级包**：device r60==钉60 / fw r3==钉3 → 升级包只含 linux apk+ESP+
    UPGRADE.md（与本地 upgrade-r86 同配方）。
-8. **草稿发布 + 字节对拍**：gh release create r86 --draft + 资产逐件字节数对拍
+7. **草稿发布 + 字节对拍**：gh release create r86 --draft + 资产逐件字节数对拍
    （r72 教训闭环）。
 
 ### ⚠️ 风险挂观察（不阻塞点火，失败时按此排障）
@@ -74,9 +74,14 @@ checkout / /mnt 摆位 / ccache 挂载 / deps（apt + gitlab 有界 clone×3）/
 3. 字节差异 = 预期（非确定构建），记录入 MANIFEST 备注（CI 真值口径）。
 
 ## 四、下会话执行蓝本
+> **执行进度（2026-10-13）**：步骤 1-2 已执行 = #11 点火（run 38391060584）——
+> version 种子/checksum/内核冷链全验绿，败于 §一 #11 新败因（hexagonrpcd），修正已入
+> （build-device 预编 + ccache save-always），重触发 = #12；冷编 #12 仍需 ~2.5h（#11
+> 败轮 ccache 未落袋），此后败轮不再丢。
 1. `git pull`（本审查 + workflow 批量修正已提交推送）。
 2. `gh workflow run build-release`（一次点火）→ 盯 §二.🔶 清单顺序过关。
 3. 过关 → §三 一致性对比 → **草稿 r86 验收 → 公网发布 = 用户拍板**。
 4. 收官三写：config/MANIFEST 发布面切 r86 + AGENTS 现态 + experiment-log 叙事
    （十跑战役全量）。
-5. 若 checksum/build-kernel 超时：§三.1 方案 C（本地 ccache 种子）后重触发。
+5. 若 checksum/build-kernel 超时：§三.1 方案 C（本地 ccache 种子）后重触发
+   （save-always 入列后此预案降级为观察项：正常败轮也会留下 ccache）。

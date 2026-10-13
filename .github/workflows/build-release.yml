@@ -40,8 +40,8 @@ jobs:
       - name: Prepare /mnt work root
         run: sudo mkdir -p /mnt/nura-work && sudo chown "$USER":"$USER" /mnt/nura-work
 
-      - name: Cache ccache
-        uses: actions/cache@v4
+      - name: Restore ccache
+        uses: actions/cache/restore@v4
         with:
           path: /mnt/nura-work/.pmbootstrap/ccache
           key: ccache-aarch64-${{ github.run_id }}
@@ -159,6 +159,14 @@ jobs:
           bash script/build-kernel.sh
           bash script/build-device.sh
           bash script/build-esp.sh "$ESP_VER"
+
+      - name: Save ccache（失败也落袋；#11 教训：败轮丢 2.5h 冷编）
+        if: always()
+        continue-on-error: true
+        uses: actions/cache/save@v4
+        with:
+          path: /mnt/nura-work/.pmbootstrap/ccache
+          key: ccache-aarch64-${{ github.run_id }}
 
       - name: Mu（r85 = config-only 轮 → --no-sync，FdtBlob 不换）
         timeout-minutes: 30

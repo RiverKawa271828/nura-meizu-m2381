@@ -37,14 +37,25 @@ for a in "$@"; do
 	esac
 done
 
-echo "[1/3] checksum device + firmware"
+echo "[1/4] checksum device + firmware"
 "$PIN_PMB_WRAPPER" checksum "$PKG_DEVICE"
 "$PIN_PMB_WRAPPER" checksum "$PKG_FIRMWARE"
 
-echo "[2/3] build device"
+echo "[2/4] hexagonrpcd 预编（CI 冷包仓）"
+# pmbootstrap 依赖队列给依赖排队不传 arch（queue_build 只传 cross），
+# arch="all" 的依赖被 autodetect 成宿主原生 arch ⇒ CROSSDIRECT 组合去装
+# gcc-<native arch>（native 仓索引无此包 ⇒ apk 退出码 2，#11 定谳）。显式
+# --arch 走目标包路径无此病。本地包仓有 apk 时 is_cached 同款跳过。
+if compgen -G "$APK_DIR/hexagonrpcd-*" > /dev/null; then
+	echo "    已有 apk，跳过"
+else
+	"$PIN_PMB_WRAPPER" build --arch aarch64 hexagonrpcd
+fi
+
+echo "[3/4] build device"
 "$PIN_PMB_WRAPPER" build "$PKG_DEVICE" --force
 
-echo "[3/3] build firmware"
+echo "[4/4] build firmware"
 "$PIN_PMB_WRAPPER" build "$PKG_FIRMWARE" --force
 
 echo "[✓] 产物: $APK_DIR/${PKG_DEVICE}-1-r$(grep -m1 '^pkgrel=' "$DPKGDIR/APKBUILD" | cut -d= -f2).apk"
