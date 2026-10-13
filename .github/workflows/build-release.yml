@@ -160,21 +160,22 @@ jobs:
           # 显式 brew install llvm（本机能过 = 本地 brew 早年装过）。验证一律不用
           # 管道——`x --version | head -1` 管道早退假阴性（工程规则#2）就是十二跑
           # 验证假绿的通道。
-          /home/linuxbrew/.linuxbrew/bin/brew install llvm
+          /home/linuxbrew/.linuxbrew/bin/brew install llvm lld
           export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-          # 十三/十七跑定谳：新 brew llvm 把 lld 拆去独立配方且不再带 lld-link* 符号
-          # 链接；EDK2 CLANGPDB 工具链（CI 全新 Conf 生成）要的是 Cellar 路径下的
-          # lld-link 与 lld-link.exe 两个名字（本地旧树 Conf 老模板只要 lld-link，
-          # 故本地从未踩）。lld 按 argv0 多路分派，从 ld.lld 双名双位补链。
+          # 十七/十八跑定谳：新 brew 把 lld 拆成独立配方（llvm 配方连 ld.lld 都不带
+          # 了），EDK2 CLANGPDB 的 CI 全新 Conf 要 Cellar 路径下 lld-link 与
+          # lld-link.exe 两个名字。lld 配方装好后从 bin/lld-link 的绝对真身补 .exe
+          # 链；验证一律直查绝对路径——PATH fallback 会让 Ubuntu apt 的 lld 冒名
+          # 应答（十八跑实测 Ubuntu LLD 18.1.3 假绿）。
           LLB=/home/linuxbrew/.linuxbrew/bin
           LLCELL=$(dirname "$(readlink -f "$LLB/clang")")
+          LTGT=$(readlink -f "$LLB/lld-link")
           for d in "$LLB" "$LLCELL"; do
-            [ -e "$d/lld-link" ]     || ln -s ld.lld "$d/lld-link"
-            [ -e "$d/lld-link.exe" ] || ln -s ld.lld "$d/lld-link.exe"
+            [ -e "$d/lld-link.exe" ] || ln -s "$LTGT" "$d/lld-link.exe"
           done
           clang --version
           llvm-objcopy --version
-          lld-link --version
+          "$LLB/lld-link" --version
           "$LLCELL/lld-link.exe" --version
           # Mu venv：build-mu.sh 硬性要求 .venv/bin/python（coloredlogs 等）
           cd "$NURA_MU_DIR"
