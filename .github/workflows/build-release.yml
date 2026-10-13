@@ -49,6 +49,15 @@ jobs:
           key: ccache-aarch64-${{ github.run_id }}
           restore-keys: ccache-aarch64-
 
+      - name: Fix ccache permissions
+        run: |
+          # 十六跑定谳：actions/cache 恢复后目录属主=runner 用户，pmbootstrap
+          # chroot 构建用户（映射 uid 不同）写入 .ccache/tmp 即 Permission denied，
+          # 内核步 ~90s 必炸；当轮自建缓存属主正确故 #13 前不踩。构建 uid 不定，
+          # 恢复后直接放权最稳。
+          chmod -R a+rwX "$NURA_PMB_WORK/cache_ccache_aarch64" 2>/dev/null || true
+          chmod -R a+rwX "$NURA_PMB_WORK/cache_ccache_x86_64" 2>/dev/null || true
+
       - name: Host deps
         run: |
           sudo apt-get update -qq
