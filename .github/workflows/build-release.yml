@@ -58,14 +58,17 @@ jobs:
 
       - name: pmbootstrap init（CI 全新盘首建 work dir；cfg 已含全部答案 → 非交互）
         run: |
-          # pmbootstrap init 校验 pmaports remote 指官方 gitlab（二跑教训：CI clone 只有
-          # github fork → 'could not find remote name' 即死；本地仓 origin=gitlab 故无感）
+          # remote 校验：pmbootstrap init 要求 pmaports 有指官方 gitlab 的 remote
+          # （二跑教训：只有 github fork → 'could not find remote name' 即死）
           git -C "$NURA_PMAPORTS_DIR" remote add pmos \
             https://gitlab.postmarketos.org/postmarketOS/pmaports.git 2>/dev/null || true
-          # channel 解析读官方 pmos/main 的 channels.cfg（三跑教训：fork 无 main 分支 →
-          # 'Failed to read channels.cfg' 即死；fetch 官方 main 建跟踪分支即解）
-          git -C "$NURA_PMAPORTS_DIR" fetch --depth 1 pmos main:refs/remotes/pmos/main
-          bash -c "yes '' | bash script/pmbootstrap-meizu.sh init"
+          # channel 解析读 pmos/main 的 channels.cfg。四跑教训：gitlab fetch 在 runner
+          # 上可无限挂死 → 官方 fetch 降级为 60s 超时的首选；兜底 = fork main 分支自带
+          # channels.cfg 快照（孤儿提交 dd2fa470，update-ref 零网络指过去）
+          timeout 60 git -C "$NURA_PMAPORTS_DIR" fetch --depth 1 \
+            pmos main:refs/remotes/pmos/main 2>/dev/null || echo "(i) 官方 fetch 失败/超时，用 fork 快照"
+          git -C "$NURA_PMAPORTS_DIR" update-ref refs/remotes/pmos/main refs/remotes/origin/main 2>/dev/null || true
+          timeout --foreground 1200 bash -c "yes '' | bash script/pmbootstrap-meizu.sh init"
 
       - name: Firmware tarball from Release → pmaports package dir
         run: |
