@@ -33,7 +33,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 360   # 首轮冷编译预算（emulated chroot 段偏慢）；后续轮 ccache 命中大幅缩短
     steps:
       - uses: actions/checkout@v4
 
@@ -92,16 +92,18 @@ jobs:
         timeout-minutes: 5
         run: |
           # 九跑教训：init 是交互 wizard，下游端口确认空 Enter=拒绝 → 136 万次重问
-          # 循环被步界处决。而 init 对 CI 的唯一持久效果 = 建出 work dir（#1 报错
-          # 原文「Work path not found」；#2/#3 证明 work dir 在位后 checksum 即通，
-          # 配置状态由 wrapper 每次显式 -c 提供）。故 = mkdir 播种 + 两道保险：
+          # 循环被步界处决。而 init 对 CI 的持久效果 = work dir + version 标记
+          # （十跑教训：纯 mkdir 会撞「work folder version needs migration」——
+          # 空目录版本标记缺失，pmbootstrap 拒绝迁移）。配置状态由 wrapper 每次
+          # 显式 -c 提供，故种子 = version 文件 + 两道保险：
           git -C "$NURA_PMAPORTS_DIR" remote add pmos \
             https://gitlab.postmarketos.org/postmarketOS/pmaports.git 2>/dev/null || true
           timeout 30 git -C "$NURA_PMAPORTS_DIR" fetch --depth 1 \
             pmos main:refs/remotes/pmos/main 2>/dev/null || echo "(i) 官方 fetch 失败/超时，用 fork 快照"
           git -C "$NURA_PMAPORTS_DIR" update-ref refs/remotes/pmos/main refs/remotes/origin/main 2>/dev/null || true
           mkdir -p "$NURA_PMB_WORK"
-          echo "work dir seeded: $NURA_PMB_WORK"
+          echo 8 > "$NURA_PMB_WORK/version"   # pmb/config/__init__.py work_version
+          echo "work dir seeded: $NURA_PMB_WORK (version 8)"
 
       - name: Firmware tarball from Release → pmaports package dir
         run: |
@@ -116,23 +118,25 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # ESP 版本 = max(最近已发布 Release 的 ESP 资产号, config 钉 ESP 号) + 1。
-          # 两源缺一不可：仅看 Release → 本地超前腿会被重号（二跑教训：钉 66 → 误推
-          # 67）；仅看钉 → 钉可滞后于发布（首跑教训）。
+          # ESP 版本按轮生命周期取值（三态，十跑教训：max+1 在「设备日已定版」阶段
+          # 会算出 68 而正确值 = 钉子 67）：
+          #   pin > release（轮进行中，本地腿已建已定版）→ 取 pin（CI 同号异字节=各自真值）
+          #   pin ≤ release（上轮已发布，新轮未开工）→ release + 1
           LAST_TAG=$(gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --limit 5 \
             --json tagName --jq '.[0].tagName')
-          PREV_REL=""
+          PREV_REL=0
           if [ -n "$LAST_TAG" ]; then
             PREV_REL=$(gh release view "$LAST_TAG" --repo "$GITHUB_REPOSITORY" --json assets \
               --jq '.assets[].name' | grep -oP '^esp-recovery-v\K[0-9]+' | sort -n | tail -1 || true)
+            PREV_REL=${PREV_REL:-0}
           fi
           PREV_PIN=$(bash -c '. ./config.sh && [[ $REL_ESP_IMG =~ esp-recovery-v([0-9]+)\.img ]] && echo "${BASH_REMATCH[1]}"')
-          PREV=$(( ${PREV_REL:-0} > ${PREV_PIN:-0} ? PREV_REL : PREV_PIN ))
-          [ -n "$PREV" ] || { echo "!! ESP 版本两源皆空"; exit 1; }
-          echo "ESP_VER=$((PREV+1))" >> "$GITHUB_ENV"
+          PREV_PIN=${PREV_PIN:-0}
+          if [ "$PREV_PIN" -gt "$PREV_REL" ]; then ESP="$PREV_PIN"; else ESP=$((PREV_REL+1)); fi
+          echo "ESP_VER=$ESP" >> "$GITHUB_ENV"
           LREL=$(grep -m1 '^pkgrel=' "$NURA_PMAPORTS_DIR/device/downstream/linux-meizu-meizu20/APKBUILD" | cut -d= -f2)
           echo "TAG=r$LREL" >> "$GITHUB_ENV"
-          echo "TAG=r$LREL  ESP=v$((PREV+1))（max: release=${PREV_REL:-无} pin=${PREV_PIN:-无}）"
+          echo "TAG=r$LREL  ESP=v$ESP（release=$PREV_REL pin=$PREV_PIN）"
 
       - name: Mu toolchain (linuxbrew clang + tree venv)
         timeout-minutes: 20
@@ -150,7 +154,7 @@ jobs:
           /home/linuxbrew/.linuxbrew/bin/llvm-objcopy --version | head -1
 
       - name: Kernel + device + ESP（顺序铁律：apk 先于 ESP；版本显式传参防 clone 无历史撞号）
-        timeout-minutes: 150
+        timeout-minutes: 180
         run: |
           bash script/build-kernel.sh
           bash script/build-device.sh
@@ -161,7 +165,7 @@ jobs:
         run: bash script/build-mu.sh --no-sync
 
       - name: Rootfs（pmbootstrap install --single-partition 铁律在脚本内）
-        timeout-minutes: 45
+        timeout-minutes: 60
         run: bash script/build-rootfs.sh
 
       - name: Verify（交付链全对拍）

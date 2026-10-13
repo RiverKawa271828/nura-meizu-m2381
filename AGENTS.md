@@ -12,12 +12,13 @@
 > 3. **任务链**（自包含两份计划）：①工作区内聚迁移 =
 >    pmos_linux 私有仓 `docs/meizu20/workspace-migration-plan-20261013.md`
 >    —— **10-13 已收官 = 零 mv**（源树全独立原地不动，nura = 控制面钉子表）。
->    ②云端构建 = 本仓 `docs/CLOUD-BUILD-RESEARCH.md` +
->    `.github/workflows/build-release.yml`——workflow 已落地，首跑两败三修后
->    **三跑待验证**（r86 稿）。③设备日 = ✅**已收官（10-13）**：手动升级路径首验
->    过（#87 + failed 0 + 读回逐字对拍）+ **waydroid 联网四连技术面全通**（r86 =
->    v6 策略路由补全；应用内加载眼判待用户）。④剩 = 云构建草稿 r86 验收 +
->    本地/云端一致性对比 + 发布窗口（用户拍板）。
+>    ②云端构建 = **十跑审计收官（docs/CLOUD-BUILD-CI-REVIEW-20261013.md = 下会话
+>    蓝本）**：#1-#10 逐败因全定谳、workflow 批量修正已入（version 种子/ESP 三态
+>    公式/step 级超时/浅 clone/job 360min），**下会话 = 按蓝本 §四一次点火**。
+>    ③设备日 = ✅**已收官（10-13）**：手动升级首验过（#87 + failed 0）+ waydroid
+>    网络三层全闭（v4 策略路由/v6 补全/MTU clamp，酷安眼判 ✓）。
+>    ④剩 = 云构建 #11 首绿 → 一致性对比（蓝本 §三）→ 草稿 r86 验收 → 发布
+>    （用户拍板）。
 > 注：私有面（pmos_linux docs、meizu20-m1 取证）原地不动，路径照旧有效；旧文档里
 > 「pmbootstrap work dir 与 K30 共享须串行」已过时（K30 退役即失效；10-13 布局 v3
 > 零 mv 确认树不搬，只防本机并发）。
@@ -77,6 +78,15 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   黑洞；修复 = **MSS clamp 1400**（`table ip waydroid_mss` 自持 postrouting/mangle 链，
   运行态+持久入 52_waydroid.nft；ping 类 ICMP 不受 clamp 影响属预期）。⚠设备重启后
   NCM 网段会漂（172.16.42.x→10.42.0.x），devsh 硬编码地址失效时绑接口直连新网段 :23。
+  ⑥**云构建十跑战役（深夜收官 = 审计转入档）**：#1-#10 逐败因全定谳修净（十跑绿到
+  第 10 步 = deps/浅clone/种子/固件/推导/Mu 工具链全过），死于 work dir 缺 version
+  标记 + 暴露 ESP 公式三态 bug——**批量修正已入 + 全审计落
+  docs/CLOUD-BUILD-CI-REVIEW-20261013.md（= 下会话蓝本：§四一次点火 → 首绿 →
+  §三一致性对比 → 草稿 r86 → 发布留用户）**。CI 坑册新增：pmbootstrap 无 GitHub
+  镜像/不在 PyPI（唯一正源=gitlab 有界 clone×3）、shell timeout 包 bash 孙进程
+  孤儿化握死管道（必须 step 级 timeout-minutes）、init 向导不可脚本化（work dir +
+  version=8 种子替代）、ESP 版本=轮生命周期三态。本会话未触发 #11（用户令：停止
+  逐跑试错，下会话按蓝本走）。
 
 - **▶ 2026-10-13 三连（全量 = pmos_linux AGENTS 现态一句话 + experiment-log（八十八）（八十八·乙））**：
   ①**Waydroid 复活定谳（八十八）**= waydroid 1.6.3 自拉官方 `waydroid_arm64_only`
