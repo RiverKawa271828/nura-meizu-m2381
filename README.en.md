@@ -142,7 +142,7 @@ absent: 3.5mm jack, SD slot.
 
 | Mark | Example | Meaning |
 |---|---|---|
-| `r84` | `mu-r69-*.img`, `meizu-meizu20-r84.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds |
+| `r84` | `mu-r69-*.img`, `meizu-meizu20-r84.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds. From r86 the rootfs filename carries a UI suffix (e.g. `meizu-meizu20-r86-phosh.img.gz`) |
 | `v65` | `esp-recovery-v65.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v65 happens to pair with r84) |
 | `#85` | `uname -v` on device | Kernel build number = **r + 1** (pkgrel+1 baked into the kernel). First verification point on device: seeing #85 proves the r84 kernel is really running |
 | `97cdea20` | `mu-r69-97cdea20.img` | First 8 hex of the image's sha256 — anti-tamper + dd read-back comparison |

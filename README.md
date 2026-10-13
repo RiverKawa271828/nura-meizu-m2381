@@ -113,7 +113,7 @@ IR/UWB（身份未定）。
 
 | 记号 | 例子 | 含义 |
 |---|---|---|
-| `r84` | `mu-r69-*.img`、`meizu-meizu20-r84.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮 |
+| `r84` | `mu-r69-*.img`、`meizu-meizu20-r84.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮。r86 起 rootfs 件名带 UI 后缀（如 `meizu-meizu20-r86-phosh.img.gz`） |
 | `v65` | `esp-recovery-v65.img.gz` | **ESP 版本**，独立计数，每换一次内核腿 +1（与 r 轮无换算关系，v65 恰好陪 r84） |
 | `#85` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #85 = r84 内核真的在跑 |
 | `97cdea20` | `mu-r69-97cdea20.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |

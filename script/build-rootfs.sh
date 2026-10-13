@@ -46,12 +46,10 @@ echo "[✓] 产物: $OUT"
 echo "    刷写: fastboot flash userdata $OUT（⚠ 全量重刷 = 机上手工补装件清零，"
 echo "          四件套/rmtfs drop-in/uim 补丁/discover-backend 重装清单见指纹表）"
 
-# ---- 本地刷写件（非 plasma UI 另存一份裸镜像，便于免解压直刷）----
-if [ "$NURA_UI" != "plasma-mobile" ]; then
-	LOCAL_IMG="$NURA_ROOT/artifacts/meizu-meizu20-$NURA_UI-local.img"
-	cp "$OUT" "$LOCAL_IMG"
-	echo "[✓] 本地刷写件: $LOCAL_IMG（$(du -h "$LOCAL_IMG" | cut -f1)）"
-fi
+# ---- 本地刷写件（裸镜像另存带 UI 后缀一份，便于免解压直刷；多 UI 并存不混）----
+LOCAL_IMG="$NURA_ROOT/artifacts/meizu-meizu20-$NURA_UI-local.img"
+cp "$OUT" "$LOCAL_IMG"
+echo "[✓] 本地刷写件: $LOCAL_IMG（$(du -h "$LOCAL_IMG" | cut -f1)）"
 
 # ---- Release 件固化：gz（<2GiB = GitHub Release 单件上限）+ SHA256SUMS 行刷新 ----
 # 2026-10-12 用户拍板「以后专注 phosh」：固化条件改为 NURA_NO_RELEASE 开关（UI 无关，
@@ -64,7 +62,7 @@ fi
 KN="$(basename "$(ls "$APK_DIR/$PKG_LINUX-"*.apk | sort -V | tail -1)")"
 REL_TAG="r${KN##*-r}"; REL_TAG="${REL_TAG%.apk}"
 REL_DIR="$NURA_ROOT/artifacts"
-OUT_GZ="$REL_DIR/meizu-meizu20-$REL_TAG.img.gz"
+OUT_GZ="$REL_DIR/meizu-meizu20-$REL_TAG-$NURA_UI.img.gz"   # r86 起件名带 UI 后缀（r84 及以前无后缀）
 gzip -c "$OUT" > "$OUT_GZ"
 SZ="$(stat -c%s "$OUT_GZ")"
 [ "$SZ" -lt 2147483648 ] || nura_die "$OUT_GZ = $SZ 字节 ≥ 2GiB（GitHub Release 单件上限，需 sparse/分卷再议）"

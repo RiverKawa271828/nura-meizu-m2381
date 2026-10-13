@@ -93,7 +93,7 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
 |---|---|---|
 | 现役 boot_b | `mu-r69-97cdea20.img`（1.1MB） | 本仓 `artifacts/` |
 | 现役 recovery_a | `esp-recovery-v65.img.gz`（gz 化，刷写自动解压；裸 463efc45 / gz 00d2d5f9） | 本仓 `artifacts/` |
-| 现役 rootfs | `meizu-meizu20-r84.img.gz`（1.04G gz；**同轮产物，内含 r84 内核 apk + 设备包 r60 + 固件 r3，phosh 桌面 = pmOS 官方 phosh 包集**，刷完即完整系统） | `build-rootfs.sh`（gz+SHA256SUMS 自动产出） |
+| 现役 rootfs | `meizu-meizu20-r84.img.gz`（1.04G gz；**同轮产物，内含 r84 内核 apk + 设备包 r60 + 固件 r3，phosh 桌面 = pmOS 官方 phosh 包集**，刷完即完整系统）。**r86 起件名带 UI 后缀** = `meizu-meizu20-<tag>-<ui>.img.gz`（如 r86-phosh；本地实验件 = `meizu-meizu20-<ui>-local.img`，多 UI 并存不混） | `build-rootfs.sh`（gz+SHA256SUMS 自动产出） |
 | 附带 apk 两件 | `linux-meizu-meizu20-7.3.0_rc6-r84.apk`（sha8 b5dd7e62）+ `firmware-meizu-meizu20-1-r3.apk`（sha8 6e6dac0a） | `$PMB_WORK/packages/edge/aarch64/` |
 | 固件 tarball | `firmware-meizu-meizu20.tar.gz`（81MB，仅构建者需要） | pmaports 包目录 |
 | SHA256SUMS | 不含 apk 件（apk sha8 见 Release 页说明） | `build-rootfs.sh` |

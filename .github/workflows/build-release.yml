@@ -193,7 +193,7 @@ jobs:
 
           MU_IMG=$(ls -t "$ART"/mu-r*.img | head -1)
           ESP_GZ=$(ls "$ART"/esp-recovery-v"$ESP_VER".img.gz)
-          ROOTFS_GZ=$(ls "$ART"/meizu-meizu20-"$TAG".img.gz)
+          ROOTFS_GZ=$(ls "$ART"/meizu-meizu20-"$TAG"-"$NURA_UI".img.gz)
           FW_TB="$FDIR/firmware-meizu-meizu20.tar.gz"
           LREL=$(gp "$LDIR"); DREL=$(gp "$DDIR"); FREL=$(gp "$FDIR")
           LIN_APK="$APK/linux-meizu-meizu20-$(grep -m1 '^pkgver=' "$LDIR/APKBUILD" | cut -d= -f2)-r$LREL.apk"
