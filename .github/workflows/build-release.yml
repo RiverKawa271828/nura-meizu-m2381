@@ -52,10 +52,11 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y git python3 python3-venv curl mtools zip \
             build-essential uuid-dev nasm lld gcc-aarch64-linux-gnu mono-devel
-          # pmbootstrap 走 PyPI（五跑教训：gitlab.postmarketos.org 从 runner 可无限
-          # 挂死；wrapper 自带 PATH 回退，setup.sh 见 command -v 即跳过 gitlab clone）
-          pipx install pmbootstrap
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          # pmbootstrap 预铺 = GitHub 官方镜像（六跑教训：pmbootstrap 不在 PyPI；
+          # 五跑教训：gitlab.postmarketos.org 从 runner 反复挂死）。depth-1 铺到
+          # 钉子位后，setup.sh 见 pmbootstrap.py 在位即跳过其 gitlab clone。
+          timeout 600 git clone --depth 1 \
+            https://github.com/postmarketOS/pmbootstrap "$NURA_PMB_CHECKOUT"
 
       - name: Clone source trees (setup.sh --clone)
         run: timeout 900 env NURA_SKIP_DOCTOR=1 bash script/setup.sh --clone
