@@ -169,9 +169,12 @@ jobs:
       - name: Kernel + device + ESP（顺序铁律：apk 先于 ESP；版本显式传参防 clone 无历史撞号）
         timeout-minutes: 180
         run: |
-          bash script/build-kernel.sh
-          bash script/build-device.sh
-          bash script/build-esp.sh "$ESP_VER"
+          # 十四跑教训：pmbootstrap 失败时控制台只有一行总结，真错误在 log.txt，
+          # runner 销毁即失明——败时必吐尾部。
+          die() { rc=$?; echo "=== pmbootstrap log.txt tail ==="; tail -100 "$NURA_PMB_WORK/log.txt" 2>/dev/null; exit "$rc"; }
+          bash script/build-kernel.sh || die
+          bash script/build-device.sh || die
+          bash script/build-esp.sh "$ESP_VER" || die
 
       - name: Save ccache（失败也落袋；#11 教训：败轮丢 2.5h 冷编）
         if: always()
