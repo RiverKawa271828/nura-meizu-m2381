@@ -67,22 +67,41 @@ jobs:
           [ "$OK" = 1 ] || { echo "!! pmbootstrap 三次获取失败（gitlab 不可达？）"; exit 1; }
           python3 "$NURA_PMB_CHECKOUT/pmbootstrap.py" --version
 
-      - name: Clone source trees (setup.sh --clone)
-        run: timeout 900 env NURA_SKIP_DOCTOR=1 bash script/setup.sh --clone
+      - name: Clone source trees (shallow + bounded)
+        timeout-minutes: 20
+        run: |
+          set -e
+          # 浅 clone（CI 只需 HEAD 构建产物，git archive 照常可用；全史 clone 是
+          # 八跑卡死根源：内核 fork 带整条 linux 历史 ~2GB）。直接 clone = timeout
+          # 的直接子进程，杀得动（八跑教训：timeout 包 bash 时孙进程 git 孤儿化
+          # 握死日志管道，timeout 形同虚设 → 一律用 step 级 timeout-minutes）。
+          clone_shallow() { # <url> <dir> <branch>
+            [ -e "$2/.git" ] && { echo "  ✓ $2 已在位"; return 0; }
+            timeout 480 git clone --depth 1 --branch "$3" "$1" "$2"
+          }
+          clone_shallow https://github.com/RiverKawa271828/linux-mobile-ports \
+            "$NURA_LINUX_DIR" meizu20-t4b
+          clone_shallow "$(bash -c '. ./config.sh && echo "$PIN_PMAPORTS_GIT"')" \
+            "$NURA_PMAPORTS_DIR" phoenix
+          clone_shallow "$(bash -c '. ./config.sh && echo "$PIN_MU_GIT"')" \
+            "$NURA_MU_DIR" meizu20-mars-port
+          # 补 Mu Binaries submodule + pmbootstrap 跳过检查（树全在位则纯校验）
+          env NURA_SKIP_DOCTOR=1 bash script/setup.sh --clone
 
       - name: pmbootstrap init（CI 全新盘首建 work dir；cfg 已含全部答案 → 非交互）
+        timeout-minutes: 25
         run: |
           # remote 校验：pmbootstrap init 要求 pmaports 有指官方 gitlab 的 remote
           # （二跑教训：只有 github fork → 'could not find remote name' 即死）
           git -C "$NURA_PMAPORTS_DIR" remote add pmos \
             https://gitlab.postmarketos.org/postmarketOS/pmaports.git 2>/dev/null || true
-          # channel 解析读 pmos/main 的 channels.cfg。四跑教训：gitlab fetch 在 runner
-          # 上可无限挂死 → 官方 fetch 降级为 60s 超时的首选；兜底 = fork main 分支自带
-          # channels.cfg 快照（孤儿提交 dd2fa470，update-ref 零网络指过去）
-          timeout 60 git -C "$NURA_PMAPORTS_DIR" fetch --depth 1 \
+          # channel 解析读 pmos/main 的 channels.cfg：官方 fetch 降级为 30s 超时首选
+          # （四跑教训：gitlab fetch 可无限挂死；git 是 timeout 直接子进程杀得动），
+          # 兜底 = fork main 分支 channels.cfg 快照（dd2fa470，update-ref 零网络）
+          timeout 30 git -C "$NURA_PMAPORTS_DIR" fetch --depth 1 \
             pmos main:refs/remotes/pmos/main 2>/dev/null || echo "(i) 官方 fetch 失败/超时，用 fork 快照"
           git -C "$NURA_PMAPORTS_DIR" update-ref refs/remotes/pmos/main refs/remotes/origin/main 2>/dev/null || true
-          timeout --foreground 1200 bash -c "yes '' | bash script/pmbootstrap-meizu.sh init"
+          bash -c "yes '' | bash script/pmbootstrap-meizu.sh init"
 
       - name: Firmware tarball from Release → pmaports package dir
         run: |
@@ -116,6 +135,7 @@ jobs:
           echo "TAG=r$LREL  ESP=v$((PREV+1))（max: release=${PREV_REL:-无} pin=${PREV_PIN:-无}）"
 
       - name: Mu toolchain (linuxbrew clang + tree venv)
+        timeout-minutes: 20
         run: |
           set -e
           NONINTERACTIVE=1 /bin/bash -c \
@@ -130,18 +150,22 @@ jobs:
           /home/linuxbrew/.linuxbrew/bin/llvm-objcopy --version | head -1
 
       - name: Kernel + device + ESP（顺序铁律：apk 先于 ESP；版本显式传参防 clone 无历史撞号）
+        timeout-minutes: 150
         run: |
           bash script/build-kernel.sh
           bash script/build-device.sh
           bash script/build-esp.sh "$ESP_VER"
 
       - name: Mu（r85 = config-only 轮 → --no-sync，FdtBlob 不换）
+        timeout-minutes: 30
         run: bash script/build-mu.sh --no-sync
 
       - name: Rootfs（pmbootstrap install --single-partition 铁律在脚本内）
+        timeout-minutes: 45
         run: bash script/build-rootfs.sh
 
       - name: Verify（交付链全对拍）
+        timeout-minutes: 8
         run: bash script/verify.sh
 
       - name: Stage release assets + manual upgrade zip + SHA256SUMS
