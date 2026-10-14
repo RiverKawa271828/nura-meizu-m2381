@@ -3,15 +3,15 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-14 @ waydroid 固化轮：**device r61 = waydroid 五件 + 网络修复入包**——重刷即用不再机上收编；在机 = plasma 本地段 10-14 重刷 + **#87** 内核不变（boot 链没动），机上 device 仍 r60+在线件，r61 随下轮构建生效；发布面 = Release r84（r86 发布件随云构建出）
+## 工作态（2026-10-14 @ r87 发布轮：**device r62 = 摘 discover + phosh 商店 flatpak 支持**（waydroid 五件 r61 起在包）——CI 云构建出 r87 发布件；在机 = **#88 + v68 + device r62**（apk+ESP 双腿升级 10-14，读回对 ✓）；发布面 = Release r84（r87 发布件随本轮云构建出）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**86**（waydroid netd 双族策略路由：IP_ADVANCED_ROUTER/IP_MULTIPLE_TABLES[r85] + IPV6_MULTIPLE_TABLES/SUBTREES[r86]；config-only，fork tip `140e5a8e308a` 不动） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r86.apk` | 6e5dd1b8 | 机上 apk add |
-| Mu 镜像 | r69（DTS 零改动沿用） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
-| ESP | **v67**（r86 内核腿；仓内 `.img.gz`；10-13 上机读回逐字对拍 ✓） | `artifacts/esp-recovery-v67.img.gz` | 2ad63003（裸镜像）/ 444dec3f（gz） | recovery_a |
-| 设备包 / 固件包 | **r61**（waydroid 固化：depends +waydroid/waydroid-pyc/waydroid-systemd/gbinder-python/libgbinder + 52_waydroid.nft 入包 + preset disable waydroid-container 按需启动；镜像不入包 = init 在线自拉或离线恢复）/ r3（r85/r86 轮零改动） | 同目录 | — | 机上 apk add |
-| 上机期望 | `uname -v` = `7.3.0-rc6` → **#87**（10-13 实测 ✓；waydroid 联网四连技术面全通：rule×15+default 路由+gw/外网 0% loss+DNS 解析） | — | — | — |
+| 内核 apk | 7.3.0_**rc6**-r**87**（**纯版本 bump，内容与 r86 全同**：waydroid netd 双族策略路由/GPU 钳零件/no_console_suspend 全在；fork tip `140e5a8e308a` 不动；r87 腾号给本轮 release tag=r87 律） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r87.apk` | 1aa9a260 | 机上 apk add |
+| Mu 镜像 | r69（DTS 零改动沿用；r87 apk dtb 同源 c061acd9 verify ✓） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
+| ESP | **v68**（r87 内核腿；仓内 `.img.gz`；10-14 上机读回整分区逐字节 ✓） | `artifacts/esp-recovery-v68.img.gz` | e7a044a8（裸镜像）/ 086a4eef（gz） | recovery_a |
+| 设备包 / 固件包 | **r62**（摘 discover-backend-apk[KDE 商店=plasma 伴生件] + flatpak/gnome-software-plugin-flatpak[phosh 商店真 flatpak 支持，用户拍板]；r61 = waydroid 五件 + 52_waydroid.nft + preset disable）/ r3（零改动） | 同目录 | 5dc0fbd9（r62 apk）/ 6e6dac0a（fw） | 机上 apk add |
+| 上机期望 | `uname -v` = `7.3.0-rc6` → **#88**（10-14 实测 ✓；waydroid v4 互联网+DNS 通，netd 零报错；52_waydroid.nft 装包后首 boot 手工 `nft -f` 补应用一次，后续 boot 由 nftables.service 正常加载） | — | — | — |
 
 **r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂
 （gzip 重压 workaround 撤）；RTC 用户态三件下线后时钟正确 + timedatectl 首次读出 RTC；
@@ -25,8 +25,7 @@ b41b88889cadf6060e35…）**——「b41b8889cadf」系连排四个 8 丢一位�
 39-41°C + 七条回归全绿；payload[0]=SUCCESS 但 ifpc 恒零 =「ack 不执行」[FW 行为态]——
 内核线收官，全量 = pmos_linux `docs/meizu20/gpu-idle-devfreq-round-20261011.md` §13。
 
-**回退配对**：内核 r84 + ESP v65（裸 463efc45 / gz 00d2d5f9）+ device r60（= r84/v65/#85，
-= Release r84 在役件；r86 发布件上线并验收前勿销）。
+**回退配对**：内核 r86 + ESP v67（裸 2ad63003 / gz 444dec3f；CI 同号件 gz dc8bed66 异字节同版本）+ device r60（= #87 在机验证过的一代，10-13/10-14 两轮实机绿）；再退 = r84 + v65（裸 463efc45 / gz 00d2d5f9）+ device r60（= Release r84 在役件；r87 发布件上线并验收前勿销）。
 
 ## 发布面现役产物（2026-10-12 @ r84；= Release r84 已发布；用户拍板「以后专注 phosh」：r66 已删，r80 = plasma 末版存档未删）
 
@@ -67,6 +66,7 @@ plasma→**phosh**；**升级口径**：内核/设备包/固件 = **apk 腿（ro
 
 | 现象 | 形态 | 定性 |
 |---|---|---|
+| **首 boot 三 unit failed**（meizu-dsp-mount / qbootctl / qbootctl-meizu） | `systemctl --failed` 3 件：「no dsp partition found」/「Failed to open bootdev dir」 | **全新刷写 userdata 后首 boot 独有竞态**：units 跑早于块设备枚举；boot-2 起全自愈 failed=0 + qbootctl 正常重标（10-14 CI rootfs 首刷实测）。传感器首 boot 缺 /mnt/dsp 一次，`systemctl start meizu-dsp-mount` 即补。OSK Stevia 同型（×6 败后 Started 收敛，锁屏可用）。候补修 = 三 unit 排序加固 |
 | journal 早期时间戳 | 标着旧日期（如 Oct 06） | **rtc1 旧值未同步**：NTP 前内核时钟 = RTC 存值，早期日志全错标；勿当旧 boot 日志读。WiFi+NTP 后恢复；写回闭环待复验 |
 | DPU「no encoder found for crtc 0」 | *ERROR* ×2-3 条，仅 boot 早期 | 窗口性噪音：面板 cold-enable restart 自愈窗口撞上合成器 vblank 请求（dpu_crtc.c:192/282）；运行期零刷，勿追 |
 | a740_sqe.fw | failed with error -2 | 假警报（27s 后重试成功；silime 时代已定性） |

@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="86"      # r86 = waydroid netd 策略路由补全（（八十八·乙）续：r85 开 v4 [IP_ADVANCED_ROUTER/IP_MULTIPLE_TABLES] 后 netd addInterface 走 v6 规则仍 EAFNOSUPPORT(97) 级联 → r86 补 IPV6_MULTIPLE_TABLES+SUBTREES；上机实测 = #87 一次点亮 failed 0 + waydroid rule×15/default 路由/gw·外网 0% loss/DNS 解析全通；config-only，fork tip 不动 140e5a8e308a；apk sha8 6e5dd1b8）；r85（apk c1d22119）= 同案 v4 半层，被 r86 取代；r84 = GPU/IFPC 收官（（八十六））回退件
-REL_DEVICE_PKGREL="61"     # r61 = waydroid 固化（10-14 用户拍板「以后构建带上 waydroid 和其修复」）：depends +waydroid/waydroid-pyc/waydroid-systemd/gbinder-python/libgbinder 五件 + 52_waydroid.nft（放行+MSS clamp）入包 /etc/nftables.d/ + preset disable waydroid-container（按需启动对齐玩具轮）；镜像不入包（waydroid init 在线自拉 arm64_only 或离线恢复）；r60 = modules-load.d 补 uhid 自载（BLE HID 无 open-time autoload）；r59 = uinput 用户态胶水（60-meizu20-uinput.rules uaccess+static_node / modules-load.d）；r58 = s2idle×systemd 看门狗修复（udevd/logind WatchdogSec=0 + 14 内部服务放宽 30min + journald sync 30s）
+REL_LINUX_PKGREL="87"      # r87 = 纯版本 bump（零源码/config 变更；release tag=内核 pkgrel 律，device r62 新版发布轮；期望 #88；内核内容与 r86 全同：waydroid 双族策略路由/GPU 钳零件/no_console_suspend 全在）；r86 = waydroid netd 策略路由补全（（八十八·乙）：IPV6_MULTIPLE_TABLES+SUBTREES，#87 实机验过）；r84 = GPU/IFPC 收官（（八十六））回退件
+REL_DEVICE_PKGREL="62"     # r62 = 摘 discover-backend-apk（10-14 用户拍板「phosh 移除 discover」——KDE 商店+flatpak/fwupd 后端=plasma-mobile 伴生件，新装 rootfs 不再带入，已装设备 apk del 清理）；r61 = waydroid 固化：depends +waydroid/waydroid-pyc/waydroid-systemd/gbinder-python/libgbinder 五件 + 52_waydroid.nft（放行+MSS clamp）入包 /etc/nftables.d/ + preset disable waydroid-container；r60 = modules-load.d 补 uhid；r59 = uinput 用户态胶水；r58 = s2idle×systemd 看门狗修复
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v67.img.gz"  # v67 = r86 内核（裸 2ad63003 / gz 444dec3f；10-13 本地构建+上机读回逐字对拍）；v66 = r85（裸 6ba496f5 / gz 327805aa）；v65 = r84 回退件（裸 463efc45 / gz 00d2d5f9）；v64 = r83 冻结留档未发货（裸 68b32cec / gz c617b083）；v63 = r82（彼侧重压版 gz 425ecd37，裸 533f40d0）；v62 = r81（裸 b41b8888，全量 b41b88889cadf6060e35…）；v61 = r80（裸 cb7f1e5a）；v60 = r79（裸 0ccfcf72）
-REL_KERNEL_VER="#87"       # 在机实测 ✓（10-13 #87 一次点亮 failed 0；#N=pkgrel+1 定律）；回退配对 = r84/v65/#85（=Release r84）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v68.img.gz"  # v68 = r87 内核（裸 e7a044a8 / gz 086a4eef；10-14 本地构建，刷写读回分段对头部）；v67 = r86（裸 2ad63003 / gz 444dec3f；CI 件 gz dc8bed66 异字节同版本，#87 实机验过）；v66 = r85（裸 6ba496f5 / gz 327805aa）；v65 = r84 回退件（裸 463efc45 / gz 00d2d5f9）；v62 = r81（裸 b41b8888，全量 b41b88889cadf6060e35…）
+REL_KERNEL_VER="#88"       # r87 期望（#N=pkgrel+1 定律；r87 内容=r86，#87 已 10-13/10-14 两轮实机验过）；回退配对 = r86/v67/#87
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。
