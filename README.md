@@ -27,13 +27,14 @@
 
 ```bash
 sha256sum -c SHA256SUMS                 # 全 OK 才继续
-fastboot flash boot_b      mu-r69-97cdea20.img    # Mu-UEFI 固件（含设备树）
-fastboot flash recovery_a  esp-recovery-v65.img   # ESP = 内核引导腿
-fastboot flash userdata    meizu-meizu20-r84.img  # rootfs（⚠清空全部数据）
+fastboot flash boot_b      mu-r87-646a0eff.img       # Mu-UEFI 固件（含设备树）
+fastboot flash recovery_a  esp-recovery-v68.img      # ESP = 内核引导腿
+fastboot flash userdata    meizu-meizu20-r87-phosh.img  # rootfs（⚠清空全部数据）
 fastboot set_active b && fastboot reboot
 ```
 
-约 1 分钟起 phosh 桌面。**睡眠可直接用**（本 Release 起）：空闲自动睡（默认 5 分钟）+
+约 1 分钟起 phosh 桌面。**waydroid 已预装**（首次打开在线自拉官方 arm64_only 镜像）+
+**phosh 商店带 flatpak 支持**。**睡眠可直接用**：空闲自动睡（默认 5 分钟）+
 电源键/RTC 唤醒，睡眠期间 **WoWLAN 保持 WiFi 连接**（设备包自带服务，零配置）。
 已知小边角：唤醒后若无输入，桌面的空闲自动睡不自动重新武装——给一次输入即恢复，日常无感。
 
@@ -113,10 +114,10 @@ IR/UWB（身份未定）。
 
 | 记号 | 例子 | 含义 |
 |---|---|---|
-| `r84` | `mu-r69-*.img`、`meizu-meizu20-r84.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮。r86 起 rootfs 件名带 UI 后缀（如 `meizu-meizu20-r86-phosh.img.gz`） |
-| `v65` | `esp-recovery-v65.img.gz` | **ESP 版本**，独立计数，每换一次内核腿 +1（与 r 轮无换算关系，v65 恰好陪 r84） |
-| `#85` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #85 = r84 内核真的在跑 |
-| `97cdea20` | `mu-r69-97cdea20.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |
+| `r87` | `mu-r87-*.img`、`meizu-meizu20-r87-phosh.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮。r86 起 rootfs 件名带 UI 后缀（如 `meizu-meizu20-r87-phosh.img.gz`） |
+| `v68` | `esp-recovery-v68.img.gz` | **ESP 版本**，独立计数，每换一次内核腿 +1（与 r 轮无换算关系，v68 恰好陪 r87） |
+| `#88` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #88 = r87 内核真的在跑 |
+| `646a0eff` | `mu-r87-646a0eff.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |
 
 设计细节与 #N 定律原理 → [docs/DESIGN.md](docs/DESIGN.md)；现役各件对应哪版 → [MANIFEST.md](MANIFEST.md)；**升级操作 → [docs/UPGRADE.md](docs/UPGRADE.md)**。
 

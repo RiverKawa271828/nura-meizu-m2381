@@ -35,7 +35,7 @@ PIN_MU_BINARIES_GIT="https://github.com/RiverKawa271828/Device-Binaries"     # �
 PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # 已建独立仓；phoenix 整条已推（10-07 推送窗口；pmOS 官方在 GitLab，GitHub 无镜像 fork 可用）
 
 # ---- Release（Phase-2；setup.sh --fetch-release 按此拉现役件/锚三件）----
-PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r84"  # 发布面（2026-10-12 r84 上线 = 首个 phosh 发布面，用户拍板「以后专注 phosh」；r80 = plasma 末版存档，r66 已删；r72 半截流教训在册：大件上传验收 = 本地 gzip -t + 资产字节数逐件对拍，完整下载回读闭环可选）
+PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r87"  # 发布面（2026-10-14 r87 上线 = waydroid 预装 + phosh 商店 flatpak + 摘 discover，CI 云构建 #22 产物；r84 = 上一个 phosh 发布面，r80 = plasma 末版存档；r72 半截流教训在册：大件上传验收 = 本地 gzip -t + 资产字节数逐件对拍，完整下载回读闭环可选）
 
 # ---- 包身份 ----
 PKGVER="7.3.0_rc6"

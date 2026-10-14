@@ -8,22 +8,23 @@
 >    ≥40 才继续干活；**旧目录保留勿删（底档）**。
 > 2. **主档必读**：pmos_linux 私有仓 `AGENTS.md` = 硬定律/硬性禁令/交互通道
 >    与操作纪律/坑册的单一事实源（本文不复制）；取证叙事 = 同仓
->    `docs/meizu20/experiment-log.md`（最新 =（八十八）（八十八·乙））。
+>    `docs/meizu20/experiment-log.md`（最新 =（八十九））。
 > 3. **任务链**（自包含两份计划）：①工作区内聚迁移 =
 >    pmos_linux 私有仓 `docs/meizu20/workspace-migration-plan-20261013.md`
 >    —— **10-13 已收官 = 零 mv**（源树全独立原地不动，nura = 控制面钉子表）。
->    ②云端构建 = **#21 首绿（10-14，全程 24min 热缓存）+ §三 三层对比全过**（DTB≡
->    c061acd9/固件≡29c1ee88/rootfs 内容级 debugfs 验 r86+r60+r3+phosh33/clang 23.1.3
->    双侧同源；CI 真值 SHA256SUMS 入蓝本 §三），**CI 草稿 r86 在库待发**；#11-#21 逐败
->    因全定谳入蓝本 §一（hexagonrpcd 依赖队列 arch 病/ccache 恢复属权/brew lld 拆配方
->    +EDK2 lld 四格矩阵/staging unbound）；**下会话 = 硬件验收**（刷 CI 三件走 FLASHING
->    §5，蓝本 §四 已备命令；⚠ 覆盖 plasma 玩具态，回滚件全在）→ 发布（用户拍板）→
->    收官三写。
+>    ②云端构建 = **✅全链收官（10-14）**：#21 首绿+三层对比 → **硬件验收全过**
+>    （CI 三件实机点亮 #87，读回逐字节；plasma 玩具态被覆盖，回滚件全在）→
+>    用户拍板新版 → **#22 = r87 首发轮全绿（20m28s）→ Release r87 上线 Latest**
+>    （waydroid 预装 + phosh 商店 flatpak + 摘 discover；8 件制含 device apk；
+>    被取代的 r86 草稿已删，r85/r86 未发布在案）；台账/蓝本 =
+>    docs/CLOUD-BUILD-CI-REVIEW-20261013.md。
 >    ③设备日 = ✅**已收官（10-13）**：手动升级首验过（#87 + failed 0）+ waydroid
->    网络三层全闭（v4 策略路由/v6 补全/MTU clamp，酷安眼判 ✓）。
+>    网络三层全闭（v4 策略路由/v6 补全/MTU clamp，酷安眼判 ✓）；**10-14 续 =
+>    #88/v68/r62 双腿升级 + waydroid 复活**（离线恢复镜像 + Session/Container
+>    RUNNING + v4 互联网/DNS 通；52_waydroid.nft 装包后首 boot 手工 `nft -f`
+>    补应用一次，后续 boot 由 nftables.service 正常加载）。
 >    ③·乙 plasma 玩具机 = ✅（10-14）：本地构建 plasma-mobile rootfs 刷机一次点亮
->    （#87/failed 0）+ waydroid 复活全链（在线装件/备份镜像 sha 全等恢复/nft 归位/
->    容器联网 0% loss）；在机 = plasma + waydroid 玩具态，可随时刷回。
+>    + waydroid 复活全链；**10-14 晚该态已被 r87 CI rootfs 覆盖**（回滚件照旧全在档）。
 > 注：私有面（pmos_linux docs、meizu20-m1 取证）原地不动，路径照旧有效；旧文档里
 > 「pmbootstrap work dir 与 K30 共享须串行」已过时（K30 退役即失效；10-13 布局 v3
 > 零 mv 确认树不搬，只防本机并发）。
@@ -58,7 +59,27 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-13 更；新会话从这里接）
+## 现态（2026-10-14 更；新会话从这里接）
+
+- **▶ 2026-10-14 晚轮：CI 硬件验收 + r87 发布轮（一轮双事，Release r87 = Latest）**：
+  ①**硬件验收全过**：CI #21 三件（mu-r86/esp-v67/r86-phosh rootfs）刷入实机一次点亮——
+  三件 sha 对拍 SUMS 全等、recovery_a 整分区逐字节、boot_b 分段对头部（**新坑：boot_b 整
+  分区 sha 永远≠镜像 sha，填充区 = stock boot 遗留非零，惰性**）；CI vmlinuz 双证实锤
+  （uname #87 + CI 构建时间戳）；**首 boot 三 unit 竞态入册**（meizu-dsp-mount/qbootctl×2
+  跑早于块设备枚举，boot-2 自愈 failed=0；OSK Stevia 同型收敛；已入 MANIFEST 已知非回归
+  表）。②**r87 发布轮（用户拍板「做新版再发布，预装 waydroid，phosh 移除 discover」+ 追加
+  拍板「加 flatpak 支持」）**：device **r62** = 摘 discover-backend-apk + flatpak/
+  gnome-software-plugin-flatpak（r61 waydroid 五件保持）；内核 **r87** 纯版本 bump（保
+  「release tag=内核 pkgrel」律，TAG 由 pmaports pkgrel 推导）；ESP **v68** 本地先建先钉
+  （「pin>release→取 pin」公式前置）；本地 verify 全绿 + 设备 apk+ESP 双腿升级 **#88** 读回
+  对 ✓ → CI **#22 全绿 20m28s** → 草稿三层对拍全过（DTB CI≡本地 c061acd9 / CI ESP↔CI apk
+  901ebc15 / rootfs debugfs = r87+r62+r3+waydroid+flatpak 插件零 discover）→ **Release r87
+  上线 Latest**（8 件制含 device r62 apk + upgrade zip；release notes 带升级路径与首 boot
+  说明）；被取代的 r86 草稿删除。③**设备查缺补漏**：r62+flatpak 上机（gnome-software 的
+  fwupd/flatpak-libs 属合法依赖树保留，discover 系清零）、waydroid 离线镜像恢复 + 容器
+  RUNNING + v4 互联网/DNS 通（v6 侧无上游=环境态，应用回退 v4 同 10-13 态）。④文档四件对齐
+  r87（README 中英/FLASHING/MANIFEST）+ config PIN_RELEASE_BASE→r87；pmaports `5da0578`、
+  nura 已推；**回退配对 = r86/v67/r60（两轮实机绿）**。
 
 - **▶ 2026-10-13 晚轮：布局 v3 零 mv + 云端构建上线 + 设备日 r86/waydroid 收官（一轮四事）**：
   ①**零 mv 拍板落地**（用户三连：源树全部独立仓库——内核多设备分支制/pmaports 多设备包/

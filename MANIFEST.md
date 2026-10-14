@@ -27,31 +27,26 @@ b41b88889cadf6060e35…）**——「b41b8889cadf」系连排四个 8 丢一位�
 
 **回退配对**：内核 r86 + ESP v67（裸 2ad63003 / gz 444dec3f；CI 同号件 gz dc8bed66 异字节同版本）+ device r60（= #87 在机验证过的一代，10-13/10-14 两轮实机绿）；再退 = r84 + v65（裸 463efc45 / gz 00d2d5f9）+ device r60（= Release r84 在役件；r87 发布件上线并验收前勿销）。
 
-## 发布面现役产物（2026-10-12 @ r84；= Release r84 已发布；用户拍板「以后专注 phosh」：r66 已删，r80 = plasma 末版存档未删）
+## 发布面现役产物（2026-10-14 @ r87；= Release r87 已发布 Latest；**CI 云构建 #22 首发**（run 38492230609，20m28s）；发布真值 = CI SHA256SUMS）
 
-| 件 | 版本 | 路径 | sha8 | 刷写目标 |
-|---|---|---|---|---|
-| 内核 apk | 7.3.0_rc6-r**84**（GPU/IFPC 轮收官：revert A 路 + 钳零防御 + payload 订阅；fork `140e5a8e308a`） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r84.apk` | b5dd7e62 | 机上 apk add |
-| 设备包 apk | 1-r**60**（uhid 自载；r57-59 = wowlan service + s2idle 看门狗修复 + uinput 随包历史） | 同目录 `device-meizu-meizu20-1-r60.apk` | — | 机上 apk add |
-| 固件包 apk | 1-r**3** | 同目录 `firmware-meizu-meizu20-1-r3.apk` | 6e6dac0a | 机上 apk add |
-| Mu 镜像 | r69（DTS 零改动自 r66 轮沿用） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
-| ESP | v65（仓内 `.img.gz`；刷写/verify 自动解压） | `artifacts/esp-recovery-v65.img.gz` | 463efc45（裸）/ 00d2d5f9（gz） | recovery_a |
-| rootfs 镜像 | r84 同轮（--single-partition；内含内核 r84 apk + 设备包 r60 + 固件 r3；**phosh** 桌面 = pmOS 官方 phosh 包集） | Release 分发件 `meizu-meizu20-r84.img.gz`（1.04GiB） | a2fdcd33 | userdata |
-| 源码钉（发布轮 r84 时） | fork `140e5a8e308a` @meizu20-t4b ｜ Mu `bdea825c` @meizu20-mars-port（r69 FdtBlob，未变）｜ pmaports `b4e5147` @phoenix（pkgrel 84）——**三树已推 GitHub** | — | — | — |
+| 件 | 版本 | 发布件 sha8 | 刷写目标 |
+|---|---|---|---|
+| 内核 apk | 7.3.0_rc6-r**87**（=r86 内容纯版本轮） | 191f2344（CI）/ 1aa9a260（本地同轮件，异字节=时间戳） | 机上 apk add |
+| 设备包 apk | 1-r**62**（摘 discover + flatpak 商店支持；waydroid 五件 r61 起） | 5dc0fbd9 | 机上 apk add（升级用户：waydroid 预装/flatpak/discover 摘除只随新装 rootfs，已装机手动补装） |
+| 固件包 apk / tarball | 1-r**3** / r3（零改动） | apk 6e6dac0a / tarball 29c1ee88 | 机上 apk add |
+| Mu 镜像 | **mu-r87-646a0eff**（DTS = FdtBlob c061acd9 同源，CI 构建） | 646a0eff | boot_b |
+| ESP | **v68**（r87 内核腿；CI vmlinuz `901ebc15` ↔ CI apk 配对；同号异字节：CI gz `883610f6` / 本地 gz `086a4eef`（裸 e7a044a8，在机件）各自真值） | 883610f6（CI 发布件） | recovery_a |
+| rootfs 镜像 | r87 同轮（--single-partition；内含 r87 + device r62 + fw r3 + **waydroid 五件预装** + **flatpak 商店**；phosh） | e53e804d（876.9MB，`meizu-meizu20-r87-phosh.img.gz`） | userdata |
+| 升级包 | upgrade-r87.zip = 内核 apk + ESP v68 + UPGRADE.md | ff726542 | 升级腿 |
 
-**Release r84 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r84>**（2026-10-12
-上传；本地件 `gzip -t` 过 + 上传后资产字节数与本地逐件对拍全等；gz 自回归通过的在机
-同款 local.img 生成 = 单一真值源）：直刷三件 + 固件 tarball + apk 两件 + `SHA256SUMS`
-共 7 件（r80 同构）。**直刷三件（boot / recovery / rootfs）必须同轮配对**——外人路径 =
-FLASHING「快速路径 A」。**r84 起 build-rootfs.sh 固化条件 = NURA_NO_RELEASE 开关**
-（UI 无关，phosh 默认进发布面；原「非 plasma 自动跳过」作废）。
+**Release r87 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r87>**（2026-10-14
+上线 Latest；8 件 = 直刷三件 + 固件 tarball + apk 三件[内核/设备/固件] + upgrade zip + SHA256SUMS；
+SUMS 自洽全 OK + 三层对拍全过[DTB CI≡本地 c061acd9 逐字节 / CI ESP↔CI apk 901ebc15 配对 /
+rootfs debugfs 内容级 = r87+r62+r3+waydroid+flatpak 插件零 discover + 版本层 TAG=r87/ESP=v68/#88]）。
+**回退配对**：r86 + v67 + device r60（#87 两轮实机绿）；再退 r84 + v65（= 上一个发布面，未删）。
+上轮 r86 草稿已删（被 r87 取代；r85/r86 未发布，历史轮次在册）。
 
-期望 uname：`7.3.0_rc6-r84` → **#85**（10-12 本机 phosh 回归全绿实测 ✓ =（八十七）：
-boot ~50s / failed 0 / 音频 T4c 直驱自动钉 / GPU 钳零件 busy_delta 恒 0 / 睡眠 rtcwake
-51s resume 0.240s + wowlan 武装 / 看门狗修复件全生效）。本轮发布面变化：UI =
-plasma→**phosh**；**升级口径**：内核/设备包/固件 = **apk 腿（rootfs 内 apk add）+ ESP 腿
-（recovery_a）原地升级，不重刷 userdata**（/home 与配置全保留）；rootfs 全量重刷仅用于
-换 UI/换发行版/从零装机。r80 plasma 末版存档（Release 未删）。
+期望 uname：`7.3.0_rc6-r87` → **#88**（10-14 在机 apk+ESP 双腿升级实测 ✓，读回整分区逐字节）。
 
 ## 回滚锚（已删，2026-10-13）
 
@@ -87,5 +82,6 @@ plasma→**phosh**；**升级口径**：内核/设备包/固件 = **apk 腿（ro
 r61 首航（10-06）→ r63/r64 录音轮 → r65 pm8008 → r66 fsa4480 摘除（10-07，首个 Release）→
 r72 首传半截流撤回（10-08，教训入流程）→ r80 async flip + uhid（10-11，Release 上线）→ r84 phosh 首个 phosh 发布面 + r66 删除（10-12，专注 phosh 拍板）→
 r85 waydroid netd 策略路由 v4 半层（10-13，config-only）→ r86 v6 补全（IPV6_MULTIPLE_TABLES/SUBTREES，
-上机四连通）；
+上机四连通）→ **r87 waydroid 预装 + phosh 商店 flatpak + 摘 discover（10-14，CI 云构建 #22 首发轮，
+Release 上线 Latest；未发布代次 r85/r86 随本记录在案）**；
 逐轮产物/sha 明细见 git log。ESP 自 v47 起仓内 gz 化（v43–v45 裸镜像已退役出史）。

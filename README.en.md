@@ -36,17 +36,19 @@ rootfs. Log in as `user`, password `1234` (use `sudo` with the same password for
 
 ```bash
 sha256sum -c SHA256SUMS                 # all OK before continuing
-fastboot flash boot_b      mu-r69-97cdea20.img    # Mu-UEFI firmware (device tree baked in)
-fastboot flash recovery_a  esp-recovery-v65.img   # ESP = kernel boot leg
-fastboot flash userdata    meizu-meizu20-r84.img  # rootfs (⚠ wipes all data)
+fastboot flash boot_b      mu-r87-646a0eff.img         # Mu-UEFI firmware (device tree baked in)
+fastboot flash recovery_a  esp-recovery-v68.img        # ESP = kernel boot leg
+fastboot flash userdata    meizu-meizu20-r87-phosh.img # rootfs (⚠ wipes all data)
 fastboot set_active b && fastboot reboot
 ```
 
-The phosh desktop comes up in about a minute. **Suspend works out of the box** (as of
-this release): automatic idle suspend is on by default (5 min), wake via power button /
-RTC, and **WoWLAN keeps the WiFi connection alive while asleep** (the device package
-ships the service — zero config). Known minor quirk: after wake, if you don't touch the
-device the desktop won't re-arm automatic suspend by itself — one input restores it.
+The phosh desktop comes up in about a minute. **Waydroid is preinstalled** (first
+launch pulls the official arm64_only image online) and **the phosh store ships with
+flatpak support**. **Suspend works out of the box**: automatic idle suspend is on by
+default (5 min), wake via power button / RTC, and **WoWLAN keeps the WiFi connection
+alive while asleep** (the device package ships the service — zero config). Known minor
+quirk: after wake, if you don't touch the device the desktop won't re-arm automatic
+suspend by itself — one input restores it.
 
 Pre-flight checklist (unlocked bootloader / Flyme baseline / anchors), step-by-step
 verification, and brick recovery → **[docs/FLASHING.md](docs/FLASHING.md)** (Chinese). **Upgrading an installed device** (no userdata wipe, data preserved) → **docs/UPGRADE.md** (Chinese).
@@ -142,10 +144,10 @@ absent: 3.5mm jack, SD slot.
 
 | Mark | Example | Meaning |
 |---|---|---|
-| `r84` | `mu-r69-*.img`, `meizu-meizu20-r84.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds. From r86 the rootfs filename carries a UI suffix (e.g. `meizu-meizu20-r86-phosh.img.gz`) |
-| `v65` | `esp-recovery-v65.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v65 happens to pair with r84) |
-| `#85` | `uname -v` on device | Kernel build number = **r + 1** (pkgrel+1 baked into the kernel). First verification point on device: seeing #85 proves the r84 kernel is really running |
-| `97cdea20` | `mu-r69-97cdea20.img` | First 8 hex of the image's sha256 — anti-tamper + dd read-back comparison |
+| `r87` | `mu-r87-*.img`, `meizu-meizu20-r87-phosh.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds. From r86 the rootfs filename carries a UI suffix (e.g. `meizu-meizu20-r87-phosh.img.gz`) |
+| `v68` | `esp-recovery-v68.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v68 happens to pair with r87) |
+| `#88` | `uname -v` on device | Kernel build number = **r + 1** (pkgrel+1 baked into the kernel). First verification point on device: seeing #88 proves the r87 kernel is really running |
+| `646a0eff` | `mu-r87-646a0eff.img` | First 8 hex of the image's sha256 — anti-tamper + dd read-back comparison |
 
 Design details and the #N law → [docs/DESIGN.md](docs/DESIGN.md) (Chinese); which
 version is current → [MANIFEST.md](MANIFEST.md) (Chinese).
