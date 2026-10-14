@@ -25,6 +25,10 @@
 >    补应用一次，后续 boot 由 nftables.service 正常加载）。
 >    ③·乙 plasma 玩具机 = ✅（10-14）：本地构建 plasma-mobile rootfs 刷机一次点亮
 >    + waydroid 复活全链；**10-14 晚该态已被 r87 CI rootfs 覆盖**（回滚件照旧全在档）。
+>    ④下轮 = **等 7.3 stable（~10-18；出 rc8 则顺延 ~10-25）→ rebase 专项**（用户点名
+>    开工）：carry-list 重放 + 拼车花屏 0xC4 旋钮 + printk 挂起回归两分钟判别法复核 +
+>    ath12k 醒后 21s 残留；候补件全落自有 fork（上游线 10-14 已取消）；7.4 binder
+>    Rust 化前瞻雷随车。
 > 注：私有面（pmos_linux docs、meizu20-m1 取证）原地不动，路径照旧有效；旧文档里
 > 「pmbootstrap work dir 与 K30 共享须串行」已过时（K30 退役即失效；10-13 布局 v3
 > 零 mv 确认树不搬，只防本机并发）。
