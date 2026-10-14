@@ -20,8 +20,8 @@
 >    docs/CLOUD-BUILD-CI-REVIEW-20261013.md。
 >    ③设备日 = ✅**已收官（10-13）**：手动升级首验过（#87 + failed 0）+ waydroid
 >    网络三层全闭（v4 策略路由/v6 补全/MTU clamp，酷安眼判 ✓）；**10-14 续 =
->    #88/v68/r62 双腿升级 + waydroid 复活**（离线恢复镜像 + Session/Container
->    RUNNING + v4 互联网/DNS 通；52_waydroid.nft 装包后首 boot 手工 `nft -f`
+>    #88/v68/r62 双腿升级 + waydroid 复活✅酷安眼判 ✓**（离线恢复镜像 + Session/
+>    Container RUNNING + v4 互联网/DNS 通；52_waydroid.nft 装包后首 boot 手工 `nft -f`
 >    补应用一次，后续 boot 由 nftables.service 正常加载）。
 >    ③·乙 plasma 玩具机 = ✅（10-14）：本地构建 plasma-mobile rootfs 刷机一次点亮
 >    + waydroid 复活全链；**10-14 晚该态已被 r87 CI rootfs 覆盖**（回滚件照旧全在档）。
@@ -77,7 +77,7 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   上线 Latest**（8 件制含 device r62 apk + upgrade zip；release notes 带升级路径与首 boot
   说明）；被取代的 r86 草稿删除。③**设备查缺补漏**：r62+flatpak 上机（gnome-software 的
   fwupd/flatpak-libs 属合法依赖树保留，discover 系清零）、waydroid 离线镜像恢复 + 容器
-  RUNNING + v4 互联网/DNS 通（v6 侧无上游=环境态，应用回退 v4 同 10-13 态）。④文档四件对齐
+  RUNNING + v4 互联网/DNS 通 + **酷安眼判 ✓**（v6 侧无上游=环境态，应用回退 v4 同 10-13 态）。④文档四件对齐
   r87（README 中英/FLASHING/MANIFEST）+ config PIN_RELEASE_BASE→r87；pmaports `5da0578`、
   nura 已推；**回退配对 = r86/v67/r60（两轮实机绿）**。
 
