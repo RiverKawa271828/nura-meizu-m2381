@@ -25,10 +25,27 @@
 >    补应用一次，后续 boot 由 nftables.service 正常加载）。
 >    ③·乙 plasma 玩具机 = ✅（10-14）：本地构建 plasma-mobile rootfs 刷机一次点亮
 >    + waydroid 复活全链；**10-14 晚该态已被 r87 CI rootfs 覆盖**（回滚件照旧全在档）。
->    ④下轮 = **等 7.3 stable（~10-18；出 rc8 则顺延 ~10-25）→ rebase 专项**（用户点名
->    开工）：carry-list 重放 + 拼车花屏 0xC4 旋钮 + printk 挂起回归两分钟判别法复核 +
->    ath12k 醒后 21s 残留；候补件全落自有 fork（上游线 10-14 已取消）；7.4 binder
->    Rust 化前瞻雷随车。
+>    ④下轮 = **等 7.3 stable（rc7 已出（10-19 核，tag ec8bf828）→ stable ~10-25；
+>    出 rc8 则顺延 ~11-01）→ rebase 专项**（用户点名开工）。**窗口期先做纯宿主预备**
+>    （下会话起）：carry-list 逐项复核三分表（点名两查：ath12k `0d777aa2ca77` 单 pdev
+>    回归上游修没修→0012 摘否；printk `9e70a5e109a4` 上游修没修→`no_console_suspend`
+>    摘/留）+ **0xC4 归零补丁预写并 rc6 基线本地预构建**（verify 走通，设备日只剩刷+判）
+>    + ath12k 醒后 21s 三路候选调研（候补件落自有 fork，上游线已取消）+ printk 两分钟
+>    判别法固化流程卡。rebase 本体 = carry-list 重放 + 0xC4 拼车 + printk 复核 + ath12k
+>    21s；7.4 前瞻雷随车（binder Rust 化 / kalama SDE catalog 收割 / `drivers/virt`
+>    gunyah 复查点在册——7.3 全周期无 gunyah，驱动只进 merge window）。
+>    ⑤**窗口期取证+小工作（10-19 用户拍板「下会话开始」）**：⚠**设备现役 = Flyme**
+>    （用户备 root = adb+su；取证全只读，刷写红线不破；**回 pmOS 后这些窗口全失效，宜先做**）。
+>    **取证四件（叙事落 pmos_linux experiment-log）**：
+>    F1 stock FDT 全量回收（/sys/firmware/fdt→dtc，fallback /proc/device-tree 归档）+
+>    stock 相机 open 内核日志 → **喂相机驱动轮**（s5k3p9 supply/MCLK/RST 映射，战役挂起件）；
+>    F2 SWR 麦会话取证（tinymix 全量 idle vs VA 录音 vs B3/B4 源 + soundwire debugfs +
+>    wcd938x dmesg）→ **喂麦克风复燃**（stock=SWR 域在册，= rebase 后下一里程碑）；
+>    F3 modem EFS dd 存档 = modemst1/modemst2/fsc/fsg 四分区（只读；「内部 NV/EFS 贵路」
+>    素材，蜂窝复燃）；F4 stock DPU/DSC 侧动态 dump → 喂花屏 S2 对拍（DSI ctrl 三态
+>    10-06 已收勿重收）。**小工作** = 公开蒸馏队列③音频方法论/④GPU·IFPC（纯宿主写作）
+>    + 花屏 §6 调研型 #2 唤醒命令组完整性/#3 DSC 唤醒重同步静态对拍 + hexagonrtc r7/r8
+>    收敛。取证毕设备去向留用户拍板（留 Flyme / 重刷现役三件回 pmOS，回滚件全在档）。
 > 注：私有面（pmos_linux docs、meizu20-m1 取证）原地不动，路径照旧有效；旧文档里
 > 「pmbootstrap work dir 与 K30 共享须串行」已过时（K30 退役即失效；10-13 布局 v3
 > 零 mv 确认树不搬，只防本机并发）。
