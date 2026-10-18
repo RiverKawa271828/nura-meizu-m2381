@@ -221,13 +221,71 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
   全零，字节级逐条对应）——「wake 漏发 post-on 组」怀疑排除。残留 = 「stock 唤醒
   是否重放同一套字节」仍未抓到 DCS 级运行流（可选挂 0xC4 设备日并行件）。
 3. **DSC 唤醒重同步**【✅ 静态对拍判负 = 无缺位（2026-10-19）】：主线 `prep_dsc`
-  挂每帧 kickoff 路径（dpu_encoder.c:2102 `_dpu_encoder_prepare_for_kickoff` 内，
-  每帧重写 dsc_config + hw_pp enable_dsc；disable 才 unprep）；stock 侧 10-19 F4
-  evtlog 实证 `_dce_dsc_setup`/`_dce_dsc_setup_single` 同样每帧 commit 在跑
-  （1080x2400 双块参数在案，dpu/evtlog 素材）——两侧同为「每帧 DSC setup」形态，
-  唤醒后 kickoff 恢复即重写，结构性「缺位」不成立。此判反而强化 §4.4 r22 判词
-  （poison = DDIC 自身 sleep transition）。剩余对拍面 = PPS/threshold 内容值与
-  编程时序位（非结构差异）。
+   挂每帧 kickoff 路径（dpu_encoder.c:2102 `_dpu_encoder_prepare_for_kickoff` 内，
+   每帧重写 dsc_config + hw_pp enable_dsc；disable 才 unprep）；stock 侧 10-19 F4
+   evtlog 实证 `_dce_dsc_setup`/`_dce_dsc_setup_single` 同样每帧 commit 在跑
+   （1080x2400 双块参数在案，dpu/evtlog 素材）——两侧同为「每帧 DSC setup」形态，
+   唤醒后 kickoff 恢复即重写，结构性「缺位」不成立。此判反而强化 §4.4 r22 判词
+   （poison = DDIC 自身 sleep transition）。剩余对拍面 = PPS/threshold 内容值与
+   编程时序位（非结构差异）。
+
+   **条 3·余面对拍（S2 内容值表，2026-10-19 宿主轮落档；推算列，不改判词）**
+
+   素材四面：F4 evtlog（18 行 DSC = 6 组三行）× CodeLinaro display-drivers
+   `display-kernel.lnx.5.15.1` 分支族源码（evtlog 行号 544/358 落 r1/r15+ 族
+   542/359 ± 厂家移行；r2–r14 族 = 538/356，两族语义同形）× stock FDT 面板节点
+   （meizu amoled cmd mode boe with DSC，四档 timing 全读）× 主线 fork 代码
+   （panel-boe-meizu20.c / dsi_host.c / drm_dsc_helper.c / dpu_encoder.c /
+   dpu_hw_dsc_1_2.c；kalama core_major≥7 → 走 1.2 寄存器布局）。
+
+   evtlog 解码（下游签名，r14 版）：
+
+   - `_dce_dsc_setup:538` = [enc_id, topology, cur_roi.xywh, prv_roi.xywh, hact,
+     vact] → `3c 9 0 0 438 960 0 0 0 0 438 960` = enc 60 / **topology 9 =
+     SDE_RM_TOPOLOGY_DUALPIPE_DSCMERGE** / 全屏 ROI 1080×2400 / prv 全零
+     （= enable/modeset 后首 commit 族，6 组 = 6 次 ROI 变更）。
+   - `_dce_dsc_setup_single:356` = [enc_id, roi.w, roi.h, dsc_common_mode, index,
+     active, merge_3d, disable_merge_3d, 4hsmerge] → `3c 438 960 3 {0|1} 1 0 1 0` =
+     **dsc_common_mode = 3 = SPLIT_PANEL|MULTIPLEX（cmd）**，index 0/1 双块。
+   - 时序位：`_dce_dsc_setup` 开头 ROI 相等早退 → **stock 的 DSC 重编程 = ROI 变更
+     触发**，非字面每帧；主线 = 每 kickoff 无条件重写（幂等，稳态内容同，唤醒恢复
+     路径两侧都重写 DSC）→ **时序差**，不动摇条 3 主判。
+
+   逐项对拍表（stock 列 = FDT+源码推算；主线列 = fork 代码推算）：
+
+   | # | 项 | stock | 主线 | 判 |
+   |---|---|---|---|---|
+   | 1 | pic 1080×2400 / slice 540×20 / slice_count 2 | ✓ | ✓ | 等价 |
+   | 2 | DSC 1.2 / bpp 8 / bpc 10 / block_pred 1 / convert_rgb 1 / line_buf 11 | ✓ | ✓ | 等价 |
+   | 3 | chunk 540 / slice-per-pkt 2 | FDT `qcom,mdss-dsc-slice-per-pkt=2` | `MIPI_DSI_MODE_DSC_ALL_SLICES_IN_PKT` → `dsc_slice_per_pkt = slice_count = 2` | 等价（小米类②我方无差） |
+   | 4 | initial_xmit_delay 512 / initial_offset 6144 / quant 15,15 / flatness 7,16 | LUT（`sde_dsc_rc_init_param_lut`） | VESA 1.2 444 表 | 等价 |
+   | 5 | buf_thresh 14 值 / min,max,bpg 15 组 | spec 表 | 同一 spec 表 | 逐值全等 |
+   | 6 | slice_bpg 1302 / final_offset 4336 / scale_dec 7 / init_scale 32 / det_thresh 8 / rc_model 8192 / mux 48 / pps_id 0 | ✓ | ✓ | 等价 |
+   | 7 | dsc_common_mode 3 / topology DUALPIPE_DSCMERGE / 双块 merge / ob_max_addr 2399 | evtlog 直证 + catalog（`has_reduced_ob_max` 仅 diwali） | 推算同值 | 等价 |
+   | 8 | 链路速率 | FDT 四档同值 `panel-clockrate = 0x41351d80` = **1094000000** | `hs_rate` 钉 1094000000（计算值 885.7 注释在案） | 等价（小米类③已被 pin 吸收） |
+   | 9 | **first_line_bpg_offset** | **13**（`_get_dsc_v1_2_bpg_offset`：slice_h 20 → ≤30 档） | **12**（VESA 1.2 444 表 8bpp/10bpc） | **内容差（根因项）** |
+   | 10 | → initial_dec_delay（DSC_HRD_DELAYS[31:16] / PPS18-19） | **549**（hrd 1061−512） | **526**（hrd 1038−512） | 内容差（#9 派生） |
+   | 11 | → nfl_bpg_offset（DSC_RC_OFFSETS_2[15:0] / PPS28-29） | **1402** | **1294** | 内容差（#9 派生） |
+   | 12 | → scale_increment_interval（DSC_RC_SCALE_INC_DEC[15:0] / PPS22-23） | **469** | **488** | 内容差（#9 派生） |
+   | 13 | **ENC_DF_CTRL.initial_lines** | **3**（Hardent 核公式：pipeline_latency 28/rtl_w 64 族） | **2**（简化公式 92×3+ixd+47；1.2 寄存器路径无 cmd +1——`+1` 只在旧版 dpu_hw_dsc.c） | **内容差** |
+   | 14 | **DSC_CFG bit17（cmd 位）** | **0**（该位仅 4HS 变体路径用） | **1**（cmd 模式置位；0x23001 vs 0x3001） | **内容差** |
+   | 15 | PPS 载体 | DI=0x0A 传输层包（每次 enable、强制 LP、动态生成） | 标准 DCS 0xA0 长写（`wake_pps_late` 旋钮可切 stock 形态） | 载体差（§4.1/4.2 在册，ProfileID 0xB 特类） |
+
+   判读：
+   - 全部内容差 = 一个根因族（#9 flbo 13↔12 派生 #10/11/12）+ 两条独立小差（#13
+     initial_lines 3↔2、#14 bit17）。**自洽性两侧各自成立**（stock PPS↔寄存器同为
+     13 族，主线同为 12 族；DDIC 按各自 PPS 解码）⇒ 正常显示两态皆工作（日用现量），
+     不构成功能错误，也无结构差异级新线索——**只记档不排实验，0xC4 仍是首发实验**。
+   - 收窄价值：主机可达维度上，两会话在 DSC 内容层的全部差异 = 表 #9–#15——往后任何
+     「会话参数落错档」类假说的对拍面用这张表（外加 PPS 载体 0xA0↔0x0A）。
+   - 小米 11 Pro 三类映射：①静态模板覆盖计算值 = 不适用（两侧 DSC 寄存器全由驱动
+     算出，DT 只喂几何）；②切片打包 = 等价（#3）；③链路速率钉死 vs 计算 = 等价
+     （#8）。附两小经验互证：PPS 长写语义（主线 `mipi_dsi_picture_parameter_set`
+     即 DCS 长写，无彼线坑）；亮度 0x0404 回文 / panel-ready 门控 = 我方现役无此病。
+   - 寄存器直证位：stock debugfs 活读（`sde_off`/`sde_reg`）对 DSC 1.2 **机制性
+     不可达**——`dsc_init_1_2` 不注册 dump 子范围 → off 写入被 `is_valid_range` 拒
+     （这也是 F4 只拿到 evtlog 流的深层原因）。stock 列维持推算（分支族已由 evtlog
+     行号钉到 r1/r15+ 族 ± 厂家移行；解码在 r14/r1 双族复核）。
 4. **寄存器 diff 残余位**【未测】：RBUF/INSERT_DCS（0x44 bit16 仅醒后置位）/
   仪式位族除 0xC4 外的残余，是否有唤醒特定语义。
 5. **供电实测矛盾**【低先验】：声明全 1.8V，早轮曾实测 1.2/3.0（板上无测试点，
