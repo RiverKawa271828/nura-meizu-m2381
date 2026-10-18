@@ -44,9 +44,14 @@
 >    rebase 本体 = carry-list 重放 + 0xC4 拼车 + printk 复核 + ath12k
 >    21s；7.4 前瞻雷随车（binder Rust 化 / kalama SDE catalog 收割 / `drivers/virt`
 >    gunyah 复查点在册——7.3 全周期无 gunyah，驱动只进 merge window）。
->    **▶窗口期剩余任务已排程（下会话照做）= docs/window-round-card-20261020.md**
->    （第一步先核 stable 出没出：出 = 转正式 rebase 轮照 dryrun 报告 §清单；
->    未出 = 1蒸馏③[steamos 在等]+3wrapper守卫 首选 / 2相机驱动轮预备卡 次选 /
+>    **▶窗口期剩余任务（下会话照做）= docs/window-round-card-20261020.md**
+>    （**✅10-19 晚已收官三项**：第 0 项窗口检查 = **stable 未出**[ls-remote 只到
+>    v7.3-rc7 `ec8bf828`，rc8 未出，下会话开工仍须重跑本检查]；**1 蒸馏③ =
+>    docs/AUDIO-METHOD.md 成文**[nura `782f3d1`，出声必需清单可平移 + probe 竞态
+>    四层 + 工作点/响度封卷 + UCM 三坑 + 录音腿边界；pmos 队列卡 ③ 打勾 `f1b2d5d`；
+>    带话素材 = §10 尾句「已公开成文」，用户转告 steamos 线]；**3 wrapper 守卫 =
+>    pmbootstrap-meizu.sh 落 NURA_INSIDE_UNIT→systemd-run 守卫**[nura `0f3a3e4`，
+>    沙箱 checksum 冒烟 exit 0]。**下会话余项**：2 相机驱动轮预备卡 次选 /
 >    4花屏S2对拍·5SDE catalog·6binder调研 并列 / 7upgrade.sh[点头件]；
 >    每项独立可停，commit 不 push。已关闭：rc7 演练[勿重做]、路线 D[勿再提]）。
 >    ⑤**窗口期取证+小工作（10-19 用户拍板「下会话开始」）**：⚠**设备现役 = Flyme**
@@ -110,6 +115,15 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-19 更；新会话从这里接）
 
+- **▶ 2026-10-19 晚 窗口期轮第 1 段（（九十一）；零设备纯宿主；执行卡 0/1/3 项收官）**：
+  ①**窗口检查 = stable 未出**（ls-remote 只到 v7.3-rc7 `ec8bf828`，rc8 未出 → 不转正式
+  rebase 轮，下会话开工须重跑检查）；②**蒸馏③ = [docs/AUDIO-METHOD.md](docs/AUDIO-METHOD.md)
+  成文**（~460 行：硬件地图/路线判别[CLASH 挂起史]/**§2 出声必需清单可平移**[DTS→config→固件→服务串→tplg→UCM→pulse 七层，按包内实文件点名]/§3 probe 竞态四层[r48 机制无关重试环现形]/§4 ADSP 域要/不要[audiopd B2 判负入册]/§5 工作点与响度封卷[409/457/251 域+r46 校准+四维回退纪律+fast-switch 判负]/§6 UCM 三坑/§7 录音腿边界[断在 DMIC 物理域，复燃=WCD/SWR bring-up]/§8 五层排查序；stock 提取件零入仓；蒸馏不改判词[S2 四维改判/r63 勘正形态照写]）；
+  ③**wrapper 守卫固化**（pmbootstrap-meizu.sh 加 build-kernel.sh 同款 NURA_INSIDE_UNIT
+  →systemd-run 守卫 + 三坑注释 + NURA_*/PMB_* 钉子 --setenv 透传；沙箱 checksum 冒烟
+  exit 0——10-19 演练轮「直调 wrapper 沙箱 sudo mknod EPERM」坑根治）。commit：nura
+  `782f3d1`+`0f3a3e4`+窗口卡/接续卡更钉、pmos_linux `f1b2d5d`+experiment-log（九十一）；
+  **全部未 push（推送窗口 = 用户）**。余项 = 2/4/5/6/7（见执行卡）。
 - **▶ 2026-10-19 窗口期轮：Flyme 取证四件全落袋 + rebase 预备四件收官（（九十）（九十·乙）；设备现役 = Flyme 未动）**：①**取证四件**（素材 = meizu20-m1/flyme-forensics-20261019/，只读红线零破）= F1 stock FDT 791KB + bootargs 全量（★旧判读修正「stock FDT 无 soundwire」作废）+ 相机 ACK 真值 s5k3p9sx 0x3109@0x5a；F2 SWR 麦域 418 控件全景（手拨不通 = stock 要 HAL AFE 会话）；F3 modem EFS 四分区双侧哈希 MATCH；F4 DSC allocated:2 + evtlog 每帧 dce_dsc_setup。②**预备四件** = printk 上游未修（`no_console_suspend` 留）+ ath12k 0012 不摘（carry 三件全留，qrtr 悬案闭环）+ 0xC4 旋钮预写预构建（fork `c1d84dcf80ec` → r88/v69 verify 走通，验证件不上机）+ printk 流程卡。③**花屏 §6 #2/#3 双判负**（无漏组/无缺位 → 强化 r22 判词，0xC4 = 唯一漏测项地位再确认）+ hexagonrpcd r7/r8 收敛。④蒸馏③④未动（留专注会话）。**四仓只 commit 未 push（推送窗口 = 用户）**；取证毕设备去向留用户拍板。
 
 - **▶ 2026-10-14 晚轮：CI 硬件验收 + r87 发布轮（一轮双事，Release r87 = Latest）**：

@@ -14,7 +14,10 @@
     推送/发布窗口仍 = 用户拍板）。
   - 未出（或 rc8 出现顺延 ~11-01）→ 按下表顺序做，做几件算几件，每件做完落档即停。
 
-## 1. 蒸馏③音频方法论（首项；steamos 线在等正式版）
+  > ✅ **10-19 执行：未出**（ls-remote kernel.org 只到 v7.3-rc7 `ec8bf828`，rc8 未出）
+  > → 按卡执行；下会话开工仍需**重跑本检查**（窗口随时可能开）。
+
+## 1. 蒸馏③音频方法论（首项；steamos 线在等正式版）✅ 2026-10-19 收官（nura `782f3d1` + pmos 队列卡打勾 `f1b2d5d`；未 push）
 
 - **目标**：`nura docs/AUDIO-METHOD.md`（命名对齐 BOOT-CHAIN-RE/PANEL-CORRUPTION 风格）。
   核心 = 出声必需清单的展开版：直驱 T4c 工作点 + 声卡非自然 probe 的编排
@@ -45,7 +48,7 @@
   + 首 ACK 判据（probe 读 id=0x3109）+ 红线（不碰门闩 i2c8=880000）」，存档即可，
   不开驱动轮（复燃 = 用户点名）。
 
-## 3. wrapper 守卫固化（小件，10 分钟，随时插空）
+## 3. wrapper 守卫固化（小件，10 分钟，随时插空）✅ 2026-10-19 收官（nura `0f3a3e4`；守卫置于 cfg 生成前 + NURA_*/PMB_* 钉子逐个 --setenv 透传；沙箱 checksum 冒烟 exit 0 走 systemd-run，pmaports 零 diff）
 
 - **目标**：`script/pmbootstrap-meizu.sh` 加 build-kernel.sh 同款守卫
   （NURA_INSIDE_UNIT 缺失 → systemd-run `--setenv=NURA_INSIDE_UNIT=1` 重入）——
