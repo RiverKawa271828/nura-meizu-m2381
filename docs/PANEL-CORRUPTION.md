@@ -207,11 +207,19 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
 
 ## 6. 未解与下一步（按先验排序）
 
-1. **0xC4 归零单变量**【旋钮已预写（2026-10-19），设备日点火】：`msm.zero_clkout_timing`
-   （fork `c1d84dcf80ec`，0644 运行时可写，下一个 host clock setup 写 0 代替
-   clk_post/clk_pre；默认 0 = 现行为不变）。rc6 基线预构建走 verify 后随 7.3 rebase
-   车带上；设备日流程 = 刷 → 旋钮归零 → 真睡×5 → 眼判，不开独立轮。低先验
-  （更像结构差异而非病因），但它是档案里唯一漏测的寄存器级差异。
+1. **0xC4 归零单变量**【✅ 已点火（2026-10-19 设备日，提前于 rebase 轮——用户拍板
+   「不等 stable 先做花屏大件、手机刷回 nura」）；**眼判待用户回执定谳**】：
+   `msm.zero_clkout_timing`（fork `c1d84dcf80ec`，0644 运行时可写，下一个
+   host clock setup 写 0 代替 clk_post/clk_pre；默认 0 = 现行为不变）。
+   执行面（10-19）：apk r88 + ESP v69 upgrade.sh 首跑双腿全绿（实测 #89 + 读回对
+   ✓；首跑抓到 apk 腿 UNTRUSTED 假绿坑已根治，见 upgrade.sh/UPGRADE.md）→ 默认态
+   回归绿（boot 29.6s / failed 0 / 声卡+三音频服务 / Goodix 触控）→ **cycle 0
+   默认态对照真睡×1**（knob=N）→ 旋钮=1 → **真睡×5**（rtcwake -d /dev/rtc1
+   -m mem -s 51；journal 六对 suspend entry/exit = 6/6 真 s2idle，
+   susp_success 0→6，dsi_err 零新增，每轮 NCM 秒回无睡死）。
+   **判读分支（眼判回执后落）**：cycle 1-5 醒后不花 = 0xC4 定罪 → 工程解落地形态
+   讨论（默认态改不改留用户）；还花 = 0xC4 洗清 → 条 4 残余位顶上（只记档不开工）。
+   低先验（更像结构差异而非病因），但它是档案里唯一漏测的寄存器级差异。
 2. **唤醒命令组完整性**【✅ 静态对拍判负 = 无漏组（2026-10-19）】：stock FDT（flyme
   取证 10-19，运行态全量 fdt 791KB）全部命令组属性 = `qcom,vid-on-commands`/
   `cmd-on-commands`/off/qsync（7 面板变体各一套）；**不存在独立 pre-panel-on 组**

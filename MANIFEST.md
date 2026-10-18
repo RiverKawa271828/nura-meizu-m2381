@@ -3,7 +3,7 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-14 @ r87 发布轮：**device r62 = 摘 discover + phosh 商店 flatpak 支持**（waydroid 五件 r61 起在包）——CI 云构建出 r87 发布件；在机 = **#88 + v68 + device r62**（apk+ESP 双腿升级 10-14，读回对 ✓）；发布面 = Release r84（r87 发布件随本轮云构建出）
+## 工作态（2026-10-19 0xC4 设备日更钉：在机 = **#89 + v69 + apk r88**（upgrade.sh 首跑双腿全绿 10-19，读回对 ✓；boot_b mu-r69 头段精确长度对 ✓）——**底 = CI r86-phosh rootfs + device r60 + fw r3**（用户 10-18 深夜刷回，非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62；现态已知良[10-13/10-14 两轮实机绿一代]）；发布面 = Release r87（Latest 不变）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
@@ -13,13 +13,16 @@
 | 设备包 / 固件包 | **r62**（摘 discover-backend-apk[KDE 商店=plasma 伴生件] + flatpak/gnome-software-plugin-flatpak[phosh 商店真 flatpak 支持，用户拍板]；r61 = waydroid 五件 + 52_waydroid.nft + preset disable）/ r3（零改动） | 同目录 | 5dc0fbd9（r62 apk）/ 6e6dac0a（fw） | 机上 apk add |
 | 上机期望 | `uname -v` = `7.3.0-rc6` → **#88**（10-14 实测 ✓；waydroid v4 互联网+DNS 通，netd 零报错；52_waydroid.nft 装包后首 boot 手工 `nft -f` 补应用一次，后续 boot 由 nftables.service 正常加载） | — | — | — |
 
-**r88/v69 预构建验证件（2026-10-19 窗口期预备轮；不上机不发布）**：fork `c1d84dcf80ec`
+**r88/v69 旋钮件（2026-10-19 窗口期预备轮预构建；同日 0xC4 设备日已上机，非发布面）**：fork `c1d84dcf80ec`
 （`msm.zero_clkout_timing` 旋钮 = 花屏 0xC4 归零单变量，0644 运行时可写，默认 0 =
 现行为）+ pmaports `77925c5` → apk **r88**（sha8 `cc1ecc44`）+ ESP **v69**（裸
 `daf03fea` / gz `0866315d`，build-esp 构造性同源）。verify [1]-[3][5] 全绿；[4] 红 =
 口径错位（APK 取 APKBUILD 现值 r88 vs 钉子 v68 发布面），工作态配对构造性同源非真红
-——rebase 轮出正式件时自消。设备日（rebase 后）流程 = 刷 rebase 件 →
-`msm.zero_clkout_timing=1` 旋钮归零 → 真睡×5 → 眼判（判据 = docs/PANEL-CORRUPTION.md §6）。
+——rebase 轮出正式件时自消。**10-19 上机实锤**：upgrade.sh 首跑双腿（apk r88 + ESP
+v69 → 实测 #89 + recovery_a 读回 daf03fea 对 ✓），首跑抓到 apk 腿 UNTRUSTED 假绿坑
+（CI rootfs 烤 CI 临时钥）已根治入 upgrade.sh/UPGRADE.md；实验执行 = 默认态对照真睡
+×1 + 旋钮归零真睡×5 全部 s2idle 入睡（journal 六对 entry/exit，susp_success 0→6，
+dsi_err 零新增）；眼判 = 用户回执定谳（docs/PANEL-CORRUPTION.md §6 条 1）。
 
 **r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂
 （gzip 重压 workaround 撤）；RTC 用户态三件下线后时钟正确 + timedatectl 首次读出 RTC；
