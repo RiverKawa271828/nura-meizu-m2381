@@ -195,7 +195,10 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
 - **边界三条**：①只防新增花屏，**不治愈已花屏**（治愈 = 冷启动重启）；
   ②功耗权衡在 AMOLED 上成立（黑帧近零），**LCD 不适用**（背光仍亮）；
   ③旋钮互斥（测 stock/profile 类旋钮会关 bloff，测完回日常需 `knob bloff` +
-  重启）。
+  重启）。**④系统 suspend 同罩（10-19 实验实证 + 代码双证）**：suspend 的 DRM off
+  同走 `unprepare()` 的 bloff 分支 ⇒ DDIC 真睡全程不睡、醒来走 bl_off_live 捷径
+  ——「真睡」在 bloff 默认态结构性不触发毒源（0xC4 首测前提证伪即此，§6 条 1；
+  「真睡不受 bloff 影响」旧判作废）。
 - 附带一条与面板无关但同轮踩出的移植雷：向用户态**暴露新 DRM 模式**会移动
   boot 时序敏感窗口（geni modprobe × DRM 探测竞态）；且当时 3 次 panic 的真凶
   是**两个 systemd 服务并发操作全局 `drivers_autoprobe`**（PAS 复位落进 touch
@@ -207,19 +210,26 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
 
 ## 6. 未解与下一步（按先验排序）
 
-1. **0xC4 归零单变量**【✅ 已点火（2026-10-19 设备日，提前于 rebase 轮——用户拍板
-   「不等 stable 先做花屏大件、手机刷回 nura」）；**眼判待用户回执定谳**】：
-   `msm.zero_clkout_timing`（fork `c1d84dcf80ec`，0644 运行时可写，下一个
-   host clock setup 写 0 代替 clk_post/clk_pre；默认 0 = 现行为不变）。
-   执行面（10-19）：apk r88 + ESP v69 upgrade.sh 首跑双腿全绿（实测 #89 + 读回对
-   ✓；首跑抓到 apk 腿 UNTRUSTED 假绿坑已根治，见 upgrade.sh/UPGRADE.md）→ 默认态
-   回归绿（boot 29.6s / failed 0 / 声卡+三音频服务 / Goodix 触控）→ **cycle 0
-   默认态对照真睡×1**（knob=N）→ 旋钮=1 → **真睡×5**（rtcwake -d /dev/rtc1
-   -m mem -s 51；journal 六对 suspend entry/exit = 6/6 真 s2idle，
-   susp_success 0→6，dsi_err 零新增，每轮 NCM 秒回无睡死）。
-   **判读分支（眼判回执后落）**：cycle 1-5 醒后不花 = 0xC4 定罪 → 工程解落地形态
-   讨论（默认态改不改留用户）；还花 = 0xC4 洗清 → 条 4 残余位顶上（只记档不开工）。
-   低先验（更像结构差异而非病因），但它是档案里唯一漏测的寄存器级差异。
+1. **0xC4 归零单变量**【✅ 10-19 设备日执行完毕——**判读 = 实验前提证伪，0xC4 不可判
+   （阳性对照缺席）**】：`msm.zero_clkout_timing`（fork `c1d84dcf80ec`，0644 运行时
+   可写，下一个 host clock setup 写 0 代替 clk_post/clk_pre；默认 0 = 现行为不变）。
+   执行面（10-19 两轮）：apk r88 + ESP v69 upgrade.sh 首跑双腿全绿（实测 #89 + 读回
+   对 ✓）→ 默认态回归绿 → 第一轮：默认态真睡 ×1 + 旋钮归零 ×5（rtcwake -d /dev/rtc1
+   -m mem；journal 六对 entry/exit，susp_success 0→6）→ 第二轮（用户在场眼判，短版
+   15s 睡/25s 观察窗）：C0 默认态对照 + 旋钮 ×5（susp_success 7→13）——**12/12 醒后
+   全净，含 C0 默认态（用户眼判回执「C0 也没花」）**。
+   **定谳（代码 + 实验双证）**：两臂全净非旋钮之功，而是**排面前提「真睡不受 bloff
+   影响」证伪**——bloff 语义在 `unprepare()` 的 bloff 分支（panel-boe-meizu20.c:1261
+   = 0x51=0、不发 0x28/0x10、keep_rails、bl_off_live=true），而系统 suspend 的 DRM
+   off 同走 unprepare → **DDIC 在 suspend/resume 全程不睡**；醒来 `enable()` 走
+   bl_off_live 捷径跳过重放（:1177）→ 毒源（sleep-out 自重初始化）结构性不可达。
+   附带正面实锤：**r88 默认态真睡 = 日用干净**（两轮 12 次 s2idle 零花屏、dsi_err
+   零新增、无睡死）。旋钮已复值 0。
+   **0xC4 修正实验设计（记档，复燃再排）**：debugfs `knob` → `default`（关 bloff =
+   病灶可达态）→ 真睡 ×1（预期全花 = 阳性对照，历史 5/5 基线）→ 保持 knob default +
+   `zero_clkout_timing=1` → 真睡 ×5 眼判 → 这才是 0xC4 的真 A/B；测完回日常 =
+   `knob bloff` + 重启（§5 旋钮互斥律）。低先验（更像结构差异而非病因）维持原判，
+   且其实验价值降级（病在日用态已不可达，只在「关 bloff 的实验态」存在）。
 2. **唤醒命令组完整性**【✅ 静态对拍判负 = 无漏组（2026-10-19）】：stock FDT（flyme
   取证 10-19，运行态全量 fdt 791KB）全部命令组属性 = `qcom,vid-on-commands`/
   `cmd-on-commands`/off/qsync（7 面板变体各一套）；**不存在独立 pre-panel-on 组**
