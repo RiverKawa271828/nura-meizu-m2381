@@ -63,6 +63,16 @@
   `dpu_encoder_dsc_pipe_cfg → dpu_hw_dsc_config`（PPS/threshold/初始行计算，
   fork 树 `drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c:1993+` + `dpu_hw_dsc.c`）
   逐项对拍表，落 `docs/PANEL-CORRUPTION.md` §6 条 3 剩余面对拍结果（追加，不改判词）。
+- **素材补强（10-19 外部情报入库）**：小米 11 Pro（sm8350，stock 5.4）Ubuntu 主线
+  移植实录视频③④的排雷经验（用户转录 notes），三类 DSC 差异可并进对拍表行清单：
+  ①**静态模板覆盖计算值**——彼线驱动算好的参数被静态 DT 模板盖掉，「不能只抄原厂
+  文件值，要对拍运行态真值」（我方对应 = dpu 侧配置 vs stock F4 运行态）；
+  ②**切片打包形态**——彼线 stock = 每包 2 切片/每行 1 包 vs 移植 1 切片/2 包；
+  ③**链路速率钉死 vs 计算**——彼线 stock 固定 1.36G/lane vs 主线算 1.181G（我方
+  对应物 = bitclk 钉 `1094000000` vs stock FDT 值[（九十）F1 已归档，可对]）。
+  另两件小经验：PPS 须走 DCS 长写语义（我方驱动已显式 compression_mode_ext +
+  pps_buf + wake_pps_late 旋钮，无此坑 = 互证）；亮度字节序 0x0404 回文试值法 +
+  早期亮度恢复须 panel-ready 门控（值留属性、enable 再应用，我方现役无此病）。
 - **完成定义**：对拍表落档；差异项标注「内容差/时序差/等价」；若发现结构差异级别
   的新线索，只记档不排实验（0xC4 仍是首发实验）。
 
