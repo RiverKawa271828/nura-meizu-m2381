@@ -83,13 +83,29 @@
   （无件退出/全跳过/报错文案）过；**设备腿首跑随下轮升级实机验证**。UPGRADE.md 已加
   「一键脚本」节对齐。
 
-## 顺序与预算（10-19 深夜更：第 0/1/2/3/4/7 项已收官，见各节 ✅）
+## 顺序与预算（10-19 深夜更：第 0/1/2/3/4/7 项已收官，见各节 ✅；下会话排面已钉）
+
+- **▶ 下会话排面（10-19 深夜钉，用户令「安排一下下个会话」）**：
+  - 开工照旧：记忆复核 → 主档现态 → **第 0 项 stable 复核（第 4 次核）**。
+  - **stable 已出 → 窗口任务全部挂起，转正式 rebase 轮**：照
+    `docs/rebase-dryrun-rc7-20261019.md` §stable 正式轮清单走（fetch `v7.3` →
+    重放 98 commits → sanity 四件 → bump pkgrel 90 出件 → verify 全绿 → printk
+    流程卡第一测；0xC4 旋钮预写预构建在册随车；**upgrade.sh 设备腿首跑顺路**
+    ——rebase 出件后 apk+ESP 双腿升级正好首验脚本）；推送/发布窗口 = 用户拍板。
+  - **未出（或 rc8 出现顺延 ~11-01）→ 主件 = 6（7.4 前瞻雷调研）**：binder Rust
+    化（v6.18-rc1 合入 7.4 生效）对 waydroid 的配置面影响（binderfs 行为/CONFIG
+    面/已装机 rootfs 重验点）+ `drivers/virt` gunyah 7.4 merge window 复查点，
+    落档补进 rebase 清单（§6 节）——**先做 6 的理由：直接喂紧后的 rebase 专项，
+    越早入册越防车漏项**。次选 = 5（kalama SDE catalog 收割；本轮已趟通
+    CodeLinaro sparse+blobless 克隆法，5 的入场券现成），6 做完即停、5 看兴致。
+  - 每件收尾 = 落档 + commit（**不 push**）+ 接续卡打勾 + 记忆簿更新。
+  - 非任务待拍板项：Flyme 设备去向（留 Flyme / 重刷现役三件回 pmOS——取证四件
+    已全落袋，无新取证需求；回 pmOS = 窗口关闭）。
 
 - **本会话排面收官记录（用户拍板 10-19 晚的排面全部走完）**：首步核 stable
   （未出，rc7 `ec8bf828` 止 rc8 未出）；**主件 4 = ✅**（对拍表落 §6，nura
   `8cbb1cc`）；**插空 7 = ✅**（upgrade.sh + UPGRADE.md，nura `e640683`）；
-  **次选 2 = ✅**（相机卡，pmos_linux `1692ace`）。**余项 = 5（SDE catalog）/
-  6（binder 调研）**——谁先有兴致做谁；另 0xC4 设备日可选并行件（条 2「stock 唤醒
-  是否重放同一套字节」DCS 级运行流）仍挂 0xC4 车上。
+  **次选 2 = ✅**（相机卡，pmos_linux `1692ace`）。0xC4 设备日可选并行件（条 2
+  「stock 唤醒是否重放同一套字节」DCS 级运行流）仍挂 0xC4 车上。
 - 每件收尾 = 落档 + commit（**不 push**，推送窗口 = 用户拍板）+ 接续卡对应段落打勾。
 - 收官时：experiment-log 追加窗口轮叙事 + 记忆簿更新 + 接续卡「等 stable」态刷新。
