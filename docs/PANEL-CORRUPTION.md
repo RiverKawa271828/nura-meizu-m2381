@@ -207,14 +207,27 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
 
 ## 6. 未解与下一步（按先验排序）
 
-1. **0xC4 归零单变量**【未测，成本最低】：小补丁让主线不写 CLKOUT_TIMING_CTRL
-  （或写 0）。低先验（更像结构差异而非病因），但它是档案里唯一漏测的寄存器级
-  差异。已挂 7.3 stable rebase 拼车。
-2. **唤醒命令组完整性**【未测】：stock 上电序列有独立 pre-on 与 post-panel-on
-  命令组；E 系清洗测的是"重放哪些表项"，但"wake 路径是否漏发 post-on 组 /
-  PPS-DSC 重同步"自评信息不全，仍是重点盘问项。
-3. **DSC 唤醒重同步**【未测，调研型】：掉电后 DDR/DSC 状态机重同步在主线 msm
-  栈是否有已知坑（PPS 需重发？soft-reset 后解码器需额外序列？）。
+1. **0xC4 归零单变量**【旋钮已预写（2026-10-19），设备日点火】：`msm.zero_clkout_timing`
+   （fork `c1d84dcf80ec`，0644 运行时可写，下一个 host clock setup 写 0 代替
+   clk_post/clk_pre；默认 0 = 现行为不变）。rc6 基线预构建走 verify 后随 7.3 rebase
+   车带上；设备日流程 = 刷 → 旋钮归零 → 真睡×5 → 眼判，不开独立轮。低先验
+  （更像结构差异而非病因），但它是档案里唯一漏测的寄存器级差异。
+2. **唤醒命令组完整性**【✅ 静态对拍判负 = 无漏组（2026-10-19）】：stock FDT（flyme
+  取证 10-19，运行态全量 fdt 791KB）全部命令组属性 = `qcom,vid-on-commands`/
+  `cmd-on-commands`/off/qsync（7 面板变体各一套）；**不存在独立 pre-panel-on 组**
+  （downstream dmesg 打点的 pre-on 阶段 = 驱动内部 reset/时序仪式，非 DCS 字节组）。
+  我方驱动 `init_cmds[]` = stock `cmd-on-commands` 忠实翻译，**完整含 0x29 后的
+  post-on 段**（f0 55 aa 52 08 08 → E1 e1 73 73 73 → E2/E3 45 31 34 a4 族 → E4-E7
+  全零，字节级逐条对应）——「wake 漏发 post-on 组」怀疑排除。残留 = 「stock 唤醒
+  是否重放同一套字节」仍未抓到 DCS 级运行流（可选挂 0xC4 设备日并行件）。
+3. **DSC 唤醒重同步**【✅ 静态对拍判负 = 无缺位（2026-10-19）】：主线 `prep_dsc`
+  挂每帧 kickoff 路径（dpu_encoder.c:2102 `_dpu_encoder_prepare_for_kickoff` 内，
+  每帧重写 dsc_config + hw_pp enable_dsc；disable 才 unprep）；stock 侧 10-19 F4
+  evtlog 实证 `_dce_dsc_setup`/`_dce_dsc_setup_single` 同样每帧 commit 在跑
+  （1080x2400 双块参数在案，dpu/evtlog 素材）——两侧同为「每帧 DSC setup」形态，
+  唤醒后 kickoff 恢复即重写，结构性「缺位」不成立。此判反而强化 §4.4 r22 判词
+  （poison = DDIC 自身 sleep transition）。剩余对拍面 = PPS/threshold 内容值与
+  编程时序位（非结构差异）。
 4. **寄存器 diff 残余位**【未测】：RBUF/INSERT_DCS（0x44 bit16 仅醒后置位）/
   仪式位族除 0xC4 外的残余，是否有唤醒特定语义。
 5. **供电实测矛盾**【低先验】：声明全 1.8V，早轮曾实测 1.2/3.0（板上无测试点，
