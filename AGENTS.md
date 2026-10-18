@@ -59,17 +59,26 @@
 >    **7 upgrade.sh**[nura `e640683` 已点头件固化 + UPGRADE.md 一键脚本节；
 >    设备腿首跑随下轮升级实机验证]；**2 相机卡**[pmos `1692ace` =
 >    s5k3p9-driver-round-card.md：i2c 0x5a→0x2d 真值 + PHY 形态 + stock 节点
->    全属性 + DT 草案 + 首 ACK 判据 0x3109]。**▶下会话排面二钉（10-19 深夜，
->    用户三连拍板：NCM 漂移 = 手动开发者模式无需修 / 慢唤醒如实接受 B 路挂起 /
->    不等 stable 先做花屏大件且**手机刷回 nura**）**：下会话 = **0xC4 归零单变量
->    设备日**（PANEL-CORRUPTION §6 条 1 点火，档案唯一漏测实验）——用户侧前置 =
->    重刷回 pmOS（Release r87 三件；Flyme 窗口全落袋关窗无损失，条 2 残留 DCS
->    抓取随关窗关闭不再提）；会话流程 = stable 复核照跑只报状态**不转轮** →
->    备料核对 r88（cc1ecc44）/v69（daf03fea）[⚠ APK_DIR 现无 linux apk，缺则
->    fork tip `c1d84dcf80ec` 重出] → **upgrade.sh 设备腿首跑**[apk r88 + ESP v69
->    → 期望 #89，脚本首次实机验证] → 默认态回归绿 → **旋钮归零真睡×5 眼判** →
->    判读落 §6 条 1[不花 = 0xC4 定罪 → 工程解形态讨论；还花 = 洗清 → 条 4 残余位
->    顶上只记档]。5/6 两调研件顺延 rebase 前再排。
+>    全属性 + DT 草案 + 首 ACK 判据 0x3109]。**▶0xC4 设备日 ✅ 收官（10-19 晨，
+>    上排面全执行；定谳 = 0xC4 洗清）**：stable 复核仍未出（rc7 `ec8bf828` 止）；
+>    备料 r88（cc1ecc44）/v69（daf03fea）全对钉（「APK_DIR 现无 linux apk」旧备注
+>    作废——备料轮已补）；**upgrade.sh 设备腿首跑全绿**（apk r88 + ESP v69 → 实测
+>    #89 + 读回 daf03fea 对 ✓）抓两坑根治入脚本（CI rootfs 烤 CI 临时钥
+>    pmos@local-6acea657 = 本地钥 6aaed2ab 签的包必 UNTRUSTED 假绿 → 照 flash-batch
+>    配方 --allow-untrusted 排雷 + apk add 超读窗假完成 → RC 标记回读；nura
+>    `28fe8d6`，UPGRADE.md 勘误随件）；**两阶段定谳（用户在场眼判）**：默认态 12 次
+>    s2idle 全净（含 C0 对照）=「真睡不受 bloff 影响」前提证伪（bloff 分支在
+>    unprepare，suspend 的 DRM off 同走 ⇒ DDIC 全程不睡、毒源结构性不可达，§5④
+>    入册）→ `knob default` 可达态修正实验：P1 阳性对照全花（历史 5/5 复现 ✓，
+>    dsi_err status=4 每轮一条 = 链路真断 marker）+ 归零臂 5/5 全花零效应 ⇒
+>    **0xC4 洗清 = 排雷表 #13 终审（最后一个寄存器级单变量负结果）**；病根维持
+>    §4.4（DDIC sleep-out 自重初始化）；条 4 残余位（RBUF/INSERT_DCS bit16/仪式位
+>    族）可达态可测但日用 bloff 结构性免疫 → 只记档不开工；附带实锤 = **r88 默认态
+>    真睡日用干净**（nura `f3c7d33`/`8f82d06`/`d019040`）。收尾旋钮/bloff 复值 +
+>    重启回日常复核绿。**设备现态 = 在机 #89 + v69 + r88 apk + CI r86-phosh rootfs
+>    （device r60 + fw r3，用户 10-18 深夜刷回；非 r87 发布面 = waydroid/flatpak
+>    缺位——日用完整态 = 择时重刷 r87 rootfs 或 apk 腿补 device r62，不急）**。
+>    5/6 两调研件顺延 rebase 前再排。
 >    每项独立可停，commit 不 push。已关闭：rc7 演练[勿重做]、路线 D[勿再提]、
 >    NCM 漂移修[无需]、ath12k B 路[挂起待点名]、stock 唤醒 DCS 抓取[窗口已关]）。
 >    ⑤**窗口期取证+小工作（10-19 用户拍板「下会话开始」）**：⚠**设备现役 = Flyme**
@@ -131,8 +140,19 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-19 更；新会话从这里接）
+## 现态（2026-10-19 晨 更；新会话从这里接）
 
+- **▶ 2026-10-19 晨 0xC4 设备日收官（定谳 = 0xC4 洗清，排雷表 #13 终审；upgrade.sh 首跑全绿 + 两坑根治）**：
+  ①**upgrade.sh 设备腿首跑全绿**（apk r88 + ESP v69 → #89 + 读回对 ✓；首跑抓 apk 腿
+  UNTRUSTED 假绿 = CI rootfs 烤 CI 临时钥 `pmos@local-6acea657`，本地钥 `6aaed2ab` 包必拒——
+  照 flash-batch 配方 `--allow-untrusted` 根治 + apk add RC 标记回读治长命令假完成，`28fe8d6`；
+  **rebase 轮 r90+ 本地包同墙已预排雷**）。②**两阶段花屏定谳**（用户在场眼判）：默认态 12 次
+  s2idle 全净 = 「真睡不受 bloff 影响」前提证伪（suspend 同走 unprepare bloff 分支 ⇒ DDIC 全程
+  不睡，毒源结构性不可达，§5④）→ `knob default` 可达态修正实验：P1 阳性对照全花（dsi_err
+  status=4 每轮一条 = 链路真断 marker）+ `zero_clkout_timing=1` 归零臂 5/5 全花零效应 ⇒
+  **0xC4 洗清**；病根维持 §4.4；条 4 残余位只记档（日用 bloff 结构性免疫）；**附带实锤 =
+  r88 默认态真睡日用干净**（`f3c7d33`/`8f82d06`/`d019040`）。③在机 = #89 + v69 + r88 apk +
+  CI r86-phosh rootfs（device r60；非 r87 发布面，waydroid/flatpak 缺位不急补）。commit 不 push。
 - **▶ 2026-10-19 深夜 窗口期轮第 2 段（（九十二）；零设备纯宿主；排面 4/7/2 三件收官，stable 复核仍未出[rc7 `ec8bf828` 止]）**：
   ①**主件 4 花屏 S2 内容值对拍表** = PANEL-CORRUPTION §6 条 3 追加「条 3·余面对拍」
   （commit `8cbb1cc`）：evtlog 解码（CodeLinaro display-drivers sparse 克隆绕限流 +
