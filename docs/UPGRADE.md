@@ -28,14 +28,19 @@ DTS 不变的轮次跨轮通用。）
 > （默认件 = config.sh 现役钉 + 本地包仓最新三包；通道 = devsh/devpush 绑 USB 接口；
 > 含设备侧 sha 对拍、软进 fastboot、只刷 recovery_a、`uname -v` 与 dd 读回双验收；
 > NCM 网段重启漂移自动重探，`--host` 可指定）。`--skip-apk` / `--skip-esp` = 单腿补完
-> （升级翻车补腿用）。2026-10-19 固化 = 10-14 设备日手动首验路径的脚本化；设备腿首跑
-> 随下轮升级实机验证。
+> （升级翻车补腿用）。2026-10-19 固化 = 10-14 设备日手动首验路径的脚本化；**同日设备腿
+> 首跑全绿**（apk r88 + ESP v69 → #89），首跑抓到 apk 腿 UNTRUSTED 假绿坑（CI rootfs
+> 烤 CI 临时钥；apk add 超读窗假完成）双件根治 = `--allow-untrusted` + RC 标记回读。
 
 ```bash
 # ── 步骤 1：装模块腿（设备上）─────────────────
 # 把 linux-meizu-meizu20-*.apk（+ 本轮 Release 列出的 device/firmware apk）传到设备后：
-sudo apk add ./linux-meizu-meizu20-7.3.0_rc6-rN.apk
-# 签名公钥已烤在 rootfs 里，直接验签通过；装完**先别重启**
+sudo apk add --allow-untrusted ./linux-meizu-meizu20-7.3.0_rc6-rN.apk
+# 装完**先别重启**。⚠ --allow-untrusted 必须带（2026-10-19 首跑坑）：CI 出的 rootfs
+# 烤的是 CI 构建机现场生成的临时公钥（pmos@local-<CI 随机后缀>，本地无对应私钥），
+# 本地 pmbootstrap 钥匙（pmos@local-6aaed2ab）签的包必报 UNTRUSTED 秒退 RC=99。
+# 完整性由「推到设备后 sha256 对拍」保证（我们自己就是签发方）；flash-batch
+# 时代配方即如此。
 
 # ── 步骤 2：刷引导腿（电脑上）─────────────────
 # 解压 Release 的 esp-recovery-vN+.img.gz 得到 .img，然后：

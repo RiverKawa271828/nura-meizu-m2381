@@ -125,10 +125,18 @@ if [ "$SKIP_APK" = 0 ]; then
 		echo "  ✓ $b（sha ${local_sha:0:8}）"
 	done
 
-	echo "[apk 3/3] apk add（主包+子包同装；公钥已烤 rootfs，直接验签）"
+	echo "[apk 3/3] apk add（--allow-untrusted 照 flash-batch 配方：CI 出的 rootfs 烤 CI"
+	echo "        临时钥匙，本地包必 UNTRUSTED；完整性 = 上一步推包 sha256 对拍）"
 	pkgs=""
 	for f in "${APKS[@]}"; do pkgs="$pkgs /tmp/${f##*/}"; done
-	dev_cmd "apk add$pkgs" || die "apk add 失败——看输出；修复后重跑（别重启，先补完这腿）"
+	# 长命令纪律（2026-10-19 首跑坑）：apk add 远超 devsh 默认读窗，必须等设备侧
+	# RC 标记才算完成；输出落 /tmp/apk-add.log 再回读，防 stdout 缓冲丢失。
+	out=$(dev_cmd --wait 300 \
+		"apk add --allow-untrusted$pkgs >/tmp/apk-add.log 2>&1; echo APK-ADD-RC=\$?; cat /tmp/apk-add.log")
+	printf '%s\n' "$out"
+	if ! printf '%s\n' "$out" | grep "APK-ADD-RC=0" >/dev/null; then
+		die "apk add 失败（看上面输出）——修复后重跑（别重启，先补完这腿）"
+	fi
 	echo "  ✓ apk 腿完成（先别重启）"
 fi
 
