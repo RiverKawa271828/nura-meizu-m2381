@@ -32,6 +32,8 @@ def main() -> int:
     ap.add_argument("src")
     ap.add_argument("--port", type=int, default=9)
     ap.add_argument("--iface", default=None)
+    ap.add_argument("--host", default=HOST,
+                    help="设备地址（默认 172.16.42.1；重启后 NCM 网段会漂，upgrade.sh 自动重探）")
     a = ap.parse_args()
 
     iface = a.iface or pick_iface()
@@ -39,7 +41,7 @@ def main() -> int:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface.encode())
     s.settimeout(120)
-    s.connect((HOST, a.port))
+    s.connect((a.host, a.port))
     view = memoryview(data)
     while view:
         n = s.send(view[:1048576])
@@ -53,7 +55,7 @@ def main() -> int:
     except socket.timeout:
         pass
     s.close()
-    print(f"pushed {len(data)} bytes -> {HOST}:{a.port}")
+    print(f"pushed {len(data)} bytes -> {a.host}:{a.port}")
     return 0
 
 

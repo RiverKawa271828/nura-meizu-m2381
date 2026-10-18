@@ -39,13 +39,15 @@ def main() -> int:
     ap.add_argument("--port", type=int, default=23)
     ap.add_argument("--wait", type=float, default=6.0, help="读取等待秒数")
     ap.add_argument("--iface", default=None)
+    ap.add_argument("--host", default=HOST,
+                    help="设备地址（默认 172.16.42.1；重启后 NCM 网段会漂，upgrade.sh 自动重探）")
     a = ap.parse_args()
 
     iface = a.iface or pick_iface()
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface.encode())
     s.settimeout(a.wait + 6)
-    s.connect((HOST, a.port))
+    s.connect((a.host, a.port))
     s.sendall((a.command + "\necho __DEVSH_END__\n").encode())
 
     buf = b""

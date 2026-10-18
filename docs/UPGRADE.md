@@ -24,6 +24,13 @@ DTS 不变的轮次跨轮通用。）
 前提：电脑装了 fastboot；设备能进系统。apk/ESP 从**同一个新 Release** 页下载，
 传到设备的通道随意（WiFi curl、scp、nc 均可，不规定）。
 
+> **一键脚本（宿主侧）**：上面两步可由 `script/upgrade.sh --i-am-present` 自动走完
+> （默认件 = config.sh 现役钉 + 本地包仓最新三包；通道 = devsh/devpush 绑 USB 接口；
+> 含设备侧 sha 对拍、软进 fastboot、只刷 recovery_a、`uname -v` 与 dd 读回双验收；
+> NCM 网段重启漂移自动重探，`--host` 可指定）。`--skip-apk` / `--skip-esp` = 单腿补完
+> （升级翻车补腿用）。2026-10-19 固化 = 10-14 设备日手动首验路径的脚本化；设备腿首跑
+> 随下轮升级实机验证。
+
 ```bash
 # ── 步骤 1：装模块腿（设备上）─────────────────
 # 把 linux-meizu-meizu20-*.apk（+ 本轮 Release 列出的 device/firmware apk）传到设备后：
