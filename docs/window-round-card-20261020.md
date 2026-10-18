@@ -83,29 +83,39 @@
   （无件退出/全跳过/报错文案）过；**设备腿首跑随下轮升级实机验证**。UPGRADE.md 已加
   「一键脚本」节对齐。
 
-## 顺序与预算（10-19 深夜更：第 0/1/2/3/4/7 项已收官，见各节 ✅；下会话排面已钉）
+## 顺序与预算（10-19 深夜二钉：下会话 = **0xC4 设备日**；用户拍板「不等 stable，先做花屏大件，手机刷回 nura」）
 
-- **▶ 下会话排面（10-19 深夜钉，用户令「安排一下下个会话」）**：
-  - 开工照旧：记忆复核 → 主档现态 → **第 0 项 stable 复核（第 4 次核）**。
-  - **stable 已出 → 窗口任务全部挂起，转正式 rebase 轮**：照
-    `docs/rebase-dryrun-rc7-20261019.md` §stable 正式轮清单走（fetch `v7.3` →
-    重放 98 commits → sanity 四件 → bump pkgrel 90 出件 → verify 全绿 → printk
-    流程卡第一测；0xC4 旋钮预写预构建在册随车；**upgrade.sh 设备腿首跑顺路**
-    ——rebase 出件后 apk+ESP 双腿升级正好首验脚本）；推送/发布窗口 = 用户拍板。
-  - **未出（或 rc8 出现顺延 ~11-01）→ 主件 = 6（7.4 前瞻雷调研）**：binder Rust
-    化（v6.18-rc1 合入 7.4 生效）对 waydroid 的配置面影响（binderfs 行为/CONFIG
-    面/已装机 rootfs 重验点）+ `drivers/virt` gunyah 7.4 merge window 复查点，
-    落档补进 rebase 清单（§6 节）——**先做 6 的理由：直接喂紧后的 rebase 专项，
-    越早入册越防车漏项**。次选 = 5（kalama SDE catalog 收割；本轮已趟通
-    CodeLinaro sparse+blobless 克隆法，5 的入场券现成），6 做完即停、5 看兴致。
-  - 每件收尾 = 落档 + commit（**不 push**）+ 接续卡打勾 + 记忆簿更新。
-  - 非任务待拍板项：Flyme 设备去向（留 Flyme / 重刷现役三件回 pmOS——取证四件
-    已全落袋，无新取证需求；回 pmOS = 窗口关闭）。
+- **▶ 下会话排面（10-19 深夜二钉，取代同夜首钉的「stable 分叉」版）**：
+  - 用户侧前置：手机重刷回 pmOS（FLASHING.md 装机流程，Release r87 三件：boot_b
+    mu-r69 + recovery_a v68 + r87 rootfs；Flyme 取证窗口四件+相机卡已全落袋，
+    关窗无损失；条 2 残留「stock 唤醒 DCS 级运行流」可选项随关窗关闭不再提）。
+  - 会话流程：
+    1. stable 复核照跑（30 秒只报状态，**不转 rebase 轮**——0xC4 优先，rebase
+       让路到 0xC4 收官之后）。
+    2. **备料核对**：r88 apk（sha8 cc1ecc44）+ v69 ESP（裸 daf03fea）在位性核对
+       （MANIFEST 工作态段；本轮 upgrade.sh 冒烟发现 APK_DIR 现无 linux apk——
+       缺 = fork tip `c1d84dcf80ec` 即旋钮件，build-kernel/build-esp 重出即可）。
+    3. **upgrade.sh 设备腿首跑（一石二鸟）**：设备在系统内
+       `script/upgrade.sh --i-am-present` → apk 腿 r88 + ESP 腿 v69 → 期望
+       `uname -v` = **#89**（#N=pkgrel+1）+ recovery_a 读回对 sha——脚本首次实机验证。
+    4. 默认态回归绿确认（boot 时长 / failed 0 / rtcwake 51s resume / 音频触控常规）。
+    5. **0xC4 实验**（PANEL-CORRUPTION §6 条 1 点火）：旋钮归零
+       （`msm.zero_clkout_timing=1`）→ **真睡 ×5 → 眼判**（真睡不受 bloff 影响，
+       bloff 只防屏灭路径）→ 结论落 §6 条 1。
+    6. 判读分支：**不花 = 0xC4 定罪** → 工程解落地形态讨论（默认态改不改留用户）；
+       **还花 = 0xC4 洗清** → 残余位候选顶上（§6 条 4：RBUF / INSERT_DCS bit16 /
+       仪式位族），下一单变量实验设计只记档不开工。
+  - 纪律照旧：fastboot 单通道 / 刷写用户在场 / 读回对 sha / commit 不 push。
+  - 已拍板关闭项：NCM 网段漂移 = 手动开发者模式所致**无需修**；ath12k 21s 慢唤醒
+    = 用户如实接受现状，**B 路（sleep hook rmmod）挂起不点名不动**。
+
+- **首钉作废记录（同夜早些的「stable 分叉」版）**：被本节取代；5（SDE catalog）/
+  6（binder 7.4 前瞻雷）两调研件顺延，rebase 轮前再排。
 
 - **本会话排面收官记录（用户拍板 10-19 晚的排面全部走完）**：首步核 stable
   （未出，rc7 `ec8bf828` 止 rc8 未出）；**主件 4 = ✅**（对拍表落 §6，nura
   `8cbb1cc`）；**插空 7 = ✅**（upgrade.sh + UPGRADE.md，nura `e640683`）；
   **次选 2 = ✅**（相机卡，pmos_linux `1692ace`）。0xC4 设备日可选并行件（条 2
-  「stock 唤醒是否重放同一套字节」DCS 级运行流）仍挂 0xC4 车上。
+  「stock 唤醒是否重放同一套字节」DCS 级运行流）随设备回 pmOS 关闭。
 - 每件收尾 = 落档 + commit（**不 push**，推送窗口 = 用户拍板）+ 接续卡对应段落打勾。
 - 收官时：experiment-log 追加窗口轮叙事 + 记忆簿更新 + 接续卡「等 stable」态刷新。

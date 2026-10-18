@@ -59,13 +59,19 @@
 >    **7 upgrade.sh**[nura `e640683` 已点头件固化 + UPGRADE.md 一键脚本节；
 >    设备腿首跑随下轮升级实机验证]；**2 相机卡**[pmos `1692ace` =
 >    s5k3p9-driver-round-card.md：i2c 0x5a→0x2d 真值 + PHY 形态 + stock 节点
->    全属性 + DT 草案 + 首 ACK 判据 0x3109]。**▶下会话排面已钉（10-19 深夜，
->    窗口卡 §顺序节）**：开工照旧 + **stable 复核第 4 次**——**出 = 转正式
->    rebase 轮**（照 rebase-dryrun §stable 清单；upgrade.sh 设备腿首跑顺路随
->    rebase 出件双腿升级）；**未出 = 主件 6（binder Rust 化×waydroid + gunyah
->    7.4 前瞻雷，落档补 rebase 清单）+ 次选 5（kalama SDE catalog，CodeLinaro
->    sparse 克隆法已趟通）**。非任务待拍板：Flyme 设备去向。
->    每项独立可停，commit 不 push。已关闭：rc7 演练[勿重做]、路线 D[勿再提]）。
+>    全属性 + DT 草案 + 首 ACK 判据 0x3109]。**▶下会话排面二钉（10-19 深夜，
+>    用户三连拍板：NCM 漂移 = 手动开发者模式无需修 / 慢唤醒如实接受 B 路挂起 /
+>    不等 stable 先做花屏大件且**手机刷回 nura**）**：下会话 = **0xC4 归零单变量
+>    设备日**（PANEL-CORRUPTION §6 条 1 点火，档案唯一漏测实验）——用户侧前置 =
+>    重刷回 pmOS（Release r87 三件；Flyme 窗口全落袋关窗无损失，条 2 残留 DCS
+>    抓取随关窗关闭不再提）；会话流程 = stable 复核照跑只报状态**不转轮** →
+>    备料核对 r88（cc1ecc44）/v69（daf03fea）[⚠ APK_DIR 现无 linux apk，缺则
+>    fork tip `c1d84dcf80ec` 重出] → **upgrade.sh 设备腿首跑**[apk r88 + ESP v69
+>    → 期望 #89，脚本首次实机验证] → 默认态回归绿 → **旋钮归零真睡×5 眼判** →
+>    判读落 §6 条 1[不花 = 0xC4 定罪 → 工程解形态讨论；还花 = 洗清 → 条 4 残余位
+>    顶上只记档]。5/6 两调研件顺延 rebase 前再排。
+>    每项独立可停，commit 不 push。已关闭：rc7 演练[勿重做]、路线 D[勿再提]、
+>    NCM 漂移修[无需]、ath12k B 路[挂起待点名]、stock 唤醒 DCS 抓取[窗口已关]）。
 >    ⑤**窗口期取证+小工作（10-19 用户拍板「下会话开始」）**：⚠**设备现役 = Flyme**
 >    （用户备 root = adb+su；取证全只读，刷写红线不破；**回 pmOS 后这些窗口全失效，宜先做**）。
 >    **取证四件（叙事落 pmos_linux experiment-log）**：
