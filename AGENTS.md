@@ -334,6 +334,7 @@ sha512 重算，source= 保持本地文件名）②**Release tag `r66`**（用�
 | 启动链逆向深档 / ABL RE / 复现脚本 | docs/BOOT-CHAIN-RE.md + tools/abl-re/（公开面；原始 dump 与 9008 备份私有仓保留，二进制不外发政策见该文 §8） |
 | 睡眠/s2idle 破案（printk 挂死 / 取证通道 / 唤醒链 / WoWLAN） | docs/SUSPEND-S2IDLE.md（公开蒸馏队列①，2026-10-12） |
 | 面板花屏 case 包（掉电唤醒马赛克 / 排雷表 / bloff 工程解 / 档案假说） | docs/PANEL-CORRUPTION.md（公开蒸馏队列②，2026-10-12） |
+| 音频 bring-up 方法论（直驱路线 / probe 竞态 / 出声必需清单 / 工作点与响度 / UCM 坑 / 录音边界） | docs/AUDIO-METHOD.md（公开蒸馏队列③，2026-10-19） |
 | 出一车产物 | docs/PIPELINE.md + script/ |
 | 查现在该刷哪个版本 | MANIFEST.md（config.sh 为准） |
 | 硬定律 / 战役叙事 / 队列 | 私有工作区仓（未公开）的 AGENTS.md + experiment-log |
