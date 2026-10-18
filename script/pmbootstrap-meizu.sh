@@ -17,9 +17,37 @@
 # 的 ui 只能来自 cfg 文件，故按 UI 生成临时 cfg（/tmp，pmbootstrap 自读）。
 # ⚠ 换 UI 后构建前须 `pmbootstrap zap` 清 rootfs chroot——chroot 复用会把
 #   旧 UI 的 world 原样保留（2026-10-09 实锤：phosh 构建混入整套 plasma）。
+#
+# 沙箱守卫（2026-10-19 落地；build-kernel.sh 同款）：pmbootstrap 必须宿主跑
+# （沙箱 sudo/losetup 必死）→ 未带 NURA_INSIDE_UNIT 标记时自动经 systemd-run
+# 重入。守卫三坑（改守卫前必读，本仓 AGENTS 工程规则 #1）：
+#   ① ZCode 沙箱 shell 里 INVOCATION_ID 天生有值，不能当「已在宿主单元内」
+#     判据——只认显式 NURA_INSIDE_UNIT；
+#   ② VAR=1 exec cmd 不把变量带进 systemd 单元，必须 export；
+#   ③ systemd-run 默认不透传调用方环境，跨单元传标记/钉子必须 --setenv=。
+# 最终形态 = 显式 NURA_INSIDE_UNIT 标记 + --setenv + 时间戳单元名（防自撞）；
+# NURA_*/PMB_* 已设钉子逐个透传（config.sh 全按 ${VAR:-默认} 消费，未设不传）。
+# ⚠ 直调本 wrapper 而无守卫 = 沙箱 sudo mknod EPERM（2026-10-19 rc7 演练轮新坑，
+#   本守卫根治；CI 无 systemd，workflow 侧已显式 export NURA_INSIDE_UNIT=1）。
 set -euo pipefail
 NURA_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 . "$NURA_ROOT/config.sh"
+
+# ---- 沙箱守卫：无 NURA_INSIDE_UNIT = 不在宿主单元内 → systemd-run 重入 ----
+# 置于 cfg 生成之前：外层不产生临时 cfg，内层自会按（透传的）NURA_UI 重生成。
+if [ -z "${NURA_INSIDE_UNIT:-}" ]; then
+	echo "[i] 经 systemd-run 在宿主执行"
+	setenv_args=(--setenv=NURA_INSIDE_UNIT=1)
+	for v in NURA_WORK NURA_UI NURA_LINUX_DIR NURA_MU_DIR NURA_PMAPORTS_DIR \
+		NURA_PMB_WRAPPER NURA_PMB_CHECKOUT NURA_PMB_WORK NURA_APK_DIR; do
+		[ -n "${!v:-}" ] && setenv_args+=(--setenv="$v=${!v}")
+	done
+	exec systemd-run --user --collect --quiet \
+		--unit="pmx-nura-meizu-wrapper-$(date +%H%M%S)" \
+		"${setenv_args[@]}" \
+		--working-directory="$NURA_ROOT" bash "$0" "$@"
+fi
+
 CFG_SRC="$NURA_ROOT/script/pmbootstrap-meizu.cfg"
 NURA_UI="${NURA_UI:-plasma-mobile}"
 case "$NURA_UI" in
