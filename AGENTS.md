@@ -51,8 +51,16 @@
 >    四层 + 工作点/响度封卷 + UCM 三坑 + 录音腿边界；pmos 队列卡 ③ 打勾 `f1b2d5d`；
 >    带话素材 = §10 尾句「已公开成文」，用户转告 steamos 线]；**3 wrapper 守卫 =
 >    pmbootstrap-meizu.sh 落 NURA_INSIDE_UNIT→systemd-run 守卫**[nura `0f3a3e4`，
->    沙箱 checksum 冒烟 exit 0]。**下会话余项**：2 相机驱动轮预备卡 次选 /
->    4花屏S2对拍·5SDE catalog·6binder调研 并列 / 7upgrade.sh[点头件]；
+>    沙箱 checksum 冒烟 exit 0]。**✅10-19 深夜（九十二）第 2 段收官三项**：
+>    **4 花屏 S2 对拍表**[nura `8cbb1cc` 落 PANEL-CORRUPTION §6 条 3 余面 =
+>    15 行对拍表：内容差 = flbo 13↔12 根因族 + initial_lines 3↔2 + DSC_CFG
+>    bit17 + PPS 载体 0xA0↔0x0A，其余全等；自洽两侧成立 → 只记档，0xC4 仍首发；
+>    stock debugfs 活读 DSC 1.2 机制性不可达 = F4 只得 evtlog 的深层原因]；
+>    **7 upgrade.sh**[nura `e640683` 已点头件固化 + UPGRADE.md 一键脚本节；
+>    设备腿首跑随下轮升级实机验证]；**2 相机卡**[pmos `1692ace` =
+>    s5k3p9-driver-round-card.md：i2c 0x5a→0x2d 真值 + PHY 形态 + stock 节点
+>    全属性 + DT 草案 + 首 ACK 判据 0x3109]。**下会话余项 = 5 SDE catalog /
+>    6 binder 调研**（谁先有兴致做谁）；
 >    每项独立可停，commit 不 push。已关闭：rc7 演练[勿重做]、路线 D[勿再提]）。
 >    ⑤**窗口期取证+小工作（10-19 用户拍板「下会话开始」）**：⚠**设备现役 = Flyme**
 >    （用户备 root = adb+su；取证全只读，刷写红线不破；**回 pmOS 后这些窗口全失效，宜先做**）。
@@ -115,6 +123,27 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-19 更；新会话从这里接）
 
+- **▶ 2026-10-19 深夜 窗口期轮第 2 段（（九十二）；零设备纯宿主；排面 4/7/2 三件收官，stable 复核仍未出[rc7 `ec8bf828` 止]）**：
+  ①**主件 4 花屏 S2 内容值对拍表** = PANEL-CORRUPTION §6 条 3 追加「条 3·余面对拍」
+  （commit `8cbb1cc`）：evtlog 解码（CodeLinaro display-drivers sparse 克隆绕限流 +
+  evtlog 行号反查 11 个 r-分支钉族 = Flyme ≈ r1/r15+ ± 厂家移行）= topology 9
+  DUALPIPE_DSCMERGE / common_mode 3 双块 merge cmd / **stock DSC 重编程 ROI 变更
+  触发**（主线每 kickoff 幂等 = 时序差）；15 行对拍表 = 等价 8 项（slice-per-pkt 2
+  两侧同值 / 链路速率 1094000000 FDT 四档同值 ↔ hs_rate pin 同值 / RC spec 表逐值
+  全等）+ **内容差 = flbo 13↔12 根因族**（downstream `_get_dsc_v1_2_bpg_offset`
+  slice_h≤30 档 vs VESA 1.2 444 表 → idd 549↔526 / nfl 1402↔1294 / sii 469↔488，
+  PPS 128 字节仅 4 处差）+ **initial_lines 3↔2**（★1.2 寄存器路径无 cmd +1，旧判
+  「3=3」作废）+ **DSC_CFG bit17**；**自洽两侧成立 → 只记档不排实验，0xC4 仍是首发
+  实验**；新机制发现 = stock debugfs 活读 DSC 1.2 不可达（dsc_init_1_2 不注册 dump
+  子范围 → is_valid_range 拒）= F4 只得 evtlog 流的深层原因。②**插空 7 upgrade.sh
+  固化**（commit `e640683`；用户点头件）：apk 腿 + ESP 腿 + 双验收全脚本化，守卫
+  systemd-run --pipe 交互形态，devsh/devpush 补 --host，UPGRADE.md 对齐；设备腿首跑
+  随下轮升级实机验证。③**次选 2 相机驱动轮预备卡**（pmos_linux `1692ace` =
+  docs/meizu20/s5k3p9-driver-round-card.md）：i2c 真值 0x5a→7bit 0x2d + 3P9=csiphy2
+  DPHY/GN5=csiphy3 CPHY 5.66G + stock sensor 节点本体在 boot FDT（dtbo 仅供给
+  phandle 补丁，判读精确化）+ DT 草案（pm8008j L5/L2/L4 供给 fork R1 现成）+
+  首 ACK 判据 probe 读 0x3109。**余项 = 5 SDE catalog / 6 binder 调研**。commit
+  不 push（推送窗口 = 用户）。
 - **▶ 2026-10-19 晚 窗口期轮第 1 段（（九十一）；零设备纯宿主；执行卡 0/1/3 项收官）**：
   ①**窗口检查 = stable 未出**（ls-remote 只到 v7.3-rc7 `ec8bf828`，rc8 未出 → 不转正式
   rebase 轮，下会话开工须重跑检查）；②**蒸馏③ = [docs/AUDIO-METHOD.md](docs/AUDIO-METHOD.md)
