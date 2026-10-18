@@ -8,7 +8,7 @@
 >    ≥40 才继续干活；**旧目录保留勿删（底档）**。
 > 2. **主档必读**：pmos_linux 私有仓 `AGENTS.md` = 硬定律/硬性禁令/交互通道
 >    与操作纪律/坑册的单一事实源（本文不复制）；取证叙事 = 同仓
->    `docs/meizu20/experiment-log.md`（最新 =（八十九））。
+>    `docs/meizu20/experiment-log.md`（最新 =（九十）（九十·乙），10-19）。
 > 3. **任务链**（自包含两份计划）：①工作区内聚迁移 =
 >    pmos_linux 私有仓 `docs/meizu20/workspace-migration-plan-20261013.md`
 >    —— **10-13 已收官 = 零 mv**（源树全独立原地不动，nura = 控制面钉子表）。
@@ -26,12 +26,19 @@
 >    ③·乙 plasma 玩具机 = ✅（10-14）：本地构建 plasma-mobile rootfs 刷机一次点亮
 >    + waydroid 复活全链；**10-14 晚该态已被 r87 CI rootfs 覆盖**（回滚件照旧全在档）。
 >    ④下轮 = **等 7.3 stable（rc7 已出（10-19 核，tag ec8bf828）→ stable ~10-25；
->    出 rc8 则顺延 ~11-01）→ rebase 专项**（用户点名开工）。**窗口期先做纯宿主预备**
->    （下会话起）：carry-list 逐项复核三分表（点名两查：ath12k `0d777aa2ca77` 单 pdev
->    回归上游修没修→0012 摘否；printk `9e70a5e109a4` 上游修没修→`no_console_suspend`
->    摘/留）+ **0xC4 归零补丁预写并 rc6 基线本地预构建**（verify 走通，设备日只剩刷+判）
->    + ath12k 醒后 21s 三路候选调研（候补件落自有 fork，上游线已取消）+ printk 两分钟
->    判别法固化流程卡。rebase 本体 = carry-list 重放 + 0xC4 拼车 + printk 复核 + ath12k
+>    出 rc8 则顺延 ~11-01）→ rebase 专项**（用户点名开工）。**窗口期纯宿主预备 =
+>    ✅四件全收官（10-19（九十·乙））**：carry-list 两查定谳 = **printk 上游未修
+>    → `no_console_suspend` 留**（修复提案押后死寂，v7.3-rc6 代码原样）+
+>    **ath12k 0012 不摘**（上游 Shenghan 件未合入；★定性修正：`0d777aa2ca77` = freq
+>    range 域非睡眠回归；睡眠轴上游 Saikiran mhi.c 件压 review 八个月未合 → carry
+>    三件全留；qrtr 悬案闭环：`544d85de4dc2` 确为真回归但修复 `6a5719cc3ef2` 已在
+>    rc6 基线内）；**0xC4 旋钮预写+预构建** = fork `c1d84dcf80ec`
+>    （`msm.zero_clkout_timing` 0644 运行时可写，默认现行为）→ apk r88（cc1ecc44）/
+>    ESP v69（daf03fea）verify 走通（[4] 红=口径错位非真红，MANIFEST 工作态在册，
+>    验证件不上机不发布）；ath12k 21s 三路候选 = A 关闭（无可吃件）/B 预案不预写/
+>    C·D 判负（pmos_linux docs/meizu20/ath12k-resume-21s-options-20261019.md）；
+>    printk 流程卡 = docs/printk-regression-2min-card.md（runtime 开关 rc6 树实锤）。
+>    rebase 本体 = carry-list 重放 + 0xC4 拼车 + printk 复核 + ath12k
 >    21s；7.4 前瞻雷随车（binder Rust 化 / kalama SDE catalog 收割 / `drivers/virt`
 >    gunyah 复查点在册——7.3 全周期无 gunyah，驱动只进 merge window）。
 >    ⑤**窗口期取证+小工作（10-19 用户拍板「下会话开始」）**：⚠**设备现役 = Flyme**
@@ -43,9 +50,22 @@
 >    wcd938x dmesg）→ **喂麦克风复燃**（stock=SWR 域在册，= rebase 后下一里程碑）；
 >    F3 modem EFS dd 存档 = modemst1/modemst2/fsc/fsg 四分区（只读；「内部 NV/EFS 贵路」
 >    素材，蜂窝复燃）；F4 stock DPU/DSC 侧动态 dump → 喂花屏 S2 对拍（DSI ctrl 三态
->    10-06 已收勿重收）。**小工作** = 公开蒸馏队列③音频方法论/④GPU·IFPC（纯宿主写作）
->    + 花屏 §6 调研型 #2 唤醒命令组完整性/#3 DSC 唤醒重同步静态对拍 + hexagonrtc r7/r8
->    收敛。取证毕设备去向留用户拍板（留 Flyme / 重刷现役三件回 pmOS，回滚件全在档）。
+>    10-06 已收勿重收）。**✅ 10-19（九十）四件全落袋**（素材 = meizu20-m1/
+>    flyme-forensics-20261019/ 25 件，只读红线零破，mixer 拨动已回拨）：F1 fdt 791KB
+>    （★旧判读修正「stock FDT 无 soundwire」作废 = 有 va_swr_master+swr-dmic×4）+
+>    bootargs 全量（allow_mismatched_32bit_el0/irqaffinity=0-2/dis_id=4DB501）+
+>    **相机 ACK 真值 s5k3p9sx id 0x3109 @0x5a ACQUIRE Success**（gn5sp START）；
+>    F2 tinymix 418 控件全景（B3/B4=stock RXTX-TX3/4 与 VA-TX0/1/2 并存）+ 手拨通路
+>    不通判词（Invalid DMIC Selection = stock SWR 路径要 HAL AFE 会话，0x3404:10→90
+>    已回拨）；F3 EFS 四分区双侧哈希全 MATCH（「内部 NV/EFS 贵路」物证首落盘）；
+>    F4 rm_status **DSC allocated:2** + evtlog 2000 行（dce_dsc_setup 每帧双块 =
+>    花屏 S2 对拍真值）。小工作：蒸馏③④**未动**（大件写作留专注会话，③ steamos 在等
+>    建议下轮首项）；花屏 §6 #2/#3 **✅双判负（无漏组/无缺位，PANEL-CORRUPTION §6 已更，
+>    反强 r22 档案假说）**；hexagonrtc(hexagonrpcd) r7/r8 **✅收敛**（pmaports `69360d4`，
+>    pkgrel 7→8 合法化包仓现态）。
+>    取证毕设备去向留用户拍板（留 Flyme / 重刷现役三件回 pmOS，回滚件全在档）。
+>    ★本轮四仓全部只 commit 未 push（推送窗口 = 用户拍板）；nura tip = 本 commit +
+>    MANIFEST 工作态更钉（r88/v69 预构建验证件段）。
 > 注：私有面（pmos_linux docs、meizu20-m1 取证）原地不动，路径照旧有效；旧文档里
 > 「pmbootstrap work dir 与 K30 共享须串行」已过时（K30 退役即失效；10-13 布局 v3
 > 零 mv 确认树不搬，只防本机并发）。
@@ -80,7 +100,9 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-14 更；新会话从这里接）
+## 现态（2026-10-19 更；新会话从这里接）
+
+- **▶ 2026-10-19 窗口期轮：Flyme 取证四件全落袋 + rebase 预备四件收官（（九十）（九十·乙）；设备现役 = Flyme 未动）**：①**取证四件**（素材 = meizu20-m1/flyme-forensics-20261019/，只读红线零破）= F1 stock FDT 791KB + bootargs 全量（★旧判读修正「stock FDT 无 soundwire」作废）+ 相机 ACK 真值 s5k3p9sx 0x3109@0x5a；F2 SWR 麦域 418 控件全景（手拨不通 = stock 要 HAL AFE 会话）；F3 modem EFS 四分区双侧哈希 MATCH；F4 DSC allocated:2 + evtlog 每帧 dce_dsc_setup。②**预备四件** = printk 上游未修（`no_console_suspend` 留）+ ath12k 0012 不摘（carry 三件全留，qrtr 悬案闭环）+ 0xC4 旋钮预写预构建（fork `c1d84dcf80ec` → r88/v69 verify 走通，验证件不上机）+ printk 流程卡。③**花屏 §6 #2/#3 双判负**（无漏组/无缺位 → 强化 r22 判词，0xC4 = 唯一漏测项地位再确认）+ hexagonrpcd r7/r8 收敛。④蒸馏③④未动（留专注会话）。**四仓只 commit 未 push（推送窗口 = 用户）**；取证毕设备去向留用户拍板。
 
 - **▶ 2026-10-14 晚轮：CI 硬件验收 + r87 发布轮（一轮双事，Release r87 = Latest）**：
   ①**硬件验收全过**：CI #21 三件（mu-r86/esp-v67/r86-phosh rootfs）刷入实机一次点亮——

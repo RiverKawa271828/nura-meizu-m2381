@@ -13,6 +13,14 @@
 | 设备包 / 固件包 | **r62**（摘 discover-backend-apk[KDE 商店=plasma 伴生件] + flatpak/gnome-software-plugin-flatpak[phosh 商店真 flatpak 支持，用户拍板]；r61 = waydroid 五件 + 52_waydroid.nft + preset disable）/ r3（零改动） | 同目录 | 5dc0fbd9（r62 apk）/ 6e6dac0a（fw） | 机上 apk add |
 | 上机期望 | `uname -v` = `7.3.0-rc6` → **#88**（10-14 实测 ✓；waydroid v4 互联网+DNS 通，netd 零报错；52_waydroid.nft 装包后首 boot 手工 `nft -f` 补应用一次，后续 boot 由 nftables.service 正常加载） | — | — | — |
 
+**r88/v69 预构建验证件（2026-10-19 窗口期预备轮；不上机不发布）**：fork `c1d84dcf80ec`
+（`msm.zero_clkout_timing` 旋钮 = 花屏 0xC4 归零单变量，0644 运行时可写，默认 0 =
+现行为）+ pmaports `77925c5` → apk **r88**（sha8 `cc1ecc44`）+ ESP **v69**（裸
+`daf03fea` / gz `0866315d`，build-esp 构造性同源）。verify [1]-[3][5] 全绿；[4] 红 =
+口径错位（APK 取 APKBUILD 现值 r88 vs 钉子 v68 发布面），工作态配对构造性同源非真红
+——rebase 轮出正式件时自消。设备日（rebase 后）流程 = 刷 rebase 件 →
+`msm.zero_clkout_timing=1` 旋钮归零 → 真睡×5 → 眼判（判据 = docs/PANEL-CORRUPTION.md §6）。
+
 **r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂
 （gzip 重压 workaround 撤）；RTC 用户态三件下线后时钟正确 + timedatectl 首次读出 RTC；
 彼侧 qbootctl v0.2.2 设备端现编落地（fastboot 停车根除，SLOT b Successful=1 重启重标 ✓）。
