@@ -89,6 +89,7 @@
 | 10 | 刷新率档位命令（H2） | 强制异档 0x91/0x2F + 真 sleep：遮罩能量图相关 +0.58（=同机位基线）⇒ 三张是同一张确定性错误表，DDIC 重载不消费命令档 | ✗【实测，终审】 |
 | 11 | DCS 可读状态空间 | 好/坏态 373 项（24 地址×16 页 + std 5）逐字节全同 | ✗【实测】 |
 | 12 | 渲染栈/帧缓冲 | 帧缓冲干净（截屏无损），病灶在 framebuffer 之后的通路 | ✗【实测】 |
+| 13 | **CLKOUT_TIMING_CTRL（clk_post/clk_pre）归零**（0xC4） | 修正实验 A/B（10-19 设备日）：knob default 可达态阳性对照 6/6 全花（P1+历史基线复现，dsi_err status=4 每轮一条），`zero_clkout_timing=1` 归零臂 5/5 全花 = 零效应 | ✗【实测，终审】 |
 
 **边界结论**：主机侧一切已知可达维度（包内容 × 包形态 × 时机 × 供电 × 时序 ×
 档位命令 × 可读状态）全部清白。病灶对 DCS 100% 不可见——要么在 DDIC 内部
@@ -210,26 +211,29 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
 
 ## 6. 未解与下一步（按先验排序）
 
-1. **0xC4 归零单变量**【✅ 10-19 设备日执行完毕——**判读 = 实验前提证伪，0xC4 不可判
-   （阳性对照缺席）**】：`msm.zero_clkout_timing`（fork `c1d84dcf80ec`，0644 运行时
-   可写，下一个 host clock setup 写 0 代替 clk_post/clk_pre；默认 0 = 现行为不变）。
-   执行面（10-19 两轮）：apk r88 + ESP v69 upgrade.sh 首跑双腿全绿（实测 #89 + 读回
-   对 ✓）→ 默认态回归绿 → 第一轮：默认态真睡 ×1 + 旋钮归零 ×5（rtcwake -d /dev/rtc1
-   -m mem；journal 六对 entry/exit，susp_success 0→6）→ 第二轮（用户在场眼判，短版
-   15s 睡/25s 观察窗）：C0 默认态对照 + 旋钮 ×5（susp_success 7→13）——**12/12 醒后
-   全净，含 C0 默认态（用户眼判回执「C0 也没花」）**。
-   **定谳（代码 + 实验双证）**：两臂全净非旋钮之功，而是**排面前提「真睡不受 bloff
-   影响」证伪**——bloff 语义在 `unprepare()` 的 bloff 分支（panel-boe-meizu20.c:1261
-   = 0x51=0、不发 0x28/0x10、keep_rails、bl_off_live=true），而系统 suspend 的 DRM
-   off 同走 unprepare → **DDIC 在 suspend/resume 全程不睡**；醒来 `enable()` 走
-   bl_off_live 捷径跳过重放（:1177）→ 毒源（sleep-out 自重初始化）结构性不可达。
-   附带正面实锤：**r88 默认态真睡 = 日用干净**（两轮 12 次 s2idle 零花屏、dsi_err
-   零新增、无睡死）。旋钮已复值 0。
-   **0xC4 修正实验设计（记档，复燃再排）**：debugfs `knob` → `default`（关 bloff =
-   病灶可达态）→ 真睡 ×1（预期全花 = 阳性对照，历史 5/5 基线）→ 保持 knob default +
-   `zero_clkout_timing=1` → 真睡 ×5 眼判 → 这才是 0xC4 的真 A/B；测完回日常 =
-   `knob bloff` + 重启（§5 旋钮互斥律）。低先验（更像结构差异而非病因）维持原判，
-   且其实验价值降级（病在日用态已不可达，只在「关 bloff 的实验态」存在）。
+1. **0xC4 归零单变量**【✅ 10-19 设备日两阶段收官——**洗清（排除）**】：
+   `msm.zero_clkout_timing`（fork `c1d84dcf80ec`，0644 运行时可写，下一个
+   host clock setup 写 0 代替 clk_post/clk_pre；默认 0 = 现行为不变）。
+   - **阶段一（默认态，12/12 全净）**：apk r88 + ESP v69 upgrade.sh 首跑双腿全绿
+     （实测 #89 + 读回对 ✓）→ 默认态回归绿 → 默认态真睡 ×2 轮 12 次 s2idle
+     （含 C0 对照，用户眼判回执「C0 也没花」；susp_success 0→13、dsi_err 零新增）
+     → **排面前提「真睡不受 bloff 影响」证伪**——bloff 分支在 `unprepare()`
+     （panel-boe-meizu20.c:1261 = 0x51=0 不发 0x28/0x10 + keep_rails +
+     bl_off_live=true），系统 suspend 的 DRM off 同走 ⇒ **DDIC 真睡全程不睡**，
+     醒来 `enable()` 走 bl_off_live 捷径跳过重放（:1177）⇒ 毒源（sleep-out 自重
+     初始化）结构性不可达（§5④）→ 默认态 0xC4 不可判（阳性对照缺席）。
+   - **阶段二（修正实验 = debugfs `knob default` 关 bloff，病灶可达态）**：P1
+     阳性对照真睡 ×1 → **全花**（历史 5/5 基线在可达态复现 ✓；**dsi_err
+     status=4 每轮一条 = 可达态链路真断的客观 marker**，对照 bloff 轮全程 0）→
+     `zero_clkout_timing=1` 真睡 ×5 → **5/5 全花 = 旋钮零效应** → **0xC4 洗清：
+     clk_post/clk_pre 归零既不治花也不加重**。susp_success 13→19，6 次真 s2idle，
+     `r22: knob 'default'` dmesg 事件在案，cold-enable sanity 零触发（DCS 面
+     全应答，与排雷 #11 一致）。
+   - **档案落位**：0xC4 = 排雷表 #13（最后一个寄存器级单变量，负结果）；病根维持
+     §4.4 判词（DDIC 自身 sleep transition）；条 4 残余位（RBUF / INSERT_DCS
+     bit16 / 仪式位族）在可达态可测，但**日用 bloff 默认态结构性免疫 → 只记档
+     不开工**。收尾 = 旋钮复值 0 + `knob bloff` + 重启回日常（冷启治愈现屏）。
+     附带正面实锤：**r88 默认态真睡日用干净**（12 次 s2idle 零花屏零睡死）。
 2. **唤醒命令组完整性**【✅ 静态对拍判负 = 无漏组（2026-10-19）】：stock FDT（flyme
   取证 10-19，运行态全量 fdt 791KB）全部命令组属性 = `qcom,vid-on-commands`/
   `cmd-on-commands`/off/qsync（7 面板变体各一套）；**不存在独立 pre-panel-on 组**

@@ -22,11 +22,12 @@
 v69 → 实测 #89 + recovery_a 读回 daf03fea 对 ✓），首跑抓到 apk 腿 UNTRUSTED 假绿坑
 （CI rootfs 烤 CI 临时钥）已根治入 upgrade.sh/UPGRADE.md；实验执行 = 默认态对照真睡
 ×1 + 旋钮归零真睡×5 全部 s2idle 入睡（journal 六对 entry/exit，susp_success 0→6，
-dsi_err 零新增）。**判读（10-19 定）**：第二轮眼判 12/12 全净**含默认态对照 C0** →
-排面前提「真睡不受 bloff 影响」证伪（bloff 分支在 unprepare，suspend 同走 ⇒ DDIC
-真睡全程不睡，毒源结构性不可达，PANEL-CORRUPTION §6 条 1/§5④ 双落档）→ 0xC4
-不可判（阳性对照缺席），旋钮已复值 0；附带实锤 = r88 默认态真睡日用干净。修正
-实验（knob default 关 bloff 点亮病灶再 A/B）记档 §6 条 1，复燃再排。
+dsi_err 零新增）。**判读（10-19 两阶段定谳，用户在场眼判）**：阶段一默认态 12 次
+s2idle 全净（含 C0 对照）→ 前提「真睡不受 bloff 影响」证伪（suspend 同走 unprepare
+bloff 分支 ⇒ DDIC 全程不睡，PANEL §5④/§6 条 1）；阶段二 `knob default` 可达态
+= P1 阳性对照全花 + `zero_clkout_timing=1` 归零臂 5/5 全花 → **0xC4 洗清**
+（clk_post/clk_pre 零效应，排雷表 #13 终审）；附带实锤 = **r88 默认态真睡日用
+干净** + bloff 结构性免疫。旋钮/bloff 已复值 + 重启回日常（冷启治愈现屏）。
 
 **r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂
 （gzip 重压 workaround 撤）；RTC 用户态三件下线后时钟正确 + timedatectl 首次读出 RTC；
