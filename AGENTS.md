@@ -27,7 +27,10 @@
 >    + waydroid 复活全链；**10-14 晚该态已被 r87 CI rootfs 覆盖**（回滚件照旧全在档）。
 >    ④下轮 = **等 7.3 stable（rc7 已出（10-19 核，tag ec8bf828）→ stable ~10-25；
 >    出 rc8 则顺延 ~11-01）→ rebase 专项**（用户点名开工）。**窗口期纯宿主预备 =
->    ✅四件全收官（10-19（九十·乙））**：carry-list 两查定谳 = **printk 上游未修
+>    ✅四件全收官（10-19（九十·乙））+ ✅rc7 rebase 演练（10-19：98 提交零冲突重放到 v7.3-rc7
+>    + 语义 sanity 四件全绿 + r89 编译验证[sha8 d8918256]；tag `archive/rc7-dryrun-20261019`@
+>    `87ca59a3afac`；v7.3-rc7 对象已入本地仓；报告/正式轮清单 = docs/rebase-dryrun-rc7-20261019.md；
+>    ⚠新坑：pmbootstrap-meizu.sh wrapper 无沙箱守卫，直调必须显式 systemd-run）**：carry-list 两查定谳 = **printk 上游未修
 >    → `no_console_suspend` 留**（修复提案押后死寂，v7.3-rc6 代码原样）+
 >    **ath12k 0012 不摘**（上游 Shenghan 件未合入；★定性修正：`0d777aa2ca77` = freq
 >    range 域非睡眠回归；睡眠轴上游 Saikiran mhi.c 件压 review 八个月未合 → carry
