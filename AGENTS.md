@@ -44,6 +44,11 @@
 >    rebase 本体 = carry-list 重放 + 0xC4 拼车 + printk 复核 + ath12k
 >    21s；7.4 前瞻雷随车（binder Rust 化 / kalama SDE catalog 收割 / `drivers/virt`
 >    gunyah 复查点在册——7.3 全周期无 gunyah，驱动只进 merge window）。
+>    **▶窗口期剩余任务已排程（下会话照做）= docs/window-round-card-20261020.md**
+>    （第一步先核 stable 出没出：出 = 转正式 rebase 轮照 dryrun 报告 §清单；
+>    未出 = 1蒸馏③[steamos 在等]+3wrapper守卫 首选 / 2相机驱动轮预备卡 次选 /
+>    4花屏S2对拍·5SDE catalog·6binder调研 并列 / 7upgrade.sh[点头件]；
+>    每项独立可停，commit 不 push。已关闭：rc7 演练[勿重做]、路线 D[勿再提]）。
 >    ⑤**窗口期取证+小工作（10-19 用户拍板「下会话开始」）**：⚠**设备现役 = Flyme**
 >    （用户备 root = adb+su；取证全只读，刷写红线不破；**回 pmOS 后这些窗口全失效，宜先做**）。
 >    **取证四件（叙事落 pmos_linux experiment-log）**：
