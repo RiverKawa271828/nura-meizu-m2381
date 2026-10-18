@@ -91,14 +91,20 @@
   （binderfs 行为/CONFIG 面变化/已装机 rootfs 的重验点）+ `drivers/virt` gunyah 在
   7.4 merge window 的复查点——调研落档补进 rebase 清单（只在 7.3→7.4 时需要）。
 
-## 7. upgrade.sh 固化（用户点头件）
+## 7. upgrade.sh 固化（用户点头件）——✅ **已点头（10-19 用户明确拍板「带，点头」），下会话随主件插空**
 
 - **方案已答 =（八十七）**（apk 腿 + ESP 腿原地升级脚本化，不重刷 userdata）。
   排入本轮 = 若您对清单无异议即视为点头；做完对齐 FLASHING/UPGRADE 文档。
 
-## 顺序与预算
+## 顺序与预算（10-19 晚更新：第 0/1/3 项已收官，见各节 ✅）
 
-- 单会话预算 1-2 件大件：**首选 1（蒸馏③）+ 3（wrapper 守卫）**；次选 2（相机卡）。
-- 4/5/6 为并列调研件，谁先有兴致做谁；7 随时插空。
+- **下会话排面（用户拍板 10-19 晚）**：首步照旧核 stable（出 = 转 rebase 轮，窗口任务
+  全部挂起）；**主件 = 4（花屏 S2 内容值对拍表**——小米11 Pro 情报已注入 §4 素材段，
+  F4 evtlog + fork 树 dpu_encoder/dpu_hw_dsc 全在盘，纯宿主零设备；产出落
+  PANEL-CORRUPTION §6，直接服务 0xC4 设备日判读）；**插空 = 7（upgrade.sh，已点头）**
+  ——apk 腿 + ESP 腿脚本化（复用 devpush/flash-batch/readback 现有件，坑变门：
+  主包+子包同装/fastboot 单通道/gz 解压/刷后 dd 读回对 sha；红线不破，
+  仍 `--i-am-present` + 用户在场），做完对齐 FLASHING/UPGRADE 文档。
+  次选 = 2（相机卡）；5/6 再后（谁先有兴致做谁）。
 - 每件收尾 = 落档 + commit（**不 push**，推送窗口 = 用户拍板）+ 接续卡对应段落打勾。
 - 收官时：experiment-log 追加窗口轮叙事 + 记忆簿更新 + 接续卡「等 stable」态刷新。
