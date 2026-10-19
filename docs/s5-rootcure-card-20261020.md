@@ -65,22 +65,32 @@
   也算交付，判词落档再排下一段。
 - 判读无论正反都落 PANEL-CORRUPTION §6 条 4/条 6 + 本卡打勾 + 记忆簿更钉。
 
-## 4. REA 工具链（10-19 晨调研落卡；用户提名 <https://github.com/morluto/rea>）
+## 4. REA 工具链（✅ 10-19 晨已装好并实测跑通；用户提名 <https://github.com/morluto/rea>）
 
-- **是什么**：RE agents 工具集（300k★，MIT）= MCP server + CLI（`npx rea-agents@latest`），
-  把 agent 直接接上 RE 工具面：native 二进制（Ghidra/Hopper/IDA → 伪代码/汇编/符号/
-  xref/调用图）、固件（Binwalk/Unblob 区域提取后接 native 分析）、字符串/熵/JSON/YAML
-  等一键摘要。分析全本地跑。授权用途注记 = 自有设备互操作性研究——我们正是此类。
-- **对 S5 的映射**（正中缺的那块肌肉）：
-  - `xbl_a/b.img`（Qualcomm XBL = ELF 头 aarch64 裸固件）→ REA native lane 出伪代码
-    + xref，比手拆 objdump 快一个量级；面板会话建立函数（上电时序/命令表/语境）=
-    第一目标；
-  - `uefi_a-fvtool` 已提取的 DisplayDxe PE 镜像（UEFI AARCH64 = PE/COFF，Ghidra 直接
-    吃）→ ProfileID 0xB 消费端 + override key 表（0x3e998/46B/151 条）语义补完。
-- **宿主前置（10-19 实测）**：node v26.7 ✓ / npm 11.19 ✓ / objdump ✓ / uv ✓；
-  **缺 = Ghidra（未装）+ JDK 21（现装 17，Ghidra 11.x 要 21，Fedora `dnf install
-  java-21-openjdk` 即可）**；无 aarch64 版 binutils（Ghidra 覆盖，不阻塞）。
-- **接线姿势**：先 CLI（`npx rea-agents@latest` 系列，零注册成本）；要挂进 agent 会话
-  再做 MCP 手动注册（REA setup 支持 arbitrary MCP client）。Ghidra 首次 setup 需
-  下载授权（REA 可代装 Hopper，我们选免费的 Ghidra 路线）。安装/首次跑照守卫纪律
-  （沙箱网络受限 → systemd-run 或用户在场跑 setup）。
+- **安装形态**（用户纠偏后定案 = 装在当前工作容器里，不用再嵌 Debian 容器）：全部
+  落 `/home/ri/work/meizu20/s5-rea/`（宿主持久 fs，跨会话存活，删目录即卸载）：
+  - REA CLI 6.7.0：`s5-rea/rea-cli/node_modules/.bin/rea`（npm prefix 安装）；
+  - Ghidra 12.1.4（doctor healthy）+ Temurin JDK 21；
+  - **环境一行**：`source /home/ri/work/meizu20/s5-rea/env.sh`（设
+    GHIDRA_INSTALL_DIR/JAVA_HOME/PATH + rea alias）。
+- **冒烟全通（真素材）**：`rea analyze` + `rea inspect-native-api` 对 xbl 代码段 →
+  Ghidra 12.1.4 lane（AARCH64:LE:64:v8A）函数边界/伪代码分类/API 边界全出
+  （evidence 在 `s5-rea/out/`）。
+- **★xbl 输入配方（当轮啃出的硬知识，下会话直接抄）**：Qualcomm xbl 的 ELF 头是
+  **ELF32 + `e_machine=1`（占位值）**，REA 直读必拒「unsupported ELF architecture」。
+  解法 = 按 program header 切出代码段再 raw-binary 喂：
+  ```bash
+  # xbl_a.img: ph0 = 代码段 off=0x74 size=0x20000 vaddr=0x22126000（真身 aarch64）
+  dd if=xbl_a.img of=xbl_a-code.bin bs=1 skip=$((0x74)) count=$((0x20000))
+  source s5-rea/env.sh
+  rea analyze xbl_a-code.bin --target-format raw-binary --architecture arm64 \
+    --entry-point 0x22126000
+  ```
+  （各 xbl/xbl_config/devcfg 的段表先 `readelf -l` 或 python struct 解一遍再切；
+  xbl_b 同法。分析产物 ephemeral——长会话用 `--snapshot` 落本地分析库加速。）
+- **对 S5 的映射**：
+  - xbl 代码段 → REA native lane 伪代码/xref 读面板会话建立（上电时序/命令表/语境）；
+  - `uefi_a-fvtool` 已提取的 DisplayDxe PE（UEFI AARCH64 = PE/COFF，格式良 → REA 直吃，
+    无需 raw-binary 套路）→ ProfileID 0xB 消费端 + override key 表（0x3e998/46B/151
+    条）语义补完。
+- **授权用途**：自有设备互操作性研究（REA 声明的合法场景，本案正是）。
