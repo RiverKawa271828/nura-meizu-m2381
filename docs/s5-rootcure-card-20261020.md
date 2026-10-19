@@ -64,3 +64,23 @@
 - 首枪（半天）→ 不治即转 S5 RE（上不封顶）；RE 有阶段性产物（模块定位/命令表）
   也算交付，判词落档再排下一段。
 - 判读无论正反都落 PANEL-CORRUPTION §6 条 4/条 6 + 本卡打勾 + 记忆簿更钉。
+
+## 4. REA 工具链（10-19 晨调研落卡；用户提名 <https://github.com/morluto/rea>）
+
+- **是什么**：RE agents 工具集（300k★，MIT）= MCP server + CLI（`npx rea-agents@latest`），
+  把 agent 直接接上 RE 工具面：native 二进制（Ghidra/Hopper/IDA → 伪代码/汇编/符号/
+  xref/调用图）、固件（Binwalk/Unblob 区域提取后接 native 分析）、字符串/熵/JSON/YAML
+  等一键摘要。分析全本地跑。授权用途注记 = 自有设备互操作性研究——我们正是此类。
+- **对 S5 的映射**（正中缺的那块肌肉）：
+  - `xbl_a/b.img`（Qualcomm XBL = ELF 头 aarch64 裸固件）→ REA native lane 出伪代码
+    + xref，比手拆 objdump 快一个量级；面板会话建立函数（上电时序/命令表/语境）=
+    第一目标；
+  - `uefi_a-fvtool` 已提取的 DisplayDxe PE 镜像（UEFI AARCH64 = PE/COFF，Ghidra 直接
+    吃）→ ProfileID 0xB 消费端 + override key 表（0x3e998/46B/151 条）语义补完。
+- **宿主前置（10-19 实测）**：node v26.7 ✓ / npm 11.19 ✓ / objdump ✓ / uv ✓；
+  **缺 = Ghidra（未装）+ JDK 21（现装 17，Ghidra 11.x 要 21，Fedora `dnf install
+  java-21-openjdk` 即可）**；无 aarch64 版 binutils（Ghidra 覆盖，不阻塞）。
+- **接线姿势**：先 CLI（`npx rea-agents@latest` 系列，零注册成本）；要挂进 agent 会话
+  再做 MCP 手动注册（REA setup 支持 arbitrary MCP client）。Ghidra 首次 setup 需
+  下载授权（REA 可代装 Hopper，我们选免费的 Ghidra 路线）。安装/首次跑照守卫纪律
+  （沙箱网络受限 → systemd-run 或用户在场跑 setup）。
