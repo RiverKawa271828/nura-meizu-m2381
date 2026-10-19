@@ -78,7 +78,13 @@
 >    重启回日常复核绿。**设备现态 = 在机 #89 + v69 + r88 apk + CI r86-phosh rootfs
 >    （device r60 + fw r3，用户 10-18 深夜刷回；非 r87 发布面 = waydroid/flatpak
 >    缺位——日用完整态 = 择时重刷 r87 rootfs 或 apk 腿补 device r62，不急）**。
->    5/6 两调研件顺延 rebase 前再排。
+>    **▶下会话排面三钉（10-19 晨用户拍板「下个会话逆向试试，我要根治」）**：
+>    花屏根治专项 = **docs/s5-rootcure-card-20261020.md**——主线 = S5 XBL/vendor
+>    逆向（素材全在库，卡内有地图）+ **强烈建议的廉价首枪 = stock-DSC-content
+>    旋钮 A/B**（H1 只测过包形态从未测过内容值；S2 表 #9-#15 四处内容差 = 现成
+>    靶，Novatek demura 专利「重载按会话参数自选档案」直指它；r90/v70 → upgrade.sh
+>    磨合链路半天内出判词）；判据钉死 = knob default 真睡×5 全干净 + 零回归。
+>    rebase 仍等 stable（rc7 止）；窗口 5/6 调研件顺延不变。
 >    每项独立可停，commit 不 push。已关闭：rc7 演练[勿重做]、路线 D[勿再提]、
 >    NCM 漂移修[无需]、ath12k B 路[挂起待点名]、stock 唤醒 DCS 抓取[窗口已关]）。
 >    ⑤**窗口期取证+小工作（10-19 用户拍板「下会话开始」）**：⚠**设备现役 = Flyme**
