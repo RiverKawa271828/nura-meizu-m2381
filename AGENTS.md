@@ -183,9 +183,11 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   算法 →「12 族只有我方内核喂过」强化落档面（置信中高）；TE 族 12 键 +
   DSIDemuraPanelIDReadCMD/ID（r22 档案假说相邻）后半场挂起（触发 = 首枪负结果）；
   负结果 = 0x1801011 不迁移（DPU 代差）+ VirtioDSI 诱饵块。commits nura
-  `eb8e3fa`/`db8dc18`/`f6f8041`（commit 不 push）。**下会话 = 首枪 A/B 挂设备回
-  pmOS 窗口**（设备去向待用户拍板；r90/v70 显式 `--apk/--esp`；0x0A 读回 0x9C 入
-  判读面）。
+  `eb8e3fa`/`db8dc18`/`f6f8041`（commit 不 push）。**下会话 = 首枪 A/B 开工**
+  （★设备窗口已开：10-21 深夜设备已回 pmOS 在机 [#89 + v69 + r88 + CI r86-phosh
+  rootfs + iio-sensor-proxy r3 热修]；r90/v70 显式 `--apk/--esp` 勿取 r89 红线件；
+  0x0A 读回 0x9C 入判读面）；构建死等时间可并行 = CI 侧 fork 包根治排查
+  （见深夜追记条）。
 - **▶ 2026-10-19 晨 0xC4 设备日收官（定谳 = 0xC4 洗清，排雷表 #13 终审；upgrade.sh 首跑全绿 + 两坑根治）**：
   ①**upgrade.sh 设备腿首跑全绿**（apk r88 + ESP v69 → #89 + 读回对 ✓；首跑抓 apk 腿
   UNTRUSTED 假绿 = CI rootfs 烤 CI 临时钥 `pmos@local-6acea657`，本地钥 `6aaed2ab` 包必拒——
