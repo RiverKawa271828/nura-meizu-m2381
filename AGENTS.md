@@ -148,6 +148,17 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-21 深夜 更；新会话从这里接）
 
+- **▶ 2026-10-21 深夜追记：传感器 QS 开关消失定谳+修复（用户眼判过）+ CI rootfs 发布面 bug 入册**：
+  设备回 nura 后自动旋转/自动亮度开关消失——排查 = 数据面全活（ADSP/fastrpc/sensorspd 会话/
+  SensorProxy 三属性 true+lux 活值）⇒ 断点在 claim 层；对钉 = 设备装 Alpine 裸包
+  **iio-sensor-proxy-3.9-r2**（无 10-03 轮 SSC 四补丁）非本机 fork **3.9-r3**（0003
+  load-bearing，APKBUILD 注释同症状）。成因 = **CI r86/r87 rootfs 构建 pmbootstrap 择了
+  pmOS 官方二进制，fork r3 没进 rootfs**（10-03 验证态=本地 rootfs）——**凡刷 r86/r87 者皆中**。
+  修复 = devpush r3 三件（主+systemd+udev）→ `apk add --no-network --allow-untrusted`
+  （★--no-network 必须，NCM 无外网 DNS 卡死 apk）→ restart iio-sensor-proxy → phosh 0.57
+  自动重 claim 开关即回。**下会话排面 = CI 侧根治**（查为何 fork 包未选中：疑官方仓版本撞号/
+  pmbootstrap 择包逻辑；把 fork 包固化进 CI rootfs 构建）。详 = 记忆
+  `meizu20-sensors-userspace`。
 - **▶ 2026-10-21 纯宿主轮：S5 卡三段落盘（用户提供魅族22 移植仓素材 → 交叉印证 +
   vendor 源码互证 + DisplayDxe 键表前半场）**：素材 = github `14185638/Linux-MEIZU_22`
   （M2582/SM8735 第三方主线移植，10-17 显示修复批；评估存记忆
