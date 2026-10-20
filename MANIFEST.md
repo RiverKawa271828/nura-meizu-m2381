@@ -3,7 +3,7 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-21 rebase 正式轮更钉：在机 = **#92 + v71 + apk r91**（upgrade.sh 双腿全绿 10-21 深夜，读回 0a102220 对 ✓ + 眼判四项过；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + device r60 + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62）+ iio-sensor-proxy fork r3 热修在机；发布面 = Release r87（Latest 不变））
+## 工作态（2026-10-21 rebase 正式轮更钉：在机 = **#92 + v71 + apk r91 + device r63**（upgrade.sh 双腿全绿 10-21 深夜，读回 0a102220 对 ✓ + 眼判四项过；device r63 = depends +iio-sensor-proxy 10-21 用户拍板，装机 RC=0；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62+）+ iio-sensor-proxy fork r3 热修在机；发布面 = Release r87（Latest 不变，r91 云构建发布轮进行中））
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|

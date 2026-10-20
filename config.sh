@@ -46,7 +46,7 @@ APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推�
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="91"      # r91 = 7.3 stable rebase 正式轮（10-21：99 提交零冲突重放到 v7.3 `091b0638`，apk 内核 release=7.3.0[模块目录 /usr/lib/modules/7.3.0/]；printk 复核=上游未修 no_console_suspend 留 + ath12k 0012 三件 carry 全留；**待上机 #92**）；r90 = 首枪 stock-content 旋钮（A/B 判负，debug 设施默认 0 随车）；r87 = 发布面（Release r87 Latest 不变）；r86 = waydroid 双族策略路由（#87 验过）
-REL_DEVICE_PKGREL="62"     # r62 = 摘 discover-backend-apk（10-14 用户拍板「phosh 移除 discover」——KDE 商店+flatpak/fwupd 后端=plasma-mobile 伴生件，新装 rootfs 不再带入，已装设备 apk del 清理）；r61 = waydroid 固化：depends +waydroid/waydroid-pyc/waydroid-systemd/gbinder-python/libgbinder 五件 + 52_waydroid.nft（放行+MSS clamp）入包 /etc/nftables.d/ + preset disable waydroid-container；r60 = modules-load.d 补 uhid；r59 = uinput 用户态胶水；r58 = s2idle×systemd 看门狗修复
+REL_DEVICE_PKGREL="63"     # r63 = depends +iio-sensor-proxy（10-21 用户拍板补名；CI rootfs 闭合根治的 depends 面收口——fork r3 自此必进构建闭合，与 build-device 预编双保险）；r62 = 摘 discover + flatpak 商店；r61 = waydroid 五件；r60 = modules-load.d 补 uhid
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v71.img.gz"  # v71 = r91 内核（裸 0a102220 / gz 6fe7811a；10-21 本地构建，verify[4] 手工对拍 v71↔r91 vmlinuz 4aad92b3 逐字节同源；**待上机**）；v70 = r90（裸 dca69c1d / gz 374c4595，#91 在机验过）；v68 = r87 发布面（裸 e7a044a8 / gz 086a4eef）；v67 = r86（裸 2ad63003，#87 验过）
