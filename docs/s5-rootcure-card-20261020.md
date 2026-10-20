@@ -29,7 +29,8 @@
   `--apk/--esp`，默认会取 r89 红线件）→ knob default + 真睡 A/B 眼判。
 - **判读**：干净 = **病根 = 会话参数落档** → 根治 = 驱动对齐 stock 值（4 处内容差
   补丁形态用户拍板）；还花 = lane A 死，**反向喂 S5**（答案确在 vendor 专有域，
-  标准命令域彻底清零）。
+  标准命令域彻底清零）。判读面增补 = **0x0A GET_POWER_MODE 读回**（DDIC 状态客观
+  marker，期望 0x9C；§5）补眼判。
 
 ## 2. S5 逆向本体（主线，纯宿主可先跑）
 
@@ -57,6 +58,16 @@
      （dcs_write / session probe 现役在 r88 驱动内）上机重放验证。
 - **预期校准**（09-30 原版照旧）：一个会话现实交付 = 定位显示模块 + 命令表结构；
   完整语境提取可能 2-3 会话 + 设备日验证。
+- **★外部锚点（10-21 魅族22 仓白捡，检索模式直接抄）**：见 §5——DisplayDxe 搜
+  「sleep-out(0x11) 前的 DCS 冷初始化写」+ INTF_TIMING_ENGINE_EN 写值邻域
+  （其设备 0x323AC 处写 0x1801011）+ **vendor 源码互证 lane**（读源码非逆向，
+  最便宜，§5a）。
+
+## 2a. 10-21 排面修正（用户拍板「开干」本轮执行序）
+
+- 本轮 = RE 纯宿主段先行：**vendor 源码互证（§5a）→ DisplayDxe 锚点检索（§2）**；
+- **首枪 A/B 挂设备回 pmOS 窗口**（设备现役 Flyme、去向待用户拍板——升级当天反正
+  走 upgrade.sh 磨合链路，半天出判词，与 RE 产物互不阻塞）。
 
 ## 3. 顺序与预算
 
@@ -94,3 +105,62 @@
     无需 raw-binary 套路）→ ProfileID 0xB 消费端 + override key 表（0x3e998/46B/151
     条）语义补完。
 - **授权用途**：自有设备互操作性研究（REA 声明的合法场景，本案正是）。
+
+## 5. 魅族22 移植仓交叉印证（2026-10-21 评估入卡；素材 = github `14185638/Linux-MEIZU_22`
+   设备分支 `Linux-7.2-MEIZU_22-M2582`，10-17 修复批 + 10-05 基础提交）
+
+- **定性**：SM8735 "tuna"（DPU 12.3）+ CSOT VTDR6130A 1200x2670 DSC 2×600x30
+  命令模式面板的第三方主线移植，与我们无关联。边界 = SoC/面板/症状均不同
+  （他 = bring-up 常显花屏 + 冷启 TE 死；我们 = 真睡唤醒才花、两侧各自自洽）；
+  **字节不通用、模式通用**。仓无 README/issue，全部主张在 commit message 层，
+  但每个修复带实测数字（137.625MHz byte clock / 0x0A=0x9C / 缺三连半数冷启 TE 死）。
+- **★flbo 实测案例（他修的就是真花屏，病灶 = DSC 内容值）**：`panel-meizu-m2582.c`
+  `m2582_apply_table_rc()` 注释——「decoder 要 flbo=**15**，尽管 DSC 1.2 与 factory
+  推导对 30 行 slice 都给 **13**；encoder/decoder 都吃此字段，错值使两者 rate-buffer
+  模型每 slice 行失步；**实测 13 = 画面下六分之五噪点，15 = 整幅正确**」⇒
+  ① PPS 内容值 = 承重墙非摆设，**单字段即可翻 noise↔clean**；
+  ② DDIC 解码端 = ground truth，可同时推翻规范表与厂商推导。
+  **对首枪的含义**：stock 重放仍是对的第一枪（stock 13 族本机现量干净）；**若整包
+  重放后仍有残余花，别排除 DDIC 想要第三种值——按他这招单字段实测迭代**
+  （flbo 是已证明的杠杆）。
+- **S2 表 #9-#12 全族机制陈述**：`48287575`（其显示基础提交）——「encoder ICH 精度
+  与 PPS 模型漂移 ⇒ reconstructs corrupted output；flbo 由 slice 高度导出
+  （30 行→13），**nfl_bpg_offset / initial_dec_delay / scale_increment_interval
+  随之**」+ PPS 必须与 encoder 同一 `drm_dsc_config` 打包（`drm_dsc_pps_payload_pack`；
+  其 DT 的 PPS 占位包曾带 flbo=1 = 反面教材）。
+- **S2 表 #13/#14 两靶方向实证**：`fb4e8c5d`——
+  ① initial_lines：upstream 简化公式（92×3+ixd+47）给 2，vendor
+  `sde_hw_dsc_initial_line_calc()` 给 3（diff 全文转录；常量 pipeline_latency=28 /
+  rtl_output_data_width=64 = 我方 S2 表所记 Hardent 族同源）；我方 fork
+  `dpu_encoder.c:1966` 同款简化公式 → 旋钮 = 直接钉 stock 值 3；
+  ② **BIT(17) = video-mode 位、仅 VIDEO 模式置位**（「BIT(17) 让 decoder 用上预期
+  slice 时序」）；我方 fork `dpu_hw_dsc_1_2.c:235` 同款 cmd 模式反置位 bug
+  （stock=0x3001 / 我方=0x23001，S2 #14 方向吻合）→ 旋钮 = cmd 模式清位。
+- **新锚点 → §2 DisplayDxe 腿**：
+  ① 其 INTF_TIMING_ENGINE_EN 写 **0x1801011**（bits 4/20/24，「DisplayDxe 形态」，
+  其设备位置 0x323AC；写 1 则 tear-check 不锁帧、cmd kickoff 全超时）→ 我方
+  DisplayDxe 同类写值可对读（我方 fork 写 1，`dpu_hw_intf.c:283`）；
+  ② **面板冷初始化三连写在 DisplayDxe、sleep-out(0x11) 之前**：
+  `f0 aa 10 / 65 04 / cf 4b`（settle 20ms；power-on set 后 300ms；缺则半数冷启
+  TE 死、0x0A 读 0x0C 非 0x9C）→ 我方 DisplayDxe 检索模式 = 「sleep-out 前的
+  DCS 写」；
+  ③ te-source mdp_vsync_p / DATA_HCTL_EN cmd 模式 / hw_vsync_mode=1 —— 我方
+  fork 已是新形态或已配，无 gap。
+- **0x0A GET_POWER_MODE 读回 = DDIC 状态客观 marker**（期望 0x9C）→ §1 首枪
+  判读面 + 后续实验矩阵通用。
+- **B-list 候补旋钮（首枪不治后再议，勿提前摊开）**：
+  ① **VBIF QoS remap**——upstream 只从 WB encoder 编程，cmd 面板读帧一直在复位
+  优先级；我方 `sm8550_vbif` 用 sdm845 表 {3,3,4,4,5,5,6,6}，kalama factory 表待
+  §5a 互证；
+  ② **首帧杀 vblank 族**——upstream 首次 ping-pong 超时即注销 RD_PTR 回调
+  （vblank_refcount 卡 1，vblank 永死）+ frame-done timeout = 5/vrefresh（mode
+  clock 源 link rate → vrefresh 虚高、27ms 太短）；其修 = vendor 84ms 平值 +
+  仅 PANEL_DEAD 注销。我方 fork 两处同款形态在（`dpu_encoder_phys_cmd.c:203` /
+  `dpu_encoder.c:2140`）——**候补解释我方冷启 restart 双遍怪癖**；
+  ③ tearcheck sync_cfg_height 2×vtotal vs 其 vendor 0xFFF0（微差，暂不动）。
+- **「90Hz 修好」勘定** = `121f62e0` both scan rates（120@30/20/10 + 90@30/18/10
+  两档 ADFR 族按 mode 名选尾），**非花屏条目**。
+- **5a. vendor 源码互证 lane（新增，最便宜的 RE）**：CodeLinaro display-drivers
+  sparse 克隆（10-19 配方在册，绕限流）→ 直读 kalama
+  `sde_hw_dsc_initial_line_calc()` 原文 + sm8550/kalama VBIF qos-rt-remap factory
+  值——读源码非逆向，产出直接钉 §1 旋钮值与 B-list①。
