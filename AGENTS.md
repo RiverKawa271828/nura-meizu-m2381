@@ -146,8 +146,35 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-19 晨 更；新会话从这里接）
+## 现态（2026-10-21 深夜 更；新会话从这里接）
 
+- **▶ 2026-10-21 纯宿主轮：S5 卡三段落盘（用户提供魅族22 移植仓素材 → 交叉印证 +
+  vendor 源码互证 + DisplayDxe 键表前半场）**：素材 = github `14185638/Linux-MEIZU_22`
+  （M2582/SM8735 第三方主线移植，10-17 显示修复批；评估存记忆
+  `meizu22-port-corruption-fixes-reference`）。①**S5 卡 §5 = 首枪两靶获独立实证**：
+  flbo=15 实测案例（他修的就是真花屏：13=画面下六分之五噪点/15=整幅正确 ⇒ PPS 内容值
+  =承重墙、DDIC=ground truth 可推翻规范表与厂商推导；stock 重放仍是对的第一枪，残余
+  花则单字段迭代）+ initial_lines vendor 公式（upstream 简化给 2/vendor 给 3，我方
+  fork 同款简化式）+ DSC_CFG BIT(17) video 位（我方 fork `dpu_hw_dsc_1_2.c:235` 同款
+  cmd 反置位 0x23001 vs stock 0x3001）——「90Hz 修好」勘定 = both scan rates 非花屏
+  条目。②**§5a vendor 源码互证三靶全中**（sparse 克隆落
+  `meizu20/s5-rea/vendor-display-drivers/`，branch `display-kernel.lnx.5.15.r10-rel`，
+  techpack 布局 = 驱动在顶层 `msm/`）：initial_lines Hardent 公式原文
+  （`sde_encoder_dce.c`，pipeline_latency28/rtl_w64）+ flbo 档位表
+  （`sde_dsc_helper.c` `_get_dsc_v1_2_bpg_offset`：slice_h≤30→13 = stock 出处）+
+  **kalama VBIF factory 真值 = 本机 stock FDT**（vendor 为 DT 驱动
+  `qcom,sde-vbif-*`：rt-remap 16 项/ot 0x28·0x20/dynamic-ot 三对/vbif-size 0x1074）；
+  **B-list① VBIF 降级**（我方 fork 已 per-plane remap 且 XIN0-7 与 factory 等值）；
+  **B-list② 首帧杀 vblank 族**（RDPTR 首超时注销 + 5/vrefresh 超时，我方 fork 两处
+  同款）= 候补解释冷启 restart 双遍。③**§6 DisplayDxe 151 键表前半场**（表
+  @0x3e998/46B = **XML schema 键表非补丁表**：内联键名+len u16@+28+type u16@+30+值域
+  指针）：DSC 族 9 键**无 flbo/initial_lines** ⇒ 冷会话 PPS = 代码内硬编码 13 族
+  算法 →「12 族只有我方内核喂过」强化落档面（置信中高）；TE 族 12 键 +
+  DSIDemuraPanelIDReadCMD/ID（r22 档案假说相邻）后半场挂起（触发 = 首枪负结果）；
+  负结果 = 0x1801011 不迁移（DPU 代差）+ VirtioDSI 诱饵块。commits nura
+  `eb8e3fa`/`db8dc18`/`f6f8041`（commit 不 push）。**下会话 = 首枪 A/B 挂设备回
+  pmOS 窗口**（设备去向待用户拍板；r90/v70 显式 `--apk/--esp`；0x0A 读回 0x9C 入
+  判读面）。
 - **▶ 2026-10-19 晨 0xC4 设备日收官（定谳 = 0xC4 洗清，排雷表 #13 终审；upgrade.sh 首跑全绿 + 两坑根治）**：
   ①**upgrade.sh 设备腿首跑全绿**（apk r88 + ESP v69 → #89 + 读回对 ✓；首跑抓 apk 腿
   UNTRUSTED 假绿 = CI rootfs 烤 CI 临时钥 `pmos@local-6acea657`，本地钥 `6aaed2ab` 包必拒——
