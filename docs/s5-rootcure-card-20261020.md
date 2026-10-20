@@ -182,3 +182,35 @@
     形态）；catalog 8 项 sdm845 表在 XIN 0-7 与 factory 16 项表**等值**，差异只在
     XIN 8-15 未编程（plane SSPP 的 XIN 用不到该域）→ 对我方花屏的实际 delta 很小，
     降级为记档不开工。
+
+## 6. DisplayDxe override 键表语义补完（✅ 10-21 前半场收官；后半场挂起）
+
+- **素材**：`uefi_a-fvtool/.../DisplayDxe`（323584B PE32+ AArch64；ImageBase=0，
+  file offset == RVA；节 .text 0x1000-0x3a000 / .data 0x3a000-0x4e000）；
+  表 @0x3e998，46B×151 条。
+- **表格式解开 = XML schema 全量键表（非补丁表）**：每条 = {内联键名（NUL 结尾，
+  ≤27B）+ name-len u16@+28 + value-type u16@+30（2=int/4=bool/5=命令串/7/8=数组）
+  + 值域指针 qword@+32}。151 键 = DisplayDxe 面板 XML 的完整参数 schema；值 =
+  所选面板 XML 解析回填（HIGHLOW 重定位；13 对 PHY timing override（四十）已解）。
+- **键族盘点**（全 151 键已抽，脚本可重放）：
+  - ①**DSC 族 9 键**（#42-50：Enable/Major/Minor/Scr/ProfileID/SliceHeight/
+    SliceWidth/SlicePerPacket/ChromaFormat）——**无 flbo/initial_lines/bpc 键** ⇒
+    DisplayDxe 冷会话 PPS 的 rate-control 内容 = 代码内硬编码算法（= §5a vendor
+    源码同族，slice_h≤30→13 档）。**推论（置信中高，PPS 生成路径未逐指令验证）：
+    冷会话（DisplayDxe）与 stock Flyme 内核会话同为 13 族；12 族只有我方内核喂过
+    ⇒ 强化 §1 首枪「DDIC 偏好档案按会话参数选择」的落档面。**
+  - ②**TE 族 12 键**（#98-109：TECheckEnable/SetDisable/UsingDedicatedTEPin/
+    TEvSyncStartPos/ContinueLines/StartLineDivisor/PosSafetyMargin/
+    BelowSafetyMargin/PercentVariance/RdPtrIrqLine/Select/InitVal）= stock 侧
+    tearcheck 编程参考面（Meizu22 TE pacing 修复的我方对应；值未解，后半场）。
+  - ③**DSIDemuraPanelIDReadCMD(#116)/DSIDemuraPanelID(#117)** = demura 面板 ID
+    读命令键（DDIC OTP demura ID 读取入口——r22 档案假说相邻，后半场语义）。
+  - ④其他：DSIDynamicRefreshRates(t8)/DSIRefreshRate/DSILP11AtInit/AutoRefresh
+    族/背光 4 键/I2C 与 EDP 族（本机惰性）。
+- **负结果三件**：①`0x01801011` 全镜像 0 命中（DPU 代差——我方 DPU 9.0
+  INTF_TIMING_ENGINE_EN=offset 0x00、INTF_CONFIG2=0x60，Meizu22 DPU 12.3 写值
+  不迁移）；②0x1011 立即数簇（0x37de0±）= 面板时序小整数表假阳性；③
+  `39 f0 55 aa 52 08 03 6f 00` 内联块紧贴 VirtioDSI 640x480 兜底模板 =
+  qemu 模拟路径惰性件（诱饵，非本机面板序列）。
+- **后半场挂起**：值域解码（除已解 13 对）+ TE 键值对读（vs 我方 tearcheck 现值）
+  + demura ID 命令键语义。触发 = 首枪 A/B 负结果后再开。
