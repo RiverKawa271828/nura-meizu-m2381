@@ -160,7 +160,25 @@
   ③ tearcheck sync_cfg_height 2×vtotal vs 其 vendor 0xFFF0（微差，暂不动）。
 - **「90Hz 修好」勘定** = `121f62e0` both scan rates（120@30/20/10 + 90@30/18/10
   两档 ADFR 族按 mode 名选尾），**非花屏条目**。
-- **5a. vendor 源码互证 lane（新增，最便宜的 RE）**：CodeLinaro display-drivers
-  sparse 克隆（10-19 配方在册，绕限流）→ 直读 kalama
-  `sde_hw_dsc_initial_line_calc()` 原文 + sm8550/kalama VBIF qos-rt-remap factory
-  值——读源码非逆向，产出直接钉 §1 旋钮值与 B-list①。
+- **5a. vendor 源码互证 lane（✅ 10-21 收官；sparse 克隆落
+  `meizu20/s5-rea/vendor-display-drivers/`，branch `display-kernel.lnx.5.15.r10-rel`，
+  techpack 布局 = 驱动在顶层 `msm/`；三靶全中）**：
+  - **initial_lines 公式原文** = `msm/sde/sde_encoder_dce.c`
+    `_dce_dsc_initial_line_calc()`——源码注释即 **"Hardent core config"**，常量
+    rtl_max_bpc=10 / rtl_output_data_width=64 / pipeline_latency=28，
+    `dsc->num_active_ss_per_enc` 入式；与魅族 22 转录逐字同族。
+    **旋钮值 = stock 3 钉死**。
+  - **flbo 推导原文** = `msm/sde_dsc_helper.c` `_get_dsc_v1_2_bpg_offset()`：
+    slice_h<8→2(sh-1)；<20→12；**≤30→13（我方 slice_h=30 正落此档 = stock 值出处）**；
+    <42→14；≥42→15。魅族 22 面板要的 15 = 最高档——同表印证 DDIC 预期可越过推导档位。
+  - **kalama VBIF factory 真值 = 本机 stock FDT**（vendor catalog 为 DT 驱动
+    `qcom,sde-vbif-*` 解析、非 mainline 硬编码表；`fdt/stock-fdt.dts:30027-30040`）：
+    `qos-rt-remap` = 16 项 `{3,3,4,4,5,5,6,6, 3,3,4,4,5,5,6,6}`；
+    `default-ot-rd/wr-limit` = 0x28/0x20（与魅族22 tuna factory 同值）；
+    `dynamic-ot-wr-limit` = {0x3b53800→2, 0x76a7000→6, 0x1da9c000→0x10}；
+    `vbif-size` = 0x1074（mainline sm8550_vbif.len=0x1040 微差）。
+  - **B-list① 降级记档**：我方 fork（newer upstream）`dpu_plane.c:416`
+    `_dpu_plane_set_qos_remap` 已做 per-plane QoS remap（非魅族22 旧树「只从 WB」
+    形态）；catalog 8 项 sdm845 表在 XIN 0-7 与 factory 16 项表**等值**，差异只在
+    XIN 8-15 未编程（plane SSPP 的 XIN 用不到该域）→ 对我方花屏的实际 delta 很小，
+    降级为记档不开工。
