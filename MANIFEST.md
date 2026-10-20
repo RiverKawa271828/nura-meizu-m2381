@@ -3,7 +3,7 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-21 首枪 A/B 轮更钉：在机 = **#91 + v70 + apk r90**（upgrade.sh 双腿全绿 10-21，读回 dca69c1d 对 ✓；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + device r60 + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62）+ iio-sensor-proxy fork r3 热修在机；发布面 = Release r87（Latest 不变））
+## 工作态（2026-10-21 rebase 正式轮更钉：**本轮交付 = apk r91 + ESP v71（7.3 stable 重放，待设备日上机 → #92）**；在机现值 = **#91 + v70 + apk r90**（首枪 A/B 轮双腿全绿，读回 dca69c1d 对 ✓；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + device r60 + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62）+ iio-sensor-proxy fork r3 热修在机；发布面 = Release r87（Latest 不变））
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
@@ -40,6 +40,21 @@ host power-on = 下次睡眠即生效）+ pmaports `acc037b` → apk **r90**（s
 读回 dca69c1d 对 ✓）；A/B 判负（控臂 6/6 花 / 治疗臂 2/2 花[DDIC 0x91 镜像
 核同值]）= **内容值轴清零，判词落 PANEL §6 条 4**；恢复 = 重启（旋钮
 runtime-only，boot 默认 = 零行为差）。
+
+**r91/v71 7.3 stable rebase 正式轮（2026-10-21 宿主段收官，零设备；待设备日双腿上机）**：
+fork `meizu20-t4b` 重放到 v7.3 stable（tag `091b0638` → commit `c03c1a14507d`），
+**99 提交零冲突**（演练 98 + 首枪旋钮 1；合流点 a90ee4305c4a = rc6 基线；sanity 四件
+全绿[panic 吸收 0 / ath12k 挂点 186/205/213/250 原行号 / 双旋钮在位 / diff 面 106 文件
+逐文件全等]）；锚 = `archive/t4b-rc6-final` + `archive/pre-73-meizu20-t4b`（同指旧 tip
+`26ab9bf3e442`）。两实质复核 = **printk 上游未修**（rc7→stable 仅 5f339c46f153
+nbcon kthread 早启件，非挂起路径 ⇒ `no_console_suspend` 留）+ **ath12k 0012 三件
+carry 全留**（Shenghan freq-range 修复不在 v7.3）。pmaports `972412f` → apk **r91**
+（sha8 `df13faa6`；内核 release = **7.3.0**，模块目录 /usr/lib/modules/7.3.0/，Mu 链
+无 initrd 无牵连）+ ESP **v71**（裸 `0a102220` / gz `6fe7811a`）。verify [1]-[3][5]
+绿；[4] 红 = 发布面钉子口径（v68 vs 工作态 v71），手工对拍 v71↔r91 vmlinuz
+`4aad92b3` 逐字节同源非真红。构建 26min（06:00 DONE）。**设备日待约窗**：upgrade.sh
+显式 --apk/--esp → #92 + 回归清单（卡 §5）。
+
 
 **r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂
 （gzip 重压 workaround 撤）；RTC 用户态三件下线后时钟正确 + timedatectl 首次读出 RTC；

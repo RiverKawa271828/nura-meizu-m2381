@@ -1,5 +1,19 @@
 # 7.3 stable rebase 正式轮执行卡（2026-10-21 深夜落盘，下会话照此做；用户点名「安排下个会话」）
 
+> **✅ 宿主段已收官（2026-10-21 深夜，零设备）：§1-§2 全绿**——§1 stable 在
+> （`091b0638`）/ v7.4-rc1 无；fetch v7.3 → 99 提交零冲突重放（tip
+> `665230b58a29`；锚 `archive/t4b-rc6-final`+`archive/pre-73-meizu20-t4b`@旧 tip
+> `26ab9bf3e442`；临时分支已删）→ sanity 四件全绿 → **printk 上游未修 ⇒
+> `no_console_suspend` 留**（rc7→stable 仅 `5f339c46f153` nbcon kthread 早启件，
+> 非挂起路径；实机 2min 判别法仍留设备日第一测）+ **ath12k 0012 三件 carry 全留**
+> （Shenghan 修复不在 v7.3，rc7→stable ath12k 零提交）→ pmaports `972412f` →
+> **apk r91**（sha8 `df13faa6`，内核 release **7.3.0**、模块目录 7.3.0/）+
+> **ESP v71**（裸 `0a102220` / gz `6fe7811a`）→ **verify 全绿**（[4] 曾红 =
+> 发布面钉子口径，v71↔r91 手工对拍 `4aad92b3` 同源后随钉子更新自消）。
+> **余 = §3 设备日段（需用户在场另约窗）：upgrade.sh 显式 --apk r91 --esp v71 →
+> #92 + §5 回归清单 + printk 流程卡实机第一测。** 拼车纪律照旧（S5 下一手 /
+> device r63 不拼车）。commit 不 push。
+>
 > 前置：7.3 stable 已出（tag `091b0638`，10-21 两次复核在案，无 rc8）。rc7 演练
 > 全绿（10-19：98 提交零冲突重放 + 语义 sanity 四件 + r89 编译验证；tag
 > `archive/rc7-dryrun-20261019`@`87ca59a3afac`；报告/配方 =
