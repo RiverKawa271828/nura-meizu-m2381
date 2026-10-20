@@ -3,7 +3,7 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-21 rebase 正式轮更钉：**本轮交付 = apk r91 + ESP v71（7.3 stable 重放，待设备日上机 → #92）**；在机现值 = **#91 + v70 + apk r90**（首枪 A/B 轮双腿全绿，读回 dca69c1d 对 ✓；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + device r60 + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62）+ iio-sensor-proxy fork r3 热修在机；发布面 = Release r87（Latest 不变））
+## 工作态（2026-10-21 rebase 正式轮更钉：在机 = **#92 + v71 + apk r91**（upgrade.sh 双腿全绿 10-21 深夜，读回 0a102220 对 ✓ + 眼判四项过；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + device r60 + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62）+ iio-sensor-proxy fork r3 热修在机；发布面 = Release r87（Latest 不变））
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
@@ -52,8 +52,14 @@ carry 全留**（Shenghan freq-range 修复不在 v7.3）。pmaports `972412f` �
 （sha8 `df13faa6`；内核 release = **7.3.0**，模块目录 /usr/lib/modules/7.3.0/，Mu 链
 无 initrd 无牵连）+ ESP **v71**（裸 `0a102220` / gz `6fe7811a`）。verify [1]-[3][5]
 绿；[4] 红 = 发布面钉子口径（v68 vs 工作态 v71），手工对拍 v71↔r91 vmlinuz
-`4aad92b3` 逐字节同源非真红。构建 26min（06:00 DONE）。**设备日待约窗**：upgrade.sh
-显式 --apk/--esp → #92 + 回归清单（卡 §5）。
+`4aad92b3` 逐字节同源非真红。构建 26min（06:00 DONE）。**10-21 深夜上机实锤**：
+upgrade.sh 显式双腿全绿（**#92** + 读回 0a102220 对 ✓）；回归清单全绿 = 真睡
+rtcwake resume 0.228-0.232s + 电源键秒醒（眼判）+ 音频三服务 active + 出声（眼判）+
+GPU 钳零件 busy_delta_us 真空闲 5 连读恒 0 + 传感器 proxy 在会话总线 + QS 开关在
+（眼判）+ WiFi 5G 扫描见 LZ-5G（实连无凭据记档）+ failed=0；**printk 流程卡第一测
+= Y 态 3/3 全活**（按卡判据 = 上游已修候选；摘 CONFIG_CMDLINE 件留用户拍板另开轮，
+在册注：rc6 亦 3/3 未死 = 回归时序依赖，保险件零成本建议留）；waydroid = 现底无
+预装跳过记档；收尾 console_suspend 已复 N + bloff_default=Y 日用态确认。
 
 
 **r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂

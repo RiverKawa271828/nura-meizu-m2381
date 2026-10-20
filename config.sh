@@ -50,7 +50,7 @@ REL_DEVICE_PKGREL="62"     # r62 = 摘 discover-backend-apk（10-14 用户拍板
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v71.img.gz"  # v71 = r91 内核（裸 0a102220 / gz 6fe7811a；10-21 本地构建，verify[4] 手工对拍 v71↔r91 vmlinuz 4aad92b3 逐字节同源；**待上机**）；v70 = r90（裸 dca69c1d / gz 374c4595，#91 在机验过）；v68 = r87 发布面（裸 e7a044a8 / gz 086a4eef）；v67 = r86（裸 2ad63003，#87 验过）
-REL_KERNEL_VER="#92"       # r91 期望（#N=pkgrel+1 定律；**待设备日实机确认**；在机现值 = #91/r90/v70）
+REL_KERNEL_VER="#92"       # r91 期望（#N=pkgrel+1 定律；**10-21 深夜设备日实测 ✓**；r92+ 才生效的摘 no_console_suspend 轮 = 留用户拍板）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。

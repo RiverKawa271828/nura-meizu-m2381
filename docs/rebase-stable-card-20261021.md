@@ -10,10 +10,19 @@
 > **apk r91**（sha8 `df13faa6`，内核 release **7.3.0**、模块目录 7.3.0/）+
 > **ESP v71**（裸 `0a102220` / gz `6fe7811a`）→ **verify 全绿**（[4] 曾红 =
 > 发布面钉子口径，v71↔r91 手工对拍 `4aad92b3` 同源后随钉子更新自消）。
-> **余 = §3 设备日段（需用户在场另约窗）：upgrade.sh 显式 --apk r91 --esp v71 →
-> #92 + §5 回归清单 + printk 流程卡实机第一测。** 拼车纪律照旧（S5 下一手 /
-> device r63 不拼车）。commit 不 push。
 >
+> **✅ 设备日段已收官（2026-10-21 深夜，用户在场）：§3-§5 全绿**——upgrade.sh
+> 显式 `--apk r91 --esp v71` 双腿全绿（**实测 uname = #92-meizu-meizu20** +
+> recovery_a 读回 `0a102220` 对 ✓）；§5 回归清单全绿：真睡 rtcwake（N 发 resume
+> 0.228s）+ **电源键秒醒**（眼判）+ 音频三服务 active + 出声（眼判）+ GPU 钳零件
+> `busy_delta_us` 真空闲 5 连读恒 0 + 传感器 proxy 在会话总线/accel 已 claim +
+> QS 开关在（眼判）+ WiFi 5G 扫描见 LZ-5G（实连无凭据记档）+ failed=0；
+> **printk 流程卡第一测 = 基线 N 发 PASS + Y 态 3/3 全活**（按卡判据 = 上游已修
+> 候选；**摘 CONFIG_CMDLINE 件 = 另开内核轮留用户拍板**——在册注：rc6 亦 3/3
+> 未死 = 回归时序依赖，保险件零成本建议留）；waydroid 现底无预装跳过记档；
+> 收尾 console_suspend 复 N + bloff_default=Y 日用态确认。**本轮全项收官，
+> 唯余推送窗口（= 用户）。**
+
 > 前置：7.3 stable 已出（tag `091b0638`，10-21 两次复核在案，无 rc8）。rc7 演练
 > 全绿（10-19：98 提交零冲突重放 + 语义 sanity 四件 + r89 编译验证；tag
 > `archive/rc7-dryrun-20261019`@`87ca59a3afac`；报告/配方 =
