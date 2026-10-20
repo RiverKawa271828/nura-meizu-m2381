@@ -146,8 +146,10 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-21 晨 更；新会话从这里接）
+## 现态（2026-10-21 深夜 更；新会话从这里接）
 
+- **▶ 2026-10-21 深夜：S5 RE 本体第一段收官（零设备纯宿主，REA/Ghidra lane）——DisplayDxe 键表后半场六面全落定 = 标准域扫描清零**：
+  ①**键表结构定谳**：151 键 @0x3e998/46B，qword@32 = `len<<32|slot<<16` 打包描述符**非指针**；slot = 运行时 config 结构体偏移（.data 0x4c000 区，文件态 BSS 零 = XML 解析回填、缺省 = 0；DSI/EDP 槽位 union）；第二 schema 表 @0x404ba×10 = SPR 锐化族（惰性）。②**冷 init/term 序列明文全文解码**（就在 XML 里）≈ fork init 表同源（微差仅 `15 35 00` 形态/亮度 0x0FFF/我方独有 E2-E7 尾 6 条）⇒ init 内容轴再排除。③**demura 定谳**：`DSIDemuraPanelIDReadCMD = 06 00 DA`（0xDA=GET_ID1）+ `DSIDemuraPanelID = {0x471, 缓冲 0x122e7000}`（vtdr demura 实例）；**本机 BOE XML 两键全无（39 XML 仅 2 demura 面板有）⇒ stock 冷会话 demura 全惰性 = 主机侧档案选择不存在**（r22 档案假说主机读 ID 变体在 DisplayDxe 域除名，与 0xB 特类互证）。④**TE 对拍**：全库 39 面板只设 4 键（Enable/DedicatedPin/StartPos=InitVal=VActive）且我方 fork tearcheck 全等（2400/2400），8 键全库零先例 = 零默认（ABL 轮询态不消费中断域）⇒ **TE pacing 候补无 stock 旋钮，记档不开工**。⑤**dis_id 勘误** = GETPANELID 平台调用（XBL 域），DisplayDxe 只打印六 nibble（0x4DB501 印证 bootargs）+写 UEFI 变量 0x358cc——「id→XML 映射表在 DisplayDxe 代码内」旧注（dig FINDINGS）作废；附带 `#override:` = DisplayPanelOverride UEFI 变量覆盖路径坐实。⑥残面 = PPS 内容填充函数未逐指令定位（首枪后内容值轴已死不追）+ **B-list 首帧杀 vblank 族 = 唯一剩余候补**。**下一手候选（留用户拍板）= XBL 平台域逆向（GETPANELID/GETPANELCONFIG 的会话语境）or 首帧杀 vblank kernel 旋钮**。工具资产 = **REA/Ghidra PE 车道首战跑通**（`rea analyze/decompile <path> <addr> --snapshot displaydxe`，PE 直吃免 xbl raw-binary 配方；MDPDetectPanel/SetupDSC/编码器/SetMode/dis_id 六函数反编译 + capstone 锚点前置）；素材 = `s5-rea/out/displaydxe/`（dec-*.md + parse_keys.py/dxe.py/scan.py 可重放 + snapshot）。落档 = PANEL §6 条 7 + 根治卡 §6 后半场打勾 + experiment-log（九十五）+ pmos AGENTS 现态一句。commit 不 push。
 - **▶ 2026-10-21 晨：首枪 A/B 设备日收官——判负（内容值轴清零，用户在场眼判）+ CI fork 包根治落地**：
   ①**旋钮** = fork `26ab9bf3e442`（`msm.msm_dsc_stock_content`，0644 运行时可写
   默认 0；一次钉 S2 表 #9/#13/#14 三靶到 stock 值 = flbo 12→13 全家族[idd 549/sii

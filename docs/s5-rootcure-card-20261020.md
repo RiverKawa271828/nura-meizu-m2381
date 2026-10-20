@@ -225,3 +225,17 @@
   qemu 模拟路径惰性件（诱饵，非本机面板序列）。
 - **后半场挂起**：值域解码（除已解 13 对）+ TE 键值对读（vs 我方 tearcheck 现值）
   + demura ID 命令键语义。**▶触发条件已达成（10-21 首枪判负）——升为下会话主件**。
+- **✅ 后半场收官（10-21 深夜宿主轮，REA/Ghidra lane 全程；六面全落定，全量判词
+  落 PANEL §6 条 7「S5 RE 本体第一段」）**：①键表结构定谳（qword@32 = len<<32
+  |slot<<16 打包描述符，slot = 运行时 config 结构体偏移 @.data 0x4c000 区，文件态
+  零 = XML 回填、缺省 = 0；DSI/EDP union；第二 schema 表 0x404ba×10 = SPR 族）；
+  ②冷 init/term 序列明文全文解码 ≈ fork 同源（微差仅 35 参数形态/亮度值/E2-E7 尾）；
+  ③demura 定谳：ReadCMD=06 00 DA（0xDA=GET_ID1）+ ID={0x471, 缓冲 0x122e7000}，
+  本机两键全无 ⇒ stock 冷会话 demura 全惰性 = 主机侧档案选择不存在（0xB 特类互证）；
+  ④TE 对拍：全库只设 4 键且我方 fork 全等，8 键零默认 = ABL 不消费中断域 ⇒ TE pacing
+  候补无旋钮记档不开工；⑤dis_id 勘误 = GETPANELID 平台域（XBL），「映射表在
+  DisplayDxe」旧注作废；⑥残面 = PPS 内容填充函数未逐指令定位（不追）+ B-list
+  首帧杀 vblank 族 = 唯一剩余候补。**下一手候选 = XBL 域会话语境（GETPANELID/
+  GETPANELCONFIG 的平台侧）或首帧杀 vblank 族 kernel 旋钮——留用户拍板**。
+  REA 素材 = `s5-rea/out/displaydxe/`（dec-*.md 反编译 + parse_keys.py 可重放脚本；
+  snapshot `displaydxe` 已落库）。

@@ -350,6 +350,59 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
   触发条件已达成）+ B-list 候补旋钮（VBIF 已降级记档 / 首帧杀 vblank 族 /
   TE pacing）。】
 
+  **条 7·S5 RE 本体第一段——DisplayDxe 键表后半场定谳（10-21 深夜纯宿主轮，
+  REA/Ghidra 6 函数反编译 + capstone 锚点；素材 = `s5-rea/out/displaydxe/`）**：
+
+  1. **键表结构定谳**（151 键 schema 完整解码，脚本可重放 =
+     `s5-rea/out/displaydxe/parse_keys.py`）：条目 46B = {内联键名[28] + nlen
+     u16@28 + type u16@30（2=int/4=bool/5=序列/7·8=数组）+ qword@32 = `len<<32
+     | slot<<16` 打包描述符 + vlen u16@42}。**slot = 运行时面板 config
+     结构体内字节偏移**（绝对 = `.data` 0x4c000 区；文件态全零 = BSS，运行时
+     XML 解析回填 ⇒ 缺省键 = 0）；DSI/EDP 两族共用槽位（union，如 slot 0xC856
+     = DSIRefreshRate↔EDPRefreshRate）。值域解码 = schema×XML join（本机 58 键
+     有值，其余代码零默认）。消费链 = `FUN_00007704(dev,1)` 平台取 XML →
+     `FUN_0001862c` schema 状态机解析回填 → MDPDetectPanel 快照 0x618B 到
+     display ctx。附：**第二 schema 表 @0x404ba ×10 = SPR 锐化配置族**
+     （AdaptiveFilter/ColorPhase，惰性支线）。
+  2. **冷会话 init/term 序列全文解码**（= 明文 hex 就在 XML 里）：init 26 行 =
+     FF AA 55 A5 页族 + `F0 55 AA 52 08 xx` 页解锁×4（r22 家族）+ 0x91 块 18B
+     + `05 2C` + `39 11` sleep-out + `FF 78`（=延时 120ms 约定）+ `39 29`；
+     **逐行 ≈ 我方 fork init 表同源等值**（微差 3 处：stock `15 35 00` vs 我方
+     `05 35`；stock 0x51=0x0FFF 满亮度 vs 我方 0；stock 无 E2-E7 尾 6 条 =
+     我方独有，出处 vendor kernel panel-boe-cmd.dts）⇒ init 内容轴再排除。
+     Term = 28/10/FF 78。
+  3. **demura 定谳（档案假说正邻域）**：`DSIDemuraPanelIDReadCMD = 06 00 DA`
+     （DT=0x06 DCS 读，cmd **0xDA = GET_ID1**）；`DSIDemuraPanelID = {期望 ID
+     0x471, demura 缓冲物理地址 0x122e7000}`（vtdr6130 demura 面板实例）。
+     消费端 = MDPDetectPanel：ID 槽非零 → 存 ctx 静态配置；ReadCMD 有效 →
+     运行时发读。**本机 BOE XML 两键全无（全库 39 XML 仅 2 个 demura 面板有）
+     ⇒ stock DisplayDxe 在魅族20 上 demura 全惰性 = 主机侧档案选择路径不存在**，
+     与 0xB 特类三重实测互证；DisplayDxe 内另有 DPU 后处理级 demura 系统
+     （`demura_config_%016llx` 时间戳文件族 + MDPDemuraSetupConfig）同被键门控。
+  4. **TE 族对拍表（B-list TE pacing 的 stock 参考面）**：全库 39 面板 XML 只设
+     4 键（Enable=True / DedicatedPin=True / StartPos=InitVal=VActive；仅 2 个
+     secondary 面板多设 Select=1），**其余 8 键全库零先例 = 永远零默认**（ABL
+     轮询态无需 RD_PTR 中断域）。我方 fork tearcheck 现值（phys_cmd:394-400）=
+     vsync_init_val 2400 / start_pos 2400（**= stock 全等**）/ sync_cfg_height
+     2×vtotal / rd_ptr_irq 2401 / threshold 1023×2 / hw_vsync_mode 1 —— 差异
+     全在 ABL 不消费的中断/阈值域 ⇒ **TE pacing 候补无 stock 可平移旋钮，
+     记档不开工**。
+  5. **dis_id 勘误**：dis_id = **GETPANELID 平台调用**（`FUN_00007704(dev,4)`，
+     XBL 域），DisplayDxe 只做 24-bit 六 nibble 打印（`0x4DB501` 印证 stock
+     bootargs）+ 写 UEFI 变量 0x358cc；**「id→XML 映射表在 DisplayDxe 代码内」
+     旧注（dig FINDINGS）作废** —— 面板 XML 选择在平台域（GETPANELCONFIG）。
+     附带确认 `#override:` 串 = DisplayPanelOverride UEFI 变量覆盖路径。
+  6. **残面**：PPS = 137B（128+9 封装）缓冲 @ctx+0x168、DSCEnable 门控
+     （MDPDetectPanel），**内容填充函数未逐指令定位**（「13 族硬编码」推论
+     维持置信中高不升级——首枪判负后内容值轴已死，不追）；DPU 侧 DSC 编码器
+     编程函数 0x26ad0（rc/QP 表位打包 + PPS 地址寄存器 0x2c688 写入）在档。
+     B-list 首帧杀 vblank 族 = 唯一剩余候补（kernel 侧，与此轮无涉）。
+
+  **本轮判词：DisplayDxe 标准域扫描收官——键表/值域/TE/demura/init 序列/dis_id
+  六面全部落定，无一个「stock 有、我方无」的会话级旋钮（除已判负的内容值族）。
+  病根进一步收缩到：XBL 域（GETPANELID/GETPANELCONFIG 所在的会话语境）与
+  vendor 专有非命令维度。**
+
 ---
 
 ## 7. 移植者检查单（在你的 DSC AMOLED 机上撞到同款病时）
