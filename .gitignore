@@ -12,6 +12,7 @@ artifacts/mu-r62-9f1e8f8d.img
 # rootfs Release 大件与 Release SUMS 属上传面产物，不入 git（build-rootfs.sh 产出）
 artifacts/meizu-meizu20-*.img.gz
 artifacts/meizu-meizu20-*.img
+artifacts/meizu-meizu20-nura-min-*.simg
 artifacts/SHA256SUMS
 
 # 固件 tarball 属 Release 上传面产物（81MB），本地 release-r66/r72 有留底
