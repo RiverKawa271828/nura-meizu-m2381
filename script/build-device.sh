@@ -52,6 +52,19 @@ else
 	"$PIN_PMB_WRAPPER" build --arch aarch64 hexagonrpcd
 fi
 
+echo "[2b/4] iio-sensor-proxy fork 预编（同 #11 坑 + 官方仓二进制遮蔽）"
+# fork（temp/iio-sensor-proxy，SSC 四补丁，0003 load-bearing）从未进 device
+# depends，官方 edge 仓有 3.9-r2 裸包可解析 ⇒ pmbootstrap 不构建它；CI 冷包仓
+# 没有本地 10-03 手工件的存续 ⇒ rootfs 择官方 r2 = 传感器 QS 开关消失
+# （2026-10-21 定谳，凡刷 CI r86/r87 rootfs 者皆中）。显式预编后本地包仓
+# r3 > 官方 r2，apk install/升级闭合一律取 fork。已装设备不受影响（世界
+# 锁名不锁源；后续官方 r4 才会盖回，届时再 bump fork pkgrel）。
+if compgen -G "$APK_DIR/iio-sensor-proxy-3.9-r*.apk" > /dev/null; then
+	echo "    已有 apk，跳过"
+else
+	"$PIN_PMB_WRAPPER" build --arch aarch64 iio-sensor-proxy
+fi
+
 echo "[3/4] build device"
 "$PIN_PMB_WRAPPER" build "$PKG_DEVICE" --force
 
