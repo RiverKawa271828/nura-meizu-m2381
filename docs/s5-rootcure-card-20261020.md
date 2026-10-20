@@ -14,23 +14,34 @@
   而是「真睡干净」——注意 XBL 只管冷启动（我们冷启动本来就干净），其价值 =
   读懂「正确会话」如何建立；真正要治疗的路径 = 我方 sleep→wake 的重载语境。
 
-## 1. ★廉价首枪（强烈建议排在 RE 之前，约半天）：stock-DSC-content 旋钮 A/B
+## 1. ★廉价首枪（✅ 10-21 设备日收官——**判负：内容值轴清零**；判读详录 =
+   PANEL-CORRUPTION §6 条 4）：stock-DSC-content 旋钮 A/B
 
-- **为什么值得先做**：H1（knob stock）只复刻过**包形态**（无 0x07/PPS 后置 LP/全 LP），
-  **从未测过 DSC 内容值**。S2 内容值对拍表（10-19 深夜，PANEL §6 条 3·余面）钉出
-  我们与 stock 的会话参数差全集 = 表 #9-#15：**flbo 13↔12 根因族**（→idd 549↔526 /
-  nfl 1402↔1294 / sii 469↔488）+ **initial_lines 3↔2** + **DSC_CFG bit17** +
-  PPS 载体 0xA0↔0x0A（已有 wake_pps_late 旋钮）。Novatek demura 专利
-  （EP4089666A1）= 补偿重载**按会话建立时收到的模式参数自选档案**——若重载键在这
-  些参数上，我们每次真睡都把 DDIC 引到错误档案。
-- **做法**：fork 加一个 stock-context 旋钮（一次把 flbo 族/initial_lines/bit17 钉到
-  stock 值；参照 0xC4 旋钮件 `c1d84dcf80ec` 手法，module_param 0644）→ r90/v70 →
-  `upgrade.sh --i-am-present --apk … --esp …`（10-19 已磨合，~30 分钟链路；⚠显式
-  `--apk/--esp`，默认会取 r89 红线件）→ knob default + 真睡 A/B 眼判。
-- **判读**：干净 = **病根 = 会话参数落档** → 根治 = 驱动对齐 stock 值（4 处内容差
-  补丁形态用户拍板）；还花 = lane A 死，**反向喂 S5**（答案确在 vendor 专有域，
-  标准命令域彻底清零）。判读面增补 = **0x0A GET_POWER_MODE 读回**（DDIC 状态客观
-  marker，期望 0x9C；§5）补眼判。
+- **✅ 判词（10-21，用户在场眼判）**：`msm.msm_dsc_stock_content`（fork
+  `26ab9bf3e442`：flbo 12→13 全家族 + initial_lines 2→3 + DSC_CFG bit17 cmd
+  清位，一次钉 S2 表 #9/#13/#14 三靶；0644 运行时可写，populate 挂每轮
+  host power-on = 下次睡眠即生效）→ r90/v70 双腿升级全绿（#91 + 读回
+  dca69c1d 对 ✓）→ 控臂（旋钮 0）花屏 6/6 → 治疗臂（旋钮 1，机制面全绿：
+  ctx PPS 三字段精确翻转 + **DDIC 0x91 读回镜像同步** = 双端同值实锤）
+  真睡 ×2 → **2/2 全花 = 判负**。
+- **结论**：H1（包形态）+ 本轮（内容值 #9-#14 全集）双判负 ⇒ 标准命令域
+  主机可达维度全部排除 ⇒ 病根在 vendor 专有域/非命令维度 → **S5 RE 本体
+  升为主线，§6 后半场触发条件达成**。×5 协议按判负提前锁死（字节级验证后
+  续跑无新信息）。
+- **判读面勘定**：Meizu22 的 0x0A→0x9C marker **不可平移**（本 DDIC 0x0A
+  机制性不可读）；改用 **DDIC `0x91` = PPS 镜像读回**（192B 重复块，decoder
+  档案 ground truth，本轮机制验证的主力证据）。
+- （原做法记录）为什么值得先做：H1（knob stock）只复刻过**包形态**（无 0x07/PPS
+  后置 LP/全 LP），**从未测过 DSC 内容值**。S2 内容值对拍表（10-19 深夜，PANEL
+  §6 条 3·余面）钉出我们与 stock 的会话参数差全集 = 表 #9-#15：**flbo 13↔12
+  根因族**（→idd 549↔526 / nfl 1402↔1294 / sii 469↔488）+ **initial_lines 3↔2** +
+  **DSC_CFG bit17** + PPS 载体 0xA0↔0x0A（已有 wake_pps_late 旋钮）。Novatek
+  demura 专利（EP4089666A1）= 补偿重载**按会话建立时收到的模式参数自选档案**——
+  若重载键在这些参数上，我们每次真睡都把 DDIC 引到错误档案。
+- （原做法记录）做法：fork 加一个 stock-context 旋钮（一次把 flbo 族/
+  initial_lines/bit17 钉到 stock 值；参照 0xC4 旋钮件 `c1d84dcf80ec` 手法，
+  module_param 0644）→ r90/v70 → `upgrade.sh --i-am-present --apk … --esp …`
+  （⚠显式 `--apk/--esp`，默认会取 r89 红线件）→ knob default + 真睡 A/B 眼判。
 
 ## 2. S5 逆向本体（主线，纯宿主可先跑）
 
@@ -213,4 +224,4 @@
   `39 f0 55 aa 52 08 03 6f 00` 内联块紧贴 VirtioDSI 640x480 兜底模板 =
   qemu 模拟路径惰性件（诱饵，非本机面板序列）。
 - **后半场挂起**：值域解码（除已解 13 对）+ TE 键值对读（vs 我方 tearcheck 现值）
-  + demura ID 命令键语义。触发 = 首枪 A/B 负结果后再开。
+  + demura ID 命令键语义。**▶触发条件已达成（10-21 首枪判负）——升为下会话主件**。

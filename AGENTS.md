@@ -146,8 +146,29 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-21 深夜 更；新会话从这里接）
+## 现态（2026-10-21 晨 更；新会话从这里接）
 
+- **▶ 2026-10-21 晨：首枪 A/B 设备日收官——判负（内容值轴清零，用户在场眼判）+ CI fork 包根治落地**：
+  ①**旋钮** = fork `26ab9bf3e442`（`msm.msm_dsc_stock_content`，0644 运行时可写
+  默认 0；一次钉 S2 表 #9/#13/#14 三靶到 stock 值 = flbo 12→13 全家族[idd 549/sii
+  469/nfl 1402，slice_bpg 1302 不变=flbo 无关项自洽]+initial_lines 2→3+DSC_CFG
+  bit17 cmd 清位；populate 挂每轮 host power-on = 下次睡眠即生效）+ pmaports
+  `acc037b` → r90（`167fe3ab`）/v70（裸 `dca69c1d`）→ upgrade.sh 双腿全绿（#91 +
+  读回对 ✓）。②**A/B 定谳**：控臂（knob default+旋钮 0）花屏 6/6；治疗臂（旋钮 1）
+  机制面全绿[ctx PPS 三字段精确翻转 + **DDIC `0x91` 读回镜像同步** = decoder 档案
+  同值实锤]→ 真睡 ×2 **2/2 全花 = 判负**（×5 协议按判负提前锁死）。**判词 = H1
+  （包形态）+ 本轮（内容值 #9-#14 全集）双判负 ⇒ 标准命令域主机可达维度全部排除
+  ⇒ 病根在 vendor 专有域/非命令维度 → S5 RE 本体升主线（根治卡 §6 后半场触发
+  条件达成）**。③副产品 = **DDIC `0x91` = PPS 镜像读回侧通道**（Meizu22 的 0x0A
+  →0x9C marker 不可平移——本 DDIC 0x0A 机制性不可读；0x91 给 decoder 档案 ground
+  truth）+ 恢复姿势 = 重启（旋钮 runtime-only，boot 默认零行为差）。④**CI fork 包
+  根治** = build-device.sh 加 iio-sensor-proxy 预编（nura `574a021`；根因定谳 =
+  包从未进 device depends 闭合 + 官方仓 r2 可解析 ⇒ pmbootstrap 不构建 + CI 冷仓
+  无本地件存续；非撞号）。⑤在机 = **#91+v70+r90 apk+CI r86-phosh rootfs（device
+  r60+fw r3+iio fork r3 热修）**，boot 默认态 failed=0 零行为差。⑥**7.3 stable
+  已出**（tag `091b0638`，10-21 复核）= rebase 专项解锁，开工等用户点名。
+  落档 = PANEL §6 条 4 + 根治卡 §1 打勾 + MANIFEST 工作态 + experiment-log（九十四）。
+  commit 不 push（推送窗口 = 用户）。
 - **▶ 2026-10-21 深夜追记：传感器 QS 开关消失定谳+修复（用户眼判过）+ CI rootfs 发布面 bug 入册**：
   设备回 nura 后自动旋转/自动亮度开关消失——排查 = 数据面全活（ADSP/fastrpc/sensorspd 会话/
   SensorProxy 三属性 true+lux 活值）⇒ 断点在 claim 层；对钉 = 设备装 Alpine 裸包
@@ -181,13 +202,14 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   @0x3e998/46B = **XML schema 键表非补丁表**：内联键名+len u16@+28+type u16@+30+值域
   指针）：DSC 族 9 键**无 flbo/initial_lines** ⇒ 冷会话 PPS = 代码内硬编码 13 族
   算法 →「12 族只有我方内核喂过」强化落档面（置信中高）；TE 族 12 键 +
-  DSIDemuraPanelIDReadCMD/ID（r22 档案假说相邻）后半场挂起（触发 = 首枪负结果）；
+  DSIDemuraPanelIDReadCMD/ID（r22 档案假说相邻）后半场挂起（~~触发 = 首枪负结果~~
+  **✅ 10-21 晨触发达成，升下会话主件**）；
   负结果 = 0x1801011 不迁移（DPU 代差）+ VirtioDSI 诱饵块。commits nura
-  `eb8e3fa`/`db8dc18`/`f6f8041`（commit 不 push）。**下会话 = 首枪 A/B 开工**
-  （★设备窗口已开：10-21 深夜设备已回 pmOS 在机 [#89 + v69 + r88 + CI r86-phosh
-  rootfs + iio-sensor-proxy r3 热修]；r90/v70 显式 `--apk/--esp` 勿取 r89 红线件；
-  0x0A 读回 0x9C 入判读面）；构建死等时间可并行 = CI 侧 fork 包根治排查
-  （见深夜追记条）。
+  `eb8e3fa`/`db8dc18`/`f6f8041`（commit 不 push）。**~~下会话 = 首枪 A/B 开工~~
+  ✅ 10-21 晨已收官 = 判负（内容值轴清零，详见顶部追记条）——下会话 = S5 RE
+  本体（DisplayDxe 键表后半场 = TE 键值对读/demura ID 键语义/值域解码）+
+  B-list 候补旋钮（首帧杀 vblank 族/TE pacing）**；7.3 stable 已出（`091b0638`）
+  = rebase 专项解锁待用户点名。
 - **▶ 2026-10-19 晨 0xC4 设备日收官（定谳 = 0xC4 洗清，排雷表 #13 终审；upgrade.sh 首跑全绿 + 两坑根治）**：
   ①**upgrade.sh 设备腿首跑全绿**（apk r88 + ESP v69 → #89 + 读回对 ✓；首跑抓 apk 腿
   UNTRUSTED 假绿 = CI rootfs 烤 CI 临时钥 `pmos@local-6acea657`，本地钥 `6aaed2ab` 包必拒——

@@ -3,7 +3,7 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-19 0xC4 设备日更钉：在机 = **#89 + v69 + apk r88**（upgrade.sh 首跑双腿全绿 10-19，读回对 ✓；boot_b mu-r69 头段精确长度对 ✓）——**底 = CI r86-phosh rootfs + device r60 + fw r3**（用户 10-18 深夜刷回，非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62；现态已知良[10-13/10-14 两轮实机绿一代]）；发布面 = Release r87（Latest 不变）
+## 工作态（2026-10-21 首枪 A/B 轮更钉：在机 = **#91 + v70 + apk r90**（upgrade.sh 双腿全绿 10-21，读回 dca69c1d 对 ✓；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + device r60 + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62）+ iio-sensor-proxy fork r3 热修在机；发布面 = Release r87（Latest 不变））
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
@@ -28,6 +28,18 @@ bloff 分支 ⇒ DDIC 全程不睡，PANEL §5④/§6 条 1）；阶段二 `knob
 = P1 阳性对照全花 + `zero_clkout_timing=1` 归零臂 5/5 全花 → **0xC4 洗清**
 （clk_post/clk_pre 零效应，排雷表 #13 终审）；附带实锤 = **r88 默认态真睡日用
 干净** + bloff 结构性免疫。旋钮/bloff 已复值 + 重启回日常（冷启治愈现屏）。
+
+**r90/v70 stock-content 旋钮件（2026-10-21 首枪 A/B 轮；已上机实验毕，debug 设施随 fork 保留默认 0）**：
+fork `26ab9bf3e442`（`msm.msm_dsc_stock_content` 旋钮：一次钉 DSC 会话内容三靶到
+stock 值——flbo 12→13 全家族[idd 549/sii 469/nfl 1402，slice_bpg 1302 不变]+
+initial_lines 2→3 + DSC_CFG bit17 cmd 清位；0644 运行时可写，populate 挂每轮
+host power-on = 下次睡眠即生效）+ pmaports `acc037b` → apk **r90**（sha8
+`167fe3ab`）+ ESP **v70**（裸 `dca69c1d` / gz `374c4595`）。verify [1]-[3][5] 绿；
+[4] 红 = 发布面钉子口径错位（v68 vs 工作态 v70），手工对拍 v70↔r90 vmlinuz
+`46504394` 逐字节同源非真红。**10-21 上机实锤**：upgrade.sh 双腿全绿（#91 +
+读回 dca69c1d 对 ✓）；A/B 判负（控臂 6/6 花 / 治疗臂 2/2 花[DDIC 0x91 镜像
+核同值]）= **内容值轴清零，判词落 PANEL §6 条 4**；恢复 = 重启（旋钮
+runtime-only，boot 默认 = 零行为差）。
 
 **r81 回归回执**（10-11 晚，steamos 线）：EFI↔apk vmlinuz 5cb94ebd 双侧互证；zstd sqsh 直挂
 （gzip 重压 workaround 撤）；RTC 用户态三件下线后时钟正确 + timedatectl 首次读出 RTC；

@@ -308,16 +308,47 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
      不可达**——`dsc_init_1_2` 不注册 dump 子范围 → off 写入被 `is_valid_range` 拒
      （这也是 F4 只拿到 evtlog 流的深层原因）。stock 列维持推算（分支族已由 evtlog
      行号钉到 r1/r15+ 族 ± 厂家移行；解码在 r14/r1 双族复核）。
-4. **寄存器 diff 残余位**【未测】：RBUF/INSERT_DCS（0x44 bit16 仅醒后置位）/
+   - 判读（10-21 更注）：本表当年「只记档不排实验」已兑现——#9-#14 全集由
+     S5 廉价首枪（下方条 4）一枪测完，**判负 = 内容值轴清零**。
+4. **stock-DSC-content 旋钮 A/B（S5 廉价首枪）**【✅ 10-21 设备日收官——**判负（内容值轴清零）**】：
+   `msm.msm_dsc_stock_content`（fork `26ab9bf3e442`，0644 运行时可写，默认 0 =
+   现行为；一次钉 S2 表 #9/#13/#14 三靶到 stock 值：flbo 12→13【RC 推导全家族
+   随之 idd 549 / sii 469 / nfl 1402，slice_bpg 1302 不变 = flbo 无关项自洽】+
+   initial_lines 2→3【Hardent 核公式值】+ DSC_CFG bit17 cmd 清位【0x23001→0x3001】；
+   populate 挂 `msm_dsi_host_power_on` = 每轮唤醒重跑，写旋钮下次睡眠即生效无需
+   modeset）→ r90/v70 upgrade.sh 双腿全绿（实测 #91 + recovery_a 读回 dca69c1d 对 ✓）。
+   - **控臂（knob default + 旋钮 0）**：真睡 25s + 唤醒 → **花屏**（P1 阳性
+     6/6；dsi_err status=4 每轮一条在案 = 可达态 marker 延续）。
+   - **机制面全绿**：wake 后 ctx PPS 三字段精确翻转（526→549 / 488→469 /
+     1294→1402）+ **DDIC `0x91` 读回镜像同步翻转**（192B 重复块
+     `d2 00 02 25 01 d5 …` = decoder 侧档案已吃进同值 stock 族，双端一致实锤）。
+   - **治疗臂（knob default + 旋钮 1）**：真睡 ×2 → **2/2 全花**（×5 协议按判负
+     提前锁死：单变量已字节级验证，续跑无新信息）。
+   - **判词**：会话参数**内容值**轴清零。H1（包形态：0x0A 载体/wake_pps_late，判负）
+     + 本轮（内容值 #9-#14 全集）双判负 ⇒ **标准命令域主机可达维度（S2 表 #9-#15）
+     全部排除** ⇒ 病根在 vendor 专有域 / 非命令维度（时序窗口 / 引擎状态 / 会话
+     建立顺序 / TE 语境）→ 条 6 S5 RE 主线（DisplayDxe 键表后半场触发条件达成）。
+     Novatek demura 专利「按会话参数自选档案」假说：**content-value 轴不成立**
+     （两侧参数同值仍引到毒档案；档案键若真在会话参数上，也不在这批参数上）。
+   - **副产品**：①**DDIC `0x91` = PPS 镜像读回侧通道**（判读面新主力——
+     `0x0A` GET_POWER_MODE 在本 DDIC 机制性不可读【写 0x0a 不出数】，Meizu22
+     的 0x9C 判读面不可平移；0x91 可读且直接给 decoder 档案，192B 重复块逐字
+     可核）；②boot 默认 = 旋钮全 0 + bloff 工程解在 = 零行为差，恢复姿势 =
+     重启（knob runtime-only）；③在机 = #91 + v70 + r90 apk + CI r86 rootfs。
+5. **寄存器 diff 残余位**【未测】：RBUF/INSERT_DCS（0x44 bit16 仅醒后置位）/
   仪式位族除 0xC4 外的残余，是否有唤醒特定语义。
-5. **供电实测矛盾**【低先验】：声明全 1.8V，早轮曾实测 1.2/3.0（板上无测试点，
+6. **供电实测矛盾**【低先验】：声明全 1.8V，早轮曾实测 1.2/3.0（板上无测试点,
   只能软件侧查 regulator 状态/使能时序）。
-6. **科学解主线**（工程解只是绕行）：stock 会话全对拍——stock 内核 =
+7. **科学解主线**（工程解只是绕行）：stock 会话全对拍——stock 内核 =
   下游 msm-5.x techpack/display，源码公开（CodeLinaro display-drivers），静态
   对拍可行。路线 = S1 stock wake 包全枚举 delta 表（已做，H1 判负）→ S2
   DPU/DSC 对拍（静态 + stock 侧动态 dump）→ S3 档位/会话探针 → S5 XBL/panel-DB
   vendor 逆向（最后）。XBL splash 会话本身建在 60Hz 档（0x91 块 60Hz 族值
   实锤）——"会话建立语境"维度仍是唯一未被系统扫描的嫌疑域。
+  【10-21 更注：S1/S2 对拍面已由 H1+首枪双判负烧完（标准命令域清零），下一段 =
+  S5 RE 本体（DisplayDxe 键表后半场：TE 键值对/demura ID 键语义/值域解码，
+  触发条件已达成）+ B-list 候补旋钮（VBIF 已降级记档 / 首帧杀 vblank 族 /
+  TE pacing）。】
 
 ---
 
