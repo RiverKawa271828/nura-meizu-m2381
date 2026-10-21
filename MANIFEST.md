@@ -3,7 +3,7 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-21 rebase 正式轮更钉：在机 = **#92 + v71 + apk r91 + device r63**（upgrade.sh 双腿全绿 10-21 深夜，读回 0a102220 对 ✓ + 眼判四项过；device r63 = depends +iio-sensor-proxy 10-21 用户拍板，装机 RC=0；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62+）+ iio-sensor-proxy fork r3 热修在机；发布面 = Release r87（Latest 不变，r91 云构建发布轮进行中））
+## 工作态（2026-10-21 rebase 正式轮更钉：在机 = **#92 + v71 + apk r91 + device r63**（upgrade.sh 双腿全绿 10-21 深夜，读回 0a102220 对 ✓ + 眼判四项过；device r63 = depends +iio-sensor-proxy 10-21 用户拍板，装机 RC=0；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62+）+ iio-sensor-proxy fork r3 热修在机；**发布面 = Release r91（2026-10-21 上线 Latest）**）
 
 | 件 | 版本 | 路径 | sha8 | 刷写目标 |
 |---|---|---|---|---|
@@ -76,26 +76,26 @@ b41b88889cadf6060e35…）**——「b41b8889cadf」系连排四个 8 丢一位�
 
 **回退配对**：内核 r86 + ESP v67（裸 2ad63003 / gz 444dec3f；CI 同号件 gz dc8bed66 异字节同版本）+ device r60（= #87 在机验证过的一代，10-13/10-14 两轮实机绿）；再退 = r84 + v65（裸 463efc45 / gz 00d2d5f9）+ device r60（= Release r84 在役件；r87 发布件上线并验收前勿销）。
 
-## 发布面现役产物（2026-10-14 @ r87；= Release r87 已发布 Latest；**CI 云构建 #22 首发**（run 38492230609，20m28s）；发布真值 = CI SHA256SUMS）
+## 发布面现役产物（2026-10-21 @ r91；= Release r91 已发布 Latest；CI run 39511226412；发布真值 = CI SHA256SUMS）
 
 | 件 | 版本 | 发布件 sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_rc6-r**87**（=r86 内容纯版本轮） | 191f2344（CI）/ 1aa9a260（本地同轮件，异字节=时间戳） | 机上 apk add |
-| 设备包 apk | 1-r**62**（摘 discover + flatpak 商店支持；waydroid 五件 r61 起） | 5dc0fbd9 | 机上 apk add（升级用户：waydroid 预装/flatpak/discover 摘除只随新装 rootfs，已装机手动补装） |
-| 固件包 apk / tarball | 1-r**3** / r3（零改动） | apk 6e6dac0a / tarball 29c1ee88 | 机上 apk add |
-| Mu 镜像 | **mu-r87-646a0eff**（DTS = FdtBlob c061acd9 同源，CI 构建） | 646a0eff | boot_b |
-| ESP | **v68**（r87 内核腿；CI vmlinuz `901ebc15` ↔ CI apk 配对；同号异字节：CI gz `883610f6` / 本地 gz `086a4eef`（裸 e7a044a8，在机件）各自真值） | 883610f6（CI 发布件） | recovery_a |
-| rootfs 镜像 | r87 同轮（--single-partition；内含 r87 + device r62 + fw r3 + **waydroid 五件预装** + **flatpak 商店**；phosh） | e53e804d（876.9MB，`meizu-meizu20-r87-phosh.img.gz`） | userdata |
-| 升级包 | upgrade-r87.zip = 内核 apk + ESP v68 + UPGRADE.md | ff726542 | 升级腿 |
+| 内核 apk | 7.3.0_rc6-r**91**（**7.3 stable 重放轮**：99 提交零冲突；内核 release=**7.3.0**） | d2f0c51b（CI）/ df13faa6（本地同轮件，异字节） | 机上 apk add |
+| 设备包 apk | 1-r**63**（depends +iio-sensor-proxy 闭合；waydroid 五件/flatpak 商店 r61-r62 起全继承） | 2013b691（本地构建补传件，在机实装 RC=0） | 机上 apk add |
+| 固件 tarball | r3（零改动，与 r72 原件同串） | 29c1ee88 | — |
+| Mu 镜像 | **mu-r91-350386e0**（DTS = FdtBlob c061acd9 同源，CI 构建） | 350386e0 | boot_b |
+| ESP | **v71**（r91 内核腿；同号异字节：CI gz `f08139e3`[发布件] / 本地 gz `6fe7811a`[裸 0a102220，**#92 在机件**]；CI 内 verify[4] 配对 ✓） | f08139e3（CI 发布件） | recovery_a |
+| rootfs 镜像 | r91 同轮（--single-partition；内含 r91 + device r63 + fw r3 + **iio fork r3** + waydroid 五件 + flatpak 商店；phosh） | 29490177（875.8MB，`meizu-meizu20-r91-phosh.img.gz`） | userdata |
+| 升级包 | upgrade-r91.zip = 内核 apk + ESP v71 + UPGRADE.md | a05d57f1 | 升级腿 |
 
-**Release r87 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r87>**（2026-10-14
-上线 Latest；8 件 = 直刷三件 + 固件 tarball + apk 三件[内核/设备/固件] + upgrade zip + SHA256SUMS；
-SUMS 自洽全 OK + 三层对拍全过[DTB CI≡本地 c061acd9 逐字节 / CI ESP↔CI apk 901ebc15 配对 /
-rootfs debugfs 内容级 = r87+r62+r3+waydroid+flatpak 插件零 discover + 版本层 TAG=r87/ESP=v68/#88]）。
-**回退配对**：r86 + v67 + device r60（#87 两轮实机绿）；再退 r84 + v65（= 上一个发布面，未删）。
-上轮 r86 草稿已删（被 r87 取代；r85/r86 未发布，历史轮次在册）。
+**Release r91 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r91>**（2026-10-21
+上线 Latest；8 件 = 直刷三件 + 固件 tarball + apk 两件[内核 CI/设备本地补传] + upgrade zip + SHA256SUMS；
+**验收口径 = 用户令直发[全量下载回读豁免]**：CI 内建上传字节数逐件对拍 ✓ + 生成时 gzip -t + CI verify 全绿
+[[1] DTB≡c061acd9 / [4] ESP↔apk 配对 / [5] 期望 #92] + CI 日志证据[iio fork 预编 01:10 → device r63
+01:13[depends 闭合取 fork]→ rootfs r91-phosh 01:21 顺序链]；rootfs debugfs 内容级未回读[豁免]）。
+**回退配对**：r87 + v68 + device r62（#88 实机绿，10-14 两轮）；再退 r84 + v65（未删）。
 
-期望 uname：`7.3.0_rc6-r87` → **#88**（10-14 在机 apk+ESP 双腿升级实测 ✓，读回整分区逐字节）。
+期望 uname：`7.3.0_rc6-r91` → **#92**（10-21 深夜本地件双腿升级实测 ✓，读回 0a102220 对；CI 件同源异字节同 #92）。
 
 ## 回滚锚（已删，2026-10-13）
 

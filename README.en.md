@@ -36,9 +36,9 @@ rootfs. Log in as `user`, password `1234` (use `sudo` with the same password for
 
 ```bash
 sha256sum -c SHA256SUMS                 # all OK before continuing
-fastboot flash boot_b      mu-r87-646a0eff.img         # Mu-UEFI firmware (device tree baked in)
-fastboot flash recovery_a  esp-recovery-v68.img        # ESP = kernel boot leg
-fastboot flash userdata    meizu-meizu20-r87-phosh.img # rootfs (⚠ wipes all data)
+fastboot flash boot_b      mu-r91-350386e0.img         # Mu-UEFI firmware (device tree baked in)
+fastboot flash recovery_a  esp-recovery-v71.img        # ESP = kernel boot leg
+fastboot flash userdata    meizu-meizu20-r91-phosh.img # rootfs (⚠ wipes all data)
 fastboot set_active b && fastboot reboot
 ```
 
@@ -144,10 +144,10 @@ absent: 3.5mm jack, SD slot.
 
 | Mark | Example | Meaning |
 |---|---|---|
-| `r87` | `mu-r87-*.img`, `meizu-meizu20-r87-phosh.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds. From r86 the rootfs filename carries a UI suffix (e.g. `meizu-meizu20-r87-phosh.img.gz`) |
-| `v68` | `esp-recovery-v68.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v68 happens to pair with r87) |
-| `#88` | `uname -v` on device | Kernel build number = **r + 1** (pkgrel+1 baked into the kernel). First verification point on device: seeing #88 proves the r87 kernel is really running |
-| `646a0eff` | `mu-r87-646a0eff.img` | First 8 hex of the image's sha256 — anti-tamper + dd read-back comparison |
+| `r91` | `mu-r91-*.img`, `meizu-meizu20-r91-phosh.img.gz` | **Release round** = kernel package pkgrel, +1 per round. The three images of one round (boot / recovery / rootfs) **must be used together** — never mix rounds. From r86 the rootfs filename carries a UI suffix (e.g. `meizu-meizu20-r91-phosh.img.gz`) |
+| `v71` | `esp-recovery-v71.img.gz` | **ESP version**, independent counter, +1 per kernel-leg change (no arithmetic link to r; v71 happens to pair with r91) |
+| `#92` | `uname -v` on device | Kernel build number = **r + 1** (pkgrel+1 baked into the kernel). First verification point on device: seeing #92 proves the r91 kernel is really running |
+| `350386e0` | `mu-r91-350386e0.img` | First 8 hex of the image's sha256 — anti-tamper + dd read-back comparison |
 
 Design details and the #N law → [docs/DESIGN.md](docs/DESIGN.md) (Chinese); which
 version is current → [MANIFEST.md](MANIFEST.md) (Chinese).

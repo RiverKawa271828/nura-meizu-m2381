@@ -87,13 +87,13 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
     （rootfs 内 apk add）+ ESP 腿（recovery_a）原地升级，不重刷 userdata**——rootfs
     全量重刷仅换 UI/换发行版/从零装机。
 
-### Release 资产清单（现役 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r84>，2026-10-12 上线 = 首个 phosh 发布面；r66 已删，r80 = plasma 末版存档）
+### Release 资产清单（现役 = <https://github.com/RiverKawa271828/nura-meizu-m2381/releases/tag/r91>，2026-10-21 上线 Latest = 7.3 stable rebase 首发 + device r63 传感器依赖闭合；r87 = 上一个 waydroid+phosh 发布面未删，r80 = plasma 末版存档）
 
 | 件 | 文件 | 出处 |
 |---|---|---|
-| 现役 boot_b | `mu-r69-97cdea20.img`（1.1MB） | 本仓 `artifacts/` |
-| 现役 recovery_a | `esp-recovery-v65.img.gz`（gz 化，刷写自动解压；裸 463efc45 / gz 00d2d5f9） | 本仓 `artifacts/` |
-| 现役 rootfs | `meizu-meizu20-r84.img.gz`（1.04G gz；**同轮产物，内含 r84 内核 apk + 设备包 r60 + 固件 r3，phosh 桌面 = pmOS 官方 phosh 包集**，刷完即完整系统）。**r86 起件名带 UI 后缀** = `meizu-meizu20-<tag>-<ui>.img.gz`（如 r86-phosh；本地实验件 = `meizu-meizu20-<ui>-local.img`，多 UI 并存不混） | `build-rootfs.sh`（gz+SHA256SUMS 自动产出） |
+| 现役 boot_b | `mu-r91-350386e0.img`（1.1MB） | Release 资产（CI 构建） |
+| 现役 recovery_a | `esp-recovery-v71.img.gz`（gz 化，刷写自动解压；CI 发布件 gz f08139e3） | Release 资产 |
+| 现役 rootfs | `meizu-meizu20-r91-phosh.img.gz`（836M gz；**同轮产物，内含 r91 内核 apk + 设备包 r63 + 固件 r3 + iio fork r3，phosh 桌面 = pmOS 官方 phosh 包集**，刷完即完整系统）。**r86 起件名带 UI 后缀** = `meizu-meizu20-<tag>-<ui>.img.gz`（如 r91-phosh；本地实验件 = `meizu-meizu20-<ui>-local.img`，多 UI 并存不混） | `build-rootfs.sh`（gz+SHA256SUMS 自动产出） |
 | 附带 apk 两件 | `linux-meizu-meizu20-7.3.0_rc6-r84.apk`（sha8 b5dd7e62）+ `firmware-meizu-meizu20-1-r3.apk`（sha8 6e6dac0a） | `$PMB_WORK/packages/edge/aarch64/` |
 | 固件 tarball | `firmware-meizu-meizu20.tar.gz`（81MB，仅构建者需要） | pmaports 包目录 |
 | SHA256SUMS | 不含 apk 件（apk sha8 见 Release 页说明） | `build-rootfs.sh` |

@@ -27,9 +27,9 @@
 
 ```bash
 sha256sum -c SHA256SUMS                 # 全 OK 才继续
-fastboot flash boot_b      mu-r87-646a0eff.img       # Mu-UEFI 固件（含设备树）
-fastboot flash recovery_a  esp-recovery-v68.img      # ESP = 内核引导腿
-fastboot flash userdata    meizu-meizu20-r87-phosh.img  # rootfs（⚠清空全部数据）
+fastboot flash boot_b      mu-r91-350386e0.img       # Mu-UEFI 固件（含设备树）
+fastboot flash recovery_a  esp-recovery-v71.img      # ESP = 内核引导腿
+fastboot flash userdata    meizu-meizu20-r91-phosh.img  # rootfs（⚠清空全部数据）
 fastboot set_active b && fastboot reboot
 ```
 
@@ -114,10 +114,10 @@ IR/UWB（身份未定）。
 
 | 记号 | 例子 | 含义 |
 |---|---|---|
-| `r87` | `mu-r87-*.img`、`meizu-meizu20-r87-phosh.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮。r86 起 rootfs 件名带 UI 后缀（如 `meizu-meizu20-r87-phosh.img.gz`） |
-| `v68` | `esp-recovery-v68.img.gz` | **ESP 版本**，独立计数，每换一次内核腿 +1（与 r 轮无换算关系，v68 恰好陪 r87） |
-| `#88` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #88 = r87 内核真的在跑 |
-| `646a0eff` | `mu-r87-646a0eff.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |
+| `r91` | `mu-r91-*.img`、`meizu-meizu20-r91-phosh.img.gz` | **发布轮次** = 内核包 pkgrel，每出一轮 +1。同轮三件（boot / recovery / rootfs）**必须配对使用**，别混搭旧轮。r86 起 rootfs 件名带 UI 后缀（如 `meizu-meizu20-r91-phosh.img.gz`） |
+| `v71` | `esp-recovery-v71.img.gz` | **ESP 版本**，独立计数，每换一次内核腿 +1（与 r 轮无换算关系，v71 恰好陪 r91） |
+| `#92` | 上机 `uname -v` | 内核编译号 = **r + 1**（pkgrel+1 烤进内核）。上机第一验证点：看到 #92 = r91 内核真的在跑 |
+| `350386e0` | `mu-r91-350386e0.img` | 镜像 sha256 前 8 位，防伪 + 刷后 dd 读回对拍用 |
 
 设计细节与 #N 定律原理 → [docs/DESIGN.md](docs/DESIGN.md)；现役各件对应哪版 → [MANIFEST.md](MANIFEST.md)；**升级操作 → [docs/UPGRADE.md](docs/UPGRADE.md)**。
 
