@@ -149,24 +149,29 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-21 深夜 更；新会话从这里接）
 
-- **▶ 2026-10-21 深夜（续）：iOS 急件首项收官（零设备纯宿主）= nura-min 定长根镜像交付（待 iOS 侧验收协议执行）**：
+- **▶ 2026-10-21 深夜（续·二）：iOS 急件首项收官 + 上机验收全绿（用户在场两轮刷写）= nura-min 定长根镜像交付完成，iOS 侧无需重测**：
   iOS 内核把 SWEETLOG 控制台日志环写在 userdata **尾部**（末 4MiB+4KiB），旧 nura 根全分区恢复必毁尾部 →
   **用户拍板「官方最小，不拆来拆去」路线** = **script/build-rootfs-min.sh**：pmbootstrap `ui=none`
-  （wrapper NURA_UI=none 临时 cfg）+ `--add` python3/openssh/unudhcpd/usb-moded(developer profile)，
-  内核/设备/固件自动取本地包仓 **r91/r63/r3**（断言钉死版本，UI 零混入）→ 定长化（v3 install 无
+  （wrapper NURA_UI=none 临时 cfg）+ `--add` python3/openssh/**networkmanager(+cli)**/unudhcpd/usb-moded(developer
+  profile)，内核/设备/固件自动取本地包仓 **r91/r63/r3**（断言钉死版本，UI 零混入）→ 定长化（v3 install 无
   `--image-size`[实锤=qemu 旗标看串行]→ truncate+resize2fs **离线一次性**扩到精确 2G，拒绝收缩）→
   唯二镜像内手术（debugfs 宿主侧零挂载）：①**mask `meizu-grow-rootfs.service`**（device 包 preset
   自启的首启扩容器=官方最小镜像同样带它，resize2fs 打 464G 整分区，不 mask 必毁尾环；wants 自启
-  链接同摘）②写 `/etc/nura-min` 溯源标记。断言全绿（尺寸恰 2147483648B/fsck clean/fstab 无扩容
-  语义/模块 7.3.0/devshell:23 preset 自启/unudhcpd@usb0+usb-signaller developer[90-base.preset
-  使能]/python3/openssh）。**交付 = artifacts/meizu-meizu20-nura-min-r91-2G.img（sha256
-  `aed7b271a21e63093f37bc453848574331e9ef23e8829c4acc48875e932b6be7`，实占 1.1G）+ 同名 .simg
-  （912M，iOS 侧 fastboot 直刷，只写镜像自身范围）**。USB 网络=unudhcpd 172.16.42.1（与 devsh
-  通道同款）；登录 = devsh nc:23 root 直达 / tty1 getty user/1234 / openssh 备腿。**验收协议 =
-  iOS 侧执行**（尾部预写标记→刷 iOS 根→刷 min→devsh dd 读回）。新坑三枚：①systemd --user 单元里
-  chroot/产物是 root 属主——rm/chown/debugfs -w 必须 sudo（chown 收归后全用户态）；②debugfs 短
-  `ls` 一行多目带尾随空格，断言必须用 `ls -l`；③v3 无 install --image-size。文档 =
-  **docs/NURA-MIN-ROOTFS.md**。commit 不 push。
+  链接同摘）②写 `/etc/nura-min` 溯源标记。**上机验收（两轮，全绿）**：pass1 刷入起机 48s 到
+  devsh:23、uname #92、usb0=172.16.42.1/16、fs Block count=524288（2GiB 整）、grow masked、
+  工具/python3/sshd 全在 → 尾部 8200 扇区（4MiB+4KiB 环位）写整段随机 pattern（基准 sha
+  `2b78a9f0…`）+头/末 ASCII 标记 → pass2 重刷同镜像+重启 → **整段 sha 与标记逐字节原样** = 「刷
+  min+起 min」零扰尾证实，iOS 侧 ③④腿免测。**★USB 网络坑定谳**：官方 `usb-signaller-developer-mode
+  up()` 用 **nmcli 配设备侧 172.16.42.1**、unudhcpd 只发 DHCP 不配 IP——无 UI 世界缺 NetworkManager
+  即 gadget 在而网死（首版上机实锤，NM 补入即通；90-base.preset 对 NM/wpa_supplicant 等的 enable
+  行在无包时自动 no-op）。**交付 = artifacts/meizu-meizu20-nura-min-r91-2G.img（sha256
+  `c841f6455d02ad5d6cb8bf7b0fdda5800bd9df0aacba4bbf4de37e5ad43519df`，实占 1.2G）+ 同名 .simg
+  （sha `a84d9212…`，fastboot 直刷）**。登录 = devsh nc:23 root 直达 / tty1 getty user/1234 /
+  openssh:22 备腿。设备现态 = 停在 nura-min（尾部带我方测试标记），iOS 侧可直接执行原协议。
+  坑四枚入册：①systemd --user 单元里 chroot/产物 root 属主——rm/chown/debugfs -w 必须 sudo；
+  ②debugfs 短 `ls` 一行多目带尾随空格，断言必须用 `ls -l`；③v3 无 install --image-size；
+  ④USB 网络 IP=NM 管（见上）。文档 = **docs/NURA-MIN-ROOTFS.md + docs/NURA-MIN-ACCEPTANCE-20261021.md
+  （验收报告，转 iOS）**。commit 不 push。
 - **▶ 2026-10-21 深夜（收尾段，用户中途令「开始构建就行不用管了，收尾」）：rebase 正式轮全项收官 + device r63 + 三树推送 + CI 发布轮点火（无人值守）——下会话排面 = iOS 取证急件优先**：
   ①**device r63** = device-meizu-meizu20 depends +iio-sensor-proxy（用户拍板「本轮补传感器」；pmaports `a637249`；apk r63 出件 `.PKGINFO` 闭合实锤 + 装机 RC=0；在机 = **#92 + v71 + r91 + device r63** + fw r3）。②**三树推送落地**（★新坑：本网络 **22 口对 github 全断**，沙箱+宿主双双 ssh 拒 ⇒ `gh auth setup-git` + 一次性 `url.https://github.com/.insteadOf=git@github.com:` 重写走 https+token；pmos_linux 无远端不在推送面）：fork `meizu20-t4b` 强推 `140e5a8e308a→665230b58a29` + 双锚 tag、pmaports `5da0578..a637249`、nura `6014b8c..2b3e861`。③**CI 发布轮 in flight = run `39511226412`**（用户令无人值守不管）。④**下会话排面（用户中途令）**：**首项 = iOS 线加急取证配合**——做**取证用最小镜像，读 userdata 尾部日志环**（iOS 急件、nura 亦受益；⚠iOS 工作区文件一律不碰，传话 = 用户转告双向）；次项 = **Release r91 收尾**（CI 绿后草稿三层对拍[DTB≡本地 c061acd9/CI ESP↔apk/rootfs debugfs=r91+r63+fw r3+iio fork r3]→ 上线 Latest[8 件制：mu-r91+ESP v72[CI 推导 max(v68,v71)+1]+rootfs r91-phosh+固件 tarball+SUMS+三 apk+upgrade zip；notes 照 r87 模板]→ 发布面文档对齐 README/FLASHING/PIPELINE/PIN_RELEASE_BASE）；然后 = **S5 全力逆向**（XBL 平台域逆向 or 首帧杀 vblank 旋钮，用户前令）。CI watch 坑：gh 须 `-R`（systemd-run cwd 非仓）+ 流式 watch 遇 TLS 抖动即死 ⇒ 轮询+重试式。
 - **▶ 2026-10-21 深夜（本轮，用户「开干」）：7.3 stable rebase 正式轮全项收官（宿主段 + 设备日）= 99 提交零冲突重放 + r91/v71 verify 全绿 + 上机 #92 回归清单全绿**：

@@ -66,7 +66,7 @@ echo "[i] pmbootstrap install（ui=none / 密码 1234；~10-20 分钟）"
 # ⚠ v3 install 无 --image-size（那是 qemu 的旗标，2026-10-21 实锤）；定长化 =
 #   官方默认出镜像后，宿主侧 truncate + 离线 resize2fs 一次性扩到精确尺寸。
 NURA_UI=none "$PIN_PMB_WRAPPER" install --password 1234 --single-partition \
-	--add python3,openssh,unudhcpd,postmarketos-usb-moded,postmarketos-usb-moded-default-profile-developer
+	--add python3,openssh,networkmanager,networkmanager-cli,unudhcpd,postmarketos-usb-moded,postmarketos-usb-moded-default-profile-developer
 
 OUT="$PMB_WORK/chroot_native/home/pmos/rootfs/meizu-meizu20.img"
 [ -e "$OUT" ] || nura_die "找不到 rootfs 产物: $OUT"
@@ -156,8 +156,8 @@ fails = []
 if ver('linux-meizu-meizu20') != f'7.3.0_rc6-r{rl}': fails.append(f"linux={ver('linux-meizu-meizu20')}")
 if ver('device-meizu-meizu20') != f'1-r{rd}': fails.append(f"device={ver('device-meizu-meizu20')}")
 if ver('firmware-meizu-meizu20') != f'1-r{rf}': fails.append(f"firmware={ver('firmware-meizu-meizu20')}")
-for need in ('python3','openssh-server','openssh-client-default','postmarketos-usb-moded',
-             'postmarketos-usb-moded-default-profile-developer','unudhcpd','usb-signaller','busybox'):
+for need in ('python3','openssh-server','openssh-client-default','networkmanager','networkmanager-cli',
+             'postmarketos-usb-moded','postmarketos-usb-moded-default-profile-developer','unudhcpd','usb-signaller','busybox'):
     if need not in entries: fails.append(f'缺包 {need}')
 for bad in (p for p in entries if p.startswith('postmarketos-ui-')):
     fails.append(f'混入 UI 包 {bad}')
@@ -179,6 +179,10 @@ debugfs -R "ls -l /etc/systemd/system/multi-user.target.wants" "$OUT" 2>/dev/nul
 	|| nura_die "unudhcpd@usb0 未自启（USB 网络腿断）"
 debugfs -R "ls -l /usr/bin" "$OUT" 2>/dev/null | grep -qE ' python3($| ->)' \
 	|| nura_die "缺 python3"
+debugfs -R "ls -l /usr/bin" "$OUT" 2>/dev/null | grep -qE ' nmcli($| ->)' \
+	|| nura_die "缺 nmcli（usb-signaller developer-mode 的配 IP 路径依赖 NetworkManager）"
+debugfs -R "ls -l /etc/systemd/system/multi-user.target.wants" "$OUT" 2>/dev/null | grep -q ' NetworkManager\.service$' \
+	|| nura_die "NetworkManager 未自启（developer-mode 需 NM 在跑才能配 172.16.42.1）"
 
 echo "[✓] 断言全绿：定长 $NURA_MIN_SIZE / fstab 净 / grow 已 mask / 模块 7.3.0 / devshell:23 / USB 栈 developer / python3"
 

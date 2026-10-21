@@ -34,17 +34,19 @@ iOS 内核把控制台日志环写在 userdata 分区**最尾部**(末 4MiB+4KiB
 
 ## 路线(用户拍板「官方最小,不拆来拆去」)
 
-`pmbootstrap ui=none`(wrapper `NURA_UI=none` 临时 cfg)+ `--add` 五件:
+`pmbootstrap ui=none`(wrapper `NURA_UI=none` 临时 cfg)+ `--add` 七件:
 
 ```
-python3,openssh,unudhcpd,postmarketos-usb-moded,
-postmarketos-usb-moded-default-profile-developer
+python3,openssh,networkmanager,networkmanager-cli,unudhcpd,
+postmarketos-usb-moded,postmarketos-usb-moded-default-profile-developer
 ```
 
 内核/设备/固件包自动取本地包仓现役(**r91 / r63 / r3**),包名版本由脚本断言
-钉死。USB 网络 = usb-signaller(postmarketos-base `90-base.preset` 使能)+
-`unudhcpd@usb0`(设备侧 172.16.42.1,给宿主发 DHCP);developer profile 由
-`usb-signaller.toml` 启动自选——与 r87 全量镜像同款官方栈,零自写脚本。
+钉死。USB 网络 = usb-signaller(developer profile 自选)→ **NetworkManager 配
+设备侧 172.16.42.1**(官方 `usb-signaller-developer-mode up()` 用 nmcli 建连接
+——⚠ unudhcpd 只发 DHCP 不配 IP,首版漏 NM 即死于此,10-21 上机实锤)+
+`unudhcpd@usb0` 给宿主发 DHCP;使能全部来自 postmarketos-base
+`90-base.preset`,与 r87 全量镜像同款官方栈,零自写脚本。
 唯二镜像内手术(均 debugfs 后处理,不改包):①mask grow 单元(见上);
 ②写 `/etc/nura-min` 溯源标记(版本钉 + 用途)。
 
@@ -81,8 +83,18 @@ tools/devpull.py ring.bin   # 设备侧 nc 172.16.42.2 <port> < 文件 推回
 
 ## 已知边界
 
-- 无 GUI/无桌面:无 NetworkManager(WiFi 未配置,不影响 USB 通道);sensors/
-  audio 的 device 包单元照常随 preset 跑,失败与否均无害(特种镜像不判 failed)。
+- 无 GUI/无桌面:NetworkManager 在(官方 USB 开发者模式配 IP 的硬依赖),WiFi
+  栈未配(unconfigured,不影响 USB 通道);sensors/audio 的 device 包单元照常随
+  preset 跑,失败与否均无害(特种镜像不判 failed)。
 - journald 易失(无持久目录),rootfs 只读式使用;要留证据先 devpull 出来。
 - 该镜像**不进 Release 不进 verify 链**,版本钉只随内核/设备包现役走;重建 =
-  重跑本脚本(包缓存热,~10-20 分钟)。
+  重跑本脚本(包缓存热,~1-5 分钟)。
+
+## 上机验收(nura 侧两轮,2026-10-21 全绿)
+
+第一轮刷入:起机 48s 到 devsh:23;uname #92;fs Block count=524288(2GiB 整,
+464G 分区上);grow 单元 masked;工具/python3/sshd 全在;fstab 净;usb0=
+172.16.42.1/16。随后写尾部标记(整段 4MiB+4KiB 随机 pattern,sha
+`2b78a9f0f2da25ddd4c69c84aaf97a90fc8a9594f64bcc4bb117b95d1ff97494` + 头/末
+ASCII 标记)→ 第二轮**重刷同一镜像 + 重启** → 标记与整段 sha 逐字节原样。
+iOS 侧完整协议(含 iOS 根刷写腿)由彼方按原协议执行。
