@@ -149,6 +149,27 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-24 更；新会话从这里接）
 
+- **▶ 2026-10-24 追记（九十七·排面钉）：S2IDLE 根治轮·二段排面已排（用户 10-24 晨拍板「安排下
+  个会话，现在弄 iOS，这边暂停」）——⚠设备去向随 iOS 轮（可能被刷走/换系统），nura 排面恢复时
+  首项 = 设备现态探测（devsh 连通+uname+wowlan/cpuidle 实读），设备不可用则排面顺延勿等**：
+  ①开工惯例 stable 检查 30s（v7.3.1 出没出）；
+  ②设备现态探测（见上⚠）；
+  ③**E 长跑过夜（首项实验，零人力）** = (wowlan 开+cpuidle 开) ×50-100 轮无人值守——复用
+  s2test 基建（设备 /root/s2test/run.sh+resume unit 都在，mask=all/state 清零即跑）；
+  ★每轮 pre 须**实读 iw phy0 info wowlan 武装态**写日志（10-23 那次 1 挂的 service-active≠
+  武装成功疑点，本轮拿统计清账）；顺带 UPower 记录 = (开,开) 睡眠功耗定量（10-23 被阻断的
+  wowlan 代价测量补齐）；若 100 轮零挂 ⇒ 拆 meizu-wfi 吃簇睡收益的底气；挂 ⇒ (开,开) 真实
+  概率入册，E 路线出局；
+  ④**段 4 悖论 kprobe 实证（主攻）** = (关,开) 触发挂死轮 + kprobe/ftrace 钉
+  cpuidle_find_deepest_state/call_cpuidle_s2idle/psci_cpu_suspend_enter 调用计数与实参
+  （QoS=10us 时这些函数到底选了什么）→ 深塌真入口定谳 → A/C/D 选路自动浮出；
+  ⑤修复轮（视③④）：A idle.c 限深 knob（治本向）/ C ath12k 域修（skill wireless.md 先例 =
+  补电源域标志+复用 awake 路径）/ D 照 v7.3 shikra.dtsi 给 sm8550 补 mpm 节点探测（AOP 若
+  不认 vMPM mailbox，probe 日志直说，一次内核轮成本）/ E 直接拆 meizu-wfi（③零挂时）；
+  ⑥拼车池 = tuned 删包 / meizu-wowlan 默认态拍板 / TECH-DEBT 清账；
+  ⑦风险预案 = 治本超窗维持 meizu-wfi 现状（不会比现状差）。
+  设备现态快照（10-24 晨暂停时）= pmOS #92/v71/r91 出厂组合（cpuidle 锁+wowlan 重武装+QoS 清
+  n/a），s2test unit disabled 无自启残留，宿主侧 watcher/digger/listener 全清。
 - **▶ 2026-10-24（九十七）：S2IDLE 挂死根治轮·一段收官（用户「开工」点名；设备全程
   在线；全量叙事+数据 = pmos experiment-log（九十七）+ docs/meizu20/s2idle-hang-data-20261024/）**：
   ①**观测基建** = netconsole 全链路通（宿主 python UDP:6666 + 设备 configfs → usb0；
