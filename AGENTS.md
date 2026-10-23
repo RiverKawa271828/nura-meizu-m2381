@@ -149,6 +149,17 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-23 更；新会话从这里接）
 
+- **▶ 2026-10-23（续）：待机功耗定谳首轮（devsh 在线只读+两枚低风险动作）**：用户报
+  「满电待机一天不到」→ UPower 历史 + suspend_stats 白嫖定量：**12h11m s2idle 掉电
+  98%→23%（≈1.15W）≈ 清醒屏灭态 0.95W = 睡眠几乎没省电**（journal 单次 entry/exit
+  一觉到底 + wakeup_sources 睡期 wakeup_count 全零 = 非"没睡"非"唤醒风暴"）。
+  已动手：①`iw phy0 wowlan disable`（runtime；meizu-wowlan.service 仍 enabled，重启
+  自动恢复 = 天然 A/B 回退；device 包默认态待 r92 拍板）；②补 journald/resolved
+  `WatchdogSec=0` drop-in（每次唤醒被 SIGABRT+coredump 实锤；**覆盖 r58 刻意 30min
+  折衷**，保持与否留用户拍板）。**▶夜 A/B 协议**：wowlan 已关态跑一夜（拔线/断 ssh/
+  灭屏，晨起记 %，数据可事后从 UPower history 挖）→ 仍 ~6%/h 则 A/B knob default
+  （bloff=0，DDIC 睡；唤醒花屏风险须用户在场）→ 再查清醒 idle 轴（0.95W 偏高）。
+  基线全录 = 记忆 `meizu20-standby-drain-baseline`。
 - **▶ 2026-10-23：android-mainline-port skill 审计轮（零设备纯宿主）**：用户提名
   `github.com/yzddmr6/android-mainline-port`（高通主线移植经验 skill，~3000 行），
   已装 `~/.agents/skills/android-mainline-port/`（ZCode 不自动触发，相关任务 Read
