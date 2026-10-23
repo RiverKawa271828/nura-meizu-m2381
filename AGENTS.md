@@ -199,6 +199,13 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   ※逆向表态：二进制 RE（REA/Ghidra）非首选——病灶在上游可读源码（psci cpuidle +
   ath12k/PCIe），首选源码互证 lane（CodeLinaro vendor wlan 源码，display §5a 同
   法）；二进制 RE 只在 vendor 源码无果后升级；
+  **★REA CLI = 条件触发第二梯队（用户 10-23 点名「大杀器 REA CLI」）**：触发条件
+  = ②③④定位出挂死层在**二进制域**（EL3 PSCI secure monitor / AOP-MPM / wlan 固
+  件）——那三层无源码，REA 是唯一路；素材现成 = 9008 全分区备份（xbl_a/b.img 在
+  库 + sbl/aop/QSEE 分区可取）+ §4 raw-binary 配方（ELF32 e_machine=1 → dd 切段
+  → rea analyze arm64，xbl 已跑通同法）；素材不足处 = meizu20-m1 私有仓备份目录。
+  若挂死层定位在 Linux 源码域（ath12k/mac80211/PCIe dwc/psci 驱动），源码互证即
+  修，REA 不上——别为顺手的锤子找钉子；
   ④**源码面（纯宿主）** = psci cpuidle 簇塌缩 × mac80211/ath12k/PCIe suspend 竞态
   检索；上游/社区修复搜索（lore/CodeLinaro）；skill kprobe 法（电源域+PCIe 挂起
   回调）现成；
