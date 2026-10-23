@@ -188,8 +188,17 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   ②**挂死率定量** = cpuidle 使能态 rtcwake 300s ×5-10 轮脚本自动循环（挂死自复位
   续跑），出挂死率；**状态粒度二分** = 只 enable 单簇 cpu-sleep（A510/A710/X3 分开
   试）找「安全子集」——挂死若跟特定簇走，日用先开安全子集吃部分功耗收益；
-  ③**抓现场** = netconsole（挂死点在 device suspend 相、USB 未断，kmsg 可外推）/
-  ftrace / 查 ramoops 为何空（看门狗复位不经内核 dump 通道）；
+  ③**抓现场 = AER 大杀器组合拳（用户 10-23 点名）**：★`CONFIG_PCIEAER=y` 已在
+  r91 config（PORTBUS/RAS/ASPM 全 y，AER_INJECT 未开），不用重编——缺的是出口：
+  a)**netconsole**（no_console_suspend 已在 cmdline ⇒ console 含 netconsole 走过
+  挂起不静音 ⇒ 挂死窗口 kmsg+AER 报文直接推到宿主，此前三次挂死证据蒸发 = 少了
+  这件）；b)**AER 统计读取** = 每轮醒来读 `/sys/bus/pci/devices/*/aer_dev_*`
+  （CE 累计 = 链路问题软证据）；c)**pcie_aspm=off 单变量试一轮**（挂死消失 = 病根
+  收敛到 ASPM 链路低功耗态×簇塌缩竞态，一行 cmdline 就能当日用折衷）；d) ftrace /
+  查 ramoops 为何空（看门狗复位不经内核 dump 通道）；
+  ※逆向表态：二进制 RE（REA/Ghidra）非首选——病灶在上游可读源码（psci cpuidle +
+  ath12k/PCIe），首选源码互证 lane（CodeLinaro vendor wlan 源码，display §5a 同
+  法）；二进制 RE 只在 vendor 源码无果后升级；
   ④**源码面（纯宿主）** = psci cpuidle 簇塌缩 × mac80211/ath12k/PCIe suspend 竞态
   检索；上游/社区修复搜索（lore/CodeLinaro）；skill kprobe 法（电源域+PCIe 挂起
   回调）现成；
