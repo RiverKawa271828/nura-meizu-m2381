@@ -147,8 +147,19 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-21 深夜 更；新会话从这里接）
+## 现态（2026-10-23 更；新会话从这里接）
 
+- **▶ 2026-10-23：android-mainline-port skill 审计轮（零设备纯宿主）**：用户提名
+  `github.com/yzddmr6/android-mainline-port`（高通主线移植经验 skill，~3000 行），
+  已装 `~/.agents/skills/android-mainline-port/`（ZCode 不自动触发，相关任务 Read
+  直读）。全文对拍本仓 = **主线达标**（skill 0-8 步全走完，方法论同构）；查漏产出：
+  ①**docs/TECH-DEBT.md 建档 = 技术债唯一出处**（9 条债带去掉条件 + 交叉印证线索 +
+  NO-GO 集中地 + 候补小件池——此前散三处，后只更此表）；②**S5 根治卡 §5 B-list 扩
+  两轴** = VBIF AXI halt 握手（彼库已确认根因例，dsi_err status=4 同 marker）+ 双
+  INTF 关闭顺序/DSI PHY 状态保存恢复，「下一手候选」菜单扩为三族留拍板；③ath12k
+  21s 新线索 = PCIe s2idle 保留链路×驱动关电源域 + kprobe 排查法（⚠运行中重载
+  ath12k 属禁手）；④廉价检查两枚待设备日（systemd-detect-virt / RebootWatchdogSec）。
+  commit 不 push。
 - **▶ 2026-10-21 深夜（续·二）：iOS 急件首项收官 + 上机验收全绿（用户在场两轮刷写）= nura-min 定长根镜像交付完成，iOS 侧无需重测**：
   iOS 内核把 SWEETLOG 控制台日志环写在 userdata **尾部**（末 4MiB+4KiB），旧 nura 根全分区恢复必毁尾部 →
   **用户拍板「官方最小，不拆来拆去」路线** = **script/build-rootfs-min.sh**：pmbootstrap `ui=none`

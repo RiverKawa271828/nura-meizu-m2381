@@ -169,6 +169,24 @@
   仅 PANEL_DEAD 注销。我方 fork 两处同款形态在（`dpu_encoder_phys_cmd.c:203` /
   `dpu_encoder.c:2140`）——**候补解释我方冷启 restart 双遍怪癖**；
   ③ tearcheck sync_cfg_height 2×vtotal vs 其 vendor 0xFFF0（微差，暂不动）。
+  ④⑤ **（10-23 增补，android-mainline-port skill display.md 交叉印证；来源 =
+  `~/.agents/skills/android-mainline-port/experience/display.md` 高通 DPU 域）**：
+  ④ **VBIF AXI halt 握手**——彼库已确认根因一例：显示电源域掉电前缺少 VBIF AXI
+  halt 握手 ⇒ CTL 软复位永不完成（需 override），恢复时先开时钟后投票；症状 =
+  亮屏后 DSI 命令 DMA -110 / CTL_FLUSH 卡住 / vblank timeout 花屏 /
+  **`dsi_err_worker status=4`（与我方链路真断 marker 同号）**。注意彼库"未解决"
+  一节写明 status=4 同 SoC 社区也未解决 = 困难度互证，但"缺 VBIF halt 握手"
+  是现成新靶——排查入口 = 逐项对照 vendor `sde_power_handle`/power-event 钩子
+  的 unprepare 序列（素材同 §5a vendor 树 `msm/`）；
+  ⑤ **双 INTF 关闭顺序 + DSI PHY 状态保存恢复**——熄屏瞬间花屏/欠载风暴的已
+  确认根因 = 在停止接口之前就清理了 CTL（关闭顺序与原厂不同）+ 从 DSI PHY 的
+  状态没有保存和恢复；修法 = 先停 INTF 再清 CTL + 导入 DPU 关闭顺序与 PHY
+  保存/恢复补丁。验收法 = 几十次 DPMS 循环数欠载事件。
+  另三条同时序纪律（2026-10-23 同源）：恢复先投票再开时钟；OPP -ERANGE 后电源
+  投票永久丢失（勿抬时钟出 OPP 表）；排除实验必须从干净新启动开始（已遵守）。
+  **▶ B-list 候补池更新：首帧杀 vblank（②）+ VBIF halt（④）+ INTF/CTL 顺序与
+  PHY 保存（⑤）三族并列；§6 判词「下一手候选」菜单相应扩为 XBL 平台域逆向 /
+  首帧杀 vblank / VBIF halt 握手——留用户拍板。**
 - **「90Hz 修好」勘定** = `121f62e0` both scan rates（120@30/20/10 + 90@30/18/10
   两档 ADFR 族按 mode 名选尾），**非花屏条目**。
 - **5a. vendor 源码互证 lane（✅ 10-21 收官；sparse 克隆落
