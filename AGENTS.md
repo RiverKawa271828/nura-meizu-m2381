@@ -177,6 +177,28 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   括号=整行 sh 语法错静默不执行（journal `syntax error` 抓现形），devsh 命令一律
   全引号。**16:29 已按 (开,开) 发射 4h 定量睡眠（T0=16:29:44/18363mWh/100%，
   rtcwake 20:29 自醒）→ 下会话挖 UPower 出 wowlan 代价判词**。
+  **▶ 同日续·四（矩阵终版）：(开,开) 4h 也挂死**——T0 后 ~3min 挂死→16:32:37
+  看门狗自复位。**定罪收窄 = cpuidle 单轴**：cpuidle 开 = 4 尝试 3 挂
+  （302s 干净=运气），cpuidle 关 = 全干净（12h+302s+出厂史），**与 wowlan 无关**；
+  (开,开) drain 定量被挂死阻断。设备自愈回出厂组合 (开,关)。**TD-10 退役取消**
+  ——meizu-wfi 是活的保险丝，s2idle 挂死根治前不能拆。
+  **▶下会话排面 = S2IDLE 挂死根治轮（内核轮；用户 10-23 拍板「直接开始修 s2idle」
+  +「安排下个会话」）**：
+  ①开工惯例 stable 检查 30s；
+  ②**挂死率定量** = cpuidle 使能态 rtcwake 300s ×5-10 轮脚本自动循环（挂死自复位
+  续跑），出挂死率；**状态粒度二分** = 只 enable 单簇 cpu-sleep（A510/A710/X3 分开
+  试）找「安全子集」——挂死若跟特定簇走，日用先开安全子集吃部分功耗收益；
+  ③**抓现场** = netconsole（挂死点在 device suspend 相、USB 未断，kmsg 可外推）/
+  ftrace / 查 ramoops 为何空（看门狗复位不经内核 dump 通道）；
+  ④**源码面（纯宿主）** = psci cpuidle 簇塌缩 × mac80211/ath12k/PCIe suspend 竞态
+  检索；上游/社区修复搜索（lore/CodeLinaro）；skill kprobe 法（电源域+PCIe 挂起
+  回调）现成；
+  ⑤修复落地 = fork 提交 + r92 内核轮 + verify + 设备日（rtcwake ≥10 轮零挂死 +
+  4h drain 定量 + 唤醒链眼判用户在场）；
+  ⑥拼车池 = tuned 删包（红鲱鱼已停服）/ meizu-wowlan 默认态 / TECH-DEBT 清账；
+  ⑦**风险预案** = 治本超窗则维持 meizu-wfi 现状（功耗问题挂起，勿硬上）。
+  完成判据 = cpuidle 使能态 ≥10 轮 rtcwake 零挂死 + 4h 睡眠 drain ≤~0.5%/h +
+  唤醒链眼判全绿。
 - **▶ 2026-10-23：android-mainline-port skill 审计轮（零设备纯宿主）**：用户提名
   `github.com/yzddmr6/android-mainline-port`（高通主线移植经验 skill，~3000 行），
   已装 `~/.agents/skills/android-mainline-port/`（ZCode 不自动触发，相关任务 Read
