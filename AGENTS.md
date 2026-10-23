@@ -147,8 +147,34 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-23 更；新会话从这里接）
+## 现态（2026-10-24 更；新会话从这里接）
 
+- **▶ 2026-10-24（九十七）：S2IDLE 挂死根治轮·一段收官（用户「开工」点名；设备全程
+  在线；全量叙事+数据 = pmos experiment-log（九十七）+ docs/meizu20/s2idle-hang-data-20261024/）**：
+  ①**观测基建** = netconsole 全链路通（宿主 python UDP:6666 + 设备 configfs → usb0；
+  **★cmdline 烤死 loglevel=3 = console 层滤 <4 级 = 历次证据蒸发又一层根因**，实验期
+  抬 7；覆盖窗 = 入睡段至 freeze 完成，dwc3 gadget 挂起即断）；无 panic 流（oops=panic
+  在）⇒ 静死。②**定量** = 段1（未关联）10/10 净 + 段2（关联 LZ-5G 同 BSSID）10/10 净；
+  **★方法论坑 = sched_clock 深睡停走**（300s 睡眠 uptime 只 +26s，累计漂移 ~40min ⇒
+  三次「没醒=挂死」全误判；可靠判据 = >350s 无新 freeze 段 / boot_id 变；顺带实证深塌
+  真发生）。③**复现 4/4 铁案 = (wowlan 关+cpuidle 开) 确定性挂死**（段3b/3c 今日 2/2
+  + 10-23 2/2），对照 (开,开) 今日 18 轮全净 ⇒ **wowlan 判词翻案：关 = ath12k
+  full-suspend（mhi 深关+电源域释放）强放大通道，开 = lite 保留链路避开竞态——10-23
+  「wowlan 无关」推翻**（(开,开) 低概率通道当年掩盖了 (关,开) 确定性通道）；段5
+  (关,锁) 净 = 定罪矩阵封卷。④**QoS 双悖论**：/dev/cpu_dma_latency=10us（清醒态实证
+  锁死）+ per-CPU resume_latency=100 **都挡不住挂死**，唯 sysfs disable 有效——源码面
+  = v7.3 idle.c 的 s2idle 分支**绕过 governor 直选 deepest available**
+  （cpu_wakeup_latency_qos_limit → cpuidle_find_deepest_state）；段6 悖论已解（读层
+  不对），**段4 悖论遗留**（全局 10us 理论应排除 750us+ 深态但实测挂）——下会话首查
+  call_cpuidle_s2idle 实现链 + kprobe 实证。⑤**机制链** = freeze 直选深塌（rail-pc
+  + OSI 簇塌，参数与 stock FDT 全等 = fw 无罪）× ath12k full-suspend 竞态 → AOP/
+  RPMH 静死 → 看门狗复位。⑥**日用结论（即刻生效）**：meizu-wowlan 升格 = (关,开)
+  挂死通道保险丝（**wowlan runtime disable 自此列禁手**，除非 cpuidle 锁着）；
+  meizu-wfi = 第二道；功耗路线（拆 meizu-wfi 吃簇睡收益）被 (开,开) 1 挂史阻塞，
+  待治本解锁。⑦**r92 排面三选留拍板**：A 内核 knob（idle.c s2idle 分支尊重 QoS/
+  限深——治本方向，段4 悖论先解）/ B device 包 wowlan 防呆加固+禁手文档化 /
+  C ath12k 域修（深水区）；拼车池不变。设备收尾 = 出厂组合回位（cpuidle 锁+wowlan
+  重武装+QoS 清 n/a）。commit 不 push。
 - **▶ 2026-10-23（续）：待机功耗定谳首轮（devsh 在线只读+两枚低风险动作）**：用户报
   「满电待机一天不到」→ UPower 历史 + suspend_stats 白嫖定量：**12h11m s2idle 掉电
   98%→23%（≈1.15W）≈ 清醒屏灭态 0.95W = 睡眠几乎没省电**（journal 单次 entry/exit
