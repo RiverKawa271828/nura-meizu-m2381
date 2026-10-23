@@ -160,6 +160,13 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   灭屏，晨起记 %，数据可事后从 UPower history 挖）→ 仍 ~6%/h 则 A/B knob default
   （bloff=0，DDIC 睡；唤醒花屏风险须用户在场）→ 再查清醒 idle 轴（0.95W 偏高）。
   基线全录 = 记忆 `meizu20-standby-drain-baseline`。
+- **▶ 2026-10-23（续·二）：待机功耗全案定谳 = `meizu-wfi.service`（TD-10）**：skill
+  方法论剥层（qcom_stats apss 计数→cpuidle disable 旗标→正反对照）——CPU 26h 仅
+  204/57/31 次簇睡、APSS 仅 7 次/0.19s；disable 清零后 120s 进 1122 次簇睡 = 机制
+  全好；写手 = 设备包 r5 时代 unit（boot 禁全部深 idle 态，K30 r24 同款 workaround，
+  当年未登记债表）。已动手：disable 全清 0（本 boot 生效）+ tuned 停服（红鲱鱼，
+  持 /dev/cpu_dma_latency 但非因）。**退役验证 = 今晚 disable=0+wowlan 关整夜 →
+  下设备日 rtcwake 多轮+花屏眼判 → 全净则 r92 删 unit**。TECH-DEBT TD-10 已立。
 - **▶ 2026-10-23：android-mainline-port skill 审计轮（零设备纯宿主）**：用户提名
   `github.com/yzddmr6/android-mainline-port`（高通主线移植经验 skill，~3000 行），
   已装 `~/.agents/skills/android-mainline-port/`（ZCode 不自动触发，相关任务 Read

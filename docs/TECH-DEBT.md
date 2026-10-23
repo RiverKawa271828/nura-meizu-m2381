@@ -20,6 +20,7 @@
 | TD-07 | ESP v71 同号异字节（CI gz `f08139e3` vs 本地 gz `6fe7811a`=#92 在机件） | Release r91 发布面 vs 在机 | CI ESP 推导撞号（v71 已被本地先建先钉占用，CI 又生成一份同号件） | 发布面 ESP 与在机 ESP 字节不同但同源同版本；读回验收口径已按"CI 件对 CI 件"记档 | 下次发布轮验证「max(release, pin)+1」推导防撞号后转记档 | 在册 |
 | TD-08 | 内核 fork tarball（270MB）gitignore + pmaports 提交 `--no-verify` | pmaports APKBUILD 提交流程 | pre-commit 钩子要求 source= 全件入 index，但 tarball 不进仓 | 校验被绕过（checksum 由构建实证兜底）；新人不知情会困惑 | 无干净解（上游化已终判弃用）；保留惯例，靠本文档知会 | 转永久 |
 | TD-09 | Mu 链无 initramfs（root=/dev/sda22 烤死在 cmdline） | 内核包 cmdline + Mu | Mu 不传 initrd，结构如此非权宜 | 换根分区/UUID 即废；救援必须走 9008 或 apk 腿 | 非债——结构性设计（见 DESIGN.md），列此防误判 | 转永久 |
+| TD-10 | **meizu-wfi.service = 开机 disable 全部深度 cpuidle 态**（K30 r24 同款 WFI workaround，设备包 r5 时代入包，当时未登记本表——本表建档后追认的首条） | device 包 `meizu-wfi.service`，boot 时 `echo 1 > …/cpuidle/state[1-9]*/disable` | 当年治「s2idle flakiness」（r20 时代，先于 no_console_suspend/r58 看门狗修复） | **待机功耗全案真凶**：CPU 永不簇塌缩→APSS 26h 仅 7 次/0.19s→清醒 idle 0.95W、s2idle 睡眠 1.15W（≈清醒功耗）→12h 掉电 75%。disable 清零后 120s 进 1122 次簇睡 = 机制全好 | **退役验证**：disable=0 + wowlan 关跑整夜（10-23 夜）+ 下设备日多轮 rtcwake/唤醒花屏眼判；全净则 r92 设备轮删 unit；若当年 flake 复发则按「最早失败层」治本再退役 | 退役验证中 |
 
 ## 二、交叉印证线索（非债，待排程；2026-10-23 skill 审计产出入册）
 
