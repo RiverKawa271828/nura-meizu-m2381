@@ -167,6 +167,16 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
   当年未登记债表）。已动手：disable 全清 0（本 boot 生效）+ tuned 停服（红鲱鱼，
   持 /dev/cpu_dma_latency 但非因）。**退役验证 = 今晚 disable=0+wowlan 关整夜 →
   下设备日 rtcwake 多轮+花屏眼判 → 全净则 r92 删 unit**。TECH-DEBT TD-10 已立。
+  **▶ 同日续·三：退役验证 rtcwake 矩阵——(wowlan 关+cpuidle 开) 2/2 确定性挂死**：
+  16:02 挂死→外部看门狗 ~1min 自复位；16:21 复试挂死→~7min 迟到复位（用户见「黑屏
+  无反应」）；其余三组合全干净[(开,关)=12h 昨晚/(开,开)/(关,关)=302s 各一]。**当年
+  "s2idle flakiness"=此交互实锤（差异轴=ath12k 全挂起路径），meizu-wfi 锁的是真
+  问题**；与 skill wireless.md「PCIe s2idle 保留链路×驱动关电源域」线索吻合，kprobe
+  法现成。r92 修复路线三选留拍板：①治本内核轮（ath12k×cpuidle）②夜用折衷 (开,开)
+  定量 wowlan 代价 ③维持 (关,关) 无收益。★实验乌龙入册：devsh 命令 echo 带未引号
+  括号=整行 sh 语法错静默不执行（journal `syntax error` 抓现形），devsh 命令一律
+  全引号。**16:29 已按 (开,开) 发射 4h 定量睡眠（T0=16:29:44/18363mWh/100%，
+  rtcwake 20:29 自醒）→ 下会话挖 UPower 出 wowlan 代价判词**。
 - **▶ 2026-10-23：android-mainline-port skill 审计轮（零设备纯宿主）**：用户提名
   `github.com/yzddmr6/android-mainline-port`（高通主线移植经验 skill，~3000 行），
   已装 `~/.agents/skills/android-mainline-port/`（ZCode 不自动触发，相关任务 Read
