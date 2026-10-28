@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="91"      # r91 = 7.3 stable rebase 正式轮（10-21：99 提交零冲突重放到 v7.3 `091b0638`，apk 内核 release=7.3.0[模块目录 /usr/lib/modules/7.3.0/]；printk 复核=上游未修 no_console_suspend 留 + ath12k 0012 三件 carry 全留；**待上机 #92**）；r90 = 首枪 stock-content 旋钮（A/B 判负，debug 设施默认 0 随车）；r87 = 发布面（Release r87 Latest 不变）；r86 = waydroid 双族策略路由（#87 验过）
+REL_LINUX_PKGREL="92"      # r92 = D4 三件拼车轮（10-29：D4-2 m2582 fb4e8c5d 移植[RDPTR 注销门控 PANEL_DEAD + frame-done 84ms 平值，c7abcd61] + D4-3 wake_pps_late default=true + D4-4 sanity 0x0A 改 LP 读[bfc79f41]；vmlinuz c1583825；验证件不上机不发布照 r88/v69 先例，期望 #93）；r91 = 7.3 stable rebase 正式轮（在机 #92）；r90 = 首枪 stock-content 旋钮（A/B 判负）；r87 = 发布面（Release r87 Latest 不变）
 REL_DEVICE_PKGREL="63"     # r63 = depends +iio-sensor-proxy（10-21 用户拍板补名；CI rootfs 闭合根治的 depends 面收口——fork r3 自此必进构建闭合，与 build-device 预编双保险）；r62 = 摘 discover + flatpak 商店；r61 = waydroid 五件；r60 = modules-load.d 补 uhid
 REL_FW_PKGREL="3"
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v71.img.gz"  # v71 = r91 内核（裸 0a102220 / gz 6fe7811a；10-21 本地构建，verify[4] 手工对拍 v71↔r91 vmlinuz 4aad92b3 逐字节同源；**待上机**）；v70 = r90（裸 dca69c1d / gz 374c4595，#91 在机验过）；v68 = r87 发布面（裸 e7a044a8 / gz 086a4eef）；v67 = r86（裸 2ad63003，#87 验过）
-REL_KERNEL_VER="#92"       # r91 期望（#N=pkgrel+1 定律；**10-21 深夜设备日实测 ✓**；r92+ 才生效的摘 no_console_suspend 轮 = 留用户拍板）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v72.img.gz"  # v72 = r92 内核（裸 37e3f9c7 / gz 18fd54a0，10-29 本地构建；v72↔r92 手工对拍 c1583825 同源；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑——沙箱背景调用不等待，首跑曾吃 r91 旧 vmlinuz 假件已重造覆盖）；v71 = r91（裸 0a102220 / gz 6fe7811a，#92 在机验过）；v70 = r90；v68 = r87 发布面
+REL_KERNEL_VER="#93"       # r92 期望（#N=pkgrel+1 定律；**待上机**）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。

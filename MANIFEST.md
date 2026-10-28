@@ -41,6 +41,18 @@ host power-on = 下次睡眠即生效）+ pmaports `acc037b` → apk **r90**（s
 核同值]）= **内容值轴清零，判词落 PANEL §6 条 4**；恢复 = 重启（旋钮
 runtime-only，boot 默认 = 零行为差）。
 
+**r92/v72 D4 三件拼车轮（2026-10-29 设备日预备轮；验证件不上机不发布照 r88/v69 先例）**：
+fork `c7abcd61`（D4-2 = m2582 fb4e8c5d 移植：RDPTR 注销门控 PANEL_DEAD +
+frame-done 84ms 平值[dpu_encoder.c + dpu_encoder_phys_cmd.c]）+ `bfc79f41`
+（D4-3 = wake_pps_late default=true[P2=stock 语义，缝 5] + D4-4 = 冷启 sanity
+0x0A 改 LP 读[stock ESD 语义]）+ pmaports pkgrel 92 → apk **r92**（vmlinuz
+`c1583825`）+ ESP **v72**（裸 `37e3f9c7` / gz `18fd54a0`；v72↔r92 手工对拍
+c1583825 同源）。verify 全绿（[1] dtb 同源 c061acd9 / [4] c1583825 / 期望
+**#93**）。**构建坑入册：build-esp 必须等 build-kernel 的 systemd-run 单元真
+完再跑——沙箱背景任务调用时守卫不等待，首跑曾拿 r91 旧 vmlinuz 造出假 v72
+（4aad92b3），已重造覆盖**。上机协议 = D4-2 唤醒行为件 A/B（用户在场眼判，
+`echo stock > knob` 真睡臂；回归预案 = 撤 D4-2 保 D4-3/4 单独上）。
+
 **r91/v71 7.3 stable rebase 正式轮（2026-10-21 宿主段收官，零设备；待设备日双腿上机）**：
 fork `meizu20-t4b` 重放到 v7.3 stable（tag `091b0638` → commit `c03c1a14507d`），
 **99 提交零冲突**（演练 98 + 首枪旋钮 1；合流点 a90ee4305c4a = rc6 基线；sanity 四件

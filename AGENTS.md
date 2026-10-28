@@ -149,6 +149,37 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-29 更；新会话从这里接）
 
+- **▶ 2026-10-29 深夜追记：设备日拼车窗 ✅ 主体收官（用户「开始吧，现在是nura设备日」点名；设备提前回 nura 链，宿主件+设备件同窗并跑）**：
+  ①**D4 三件拼车轮 r92/v72 全绿**（fork `c7abcd61` = D4-2[m2582 fb4e8c5d 移植：
+  RDPTR 注销门控 PANEL_DEAD + frame-done 84ms 平值] + `bfc79f41` = D4-3
+  wake_pps_late default=true + D4-4 sanity 0x0A 改 LP 读；apk r92 vmlinuz
+  `c1583825` + ESP v72 裸 `37e3f9c7`/gz `18fd54a0` + verify 全绿 + pmaports
+  `650fef7`；**验证件不上机不发布照 r88/v69 先例**；★构建坑 = build-kernel 的
+  systemd-run 守卫从沙箱背景任务调用**不等待** ⇒ build-esp 提前跑吃 r91 旧
+  vmlinuz 造出假 v72[4aad92b3]，已显式 72 重造覆盖——build-esp 必须等单元真完）。
+  ②**D1 上户口定谳**（stock 6B 前缀 `f0 55 aa 52 08 03 6f` 后读 0xDF = 23B
+  模组串 **"MZ1300043601ECQM3AW03MR"**，DF[0]=0x4D 判读表命中；0x0A/0xA1/
+  0xDA-DC/0x04 主线读路全零载荷 = vendor RX 机制差记档；**主线可读面 =
+  {0x91, 0xDF}**；★屏唤醒招 = phosh `org.gnome.ScreenSaver SetActive false`
+  经 `su user -c busctl`——uinput REL 点屏无效）。③**D2 寄存器维度收官**
+  （stock 旋钮真睡唤醒 vs 冷启 37 项全扫 **diff=0**，0x91 镜像跨真睡无差 ⇒
+  档案假说寄存器可见维度关闭[与 r22 互证]；dsi_err status=4 marker 在场；
+  眼判维度并入 A/B 窗）。④**D3 三件**（页解锁域设备半边补齐 = stock 前缀
+  我方活会话有效；**PMIC 上电拍数差实锤 2/5/0ms vs 5/5/10ms = D4-1 弹药**；
+  OLED 轨电压 = XBL 同链共担等值降权）。⑤**S2IDLE 段 4 悖论源码面定谳**
+  （三重锁死：s2idle 读 CPU_SYSTEM_WAKEUP 类 ≠ /dev/cpu_dma_latency 的
+  CPU_DMA_LATENCY 类 + config 未开 ⇒ 恒 NO_CONSTRAINT + resume_latency 只喂
+  governor ⇒ 唯 disable 可达；**A1 = CONFIG_PM_QOS_CPU_SYSTEM_WAKEUP=y +
+  /dev/cpu_wakeup_latency 持 fd 服务**[config-only 上游意图机制，清醒态簇睡
+  不受影响优于 meizu-wfi] + kprobe-seg4.sh 成文；pmos `ee52f63`）。⑥stable
+  检查 = v7.3.1/v7.4-rc 未出。落档 = PANEL §6 条 9 D1/D3 段[nura `69e6ab1`] +
+  host-round-card 收官段 + MANIFEST r92 预备件段 + config 定版（REL 92/v72/
+  **期望 #93**）。**剩余 = ③r92 上机 A/B（用户在场眼判，`echo stock > knob`
+  真睡×5；回归预案 = 撤 D4-2 保 D4-3/4）∥ ④S1 E 长跑过夜 + 次晨 kprobe**——
+  一窗双案留拍板；**用户 10-29 深夜令「等 iOS 那边做完再说，现在收尾」⇒ 两件
+  挂起，iOS 线收尾后恢复（设备已出厂态回位：bloff+failed 0+D2 周期干净
+  suspend success=1+wowlan 武装+cpuidle 锁）**。commit 不 push。
+
 - **▶ 2026-10-29 排面钉（二）：设备去向 = iOS（用户 10-29 晚拍板「估计半小时后才刷」）；
   下会话 = iOS 窗口期宿主轮，卡 = docs/host-round-card-20261029-iosgap.md**——
   ①主件 = **D4 三件拼车内核轮 r92 预备**（D4-2 vblank 修法 m2582 fb4e8c5d 移植

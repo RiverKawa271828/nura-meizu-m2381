@@ -1,5 +1,33 @@
 # 下会话排面卡：iOS 窗口期宿主轮（2026-10-29 晚钉；设备刷回 iOS 后照做）
 
+> **✅ 本卡主体当日收官（2026-10-29 深夜轮；设备提前回 nura 链 = 用户令
+> 「开始吧，现在是nura设备日」，宿主件与设备件同窗并跑）**：
+> §1 主件 ✅ = D4 三件拼车轮 r92/v72 全绿（fork `c7abcd61` D4-2[m2582
+> fb4e8c5d 移植：RDPTR 注销门控 PANEL_DEAD + frame-done 84ms 平值] +
+> `bfc79f41` D4-3[wake_pps_late default=true] + D4-4[sanity 0x0A 改 LP 读]；
+> apk r92 vmlinuz `c1583825` + ESP v72 裸 `37e3f9c7`/gz `18fd54a0`；verify
+> 全绿 dtb c061acd9 同源；pmaports `650fef7`。**⚠构建坑入册：build-kernel 的
+> systemd-run 守卫从沙箱背景任务调用不等待 ⇒ build-esp 提前跑吃 r91 旧
+> vmlinuz 造出假 v72[4aad92b3]，已显式 72 重造覆盖——build-esp 必须等单元
+> 真完**）。§2 次件 ✅ = 段 4 悖论三重锁死定谳 + A1 config-only 修复形态
+> + kprobe 脚本成文（pmos `ee52f63`，docs/meizu20/s2idle-seg4-paradox-20261029.md
+> + kprobe-seg4.sh）——**A1 = CONFIG_PM_QOS_CPU_SYSTEM_WAKEUP=y +
+> /dev/cpu_wakeup_latency 持 fd 服务（上游意图机制，清醒态簇睡不受影响，
+> 优于 meizu-wfi），拼车留拍板**。§3 设备窗 ✅ 三件 = S2（#92+r91 出厂
+> 组合回位）+ D1（**0xDF + stock 6B 前缀 = 23B 模组串
+> "MZ1300043601ECQM3AW03MR"，DF[0]=0x4D 判读表命中；0x0A/0xA1/0xDA-DC/0x04
+> 主线读路全零载荷——可读面 = {0x91, 0xDF}，页域候选部分证伪**）+ D2 寄存器
+> 维度（**冷启 vs 真睡唤醒 37 项全扫 diff=0**，档案假说寄存器可见维度关闭，
+> 与 r22 全扫互证；眼判维度并入 r92 A/B 窗）+ D3（页解锁域设备半边补齐/
+> **PMIC 上电拍数差实锤 2/5/0ms vs 5/5/10ms = D4-1 弹药**/OLED 轨电压等值
+> 语境降权）。落档 = PANEL §6 条 9 D1/D3 实测段（nura `69e6ab1`）。
+> **剩余 = ③r92 上机 A/B（用户在场：upgrade.sh 双腿 → #93 → `echo stock >
+> knob` 真睡×5 眼判；回归预案 = 撤 D4-2 保 D4-3/4）∥ ④S1 E 长跑过夜**
+> （(开,开)×50-100 + iw show 入日志 + UPower 定量；次晨 kprobe-seg4 (关,开)
+> 挂死轮拿 A1 判据）——一窗双案留拍板。**用户 10-29 深夜令「等 iOS 那边
+> 做完再说，现在收尾」⇒ 两件挂起待 iOS 线收尾；设备已出厂态回位（bloff +
+> failed 0 + D2 周期干净 suspend success=1 + wowlan 武装 + cpuidle 锁）。**
+
 > 语境：设备 10-29 晚刷回 iOS（用户拍板），nura 设备通道（devsh/fastboot）
 > 全失效；设备再回 nura 链的时间未定。本卡 = 设备不在期间的纯宿主轮排面
 > （用户 10-29「你安排下个会话吧」拍板）；设备窗恢复排面见 §3。
