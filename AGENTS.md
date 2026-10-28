@@ -149,6 +149,24 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-29 更；新会话从这里接）
 
+- **▶ 2026-10-29 排面钉（下会话照做）：S5 续轮 = 唤醒重载路径对照 + DDIC 考古预备，
+  卡 = docs/s5-wake-ddic-card-20261029.md**（用户「下个会话做，你安排好」拍板；语境 =
+  固件逆向面已穷尽[XBL/ABL/uefi 三面收官]，花屏病灶转 vendor 源码域 + DDIC 三层考古）：
+  **宿主段（零设备，下会话主体）** = ①主件 vendor wake 重载路径对照（七缝对拍排面在卡
+  §1：dsi_panel suspend→resume 重发集合/双 INTF 关闭顺序+PHY 保存恢复/VBIF halt/首帧
+  杀 vblank/PPS 重发位/页解锁域/DSC 重编程触发——素材 = s5-rea/vendor-display-drivers
+  全源码 vs 我方 fork panel-boe-meizu20.c+dpu1；落档 PANEL §6 条 9 + B-list 判词）+
+  ②次件 DDIC 考古宿主半边（stock FDT 面板节点验尸 → 指纹检索：**页解锁魔数 f0 55 aa
+  52 08 + panel_id 首字节 0x4D** 搜下游内核同族驱动[Novatek NT37xxx/Raydium 先验]→
+  候选清单+上户口判读表+可读状态寄存器地图；**dip.img=1MB 全零已定谳勿重查**）。
+  **设备日拼车排面（等设备回 nura 链+用户拍板窗，与 S2IDLE 二段同窗一窗双案）** =
+  D1 DDIC 上户口（DCS 0x04/0xDF/0xA1/0xDA 读回定型号，前置探针 = 读回通道是否缺
+  page-unlock 前置 dcs_read 旋钮，缺则与 D4 patch 拼一个内核轮）→ D2 会话双快照
+  （冷启干净 vs 唤醒花屏寄存器全量 diff，0x91 PPS 镜像已验证可读；**档案假说可证伪化
+  主力**）+ D3 语境差三件 + D4 B-list 旋钮上机 ∥ S1 S2IDLE 二段（E 长跑+段 4 kprobe）
+  + S2 设备现态探测（恢复首项）。宿主段收官判据 = 对拍表+候选清单落档；设备窗收官 =
+  D2 diff 判词（档案假说立/倒）+ S2IDLE A/C/D/E 选路。
+
 - **▶ 2026-10-29 追记：队列② XBL 会话语境 RE ✅ 收官**（用户「abl逆向已完成，你继续」
   点名；零设备纯宿主；REA/Ghidra lane，snapshot xbl-loader/xbl-main；全量落档 =
   **docs/XBL-RE.md**，PANEL §6 条 8 收录判词）：
