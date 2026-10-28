@@ -149,6 +149,17 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-29 更；新会话从这里接）
 
+- **▶ 2026-10-29 排面钉（二）：设备去向 = iOS（用户 10-29 晚拍板「估计半小时后才刷」）；
+  下会话 = iOS 窗口期宿主轮，卡 = docs/host-round-card-20261029-iosgap.md**——
+  ①主件 = **D4 三件拼车内核轮 r92 预备**（D4-2 vblank 修法 m2582 fb4e8c5d 移植
+  [RDPTR 注销门控 PANEL_DEAD + frame-done 84ms 平值] + D4-3 pps_late default=true
+  + D4-4 sanity 探针 LP 读；build+verify 全绿，**验证件不上机不发布**照 r88/v69
+  先例，期望 #93）；②次件 = S2IDLE 段 4 悖论宿主半边（idle.c s2idle 分支对拍 +
+  kprobe 脚本成文，设备回来直接跑）；③插空 = stock kernel Image 代表性验证；
+  **设备窗恢复排面在卡 §3**（S2 探测 → D1 上户口[前置探针 = 回 page 0]→ D2 双
+  快照 → D3 → r92 上机 A/B ∥ S1 E 长跑+kprobe，一窗双案留拍板）。⚠iOS 红线
+  照旧：iOS 工作区/设备零接触；stable 检查开工惯例照跑。
+
 - **▶ 2026-10-29 追记（续轮）：S5 续轮宿主段 ✅ 收官（用户「我已刷回nura，开工」点名；
   零设备宿主主体 + 设备现态探测 S2 顺带落袋）**：七缝对拍全部定谳（全量 =
   **PANEL-CORRUPTION §6 条 9** + 根治卡 §5 B-list 终审）——**①头号新判据 =
