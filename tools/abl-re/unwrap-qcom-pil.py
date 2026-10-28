@@ -106,10 +106,14 @@ if raw[:4] == b"\x7fELF":
     is64 = raw[4] == 2
     if is64:
         e_phoff, = struct.unpack_from("<Q", raw, 0x20)
+        # e_phentsize@0x36, e_phnum@0x38（旧版从 0x36 连读两个半字 = off-by-2，phnum 恒 0）
         e_phentsize, e_phnum = struct.unpack_from("<HH", raw, 0x36)
+        e_phnum, = struct.unpack_from("<H", raw, 0x38)
     else:
         e_phoff, = struct.unpack_from("<I", raw, 0x1C)
-        e_phentsize, e_phnum = struct.unpack_from("<HH", raw, 0x2C)
+        # e_phentsize@0x2A, e_phnum@0x2C（off-by-2 bug 同上，10-29 XBL 轮修复）
+        e_phentsize, = struct.unpack_from("<H", raw, 0x2A)
+        e_phnum, = struct.unpack_from("<H", raw, 0x2C)
     print(f"ELF{'64' if is64 else '32'}: phoff={e_phoff:#x} phnum={e_phnum}")
     for i in range(e_phnum):
         ph = raw[e_phoff + i*e_phentsize:][:e_phentsize]

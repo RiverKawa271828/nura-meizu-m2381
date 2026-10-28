@@ -149,6 +149,37 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-29 更；新会话从这里接）
 
+- **▶ 2026-10-29 追记：队列② XBL 会话语境 RE ✅ 收官**（用户「abl逆向已完成，你继续」
+  点名；零设备纯宿主；REA/Ghidra lane，snapshot xbl-loader/xbl-main；全量落档 =
+  **docs/XBL-RE.md**，PANEL §6 条 8 收录判词）：
+  **①XBL 零面板域结构性定谳**——xbl 分区三层镜像全解剖（loader 桩 128KB@0x22126000
+  [attestation/安全装载] + ELF#2 ~208KB@0x20412800 [SMEM/IPCC/证书] + 主镜像
+  ~832KB@0x14800000 [sbl1 流程/DDR 训练/PMIC/XBL Config]；xbl_config = DDR 训练包+
+  双 kailua DTB+DCB/CPR），全镜像 panel/dsi/splash 族 strings 零命中 ⇒ **splash 显示
+  会话整体由 uefi 分区 DisplayDxe 建立，XBL 不碰 DSI/DDIC/帧缓冲**（「XBL splash 建立
+  会话」前提作废）。
+  **②GETPANELID 供给侧正式勘误**（（九十五）⑤「XBL 域」标注作废）：
+  MDPPlatformConfigure 分发器在 DisplayDxe 内部（0x7704）；type=1 实读 = DSI 页解锁
+  `39 f0 55 aa 52 08 03 6f`（r22 页解锁家族 stock 用点实锤）后读 DDIC 0xDF(23B)+
+  0xA1(4B)，`panel_id = DF[0]<<16|A1[0]<<8|A1[1]`（0x4DB501 逐位吻合）；type=4 回缓存/
+  type=10 回 XML 表指针——**供给侧全在 DisplayDxe，XBL 无涉**。
+  **③XBL 显示域贡献 = 三条非命令维度**（全带地址证据）：PMIC OLED 轨默认电压（DT
+  `/sw/pmic/pm/display` ELVSS 0xfffff060/ELVDD 0x11f8/OLEDB 0x1900，主镜像 PMIC DT
+  解析器 boot 应用，引用点 0x1480CE44）+ 显示内存保留区（Display Reserved
+  0xB8000000+43MB[= splash 帧缓冲域，iOS fb 同址互证]/Display Demura 43MB）+
+  EnableDisplayThread=1 递交；附赠 DisplayDxe case 0 **PMIC GPIO 上电序列**
+  （VDDI 5ms→VDDR 5ms→VCI 10ms + TLMM 复位 10ms×3）= stock 上电时序 ground truth。
+  **④uefiplat.cfg 双副本对拍（新档案）**：XBL DT `/sw/uefi/uefiplat` payload（8342B，
+  loader 建 HOB 源）vs UEFI FV 内置份（8286B，UefiPlatCfg.c 源）**漂移实锤**（Display
+  Demura 0xA2A80000↔0xEEB00000、PIL/TZApps 布局、EnableLogFsSyncInRetail 0x0↔0x1），
+  本机 demura 惰性只记档。**⑤判词**：「splash 会话缺失维度」收缩为三件语境差候选
+  （页解锁域/PMIC GPIO 上电拍数/OLED 轨默认电压对拍，XBL-RE.md §6.4）+ B-list 首帧
+  杀 vblank 旋钮地位不变；设备日验证留拍板。**工具实锤 = REA raw-binary lane 基址
+  语义**（entry 值=镜像基址，文档地址一律换算真基址 0x14800000[entry 自洽法定谳]）+
+  unwrap-qcom-pil.py ELF32 phnum off-by-2 修复（旧版对 xbl 类 phnum 恒 0）。
+  **推送 = 届时看情况（用户 10-28 对本件原话），本轮 commit 不 push**。
+  **队列 = ③S2IDLE 二段**（需设备回 nura 链；恢复首项 = 设备现态探测）。
+
 - **▶ 2026-10-29 追记：队列① ABL fastboot 命令表逆向 ✅ 收官**（用户「开始逆向 1」
   点名；零设备纯宿主；iOS 委托三件判词全部定谳）：
   **①命令表 = 42 注册**（标准表静态数组 0x71dd8×19 + super 门控条件注册 3
@@ -679,6 +710,7 @@ sha512 重算，source= 保持本地文件名）②**Release tag `r66`**（用�
 | 第一次上手 / 刷机 | README.md → docs/FLASHING.md |
 | 启动链原理 / 镜像组成详解 | docs/DESIGN.md |
 | 启动链逆向深档 / ABL RE / 复现脚本 | docs/BOOT-CHAIN-RE.md + tools/abl-re/（公开面；原始 dump 与 9008 备份私有仓保留，二进制不外发政策见该文 §8） |
+| XBL 镜像解剖 / 会话语境定谳（splash 归属 / GETPANELID 供给侧 / uefiplat 双副本） | docs/XBL-RE.md（2026-10-29；面板花屏语境差候选清单 §6.4） |
 | 睡眠/s2idle 破案（printk 挂死 / 取证通道 / 唤醒链 / WoWLAN） | docs/SUSPEND-S2IDLE.md（公开蒸馏队列①，2026-10-12） |
 | 面板花屏 case 包（掉电唤醒马赛克 / 排雷表 / bloff 工程解 / 档案假说） | docs/PANEL-CORRUPTION.md（公开蒸馏队列②，2026-10-12） |
 | 音频 bring-up 方法论（直驱路线 / probe 竞态 / 出声必需清单 / 工作点与响度 / UCM 坑 / 录音边界） | docs/AUDIO-METHOD.md（公开蒸馏队列③，2026-10-19） |

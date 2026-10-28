@@ -1,5 +1,14 @@
 # XBL 会话语境逆向 — 花屏根治 S5 下一手卡（2026-10-28 排程）
 
+> **✅ 收官（2026-10-29，用户「abl逆向已完成，你继续」点名开工）**：全量落档 =
+> **docs/XBL-RE.md**（镜像解剖/零面板域定谳/GETPANELID 供给侧勘误/uefiplat
+> 双副本对拍/会话语境判词五面）；PANEL-CORRUPTION §6 条 8 收录判词。交付形态
+> 独立文档（体量超 PANEL 单节）。**推送 = 届时看情况（用户 10-28 原话），本
+> 轮 commit 不 push**。判词速览：XBL 零面板域（splash 会话全在 DisplayDxe）+
+> 「GETPANELID=XBL 域」标注勘误（供给链全在 DisplayDxe 0x7704）+ XBL 显示域
+> 贡献三条（PMIC OLED 轨默认电压/显示内存保留区/EnableDisplayThread）+
+> 语境差候选清单三件留设备日拍板。
+
 > 排程：用户 10-28 拍板「排程加入到 abl 逆向之后，用同一个配方，同样出具完整
 > 逆向文档，到时候看情况推送到远端仓库」。
 > 队列位置 = ②（① = ABL fastboot 命令表，docs/ABL-FASTBOOT-TABLE-CARD-20261028.md）。

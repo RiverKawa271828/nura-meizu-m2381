@@ -403,6 +403,39 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
   病根进一步收缩到：XBL 域（GETPANELID/GETPANELCONFIG 所在的会话语境）与
   vendor 专有非命令维度。**
 
+  **条 8·XBL 会话语境 RE 收官——XBL 零面板域 + GETPANELID 供给侧勘误定谳
+  （10-29 零设备纯宿主轮，队列②；全量 = docs/XBL-RE.md）**：
+
+  1. **XBL 零面板域（结构性）**：xbl 分区 = loader 桩 128KB@0x22126000 +
+     ELF#2 ~208KB@0x20412800（SMEM/IPCC/证书）+ 主镜像 ~832KB@0x14800000
+     （sbl1 流程/DDR 训练/PMIC/XBL Config）；xbl_config = DDR 训练包+双
+     kailua DTB+DCB/CPR，零面板域。全镜像 panel/dsi/splash 族 strings 只
+     命中 `/sw/pmic/pm/display` ⇒ **splash 会话整体由 uefi 分区 DisplayDxe
+     建立，XBL 不碰 DSI/DDIC/帧缓冲**。
+  2. **GETPANELID 供给侧勘误（条 5 的「XBL 域」标注作废）**：
+     `MDPPlatformConfigure` 分发器就在 DisplayDxe 内部（0x7704）；type=1
+     实读 = DSI 发页解锁 `39 f0 55 aa 52 08 03 6f` 后读 DDIC `0xDF`(23B)
+     + `0xA1`(4B)，`panel_id = DF[0]<<16|A1[0]<<8|A1[1]`（0x4DB501 逐位
+     吻合）；type=4 回缓存、type=10 回 XML 表指针（&0x46fd8+idx*0x52）。
+     **供给侧全在 DisplayDxe，XBL 无涉。**
+  3. **XBL 对显示域的全部贡献（三条非命令维度，全带地址证据）**：①PMIC
+     OLED 轨默认电压（DT `/sw/pmic/pm/display`：ELVSS 0xfffff060/ELVDD
+     0x11f8/OLEDB 0x1900；主镜像 PMIC DT 解析器 boot 时应用，引用点
+     0x1480CE44）；②显示内存保留区（Display Reserved 0xB8000000+43MB =
+     splash 帧缓冲域/disp_rdump_region 8MB/Display Demura 43MB）；③
+     `EnableDisplayThread=1`（UEFI 面板初始化并行线程旗标）随 uefiplat
+     递交。另：DisplayDxe case 0 含 **PMIC GPIO 上电序列**（VDDI 5ms→
+     VDDR 5ms→VCI 10ms + TLMM 复位 10ms×3，hw_id/project_id 分支选
+     GPIO 组）= stock 上电时序 ground truth。
+  4. **uefiplat.cfg 双副本对拍**：XBL DT `/sw/uefi/uefiplat` payload（8342B，
+     loader 建 HOB 源）vs UEFI FV 内置份（8286B，UefiPlatCfg.c 源）**漂移
+     实锤**——Display Demura 0xA2A80000↔0xEEB00000、PIL/TZApps 布局、
+     EnableLogFsSyncInRetail 0x0↔0x1。本机 demura 惰性 ⇒ 只记档。
+  5. **判词**：XBL 域挖穿，「splash 会话缺失维度」收缩为有地址证据的语境
+     差候选清单（页解锁域 f0 55 aa 52 08 族/PMIC GPIO 上电拍数/OLED 轨
+     默认电压对拍三件，XBL-RE.md §6.4）+ B-list 首帧杀 vblank 旋钮（地位
+     不变）；设备日验证留拍板。
+
 ---
 
 ## 7. 移植者检查单（在你的 DSC AMOLED 机上撞到同款病时）
