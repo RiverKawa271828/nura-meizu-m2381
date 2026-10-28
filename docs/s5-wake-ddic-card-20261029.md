@@ -1,5 +1,22 @@
 # S5 续轮执行卡：唤醒重载路径对照 + DDIC 考古预备（2026-10-29 排程，下会话照做）
 
+> **✅ 宿主段收官（2026-10-29 当日轮；全量判词 = PANEL-CORRUPTION §6 条 9
+> + s5-rootcure-card §5 B-list 终审）**：
+> §1 七缝对拍全部定谳——缝 1 头号新判据 = **stock 唤醒 = 冷启等价**
+> （unprepare 尾 reset 拉低+VREG 全断 / resume 全套上电+reset+ON 表+PPS 每
+> enable 重发）vs 我方 sleep 态留轨重放（M3）＝唤醒语境差定位；缝 2 双 INTF
+> 轴不适用+PHY save/restore 我方在位；缝 3 VBIF halt **B-list ④ 除名**（vendor
+> 仅 secure 路径有 halt）；缝 4 m2582 fb4e8c5d 修法移植 = **D4-2 patch 候选
+> 成立**；缝 5 P2 旋钮 = stock 语义（新列 D4-3 默认翻转）；缝 6 页解锁域
+> kernel 半边排除（vendor 不做解锁，全在 DTSI payload 透传）；缝 7 留设备日。
+> §2 DDIC 考古宿主半边收官——stock FDT 验尸（ESD=LP 读 0x0A 威 0x9C 在用/
+> 双解锁域并存/无 demura-id）+ **家族锁死 Novatek NT37700 系（BOE 委工，
+> 四链吻合：F0 55 AA 52 08+page 宏逐字同/FF AA 55 A5 工程域同/FB 01 MSB/
+> ESD 模式同族）** + D1 判读表落地（0x0A/0xDA/DB/DC/0x04/0xDF=0x4D/0xA1=B5 01/
+> 0x91）+「0x0A 不可读」新候选 = 读前页域（D1 探针增补：读前回 page 0）。
+> 附赠判读 = 0x10a 编码勘误（payload=data[7]=0x0A；flags=data[3]=0x01=LP）。
+> **设备日拼车排面（§4）不变**：D1-D4 + S1/S2，一窗双案留用户拍板。
+
 > 排程：用户 10-29 拍板「下个会话做，你安排好」（语境 = XBL RE 收官后
 > 「还应该增加哪些逆向」的答复：固件逆向面已穷尽，转 vendor 源码对照 +
 > DDIC 三层考古）。队列位置 = ③（①ABL 表 ✅ ②XBL RE ✅）；本卡 = ③

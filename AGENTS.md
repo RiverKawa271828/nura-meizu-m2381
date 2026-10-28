@@ -149,6 +149,34 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-29 更；新会话从这里接）
 
+- **▶ 2026-10-29 追记（续轮）：S5 续轮宿主段 ✅ 收官（用户「我已刷回nura，开工」点名；
+  零设备宿主主体 + 设备现态探测 S2 顺带落袋）**：七缝对拍全部定谳（全量 =
+  **PANEL-CORRUPTION §6 条 9** + 根治卡 §5 B-list 终审）——**①头号新判据 =
+  stock 唤醒 = 冷启等价**（vendor `dsi_display_unprepare`:9039 固定序尾部
+  reset 拉低+VREG 全断[stock FDT 无 always_on 实锤]；resume 全套 VREG→reset
+  1,10,0,10,1,10→PHY sw reset→ON 表→**PPS 每 enable 动态重发**:8717）vs 我方
+  sleep 态留轨重放（M3）——唤醒语境差定位 = 差异收敛到断电后的重载语境
+  （DisplayDxe 冷启三连/PMIC GPIO 上电拍数/OLED 轨电压），D3 语境差三件升格
+  =「唤醒冷启等价化」D4-1 前置对拍。②**B-list 重排：④除名**（vendor VBIF
+  halt 唯一调用点=secure-VM 路径 sde_kms.c:277，unprepare 无 halt——skill
+  案例不可平移）/**⑤收窄**（单 INTF 双 INTF 轴不适用+PHY save/restore 我方
+  在位 vendor 无）/②升级 = **D4-2 patch 候选成立**（m2582 fb4e8c5d：RD_PTR
+  注销门控 PANEL_DEAD + frame-done 84ms 平值）/新列 **D4-3 P2 默认翻转**
+  （P2 旋钮=stock 语义实证）+ **D4-4 sanity 探针 LP+读前回 page 0**。③缝 6
+  页解锁域 kernel 半边排除（vendor 全树零命中，解锁字节全在 DTSI payload 7 字节
+  头透传，我方 init_cmds 8 处同款 = 内容等值）。④**DDIC 家族锁死 = Novatek
+  NT37700 系（BOE 委工）**——四链吻合（F0 55 AA 52 08+page 宏逐字同
+  panel-novatek-nt37700f.c:43 / FF AA 55 A5 工程域同 / FB 01 MSB / ESD
+  0x0A→0x9C 同族）；stock FDT 验尸（节点 mdss_dsi_meizu_amoled_boe_cmd、
+  ESD REG_READ 在用、off=28→10(120ms)、双解锁域并存、无 demura-id）；
+  **0x10a 编码勘误**（payload=data[7]=0x0A，flags=data[3]=LP）；「0x0A 不可读」
+  剩余候选 = 读前页域状态 → D1 探针协议增补「读前回 page 0」；D1 判读表
+  落地（0x0A/0xDA/DB/DC/0x04/0xDF[0]=0x4D/0xA1=B5 01/0x91）。⑤**设备现态
+  （S2 探测 10-29）= #92+r91 内核+device r63+iio r3+wowlan 武装(magic
+  packet)+cpuidle 锁在位+failed 0 = 出厂组合完整回位，设备可用**。⑥队列 =
+  设备日拼车（D1 上户口→D2 双快照 + D3 语境差 + D4 旋钮 ∥ S1 S2IDLE 二段，
+  一窗双案**留用户拍板**）。commit 不 push（推送窗口 = 用户）。
+
 - **▶ 2026-10-29 排面钉（下会话照做）：S5 续轮 = 唤醒重载路径对照 + DDIC 考古预备，
   卡 = docs/s5-wake-ddic-card-20261029.md**（用户「下个会话做，你安排好」拍板；语境 =
   固件逆向面已穷尽[XBL/ABL/uefi 三面收官]，花屏病灶转 vendor 源码域 + DDIC 三层考古）：

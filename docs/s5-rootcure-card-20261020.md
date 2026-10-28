@@ -187,6 +187,20 @@
   **▶ B-list 候补池更新：首帧杀 vblank（②）+ VBIF halt（④）+ INTF/CTL 顺序与
   PHY 保存（⑤）三族并列；§6 判词「下一手候选」菜单相应扩为 XBL 平台域逆向 /
   首帧杀 vblank / VBIF halt 握手——留用户拍板。**
+  **▶（10-29 七缝对拍终审，全量 = PANEL-CORRUPTION §6 条 9）**：**④除名**
+  （vendor 5.15 全树 sde_vbif_halt_xin_mask 唯一调用点 = secure-VM 切换路径
+  sde_kms.c:277，unprepare/power-event 无 halt——「缺失」前提不成立，skill
+  案例彼 SoC 特例不可平移；status=4 与 VBIF 无关的 0xC4 定谳不变）；
+  **⑤收窄**（我方单 DSI 单 INTF，双 INTF 顺序轴结构性不适用；PHY PLL
+  save/restore 我方 mainline 在位且 vendor 无 save 逻辑——此轴我方 ≥ vendor
+  非缺失）；**②升级 = patch 候选 D4-2 成立**（m2582 fb4e8c5d 修法：RD_PTR
+  注销门控 PANEL_DEAD + frame-done 84ms 平值，判据原文齐）+ **新列 D4-3 P2
+  默认态翻转**（pps_late default=true 对齐 stock「ON 表后每 enable 发 PPS」）
+  + **D4-4 sanity 探针改 LP+读前回 page 0**（stock ESD = LP 读 0x0A 威
+  0x9C；「0x0A 不可读」剩余候选 = 页域状态）。**头号新判据：stock 唤醒 =
+  冷启等价**（unprepare 尾部 reset 拉低+VREG 全断，resume 全套上电+reset+ON
+  表+PPS），我方 = sleep 态留轨重放（M3）——唤醒语境差定位完成，D3 语境差
+  三件升格 = 「唤醒冷启等价化」（D4-1）前置对拍。
 - **「90Hz 修好」勘定** = `121f62e0` both scan rates（120@30/20/10 + 90@30/18/10
   两档 ADFR 族按 mode 名选尾），**非花屏条目**。
 - **5a. vendor 源码互证 lane（✅ 10-21 收官；sparse 克隆落

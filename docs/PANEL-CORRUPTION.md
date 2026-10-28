@@ -436,6 +436,122 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
      默认电压对拍三件，XBL-RE.md §6.4）+ B-list 首帧杀 vblank 旋钮（地位
      不变）；设备日验证留拍板。
 
+**条 9·S5 续轮：唤醒重载路径七缝对拍 + DDIC 考古宿主半边（2026-10-29 宿主轮；
+判据升级三件：唤醒语境差定位 / B-list 重排 / DDIC 家族锁死）**——素材 =
+vendor 全源码树（s5-rea/vendor-display-drivers，display-kernel.lnx.5.15.r10-rel）
+vs 我方 fork（panel-boe-meizu20.c + mainline msm dpu1/dsi）；stock FDT 面板节点
+验尸 + GitHub 同族驱动检索。
+
+  **缝 1【头号缝·唤醒语境差定位】suspend→resume 重发序列**：
+  stock suspend 链（`dsi_display_unprepare` dsi_display.c:9039 固定序）=
+  OFF 集合（0x28/0x10，`dsi_panel_disable`:4905 发出，**失败被吞 rc=0 假成功**:4913）
+  → POST_OFF → ctrl_host_disable（先 flush 异步 tx:3056）→ LINK clk off →
+  ctrl_deinit → **PHY disable** → CORE clk off → isr down →
+  **post_unprepare = reset 拉低（stock FDT 无 always_on 属性）+ pinctrl
+  suspend + VREG 全断**（`dsi_panel_power_off`:395 只动 GPIO/pinctrl/vreg，
+  零 DCS）。stock resume 链（`dsi_display_prepare`:8210 + `enable`:8658）=
+  **VREG on → pinctrl → reset 全序列（1,10,0,10,1,10）→ CORE clk → PHY sw
+  reset → PHY enable → ctrl init → 错误处理器注册 → host enable → LINK clk →
+  soft reset → PRE_ON → ON 表（0x11/0x29 + 页解锁，DTSI 透传）→ PPS 动态生成
+  重发（`dsi_panel_update_pps`:4351，`enable`:8717 处，每 enable 且非
+  DMS_FPS；LP 态默认:2059）→ engine enable → POST_ON**。
+  我方真睡路径 = unprepare 0x28(+5ms)→0x10(+120ms)→**留轨不复位（M3）**；
+  prepare keep_rails 直返；enable_once = init 表前半→PPS（早发，默认
+  pps_late=false）→COMP→5ms→init 表后半（0x11/0x29）→20ms→sanity 0x0A 读
+  （HS 态:1219 剥 LPM）→失败 schedule recovery 双遍。
+  **判词：stock 唤醒 = 冷启等价（DDIC 全掉电重启 + reset 时序全跑 + OTP/demura
+  自加载完整 boot 流程）；我方 = sleep 态留轨重放（DDIC 不重启）。M3 留轨
+  设计与 stock 语境结构性相反**——但 E1 实锤「复位/断电后重放 = 固定马赛克」
+  vs stock 断电路径冷启干净 ⇒ 差异收敛到**断电后的重载语境**（DisplayDxe 冷
+  启三连 f0 aa 10 / 65 04 / cf 4b + PMIC GPIO 上电拍数 VDDI 5ms→VDDR 5ms→
+  VCI 10ms + OLED 轨默认电压 + on-command 全表）——§4.4 病根（DDIC sleep-out
+  自重初始化）在 stock 语境被「全新 boot 流程」覆盖，我方语境暴露。
+  **D3 语境差三件的地位升格 = 「唤醒冷启等价化」实验的前置对拍**。vendor
+  OFF 吞错（:4913）= stock 自身暗坑，判读不为怪。
+
+  **缝 2【B-list ⑤ 收窄】双 INTF 关闭顺序 + PHY 保存恢复**：我方 = 单 DSI
+  单 INTF cmd mode，**双 INTF 顺序轴结构性不适用**（B-list ⑤ 收窄为 PHY
+  单轴）。PHY PLL save/restore：我方 mainline 在位（suspend 侧
+  dsi_manager.c:370 `msm_dsi_phy_pll_save_state`；enable 侧 dsi_phy.c:791
+  restore 在 ops.enable 之后，4nm V5.2 cfg = dsi_phy_7nm.c:1489，全 5nm/4nm
+  cfg 均挂 save/restore ops）；**vendor dsi_phy.c 无任何 save/resv 逻辑**
+  （全树零命中）= vendor 唤醒走 PLL 重训路线。此轴我方 ≥ vendor，非缺失项。
+
+  **缝 3【B-list ④ 除名】VBIF AXI halt 握手**：vendor 全树
+  `sde_vbif_halt_xin_mask` 唯一调用点 = `_sde_kms_secure_ctrl_xin_clients`
+  （sde_kms.c:277）= **secure-VM VMID 切换路径**；unprepare/power-event 通道
+  无 halt（sde_power_handle 全文零 vbif）。B-list ④ 判词更新：「缺失」前提
+  不成立（vendor 亦无此形态；android-mainline-port skill 案例为彼 SoC 特例
+  不可平移）→ **记档不开工**。dsi_err status=4 = 链路真断实证（0xC4 轮），
+  与 VBIF 无关的定谳不变。
+
+  **缝 4【B-list ② 升级 = patch 候选成立】首帧杀 vblank 族**：我方两处同款
+  形态（dpu_encoder_phys_cmd.c RDPTR 首超时即注销 + dpu_encoder.c
+  frame-done = 5×1000/vrefresh 公式）。魅族 22 m2582 修法（参考仓 commit
+  fb4e8c5d「fix the command-mode frame handoff on DPU 12.3」）判据三件：
+  ①RD_PTR 注销门控到 `DPU_ENCODER_FRAME_EVENT_PANEL_DEAD`（一帧慢 ≠ 永久死
+  commit 路径）②frame-done = vendor 84ms 平值（≥24fps 面板；120Hz 帧时
+  8.3ms）③TE pacing hw_vsync_mode=1 + 0xFFF0（tearcheck 单缓冲，源自 boot）。
+  **patch 候选 D4-2 = ①②移植**（③TE 轴 10-21 已判无旋钮记档不开工）。上机
+  判据 = 冷启 restart 双遍消失 / 唤醒首轮 kickoff 不再 NEEDS_HW_RESET。
+
+  **缝 5 PPS 重发位**：stock = PPS 动态生成（`dsi_dsc_create_pps_buf_cmd`，
+  **不从 DTSI**），发送点在 **dsi_display_enable 内、ON 表之后**（:8717，每
+  enable 且非 DMS_FPS），LP 态。我方 = enable_once 早发（sleep-out 前，默认）
+  + P2 旋钮晚发（ON 表后）——**P2 旋钮语义 = stock 语义**；我方默认态与
+  stock 不同位（日用 bloff 结构性免疫；真睡实验默认应置 P2）。0x91 读回镜像
+  判读不变。
+
+  **缝 6 页解锁域（kernel 侧半边排除）**：vendor kernel 源码 `55 aa 52 08`/
+  `ff aa 55 a5` 全树三重变体 grep 零命中 = **stock kernel 不做页解锁**——
+  解锁字节全部在 DTSI on-command payload 内按 7 字节头（type/ch/flags/
+  post_wait/len/len）原样透传（`dsi_panel_create_cmd_packets`:1936）。我方
+  init_cmds 含 8 处同款解锁段（XML 拷贝）= 内容域等值。XBL-RE §6.4 候选 a
+  的 kernel 侧半边排除；差异只剩固件域（DisplayDxe GETPANELID）与设备日 D3。
+
+  **缝 7 DSC 重编程触发**：stock = ROI 变更才重编程（（九十二）判读）vs
+  主线每 kickoff 幂等；唤醒首轮 kickoff 数对拍 = 设备日观测项（D2 顺带），
+  宿主侧无新判据。
+
+  **§2 DDIC 考古·宿主半边交付**：
+  1. **stock FDT 验尸**：节点 `qcom,mdss_dsi_meizu_amoled_boe_cmd`
+     （phandle 0x743），1080x2400@120/90/60/144 四档 timing，DSC 1.2 slice
+     540x20、2/pkt、8bpp/10bpc；**ESD = REG_READ 模式读 0x0A 期望 0x9C，
+     esd-check-enabled 在用**（vendor 有完整 ESD 自愈通道：失败置
+     esd_recovery_pending → 吞 DCS → bridge pre_enable 清标志 +
+     dsi_phy_lane_reset/dsi_ctrl_soft_reset 重建）；off-command =
+     `28 00 → 10 00(120ms)`；reset = 1,10,0,10,1,10；on-command **双解锁域
+     并存**（ff 20/24/10 单字节页 + fb 01 MSB 解锁 + ff aa 55 a5 80/00 工程
+     对）；**无 qcom,demura-panel-id**（与 10-21 XML 判读互证：冷会话 demura
+     惰性）。
+  2. **0x10a 编码勘误**：status-command u32 0x10a 的 payload 字节 = data[7]
+     = **0x0A**（Get Power Mode；解析布局 = `dsi_panel_create_cmd_packets`：
+     type=06 短读、flags data[3]=0x01=**MIPI_DSI_MSG_USE_LPM 即 LP 读**）。
+     我方 r22 dcs_read **已是 LP**（驱动 625 行加 LPM）——「0x0A 机制性
+     不可读」的剩余候选解释 = **读前页域状态**（读前需回 page 0；stock ESD
+     读发生在帧间 = DDIC 处 page 0）或 BTA 路径差异（vendor dsi_ctrl_cmd_
+     transfer vs mainline dsi_host BTA）。**D1 探针协议增补：读前先回
+     page 0（`f0 55 aa 52 08 00` 或 `ff 00`）再读**。stock 健康值 0x9C 与
+     我方 sanity check 位组合兼容（0x9C & 0x1C = 0x1C 全中，无矛盾）。
+  3. **家族锁死：Novatek NT37700 系（BOE 委工）**。四链吻合：①`F0 55 AA
+     52 08 + page` 页切换宏 = NT37700F 上游驱动逐字同
+     （panel-novatek-nt37700f.c:43，Pixel 7 Pro Tianma 面板）②`FF AA 55 A5
+     80/81` 工程域同款（同驱动 :60/:65）③`FB 01` MSB 解锁 = Novatek 特有
+     ④ESD 0x0A→0x9C 模式同族。panel_id 0x4DB501（DF[0]=0x4D, A1=B5 01）
+     待 D1 实读定变体（NT37700F/P/定制）。同族参考件三份：上游
+     nt37700f 驱动（页 0x00/01/02/04 域 + 0x6F 二级指针 + 0xC0/CA/CD/CC/
+     D0/B1 位）+ 华为 boe_nt37700p（NT37700P 变体存在性，Mate 40 系）+
+     小米 mi_dsi_panel `F0 55 AA 52 08` Level-2 解锁（:3854，BF 灰度域）。
+  4. **D1 上户口判读表**：0x0A→0x9C 健康位 / 0xDA·DB·DC=ID1-3 / 0x04=DDB /
+     0xDF(23B)→[0]=0x4D 期望 / 0xA1(4B)→B5 01 期望 / 0x91=PPS 镜像（已
+     验证可读 192B）。前置探针 = page-0 归零再读。
+
+  **B-list 判词汇总（本轮后）**：①VBIF 降级（10-21 判过）+ ④除名 + ⑤收窄
+  = 三族记档；②升级 D4-2 patch 候选（判据齐）；**新列 = P2 默认态翻转**
+  （pps_late default=true 对齐 stock）。设备日 D4 排面 = D4-1 唤醒冷启等价
+  实验（D3 前置对拍后决定，高风险高信息）/ D4-2 vblank 修法移植 / D4-3 P2
+  默认翻转 / D4-4 sanity 探针改 LP+回 page 0（联动 D1）。
+
 ---
 
 ## 7. 移植者检查单（在你的 DSC AMOLED 机上撞到同款病时）
@@ -455,7 +571,8 @@ EP4089666A1）——与 comp_sel 档案表实测互证。
    上——但务必保留冷启动完整会话建立路径（recovery 双遍教训），且想清楚
    它只防新增不治已花。
 6. **读 vendor 参考时**：下游 techpack/display 源码公开的部分优先静态对拍；
-   XBL/固件侧逆向放最后（本机 XBL splash 建的会话语境至今仍是头号未知域）。
+   固件域逆向次之（本机 XBL/ABL/uefi DisplayDxe 三面已挖穿，见条 7/8；
+   kernel 源码域七缝对拍见条 9）。
 
 ---
 
