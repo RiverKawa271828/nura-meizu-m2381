@@ -546,6 +546,28 @@ vs 我方 fork（panel-boe-meizu20.c + mainline msm dpu1/dsi）；stock FDT 面�
      0xDF(23B)→[0]=0x4D 期望 / 0xA1(4B)→B5 01 期望 / 0x91=PPS 镜像（已
      验证可读 192B）。前置探针 = page-0 归零再读。
 
+  **条 9·D1/D3 设备日实测（2026-10-29 晚，r91 在机屏亮活会话；读通道 =
+  debugfs dcs_read/dcs_write）**：
+  - **0xDF 命中**：stock 前缀 `f0 55 aa 52 08 03 6f`（6B payload，XBL-RE
+    GETPANELID 同款）后读 = 23B ASCII 模组串 **"MZ1300043601ECQM3AW03MR"**
+    ——DF[0]=0x4D 即判读表期望（0x4D = ASCII 'M'，panel_id 高字节真身）。
+  - **stock 6B 前缀是 0xDF 可读的必要条件**：page-0（`f0 55 aa 52 08 00`）
+    与 page-03 裸 5B 形态下 0xDF = 192B 全零——0x6F 尾字节（二级指针域）
+    参与。
+  - **0xA1/0x0A/0xDA·DB·DC/0x04 = 主线读路全零载荷（len=0，事务级成功）**：
+    每读重发 stock 前缀也无效；「读前回 page 0」探针对 0x0A **未解锁** ⇒
+    「读前页域」候选部分证伪，剩余候选收敛 = vendor dsi_ctrl RX 机制差
+    （stock ESD 同地址可读、4B/23B 短读语义）。panel_id 低两字节（B5 01）
+    主线读路暂缺。
+  - **实证判词：主线读路可读面 = {0x91, 0xDF(stock 6B 前缀)}**；D1 上户口
+    以 0xDF 模组串为准（MZ 魅族件号族，与 NT37700 系 BOE 委工相容）。
+  - **D3 三件实测**：①页解锁域设备半边补齐 = stock 前缀在我方活会话有效
+    （域本身无语境差，差在 stock 唤醒路径是否发它 = D2 观测项）；②**PMIC
+    上电拍数差实锤** = stock VDDI 5ms→VDDR 5ms→VCI 10ms vs 我方 VDDIO
+    2ms→VDD 5ms→VCI 0ms（reset 轴已 E4 对齐）——D4-1 弹药（三行 mdelay，
+    拍数轴未单变量过）；③OLED 轨电压 = **等值语境候选降权**（XBL 在我方
+    链上照跑共担电压设置，我方 DT 零配置，无需动作）。
+
   **B-list 判词汇总（本轮后）**：①VBIF 降级（10-21 判过）+ ④除名 + ⑤收窄
   = 三族记档；②升级 D4-2 patch 候选（判据齐）；**新列 = P2 默认态翻转**
   （pps_late default=true 对齐 stock）。设备日 D4 排面 = D4-1 唤醒冷启等价
