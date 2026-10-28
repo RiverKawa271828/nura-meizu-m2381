@@ -147,7 +147,32 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-28 更；新会话从这里接）
+## 现态（2026-10-29 更；新会话从这里接）
+
+- **▶ 2026-10-29 追记：队列① ABL fastboot 命令表逆向 ✅ 收官**（用户「开始逆向 1」
+  点名；零设备纯宿主；iOS 委托三件判词全部定谳）：
+  **①命令表 = 42 注册**（标准表静态数组 0x71dd8×19 + super 门控条件注册 3
+  [reboot-recovery/reboot-fastboot/snapshot-update，本机在册] + OEM 表 0x4eab0×18
+  [= §6.1 逐字复核通过]），全部真实现零残桩；**②boot 死因 = 编译期删除（表中无）
+  非残桩**——FastbootRegister(0x1123c) 22 处调用点全镜像普查无一注册 "boot"，
+  分发器(0xf744)唯一 fallback = "unknown command"(0x676c7@0xfb08) = iOS r70 实测
+  原文；**③读回通道 = 无**（fetch/get_staged/upload 全镜像字符串零命中；read_psn=
+  序列号、logfs=环读均非通用读回）⇒ **iOS「绕过 ABL 限制」调研线正式关门，分区
+  读回维持启动后 reader**；**④附带定谳：§5.3/5.4 装载行为无 fastboot 旋钮**——
+  UEFI 变量 "K"(GUID 882F8C2B) 全镜像无写点（SetVariable 仅 2 处写 "R"/"F"，均
+  fastboot 不可达），gunzip 窗/ramdisk 忽略/DTB 校验全硬编码。机制新档 = 命令面
+  运行时单链表（表头 0x83340 头插、前缀匹配）+ parallel-download-flash 异步机制
+  （download: 完成事件回调 0x114cc 重入分发器派发排队的 flash:）。getvar 全集 =
+  39 处 PublishVar 普查归并（kernel="uefi"/is-userspace="no"/per-partition
+  partition-size:/partition-type: 循环发布/snapshot-update-status 五态/slot 族
+  multislot 门控）。落档 = **BOOT-CHAIN-RE.md §6.5**（全表+地址证据）+ §6.1 指针
+  + 委托卡收官标记；工作目录（解包件/反编译/REA 快照，私有面不进公开仓）=
+  meizu20-m1/abl-fastboot-re-20261029/（PE sha 2f5b7335 与 09-25 轮件同源，abl_a
+  两源 026d673c 同源互换均实测）。工具链实锤 = REA CLI PE 车道二连跑通（快照
+  abl-fastboot）+ tools/abl-re xref/disfunc 配套。**推送 = 本件授权窗已执行**
+  （nura 公开仓 push，§8 政策：结论+地址公开、派生物留私有面）。队列 = ②XBL
+  会话语境 RE（docs/XBL-SESSION-RE-CARD-20261028.md，等点名）→ ③S2IDLE 二段
+  （需设备回 nura 链）。
 
 - **▶ 2026-10-28 追记（排面钉）：iOS 侧委托 = m2381 ABL fastboot 命令表逆向 →
   **列第一待办**（用户「不着急做，加入第一待办」+「记得用 REA 逆向工具」点名；

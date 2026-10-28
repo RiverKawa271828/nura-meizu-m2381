@@ -546,6 +546,8 @@ ABL 语义上不 fault。** 实证上界：FD 3MB 的实验轮里 BootShim 在�
 | oem color: / erase-bootinfo | 0x4fdc0 / 0x4fe60 | — |
 
 另有 fastboot 变量 `kernel-log-enable`（getvar 可查，回调 0x4ed0c）。
+本表 2026-10-29 轮逐字复核通过（注册函数 0x4eab0 反编译，18 条调用点逐一在位）；
+全命令面（标准命令 + 条件注册 + getvar 全集 + 读回通道定谳）见 §6.5。
 
 ### 6.2 private 分区旗标与 kernel-log/logfs 环
 
@@ -585,6 +587,128 @@ vendor_boot v4 的 vendor_ramdisk table 条目 `ramdisk_type` 字段被魅族私
 （stock 枚举只到 3=DLKM）。ABL 侧未发现对 0x80 的特判代码；stock 拼接 vendor
 ramdisk 时 type 只影响 recovery/normal 模式筛选。**vendor_boot 原封则无风险**；
 若将来自组 vendor_boot，需实测 0x80 条目去留。
+
+### 6.5 fastboot 命令表全表（2026-10-29 轮：分发器机制、三档定性、读回通道与行为旋钮定谳）
+
+> iOS 侧委托件（2026-10-28 拍板、10-29 执行）：r70 轮实测 `fastboot boot` 下载
+> OKAY(98MB) 后 `Booting FAILED (remote:'unknown command')`，要把「魅族 ABL 裁了
+> CmdBoot」做实成**完整命令表**。纯宿主静态逆向，素材与代际同 §6.1/§5（解包 PE
+> sha256 `2f5b7335…` 与 09-25 轮件逐字节同源；abl_a 第二源 OTA 备份件 sha256
+> `026d673c…` 同源互换）。方法 = §5.1 路标法 + REA/Ghidra 反编译。本节只进结论
+> 与地址证据（§8 红线照旧）。
+
+**分发器机制**（读表的前提，三条）：
+
+- 命令面不是静态查找表，是**运行时单链表**：`FastbootRegister`（0x1123c）分配
+  0x20 字节节点 `{next@0x00, name@0x08, name_len@0x10, handler@0x18}`，
+  **头插**进表头 0x83340（= fastboot 上下文结构 0x832f8 的 +0x48 字段）——
+  后注册者先匹配。
+- 分发器 `HandleCommandReceived`（0xf744）：命令 0x40 截断（`Handling Cmd: %a`）
+  → 内联特判（见下）→ 链表按 name_len 做**前缀匹配**（strncmp @0x21dc）→
+  命中 = `handler(cmd+name_len, ctx+0x30, ctx+0)`。**唯一 fallback =
+  打印 "unknown command"（串 @0x676c7，引用点 0xfb08）**——iOS r70 看到的
+  正是它。
+- 内联特判不新增命令，只做异步预处理：`download:`/`flash:` 的
+  **parallel-download-flash 异步机制**（`download:` 完成后建事件回调 0x114cc，
+  把排队的 `flash:` 重新喂回分发器 0xf744）+ `getvar:partition-type` 跟踪位
+  （0xfa6c）。
+- **注册调用点全镜像共 22 处 `bl 0x1123c`**：标准表循环 ×1（注册 19 条）+
+  条件注册 ×3 + OEM 表 ×18。全二进制无第二个写表头 0x83340 的代码 ⇒
+  下表 = 完整命令面，无遗漏路径。
+
+**标准命令表**（静态数组 @0x71dd8，19 项，FastbootAppInit 循环注册）：
+
+| # | 命令 | handler | 定性 |
+|---|---|---|---|
+| 1 | `flash:` | 0x11534 | 正常（分区烧写全链） |
+| 2 | `erase:` | 0x12cbc | 正常 |
+| 3 | `set_active` | 0xf018 | 正常（槽切换） |
+| 4 | `flashing get_unlock_ability` | 0x1314c | 正常 |
+| 5 | `flashing unlock` | 0x131a8 | 正常 |
+| 6 | `flashing lock` | 0x131cc | 正常 |
+| 7 | `oem enable-charger-screen` | 0x131f0 | 正常 |
+| 8 | `oem disable-charger-screen` | 0x13278 | 正常 |
+| 9 | `oem off-mode-charge` | 0x13300 | 正常 |
+| 10 | `oem select-display-panel` | 0x13468 | 正常 |
+| 11 | `oem set-hw-fence-value` | 0x137d8 | 正常（魅族私有） |
+| 12 | `oem set-gpu-preemption` | 0x138e0 | 正常（魅族私有） |
+| 13 | `oem device-info` | 0x139e8 | 正常 |
+| 14 | `continue` | 0x13af4 | 正常（走 §5.2 boot 链） |
+| 15 | `reboot` | 0x13b94 | 正常 |
+| 16 | `reboot-bootloader` | 0x13c08 | 正常 |
+| 17 | `getvar:` | 0x13c80 | 正常（变量集见下） |
+| 18 | `download:` | 0x13f24 | 正常（iOS r70 实测下载 OKAY 98MB） |
+| 19 | `oem audio-framework` | 0x141a0 | 正常（魅族私有） |
+
+**条件注册三条**（0x10f08-0x10f40；门 0x871c → 0x95d8 末查 `L"super"` 分区，
+即动态分区支持门——本机 super 在 ⇒ 三条在册）：`reboot-recovery`（0x148bc）、
+`reboot-fastboot`（0x14950，"rebooting the device to fastbootd"）、
+`snapshot-update`（0x149e4）。
+
+**OEM 表 18 条**：注册函数 0x4eab0 反编译逐字复核通过，全表 = §6.1 原表
+（handler VA 与权限档不重抄）；**三档定性增补：18 条 handler 全部真实现，
+无一残桩**（`oem kernel-log-enable` 的写路径会卡死 ABL 是 §6.2 在册行为坑，
+非残桩）。
+
+**表中无 = 编译期删除**（无注册点，多数连字符串都不存在）：
+
+- **`boot`（本节要害）**：19+3+18 = 42 个注册名中无 "boot"；无任何
+  `FastbootRegister("boot")` 调用点；分发器唯一 fallback 就是 iOS 实测的
+  `unknown command`。**残桩论排除**——残桩 = 表内有名、handler 回错，那样
+  fastboot 会收到 handler 应答而非 unknown command。⇒ **CmdBoot 编译期整体
+  删除**（stock QcomModulePkg 的 `FastbootRegister("boot", CmdBoot)` 被魅族
+  移除，其余命令面原样保留）。
+- `fetch` / `get_staged` / `upload`：全镜像字符串普查（`strings -n 3`）零命中
+  ——AOSP 的读回/上传命令族整体不存在。
+- `update-super`、`flashing unlock_critical` / `lock_critical` / `erase_boot` /
+  `apd` 等现代扩展：零命中。
+- 裸 `oem`：未注册——OEM 面逐条全名注册（"oem xxx" 整串前缀匹配），乱打
+  `oem whatever` 一律 unknown command。
+
+**getvar 变量集**（39 处 `PublishVar`（0xd678）全普查归并）：
+
+- 初始化期（0x105xx-0x10fxx）：`kernel` = **"uefi"**（魅族标记）、
+  `max-download-size` = 下载缓冲字节数（运行时定格，十进制；实测 ≥98MB）、
+  `is-userspace` = **"no"**（= 这是 bootloader fastboot，不是 fastbootd）、
+  `product` / `serialno` / `secure` / `variant` / `logical-block-size` /
+  `erase-block-size` / `version-bootloader` / `version-baseband` /
+  `battery-voltage` / `battery-soc-ok` / `charger-screen-enabled` /
+  `off-mode-charge` / `unlocked` / `hw-revision` / `parallel-download-flash` /
+  `snapshot-update-status`（none/unknown/snapshotted/merging/cancelled 五态表
+  @0x71f08）；**per-partition 循环发布 `partition-size:<名>` /
+  `partition-type:<名>`（每个 GPT 分区一条）**。
+- multislot 门控（0x14204 内）：`slot-count` / `has-slot:boot` / `current-slot` /
+  `has-slot:system` / `has-slot:modem`。
+- OEM init（0x4eab0 尾段）：`version` = "0.2"、`rooted`、`product`、`serialno`、
+  `chipid`、`socid`、`secure_state`、`lock_state`、`kernel-log-enable`、
+  `fastboot-reason`。
+- CmdGetVar（0x13c80）运行时再算：`partition-*`（":" 分隔解析）、`has-slot:*`、
+  slot 族、battery 族等。
+
+**读回通道定谳（委托③）**：**无任何通用读回通道。** `fetch`/`get_staged`/
+`upload` 串级缺席 = 读回命令族编译期不存在；`oem read_psn` 是序列号读写、
+`oem logfs` 是 logfs 分区 32KB 环头校验读（§6.2）、getvar 只回元数据字符串
+（尺寸/类型/槽位）——均非任意内存/分区内容读回。⇒ **iOS 分区读回维持
+「启动后 reader」路线；「绕过 ABL 限制」调研线正式关门。**
+
+**装载行为旋钮定谳（委托④）**：**§5.3/§5.4 的全部行为无 fastboot 旋钮可改。**
+gunzip 窗数学（K/RdEnd/DtLoad，常量池 0x74f94 族）、忽略 boot ramdisk、九项尺寸
+校验、DTB 校验——全部代码硬编码，无任何条件分支接 fastboot 状态。唯一装载面
+变量 = UEFI 变量 **"K"**（GUID 882F8C2B-9646-435F-8DE5-F208FF80C1BD；§5.2 装载
+基址覆盖 + §6.2 console 门共用）：全镜像 `SetVariable`（RT+0x58）仅 2 处，写的
+是单字母变量 **"R"**（0x17cd0，面板/硬件 ID 路径）与 **"F"**（0x1f0a0，平台
+路径），两处均与 fastboot handler 无调用边；**"K" 无任何写点**；fastboot
+handler 区（0xf018-0x14a44）对该 GUID 引用为零。⇒ 经 fastboot 改变 ABL 装载
+行为的路 = 不存在（含隐藏命令）。
+
+**交付判词三件（回报 iOS，2026-10-29）**：
+
+1. 命令表一张：**42 注册**（19 标准 + 3 条件 + 18 OEM，全部真实现零残桩）+
+   上列编译期删除清单；
+2. `boot` 死因一句话：**编译期删除（表中无），非残桩**——`fastboot boot` 的
+   下载（`download:`）会成功，随后的 `boot` 命令撞分发器 fallback =
+   `unknown command`；
+3. 读回通道：**无**，「绕过 ABL 限制」调研线关门，分区读回走启动后 reader。
 
 ---
 
