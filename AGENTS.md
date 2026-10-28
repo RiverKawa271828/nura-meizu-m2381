@@ -147,8 +147,26 @@ MANIFEST.md      现役产物表 + 回滚锚表 + 已知非回归失败（首 bo
 artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
 ```
 
-## 现态（2026-10-24 更；新会话从这里接）
+## 现态（2026-10-28 更；新会话从这里接）
 
+- **▶ 2026-10-28 追记（排面钉）：iOS 侧委托 = m2381 ABL fastboot 命令表逆向 →
+  **列第一待办**（用户「不着急做，加入第一待办」+「记得用 REA 逆向工具」点名；
+  **执行等用户点名**；卡 = docs/ABL-FASTBOOT-TABLE-CARD-20261028.md；零设备纯宿主
+  ——设备现役 iOS 链 + 单通道红线全程不碰）**：iOS r70 实测 `fastboot boot`
+  下载 OKAY(98MB) + `Booting FAILED(remote:'unknown command')`，要把「ABL 裁
+  CmdBoot」做实成全命令表。**素材已核 = 委托给的固件 tarball 不含 abl**（userspace
+  固件包非分区镜像包，勿白挖）；真取件 = 私有仓 meizu20-m1/artifacts-uefi/
+  uefi-partition-dig-20260930/abl_a.bin+abl_b.bin（dd 件现成）。工具 = **REA CLI
+  主刀**（s5-rea PE 车道 10-21 已跑通）+ tools/abl-re 配套。底账 = BOOT-CHAIN-RE
+  §6.1 OEM 表半成品（注册点 0x4eab0，09-25 轮）扩全表；五项 = ①"unknown command"
+  串反查分发器→命令表 ②三档定性（正常/残桩/表无；**boot=表无 or 残桩定谳**）
+  ③oem/flashing/getvar 全普查（**fetch/oem read 内存读回通道有无定谳**——无 =
+  iOS 分区读回 reader 路维持、「绕过 ABL 限制」调研线正式关门；防误判：read_psn
+  =序列号读写、logfs=分区环，非通用读回）④§5.3/5.4 行为约束复核（gunzip 窗
+  83.5MB=DtLoad−K/忽略 ramdisk/DTB 校验，有无 fastboot 变量可改；顺看 UEFI 变量
+  "K" 写入路径）⑤BOOT-CHAIN-RE.md 加节（§8 红线：只进结论与原创脚本，派生物留
+  私有面）。交付 = 命令表+boot 死因+通道定谳，经用户转告 iOS。S2IDLE 二段排面
+  顺延其后不变（该轮需设备回 nura 链）。
 - **▶ 2026-10-24 追记（九十七·排面钉）：S2IDLE 根治轮·二段排面已排（用户 10-24 晨拍板「安排下
   个会话，现在弄 iOS，这边暂停」）——⚠设备去向随 iOS 轮（可能被刷走/换系统），nura 排面恢复时
   首项 = 设备现态探测（devsh 连通+uname+wowlan/cpuidle 实读），设备不可用则排面顺延勿等**：
