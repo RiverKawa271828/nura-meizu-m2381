@@ -149,6 +149,16 @@ artifacts/       本仓自产产物：mu 现役/次级锚裸镜像 + esp .img.gz
 
 ## 现态（2026-10-29 更；新会话从这里接）
 
+- **▶ 2026-10-30 追记：UniXNU 急件 ✅ 收官 = 读者专用精简内核 unixnu-reader-7.3.0（用户「unixnu 加急需求，先做」点名；零设备纯宿主，iOS/unixnu 工作区零接触）**：
+  UniXNU payload ESP（recovery_a 100MiB）SHLOG 读者原用 v71 整机内核 13.9MiB，payload 内核涨到 85.2MiB 放不下 → 交付读者专用内核 PE + .config（busybox/initramfs 沿用现役）。
+  **交付 = artifacts/unixnu-reader/**：`vmlinuz-unixnu-reader-7.3.0-20261030`（**3,977,728 B = 3.79 MiB ≤ 4 目标**，sha `1512301a…`，PE32+ EFI app AArch64，zboot+zstd，同 v71 格式族，LoadFile2 契约不变）+ `config-…`（sha `f7142f19…`）+ SHA256SUMS；预算对账 85.2+3.79+2.4 ≈ 92 < 100 ✓。
+  **源码 = fork meizu20-t4b @ bfc79f41633b（D4 件全在 DRM 域对本件零影响）；CONFIG_CMDLINE 与现役逐字节一致；LOCALVERSION="-unixnu-reader"（uname 即辨）**。
+  构建车道 = 宿主 aarch64 cross gcc + **git archive 纯净副本 + O= out-of-tree**（fork 树有历史 in-tree 残留，outputmakefile 会拒；fork 树零接触）。**全量 = docs/UNIXNU-READER-KERNEL.md（审计表 + 复现配方 + 验收清单）**。
+  内容拍板（用户中途两改）：①先「面板驱动保留」→ ②「面板驱动也删了，能看见字就行」终态 = **DRM/GPU/panel 全删**；显示 = earlycon=efifb（UEFI GOP 残留 fb 写早期字）+ FB_EFI/fbcon 常显（VT 保留）。
+  **USB 腿 = dwc3 gadget-only**（无 host/PMIC_GLINK/typec——PMIC_GLINK 硬依赖 DRM；device 模式 probe 起固定，configfs 绑 UDC 即通，不赌角色切换）；**★eusb2 链救回**：sm8550 HS PHY = eusb2（非 qusb2），PHY_SNPS_EUSB2+PHY_QCOM_EUSB2_REPEATER+SPMI_MSM_PMIC_ARB 全 =y（repeater 走 SPMI，缺一件 NCM 死）；f_ncm 链接实锤（System.map gether_connect）。
+  终态 =y 1,018 / =m 0：必删全灭（DRM/SOUND/WLAN/BT/QRTR/REMOTEPROC/MEDIA/PCI/KVM/IPV6/NETFILTER/EXT4 等文件系统/MODULES/SECURITY/cgroup 全家/94 个非 qcom ARCH_* 平台门/ACPI/XEN/VIRTIO/KALLSYMS/SMMU/TEE/THP）；必保 63 项全绿；压舱物 ~150KB = POWER_SUPPLY（arm64 arch 本体 select）+ NLS（根头未定谳）+ INPUT（VT select）。
+  **★kconfig 坑册四连（文档坑册节有全录）**：MODULES=n 时 base 全部 =m 被 olddefconfig 升 =y；**EXPERT=n 时 if-EXPERT 符号不可见 → olddefconfig 无视 not set 直接取 default y**（base 是 EXPERT=n config！先 -e EXPERT 再杀）；select 链复活（SCHED_AUTOGROUP→CGROUPS、VT→INPUT）；菜单门塌方（USB_SUPPORT/PHY_QCOM_QMP 伞）；kbuild 陈旧 .o 污染目录级 size 测量。
+  验收 = UniXNU 侧设备日（payload 菜单进 reader → UART shell uname 7.3.0-unixnu-reader → initramfs unpack 不回归 → NCM 起 → 宿主 dd recovery_a 前 96MiB 对拍；设备上可 zcat /proc/config.gz 自验）。stable 惯例检查 = v7.3.1/v7.4-rc 均未出。commit 不 push（推送窗口 = 用户）。
 - **▶ 2026-10-29 深夜追记：设备日拼车窗 ✅ 主体收官（用户「开始吧，现在是nura设备日」点名；设备提前回 nura 链，宿主件+设备件同窗并跑）**：
   ①**D4 三件拼车轮 r92/v72 全绿**（fork `c7abcd61` = D4-2[m2582 fb4e8c5d 移植：
   RDPTR 注销门控 PANEL_DEAD + frame-done 84ms 平值] + `bfc79f41` = D4-3
