@@ -5,41 +5,18 @@
 
 ## 工作态（2026-10-21 rebase 正式轮更钉：在机 = **#92 + v71 + apk r91 + device r63**（upgrade.sh 双腿全绿 10-21 深夜，读回 0a102220 对 ✓ + 眼判四项过；device r63 = depends +iio-sensor-proxy 10-21 用户拍板，装机 RC=0；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62+）+ iio-sensor-proxy fork r3 热修在机；**发布面 = Release r91（2026-10-21 上线 Latest）**）
 
-| 件 | 版本 | 路径 | sha8 | 刷写目标 |
-|---|---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**87**（**纯版本 bump，内容与 r86 全同**：waydroid netd 双族策略路由/GPU 钳零件/no_console_suspend 全在；fork tip `140e5a8e308a` 不动；r87 腾号给本轮 release tag=r87 律） | `$PMB_WORK/packages/edge/aarch64/linux-meizu-meizu20-7.3.0_rc6-r87.apk` | 1aa9a260 | 机上 apk add |
-| Mu 镜像 | r69（DTS 零改动沿用；r87 apk dtb 同源 c061acd9 verify ✓） | `artifacts/mu-r69-97cdea20.img` | 97cdea20 | boot_b |
-| ESP | **v68**（r87 内核腿；仓内 `.img.gz`；10-14 上机读回整分区逐字节 ✓） | `artifacts/esp-recovery-v68.img.gz` | e7a044a8（裸镜像）/ 086a4eef（gz） | recovery_a |
-| 设备包 / 固件包 | **r62**（摘 discover-backend-apk[KDE 商店=plasma 伴生件] + flatpak/gnome-software-plugin-flatpak[phosh 商店真 flatpak 支持，用户拍板]；r61 = waydroid 五件 + 52_waydroid.nft + preset disable）/ r3（零改动） | 同目录 | 5dc0fbd9（r62 apk）/ 6e6dac0a（fw） | 机上 apk add |
-| 上机期望 | `uname -v` = `7.3.0-rc6` → **#88**（10-14 实测 ✓；waydroid v4 互联网+DNS 通，netd 零报错；52_waydroid.nft 装包后首 boot 手工 `nft -f` 补应用一次，后续 boot 由 nftables.service 正常加载） | — | — | — |
+| 件 | 版本 | sha8 | 刷写目标 |
+|---|---|---|---|
+| 内核 apk | 7.3.0_**rc6**-r**91**（CI 件在机；本地同轮件 df13faa6 异字节同源） | d2f0c51b | 机上 apk add |
+| ESP | **v71**（r91 内核腿；本地 gz `6fe7811a` = **#92 在机件**，裸 `0a102220` 读回对 ✓；CI 发布件 gz `f08139e3` 同号异字节 = TD-07） | 0a102220（裸） | recovery_a |
+| Mu 镜像 | r69（r87 起 DTS 零改动沿用；dtb 同源 c061acd9 verify ✓） | 97cdea20 | boot_b |
+| 设备包 / 固件包 | **r63**（depends +iio-sensor-proxy 闭合；r61 起继承 waydroid 五件/r62 起 flatpak 商店）/ r3（零改动） | 2013b691 / 29c1ee88 | 机上 apk add |
+| rootfs | CI r86-phosh（**TD-04**：非发布面底，waydroid/flatpak 缺位，择时重刷 r91 rootfs） | — | userdata |
+| 上机期望 | `uname -v` → **#92**（10-21 双腿升级实测 ✓，读回 0a102220 对） | — | — |
 
-**r88/v69 旋钮件（2026-10-19 窗口期预备轮预构建；同日 0xC4 设备日已上机，非发布面）**：fork `c1d84dcf80ec`
-（`msm.zero_clkout_timing` 旋钮 = 花屏 0xC4 归零单变量，0644 运行时可写，默认 0 =
-现行为）+ pmaports `77925c5` → apk **r88**（sha8 `cc1ecc44`）+ ESP **v69**（裸
-`daf03fea` / gz `0866315d`，build-esp 构造性同源）。verify [1]-[3][5] 全绿；[4] 红 =
-口径错位（APK 取 APKBUILD 现值 r88 vs 钉子 v68 发布面），工作态配对构造性同源非真红
-——rebase 轮出正式件时自消。**10-19 上机实锤**：upgrade.sh 首跑双腿（apk r88 + ESP
-v69 → 实测 #89 + recovery_a 读回 daf03fea 对 ✓），首跑抓到 apk 腿 UNTRUSTED 假绿坑
-（CI rootfs 烤 CI 临时钥）已根治入 upgrade.sh/UPGRADE.md；实验执行 = 默认态对照真睡
-×1 + 旋钮归零真睡×5 全部 s2idle 入睡（journal 六对 entry/exit，susp_success 0→6，
-dsi_err 零新增）。**判读（10-19 两阶段定谳，用户在场眼判）**：阶段一默认态 12 次
-s2idle 全净（含 C0 对照）→ 前提「真睡不受 bloff 影响」证伪（suspend 同走 unprepare
-bloff 分支 ⇒ DDIC 全程不睡，PANEL §5④/§6 条 1）；阶段二 `knob default` 可达态
-= P1 阳性对照全花 + `zero_clkout_timing=1` 归零臂 5/5 全花 → **0xC4 洗清**
-（clk_post/clk_pre 零效应，排雷表 #13 终审）；附带实锤 = **r88 默认态真睡日用
-干净** + bloff 结构性免疫。旋钮/bloff 已复值 + 重启回日常（冷启治愈现屏）。
-
-**r90/v70 stock-content 旋钮件（2026-10-21 首枪 A/B 轮；已上机实验毕，debug 设施随 fork 保留默认 0）**：
-fork `26ab9bf3e442`（`msm.msm_dsc_stock_content` 旋钮：一次钉 DSC 会话内容三靶到
-stock 值——flbo 12→13 全家族[idd 549/sii 469/nfl 1402，slice_bpg 1302 不变]+
-initial_lines 2→3 + DSC_CFG bit17 cmd 清位；0644 运行时可写，populate 挂每轮
-host power-on = 下次睡眠即生效）+ pmaports `acc037b` → apk **r90**（sha8
-`167fe3ab`）+ ESP **v70**（裸 `dca69c1d` / gz `374c4595`）。verify [1]-[3][5] 绿；
-[4] 红 = 发布面钉子口径错位（v68 vs 工作态 v70），手工对拍 v70↔r90 vmlinuz
-`46504394` 逐字节同源非真红。**10-21 上机实锤**：upgrade.sh 双腿全绿（#91 +
-读回 dca69c1d 对 ✓）；A/B 判负（控臂 6/6 花 / 治疗臂 2/2 花[DDIC 0x91 镜像
-核同值]）= **内容值轴清零，判词落 PANEL §6 条 4**；恢复 = 重启（旋钮
-runtime-only，boot 默认 = 零行为差）。
+**历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
+- **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。
+- **r90/v70**（`msm.msm_dsc_stock_content` 旋钮，10-21 上机 A/B）→ **内容值轴判负**（控臂 6/6 花 / 治疗臂 2/2 花，PANEL §6 条 4）→ S5 RE 升主线。
 
 **r92/v72 D4 三件拼车轮（2026-10-29 设备日预备轮；验证件不上机不发布照 r88/v69 先例）**：
 fork `c7abcd61`（D4-2 = m2582 fb4e8c5d 移植：RDPTR 注销门控 PANEL_DEAD +
@@ -48,10 +25,9 @@ frame-done 84ms 平值[dpu_encoder.c + dpu_encoder_phys_cmd.c]）+ `bfc79f41`
 0x0A 改 LP 读[stock ESD 语义]）+ pmaports pkgrel 92 → apk **r92**（vmlinuz
 `c1583825`）+ ESP **v72**（裸 `37e3f9c7` / gz `18fd54a0`；v72↔r92 手工对拍
 c1583825 同源）。verify 全绿（[1] dtb 同源 c061acd9 / [4] c1583825 / 期望
-**#93**）。**构建坑入册：build-esp 必须等 build-kernel 的 systemd-run 单元真
-完再跑——沙箱背景任务调用时守卫不等待，首跑曾拿 r91 旧 vmlinuz 造出假 v72
-（4aad92b3），已重造覆盖**。上机协议 = D4-2 唤醒行为件 A/B（用户在场眼判，
-`echo stock > knob` 真睡臂；回归预案 = 撤 D4-2 保 D4-3/4 单独上）。
+**#93**）。上机排程 = **rootcure-window-card-20261101.md**（★花屏腿加门：
+等 21 Note 仓开源对拍再修，11-05 用户拍板；构建坑 = build-esp 须等
+build-kernel 单元真完，详见 config.sh v72 行）。
 
 **r91/v71 7.3 stable rebase 正式轮（2026-10-21 宿主段收官，零设备；待设备日双腿上机）**：
 fork `meizu20-t4b` 重放到 v7.3 stable（tag `091b0638` → commit `c03c1a14507d`），

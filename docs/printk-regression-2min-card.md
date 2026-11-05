@@ -4,6 +4,8 @@
 > `9e70a5e109a4 "printk: Add per-console suspended state"` 引入的挂起回归，
 > 决定 `no_console_suspend`（CONFIG_CMDLINE 保险件）摘/留。**别凭 release note 猜。**
 > 破案背景 = experiment-log（七十七）（全量 = meizu20-m1/suspend-test-20261008/FINDINGS）。
+> ★7.3 实测已毕（10-21 轮）：上游未修 → 保险件留（= TECH-DEBT TD-01，摘除条件见彼表）；
+> 本卡方法论留作 7.4 轮复用。
 
 ## 原理一句话
 
