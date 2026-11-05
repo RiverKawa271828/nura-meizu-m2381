@@ -2,6 +2,10 @@
 
 > **状态 = 等门。** 两案拼一窗：**花屏 r92 上机 A/B ∥ S2IDLE E 长跑 + 段 4 kprobe**。
 > **门 = 设备回 nura 链 + 用户在场（A/B 眼判必须）；iOS 线收尾后开工。**
+> **★花屏腿加门（2026-11-05 用户拍板「等 21note 开源我们再修」）：整腿（含主件 A
+> 的 r92 上机 A/B）等 Meizu 21 Note 仓开源后再排窗——彼仓花屏修法 = 第 2 个 DDIC
+> ground truth 样本（第 1 个 = 22 移植仓 flbo 内容值），到手对拍再动，勿自研硬烧
+> 轮次；r92/v72 预备件继续冻结不上机。主件 B（S2IDLE）不受此门，照旧等设备窗。**
 > 每项独立可停，commit 不 push。本卡取代 host-round-card-20261029-iosgap.md §3
 > 的设备窗排面；背景深档 = s5-rootcure-card-20261020.md + PANEL-CORRUPTION §6 条 9。
 

@@ -57,7 +57,10 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
   r63 传感器依赖闭合）；回退 = r87/v68/r62。升级口径 = apk 腿 + ESP 腿原地升级
   （`script/upgrade.sh`，⚠真跑须显式 --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
 - **队列**：①**根治轮·设备窗 = [docs/rootcure-window-card-20261101.md](docs/rootcure-window-card-20261101.md)**
-  （花屏 r92 上机 A/B ∥ S2IDLE E 长跑 + 段 4 kprobe；一窗双案；**等设备 + 用户在场窗**）；
+  （花屏 r92 上机 A/B ∥ S2IDLE E 长跑 + 段 4 kprobe；一窗双案；**等设备 + 用户在场窗**；
+  ★花屏腿加门（11-05 用户拍板）：**等 Meizu 21 Note 仓开源**再排——彼仓修法 = 第 2 个
+  DDIC ground truth 样本（第 1 个 = 22 仓），到手对拍再修，r92/v72 冻结照旧；
+  S2IDLE 腿不受此门）；
   ②推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
 - **开工惯例**：stable 检查 30s（v7.3.1 / v7.4-rc 出没出；10-30 复核均未出）；
   设备现态探测先行（devsh 连通 / uname / wowlan / cpuidle / failed 计数）。
