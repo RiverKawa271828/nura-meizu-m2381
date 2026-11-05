@@ -62,7 +62,9 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
   DDIC ground truth 样本（第 1 个 = 22 仓），到手对拍再修，r92/v72 冻结照旧；
   S2IDLE 腿不受此门）；
   ②推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
-- **开工惯例**：stable 检查 30s（v7.3.1 / v7.4-rc 出没出；10-30 复核均未出）；
+- **开工惯例**：stable 检查 30s（11-06 复核：v7.3.1 已出 = **40 修批零交集**
+  io_uring/keys/tracing 域，TD-01 printk 修复未进、TD-02 ath12k 未进 → **不跟进**；
+  v7.4-rc1 已出照政策不追；下轮复查起点 = 7.3.2 / 7.4 正式）；
   设备现态探测先行（devsh 连通 / uname / wowlan / cpuidle / failed 计数）。
 - **已关闭（勿重做/勿再提）**：rc7 演练、路线 D、NCM 漂移修、ath12k B 路（挂起
   待点名）、stock 唤醒 DCS 抓取（窗口已关）、上游化（10-14 用户终判 fork=终态）、
