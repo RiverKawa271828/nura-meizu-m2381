@@ -1,7 +1,7 @@
 # XBL 会话语境逆向 — 花屏根治 S5 下一手卡（2026-10-28 排程）
 
 > **✅ 收官（2026-10-29，用户「abl逆向已完成，你继续」点名开工）**：全量落档 =
-> **docs/XBL-RE.md**（镜像解剖/零面板域定谳/GETPANELID 供给侧勘误/uefiplat
+> **../XBL-RE.md**（镜像解剖/零面板域定谳/GETPANELID 供给侧勘误/uefiplat
 > 双副本对拍/会话语境判词五面）；PANEL-CORRUPTION §6 条 8 收录判词。交付形态
 > 独立文档（体量超 PANEL 单节）。**推送 = 届时看情况（用户 10-28 原话），本
 > 轮 commit 不 push**。判词速览：XBL 零面板域（splash 会话全在 DisplayDxe）+
@@ -11,12 +11,12 @@
 
 > 排程：用户 10-28 拍板「排程加入到 abl 逆向之后，用同一个配方，同样出具完整
 > 逆向文档，到时候看情况推送到远端仓库」。
-> 队列位置 = ②（① = ABL fastboot 命令表，docs/ABL-FASTBOOT-TABLE-CARD-20261028.md）。
+> 队列位置 = ②（① = ABL fastboot 命令表，ABL-FASTBOOT-TABLE-CARD-20261028.md）。
 > **执行等用户点名**（随 ① 的开工节奏）。零设备纯宿主——设备现役 iOS 链不挡本件。
 
 ## 背景与目标（花屏根治 S5 主线）
 
-- S5 排除链现状（全量 = docs/s5-rootcure-card-20261020.md + PANEL-CORRUPTION.md §6）：
+- S5 排除链现状（全量 = s5-rootcure-card-20261020.md + PANEL-CORRUPTION.md §6）：
   DisplayDxe 标准域清零（151 键 schema/冷 init-term/demura/TE/dis_id 六面定谳，
   10-21）+ vendor display 源码互证三靶全中 + 0xC4 洗清 + stock-content 旋钮判负
   ⇒ 内容值轴与标准命令域全排除，**病根收缩到两候选**：

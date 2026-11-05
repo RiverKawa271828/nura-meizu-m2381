@@ -25,7 +25,7 @@
 
 ## 0. 背景与判据（一句版）
 
-- XBL RE 收官（10-29，docs/XBL-RE.md）：固件三面（xbl/abl/uefi DisplayDxe）
+- XBL RE 收官（10-29，../XBL-RE.md）：固件三面（xbl/abl/uefi DisplayDxe）
   全挖穿或判死；花屏病灶（真睡唤醒重载）的语境在 **vendor 内核源码域**，
   不在固件。
 - 本轮判据：产出**「唤醒重载语境差全集」对拍表**（stock vendor 驱动 vs

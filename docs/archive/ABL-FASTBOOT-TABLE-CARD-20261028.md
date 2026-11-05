@@ -50,7 +50,7 @@ BOOT-CHAIN-RE 墙面体系）。委托目标：把该结论做实成**完整命�
 
 ## 已有底账（从这续挖，勿重做）
 
-- `docs/BOOT-CHAIN-RE.md §6.1` = 2026-09-25 轮 **OEM 命令表半成品**：注册点
+- `../BOOT-CHAIN-RE.md §6.1` = 2026-09-25 轮 **OEM 命令表半成品**：注册点
   **0x4eab0**，已列 oem poweroff/reboot、read_psn/write_psn:、edl/random/verify:、
   lock/unlock:、root/unroot、kernel-log-enable/disable、ssr-enable/disable、
   logfs、color:/erase-bootinfo 的 handler VA + 权限档；getvar `kernel-log-enable`
@@ -81,7 +81,7 @@ BOOT-CHAIN-RE 墙面体系）。委托目标：把该结论做实成**完整命�
    忽略 boot ramdisk、image_size/appended DTB 校验（nura 底账 §5.3/§5.4；
    iOS 侧对应文档 = 彼仓 `docs/HARDWARE-m2381.md §7`）——看代码里有无任何
    fastboot 变量/隐藏命令能改变这些行为。
-5. **产出**：`docs/BOOT-CHAIN-RE.md` 加「fastboot 命令表」节（全表 + 地址证据 +
+5. **产出**：`../BOOT-CHAIN-RE.md` 加「fastboot 命令表」节（全表 + 地址证据 +
    strings/xref 截证）；**§8 红线 = 只进结论与原创脚本，不进固件派生物**
    （解包产物、反编译 dump 留私有面）。
 
@@ -103,6 +103,6 @@ BOOT-CHAIN-RE 墙面体系）。委托目标：把该结论做实成**完整命�
 ## 排面位置
 
 - **第一待办**（用户 10-28 拍板）。其后队列 = ②XBL 会话语境 RE
-  （docs/XBL-SESSION-RE-CARD-20261028.md，用户 10-28 拍板「同配方同完整逆向
+  （XBL-SESSION-RE-CARD-20261028.md，用户 10-28 拍板「同配方同完整逆向
   文档，推送届时看情况」）→ ③S2IDLE 根治轮二段（AGENTS.md 10-24 排面，需设备
   回 nura 链）。本卡零设备，与设备去向无关，随时可点名开工。

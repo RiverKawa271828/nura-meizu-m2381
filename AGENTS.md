@@ -114,7 +114,8 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
    「结构 + 现态 + 规则」，轮次战报落 experiment-log / 归档，防再长成接续卡
    屎山；每季度或体量翻倍时蒸馏一次。**每轮收官 = 文档清理顺手项**（11-06
    用户立）：①MANIFEST/config.sh/AGENTS 现态三处对拍防漂移；②已收官/被取代的
-   卡头部补 ✅/📚 状态行（收官去向一句话，勿追记战报）；③仓根/临时件清扫
+   卡头部补 ✅/📚 状态行 + `git mv` 进 `docs/archive/`（活区只留知识库/操作
+   手册/现役卡/活方法论卡，11-06 首轮迁 10 件实证）；③仓根/临时件清扫
    （gitignore 或删）；④本条在 commit 收官信息里带回执。
 
 ## Phase-2 发布面（✅ 已全落地；仅剩干净机首航）
@@ -139,6 +140,7 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
 | 音频 bring-up 方法论（出声必需清单 / probe 竞态 / 工作点 / UCM 坑 / 录音边界） | docs/AUDIO-METHOD.md |
 | 技术债唯一出处（去债条件 / NO-GO 集 / 候补小件池） | docs/TECH-DEBT.md |
 | **下一轮执行卡（根治轮·设备窗）** | docs/rootcure-window-card-20261101.md |
+| 已收官轮次卡 / 历史研究档（10 张，✅/📚 标注） | docs/archive/（考古用，勿接排面） |
 | 历史战报全量（10-13~10-30 接续卡原文 + 带话四轮回信） | docs/AGENTS-ARCHIVE-20261101.md（只读快照） |
 | 出一车产物 | docs/PIPELINE.md + script/ |
 | 查现在该刷哪个版本 | MANIFEST.md（config.sh 为准） |

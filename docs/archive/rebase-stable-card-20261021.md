@@ -53,7 +53,7 @@
    仅收尾修复）。
 3. **两个实质复核项**（rebase 轮的正文，非走形式）：
    - **printk**：v7.3 stable 上核 `9e70a5e109a4` 后续修复是否进（流程卡 =
-     `docs/printk-regression-2min-card.md`）；未进 ⇒ `no_console_suspend` 留
+     `../printk-regression-2min-card.md`）；未进 ⇒ `no_console_suspend` 留
      （10-19 定谳默认）。
    - **ath12k 0012**：核 Shenghan Gao freq-range 修复是否进 stable；进 ⇒ 摘
      本地补丁；未进 ⇒ 三件 carry 全留（10-19 定谳默认）。

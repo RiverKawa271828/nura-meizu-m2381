@@ -1,12 +1,12 @@
 # 窗口期轮执行卡（2026-10-19 落盘，下会话照此做；每项独立可停）
 
-> **✅ 本卡已收官（2026-10-19~21 分段执行完毕）**：audio 蒸馏③ = docs/AUDIO-METHOD.md
+> **✅ 本卡已收官（2026-10-19~21 分段执行完毕）**：audio 蒸馏③ = ../AUDIO-METHOD.md
 > 成文；S2 对拍表落 PANEL §6；upgrade.sh 固化 + 0xC4 洗清（r88/v69 上机）；
 > 7.3 正式 rebase = rebase-stable-card-20261021.md。**本卡仅供考古，勿接排面**
 > （现役卡 = rootcure-window-card-20261101.md）。
 >
 > 背景：rc7 rebase 演练已收官（10-19，98 提交零冲突 + r89 编译验证，报告 =
-> `docs/rebase-dryrun-rc7-20261019.md`——**勿重做**）。本卡 = 窗口期剩余任务排程。
+> `rebase-dryrun-rc7-20261019.md`——**勿重做**）。本卡 = 窗口期剩余任务排程。
 > 路线 D（32 位 app）已关闭（10-19 用户终判无需求），勿再提。
 
 ## 0. 开工第一件事：窗口检查（2 分钟）
@@ -14,7 +14,7 @@
 - 核 7.3 stable 是否已发布（`git ls-remote https://github.com/torvalds/linux.git refs/tags/v7.3`
   或 kernel.org）：
   - **已出** → 窗口期任务全部挂起，转**正式 rebase 轮**：照
-    `docs/rebase-dryrun-rc7-20261019.md` §stable 正式轮清单执行（fetch `v7.3` tag →
+    `rebase-dryrun-rc7-20261019.md` §stable 正式轮清单执行（fetch `v7.3` tag →
     重放 → sanity 四件 → bump pkgrel 90 出件 → verify 全绿 → printk 流程卡第一测；
     推送/发布窗口仍 = 用户拍板）。
   - 未出（或 rc8 出现顺延 ~11-01）→ 按下表顺序做，做几件算几件，每件做完落档即停。
@@ -24,7 +24,7 @@
 
 ## 1. 蒸馏③音频方法论（首项；steamos 线在等正式版）✅ 2026-10-19 收官（nura `782f3d1` + pmos 队列卡打勾 `f1b2d5d`；未 push）
 
-- **目标**：`nura docs/AUDIO-METHOD.md`（命名对齐 BOOT-CHAIN-RE/PANEL-CORRUPTION 风格）。
+- **目标**：`nura ../AUDIO-METHOD.md`（命名对齐 BOOT-CHAIN-RE/PANEL-CORRUPTION 风格）。
   核心 = 出声必需清单的展开版：直驱 T4c 工作点 + 声卡非自然 probe 的编排
   （autoprobe=1→pinctrl→va→sound + ADSP ~boot+75s 长预算重试）+ BE intf 五层排查序 +
   UCM/tplg/服务串清单。**蒸馏不改判词**；fast-switch 判负与响度封卷照实写。

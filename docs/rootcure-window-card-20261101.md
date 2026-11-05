@@ -7,7 +7,8 @@
 > ground truth 样本（第 1 个 = 22 移植仓 flbo 内容值），到手对拍再动，勿自研硬烧
 > 轮次；r92/v72 预备件继续冻结不上机。主件 B（S2IDLE）不受此门，照旧等设备窗。**
 > 每项独立可停，commit 不 push。本卡取代 host-round-card-20261029-iosgap.md §3
-> 的设备窗排面；背景深档 = s5-rootcure-card-20261020.md + PANEL-CORRUPTION §6 条 9。
+> （archive）的设备窗排面；背景深档 = docs/archive/s5-rootcure-card-20261020.md
+> + PANEL-CORRUPTION §6 条 9。
 
 ## S0 开工惯例（30s + 5min）
 

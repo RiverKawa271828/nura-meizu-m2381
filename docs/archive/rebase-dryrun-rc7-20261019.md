@@ -61,7 +61,7 @@ build-kernel.sh 包着用）——修复 = 显式 systemd-run 重入（`--setenv
 3. tag 双锚：`archive/rc7-dryrun-20261019`（演练分支）+ 正式重放后老 tip
    `archive/pre-73-meizu20-t4b`（分支规范：历史一律落 tag）；
 4. 构建链 bump（正式件 pkgrel 从 90 起；r88=0xC4 rc6 验证件、r89=rc7 演练件留档）；
-5. verify 全绿 + printk 流程卡第一测（`docs/printk-regression-2min-card.md`）；
+5. verify 全绿 + printk 流程卡第一测（`../printk-regression-2min-card.md`）；
 6. 0xC4 设备日拼车照旧（旋钮归零 → 真睡×5 → 眼判）。
 
 演练分支 `rebase-dryrun-rc7` 本地保留（tag 后删分支，分支规范：分支只留
