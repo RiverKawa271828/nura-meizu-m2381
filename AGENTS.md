@@ -34,6 +34,8 @@ script/          build-kernel / build-device / build-esp / build-mu / build-root
                  verify（交付链对拍）/ flash-batch / readback / setup（体检）
                  + build-rootfs-min.sh（nura-min 定长根镜像，iOS 尾环配套）
                  + upgrade.sh（apk 腿+ESP 腿原地升级，双验收）
+                 + devselfcheck.sh（B1 设备侧自检：--light 纯只读/人工眼判档/
+                   rtcwake 显式门[红线 -d /dev/rtc1]，结果落 /var/lib/nura-selfcheck）
                  + pmbootstrap-meizu.sh（wrapper，官方工具组合器）+ 配套 cfg
 tools/           make-esp-recovery.sh + devsh/devpush/devpull（设备通道三件）
                  + abl-re/（启动链逆向复现脚本；配套 docs/BOOT-CHAIN-RE.md）
