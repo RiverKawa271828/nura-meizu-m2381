@@ -48,14 +48,26 @@ if [ "${1:-}" = "--fetch-release" ]; then
 	[ -n "${PIN_RELEASE_BASE:-}" ] || nura_die "PIN_RELEASE_BASE 未填（config.sh）"
 	command -v curl >/dev/null 2>&1 || nura_die "缺 curl"
 	mkdir -p "$NURA_ROOT/artifacts"
-	for f in SHA256SUMS mu-r69-97cdea20.img esp-recovery-v65.img.gz meizu-meizu20-r84.img.gz \
-		firmware-meizu-meizu20.tar.gz; do
+	# 资产清单 = SHA256SUMS 本身（旧版硬编码件名随 Release 代次腐烂：r84 名单对 r91 必 404，
+	# B2 演练 2026-11-06 发现）。SUMS 每次现拉，保证与 PIN_RELEASE_BASE 同代。
+	curl -fSL --retry 3 -o "$NURA_ROOT/artifacts/SHA256SUMS" "$PIN_RELEASE_BASE/SHA256SUMS" \
+		|| nura_die "SHA256SUMS 下载失败（Release tag 对不上？base=$PIN_RELEASE_BASE）"
+	FILES="$(sed 's/^[0-9a-fA-F]*[[:space:]]*//' "$NURA_ROOT/artifacts/SHA256SUMS" | grep -v '^$')"
+	for f in $FILES; do
 		if [ -e "$NURA_ROOT/artifacts/$f" ]; then echo "  - $f 已在位，跳过"; continue; fi
 		curl -fSL --retry 3 -o "$NURA_ROOT/artifacts/$f" "$PIN_RELEASE_BASE/$f" \
-			|| nura_die "下载失败：$f（Release 页是否存在 tag r84？）"
+			|| nura_die "下载失败：$f"
 		echo "  ✓ $f"
 	done
 	( cd "$NURA_ROOT/artifacts" && sha256sum -c SHA256SUMS ) || nura_die "SHA256 校验不过，勿用"
+	# 固件 tarball 摆进包目录（APKBUILD source= 同目录约定；B2 演练发现的缺口：
+	# 旧流程 artifacts 拉完无摆放路径，build-device 的 firmware 包在新机器必断）
+	FWPKG="$PIN_PMAPORTS/device/downstream/firmware-meizu-meizu20"
+	if [ -d "$FWPKG" ] && [ -e "$NURA_ROOT/artifacts/firmware-meizu-meizu20.tar.gz" ] \
+		&& [ ! -e "$FWPKG/firmware-meizu-meizu20.tar.gz" ]; then
+		cp "$NURA_ROOT/artifacts/firmware-meizu-meizu20.tar.gz" "$FWPKG/"
+		echo "  ✓ 固件 tarball → $FWPKG/"
+	fi
 	echo "== Release 资产就绪（sha256 全 OK）=="
 	exit 0
 fi
