@@ -74,9 +74,10 @@
 
 1. **用户第一小时审计清单**：发布面加一节固定清单（语言/键盘/时区/联网/浏览器/
    音量/亮度/电源键/主机名/apk 可用）——并 FLASHING.md 或 README。
-2. **设备侧自检脚本**：升级回归清单（rtcwake/电源键/音频/GPU 钳零/传感器/
-   failed=0）脚本化，一条命令出结果，结果与上一版对比——可挂 devsh 或 device 包
-   oneshot。【已排程 → docs/offline-round-card-20261106.md 主件 A，11-06】
+2. ~~设备侧自检脚本~~ **✅ 已落地（11-06 离线轮主件 A）= `script/devselfcheck.sh`**：
+   自动七项只读（uname 对期望/wowlan show 直读/cpuidle 锁/failed 分型/GPU busy_deltas
+   钳零/iio/WiFi 5G）+ 人工眼判四项 + rtcwake 显式门（红线 `-d /dev/rtc1`）；
+   结果落 `/var/lib/nura-selfcheck/` 自动与上一份对比。真机首跑挂下个设备窗。
 3. **干净机首航**：发布面成立判据（第二台机器/容器从零 setup→build→flash）——
    项目自 10-07 起在册的遗留，恰 = skill 第 7 步完成标准；排队等条件（第二台机器
    或容器）。

@@ -1,5 +1,13 @@
 # 下会话执行卡：离线轮（2026-11-06 落盘；用户拍板主工时投 B1，本会话被卫生轮占满顺延）
 
+> **✅ 收官（2026-11-06）**：主件 A = B1 `script/devselfcheck.sh` 落地（自动七项只读 +
+> 人工眼判四项 + rtcwake 显式门；shellcheck(dash) 全绿 + 本机烟测全过；真机首跑挂下个
+> 设备窗）✅；B3 = FLASHING.md「用户第一小时审计清单」落地 ✅；主件 B = 设备在 iOS 链
+> 未跑（S2IDLE 腿原封留根治卡）⛔；B2 容器首航 = 用户砍单收兵（半截 clone 324M 已清）
+> ⛔，顺手修 setup.sh 两真缺口（--fetch-release 硬编码 r84 名单改 SHA256SUMS 驱动 +
+> 固件 tarball 自动摆进包目录，commit 9472de7）；stable 复核 = 7.3.2 / 7.4 正式均未出
+> 不跟进（kernel.org 官方 + gregkh 镜像双核）。本卡归档。
+
 > **性质 = 纯离线轮 + 设备窗条件跳板**；每项独立可停，commit 不 push。
 > 收官时执行 AGENTS 规则 8 四动作（三处对拍 / 死卡进 archive / 仓根清扫 / 回执）。
 

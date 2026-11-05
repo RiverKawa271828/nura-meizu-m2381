@@ -43,8 +43,7 @@ docs/FLASHING.md 刷机教程（每步带验证点）——动手前必读
 docs/PIPELINE.md 构建管线 + Phase-2 发布清单
 MANIFEST.md      现役产物表 + 已知非回归失败（首 boot 看到别慌的三件）
 artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
-docs/*-card-*.md 各轮执行卡（现役 = offline-round-card-20261106.md +
-rootcure-window-card-20261101.md）
+docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
 ```
 
 ## 现态（2026-11-01 更；新会话从这里接）
@@ -59,15 +58,15 @@ rootcure-window-card-20261101.md）
 - **发布面**：**Release r91 = Latest**（8 件制；7.3 stable rebase 首发 + device
   r63 传感器依赖闭合）；回退 = r87/v68/r62。升级口径 = apk 腿 + ESP 腿原地升级
   （`script/upgrade.sh`，⚠真跑须显式 --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
-- **队列**：①**下会话·离线轮 = [docs/offline-round-card-20261106.md](docs/offline-round-card-20261106.md)**
-  （主件 A = B1 设备侧自检脚本纯离线；主件 B = 设备在链才跳 rootcure 卡 S2IDLE 腿；
-  拼车池 B2 容器首航预演 / B3 审计清单文档）；
-  ②**根治轮·设备窗 = [docs/rootcure-window-card-20261101.md](docs/rootcure-window-card-20261101.md)**
+- **队列**：①**根治轮·设备窗 = [docs/rootcure-window-card-20261101.md](docs/rootcure-window-card-20261101.md)**
   （花屏 r92 上机 A/B ∥ S2IDLE E 长跑 + 段 4 kprobe；一窗双案；**等设备 + 用户在场窗**；
   ★花屏腿加门（11-05 用户拍板）：**等 Meizu 21 Note 仓开源**再排——彼仓修法 = 第 2 个
   DDIC ground truth 样本（第 1 个 = 22 仓），到手对拍再修，r92/v72 冻结照旧；
   S2IDLE 腿不受此门）；
-  ③推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
+  ②推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
+  （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
+  B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
+  卡归档 docs/archive/）
 - **开工惯例**：stable 检查 30s（11-06 复核：v7.3.1 已出 = **40 修批零交集**
   io_uring/keys/tracing 域，TD-01 printk 修复未进、TD-02 ath12k 未进 → **不跟进**；
   v7.4-rc1 已出照政策不追；下轮复查起点 = 7.3.2 / 7.4 正式）；
