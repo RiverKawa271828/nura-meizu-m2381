@@ -54,7 +54,8 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
 - **预备件（验证件不上机不发布，照 r88/v69 先例）**：apk **r92**（vmlinuz
   `c1583825`）+ ESP **v72**（裸 `37e3f9c7` / gz `18fd54a0`）= D4 三件拼车轮
   （D4-2 m2582 fb4e8c5d 移植 + D4-3 wake_pps_late default=true + D4-4 sanity LP
-  读），verify 全绿，**期望 #93**。
+  读），verify 全绿，**期望 #93**；**fw r4**（11-07 蜂窝复燃备料：+modem_pr
+  mcfg/so 158 件，pmaports `f2885ef`，本地 apk 全绿未发布，S3 拦截点缺料假说弹药）。
 - **发布面**：**Release r91 = Latest**（8 件制；7.3 stable rebase 首发 + device
   r63 传感器依赖闭合）；回退 = r87/v68/r62。升级口径 = apk 腿 + ESP 腿原地升级
   （`script/upgrade.sh`，⚠真跑须显式 --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
@@ -65,7 +66,13 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
   Ilitek 系**非 NT37700**，无第 2 个 ground truth 可移植；彼自身花屏另病相且修法
   E44 未验证（对拍全录 = PANEL §6 条 10）。r92/v72 冻结照旧，排面回归原两门 =
   设备回链 + 用户在场；S2IDLE 腿本不受门）；
-  ②推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
+  ②**蜂窝复燃·设备窗 = [docs/cellular-reactivation-card-20261107.md](docs/cellular-reactivation-card-20261107.md)**
+  （11-06 用户点名复燃「参考 21 Note 仓来修」→ 11-07 离线备料 ✅：fw r4
+  [+modem_pr mcfg/so 158 件 = S3 DeviceNotReady 头号新嫌疑的缺料]pmaports
+  `f2885ef` 本地 apk 全绿未发布；全序 S-0~S8 = tqftpserv 根直读判据 → 解封
+  → aid provision → DMS 舞步 → 注册里程碑 → PLL 墙预期管理；**等设备回链 +
+  用户在场窗，与①同门可拼车/让路，用户定序**）；
+  ③推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
   卡归档 docs/archive/）
@@ -147,6 +154,7 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
 | 音频 bring-up 方法论（出声必需清单 / probe 竞态 / 工作点 / UCM 坑 / 录音边界） | docs/AUDIO-METHOD.md |
 | 技术债唯一出处（去债条件 / NO-GO 集 / 候补小件池） | docs/TECH-DEBT.md |
 | **下一轮执行卡（根治轮·设备窗）** | docs/rootcure-window-card-20261101.md |
+| **蜂窝复燃·设备窗执行卡（备料毕）** | docs/cellular-reactivation-card-20261107.md |
 | 已收官轮次卡 / 历史研究档（10 张，✅/📚 标注） | docs/archive/（考古用，勿接排面） |
 | 历史战报全量（10-13~10-30 接续卡原文 + 带话四轮回信） | docs/AGENTS-ARCHIVE-20261101.md（只读快照） |
 | 出一车产物 | docs/PIPELINE.md + script/ |
