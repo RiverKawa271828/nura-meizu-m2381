@@ -60,9 +60,11 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
   （`script/upgrade.sh`，⚠真跑须显式 --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
 - **队列**：①**根治轮·设备窗 = [docs/rootcure-window-card-20261101.md](docs/rootcure-window-card-20261101.md)**
   （花屏 r92 上机 A/B ∥ S2IDLE E 长跑 + 段 4 kprobe；一窗双案；**等设备 + 用户在场窗**；
-  ★花屏腿加门（11-05 用户拍板）：**等 Meizu 21 Note 仓开源**再排——彼仓修法 = 第 2 个
-  DDIC ground truth 样本（第 1 个 = 22 仓），到手对拍再修，r92/v72 冻结照旧；
-  S2IDLE 腿不受此门）；
+  ★花屏腿加门（11-05 立，**11-06 判毕收门**）：21 Note 仓已开源
+  [leluo123/m2468-mainline]，当日审计判词 = **空样本**——彼屏 = 天马 ILI7838E
+  Ilitek 系**非 NT37700**，无第 2 个 ground truth 可移植；彼自身花屏另病相且修法
+  E44 未验证（对拍全录 = PANEL §6 条 10）。r92/v72 冻结照旧，排面回归原两门 =
+  设备回链 + 用户在场；S2IDLE 腿本不受门）；
   ②推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；

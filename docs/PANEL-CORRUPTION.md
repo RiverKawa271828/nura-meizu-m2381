@@ -574,6 +574,35 @@ vs 我方 fork（panel-boe-meizu20.c + mainline msm dpu1/dsi）；stock FDT 面�
   实验（D3 前置对拍后决定，高风险高信息）/ D4-2 vblank 修法移植 / D4-3 P2
   默认翻转 / D4-4 sanity 探针改 LP+回 page 0（联动 D1）。
 
+**条 10·21 Note 仓对拍——gate 判毕收门 = 空样本（2026-11-06 宿主审计轮；
+leluo123/m2468-mainline，11-05 加门条件触发即审）**——
+1. **面板身份定谳 = 天马 ILI7838E（Ilitek DDIC）**：stock dtbo fragment@71 =
+   `mdss_dsi_xjmz_amoled_tianma_cmd`；其仓自述「21 Note 是天马，魅族 20 是 BOE，
+   时序/DSC/初始化全不一样」。⇒ **11-05 家族判词「20/21Note/22 = BOE+NT37700」
+   对 21 Note 证伪**，修正为：20+22 = NT37700 系，21 Note = Ilitek 系（魅族同族
+   混面板供应商）。⇒ gate 前提（彼仓修法 = 第 2 个 NT37700 DDIC ground truth
+   样本）**落空 = 空样本，无可移植修法**。
+2. **彼仓花屏案 = 另一病相**：滑动时右侧中间偏上**局部**花屏（位置固定、静态不
+   明显）≠ 我方真睡唤醒**全幅**马赛克。其「根因已定位」（11-01）= 我方 fork 的
+   `msm_dsc_stock_content` 旋钮轴（VESA 表 12 vs vendor tier 表 13；他们 11-01
+   立案 E44 = knob=true）——**至今未验证**（彼 11-05 账本 subsys.display 仍
+   「进行中」），不构成 ground truth。
+3. **跨机三角互证（tier vs VESA 内容值轴）**：22 仓 tier 15 正确/VESA 13 噪点；
+   21 Note tier 13 候选/VESA 12 出花（待验）；我方 A/B 强制 tier 13 → 唤醒花屏
+   不动（内容值轴对唤醒病相清零维持）。判词 = **stock 主机侧 tier 表推导是逐
+   面板 ground truth、VESA 通用表不可靠**——但我方病相（唤醒）另有病灶，此轴
+   判词不变。附带：彼 PPS 实测 ILI7838E 原厂 payload flbo=12（10-29 文档）与
+   11-01 tier=13 修法并存 = 上下家不一致亦在彼仓未决，勿引为定论。
+4. **我方 = 21 Note 仓的上游**：CREDITS 头号致谢 nura-meizu-m2381 /
+   uefi-m2381 / linux-mobile-ports（DTS 骨架/regulator 对齐/7.3 runtime PM
+   模型全自我方树）；其 DSC 接入缺口（`dsi->dsc` 漏一行致纯黑零错误）自认抄
+   我 `panel-boe-meizu20.c` 漏行。方法论输出实锤：彼仓设「报告_nura_DTS方法论」
+   专文复刻我方 A/B 判负协议（×5 眼判/一次一变量）。
+5. **影响面**：r92/v72 冻结照旧、S5 RE 候选（XBL 平台域/首帧 vblank）不变；
+   gate 收门 = 花屏腿排面回归原两门（设备回链 + 用户在场）。彼仓附带通用坑与
+   我方管线一致（ESP 固件过多不稳/Mu 吃预编译 dtb 非 Linux 树 dts/ESP 须
+   128MB），零新增风险。蜂窝情报不入本档（见记忆 m2468 审计件）。
+
 ---
 
 ## 7. 移植者检查单（在你的 DSC AMOLED 机上撞到同款病时）
