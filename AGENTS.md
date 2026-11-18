@@ -48,13 +48,14 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
 
 ## 现态（2026-11-19 更；新会话从这里接）
 
-- **设备**：**11-19 回位直刷**（设备自 iOS 链回 nura，用户在场授权）：boot_b
-  **mu-r91**（首刷，dtb 同源）+ recovery_a **v71** + userdata **Release
+- **设备**：**11-19 回位直刷 ✅ 验收全绿**（设备自 iOS 链回 nura，用户在场授权）：
+  boot_b **mu-r91**（首刷，dtb 同源）+ recovery_a **v71** + userdata **Release
   r91-phosh rootfs**（= CI 发布件同字节，device r63 + fw r3 + iio fork r3 +
   waydroid 五件 + flatpak 商店全烤入；**TD-04 闭合，CI r86 底退役**）。
-  在机期望 = **#92 + v71 + apk r91**。⚠**首 boot 验证 + 读回对 sha 未做**
-  （fastboot reboot 宿主挂为老毛病未及）——**下会话 S0 第一件先补**：
-  FLASHING §5 清单 + `readback.sh` 350386e0 / 0a102220 + 第一小时清单。
+  在机实测 = **#92 + v71 + apk r91**：uname #92 ✓ / MEIZU20 声卡 ✓ / 背光 ✓ /
+  **failed 0**（首 boot 竞态零出现）/ journal 无新红 / **读回双对**（boot_b 逐字节
+  350386e0 + recovery_a 0a102220）/ wowlan 武装 ✓ / bloff=1 日用态 ✓ /
+  iio-sensor-proxy + meizu-wowlan 双 active ✓ / cpuidle psci_idle ✓。
   **SIM 已插（可用卡）→ 蜂窝复燃窗开**。iOS 线并行走用户——**iOS 工作区/
   文档零接触，传话 = 用户转告**。
 - **预备件（验证件不上机不发布，照 r88/v69 先例）**：apk **r92**（vmlinuz
@@ -67,7 +68,7 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
   （`script/upgrade.sh`，⚠真跑须显式 --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
 - **队列**（**设备回链门 ✅ 11-19 开**；SIM 已插）：①**根治轮·设备窗 =
   [docs/rootcure-window-card-20261101.md](docs/rootcure-window-card-20261101.md)**
-  （S0 先补 11-19 直刷首 boot 验证 + 读回 → 花屏 r92 上机 A/B[upgrade.sh 双腿
+  （花屏 r92 上机 A/B[upgrade.sh 双腿
   --apk r92 --esp v72 → #93 → 真睡×5 用户眼判]∥ S2IDLE E 长跑 + 段 4 kprobe；
   一窗双案；花屏腿剩余门 = **用户在场窗**；
   ★花屏腿 21 Note 门已判毕收门（11-06 空样本判词 = PANEL §6 条 10）；S2IDLE

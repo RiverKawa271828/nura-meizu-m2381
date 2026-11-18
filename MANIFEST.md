@@ -3,7 +3,7 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-19 回位直刷轮更钉：设备自 iOS 链回 nura，fastboot **三件全刷** = boot_b **mu-r91**（首刷，dtb 同源 c061acd9）+ recovery_a **v71** + userdata **Release r91-phosh rootfs**（裸 16147c7d = CI 发布件逐字节同源，内含 r91/device r63/fw r3/iio fork r3/waydroid 五件/flatpak 商店全烤入，**TD-04 闭合、CI r86 底退役**）——⚠**首 boot 验证 + 读回对 sha 未做**（fastboot reboot 宿主挂为老毛病，会话内未及）：下会话 S0 先补 = FLASHING §5 清单 + readback 350386e0/0a102220 + 用户第一小时清单；**SIM 已插 → 蜂窝复燃窗同步开**；**发布面 = Release r91（Latest）**）
+## 工作态（2026-11-19 回位直刷轮更钉：设备自 iOS 链回 nura，fastboot **三件全刷** = boot_b **mu-r91**（首刷，dtb 同源 c061acd9）+ recovery_a **v71** + userdata **Release r91-phosh rootfs**（裸 16147c7d = CI 发布件逐字节同源，内含 r91/device r63/fw r3/iio fork r3/waydroid 五件/flatpak 商店全烤入，**TD-04 闭合、CI r86 底退役**）——**首 boot 验收全绿**（uname #92 / MEIZU20 声卡 / 背光 / failed 0 / journal 无新红 / **读回双对** boot_b 350386e0 逐字节 + recovery_a 0a102220 / wowlan 武装 / bloff=1 / iio+wowlan 服务双 active / cpuidle 开）；**SIM 已插 → 蜂窝复燃窗同步开**；**发布面 = Release r91（Latest）**）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
@@ -12,7 +12,7 @@
 | Mu 镜像 | r91（**11-19 首刷在机**；r87 起 DTS 零改动沿用，dtb 同源 c061acd9；r69 前代留档） | 350386e0 | boot_b |
 | 设备包 / 固件包 | **r63**（depends +iio-sensor-proxy 闭合；r61 起继承 waydroid 五件/r62 起 flatpak 商店）/ r3（零改动） | 2013b691 / 29c1ee88 | 机上 apk add |
 | rootfs | Release r91-phosh（**11-19 直刷在机**；裸 16147c7d = CI 发布件同字节；waydroid 五件/flatpak 商店/iio fork r3 烤入） | 16147c7d | userdata |
-| 上机期望 | `uname -v` → **#92**（10-21 双腿升级实测 ✓；11-19 直刷后**待下会话 S0 复验**） | — | — |
+| 上机期望 | `uname -v` → **#92**（10-21 双腿升级实测 ✓；11-19 直刷首 boot 复测 ✓ 读回双对） | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。
