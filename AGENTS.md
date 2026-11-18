@@ -62,8 +62,6 @@ docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.
   WFI + psci_in=0）+ **freeze 唤醒风暴活锁**定位（黑屏假挂死，电源键可打回）；
   A1 疗效存疑；下一手 = waker 识别（netconsole 唯一通道）+ A1 挂 fd 一发判生死。
   **新雷 = s2idle 睡中拔线 = 硬复位 3/3**（面板路径无关，候补池独立查）。
-  **E 长跑跑中**（60 轮观测窗版，R1/R2 = 302s 真睡真醒 2/2 全净；(开,开)），
-  ~中午收全量日志；**E 结果未出前不碰设备**（睡中拔线/电源键都会污染轮次）。
   devselfcheck A7 判读器适配 + iio 零节点查因仍挂设备窗（TECH-DEBT 候补 6）。
   **SIM 已插（可用卡）→ 蜂窝复燃窗开**。iOS 线并行走用户——**iOS 工作区/
   文档零接触，传话 = 用户转告**。
@@ -74,7 +72,7 @@ docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.
   ⚠config 陈旧重复行坑两连，config 改动必须解包 apk 验 /proc/config 再上机）；
   **fw r4**（11-07 蜂窝复燃备料：+modem_pr mcfg/so 158 件，pmaports `f2885ef`，
   本地 apk 全绿未发布）。
-- **发布面**：**Release r91 = Latest 不变**（8 件制）；r94 是否发 Release 留用户。
+- **发布面**：**Release r91 = Latest 不变**（8 件制）；r95 是否发 Release 留用户。
   升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑须显式
   --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
 - **队列**：①**花屏科学解 ✅ 达成验收属实收官**（PANEL §6 条 11.7-8）；
@@ -95,8 +93,8 @@ docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.
   msm 三域零交集不跟进**[7.3.1 同判延续]；v7.4-rc3 已出照政策不追；下轮复查
   起点 = **7.3.6 / 7.4 正式**）；
   设备现态探测先行（devsh 连通 / uname / wowlan / cpuidle / failed 计数）。
-  ⚠E 长跑跑中时（B-1）设备探测降级为只读轮间观测窗（睡中拔线/电源键 = 污染轮次，
-  拔线还有复位雷）。
+  ⚠若复活 S2IDLE E 长跑（挂起线）：设备探测降级为只读轮间观测窗
+  （睡中拔线/电源键 = 污染轮次，拔线还有复位雷）。
 - **已关闭（勿重做/勿再提）**：rc7 演练、路线 D、NCM 漂移修、ath12k B 路（挂起
   待点名）、stock 唤醒 DCS 抓取（窗口已关）、上游化（10-14 用户终判 fork=终态）、
   DP 外接（⛔硬件断）、GPT 外脑通道（花屏自研攻坚）。
@@ -171,7 +169,6 @@ docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.
 | 音频 bring-up 方法论（出声必需清单 / probe 竞态 / 工作点 / UCM 坑 / 录音边界） | docs/AUDIO-METHOD.md |
 | 技术债唯一出处（去债条件 / NO-GO 集 / 候补小件池） | docs/TECH-DEBT.md |
 | **下一轮执行卡（蜂窝复燃·设备窗）** | docs/cellular-reactivation-card-20261107.md |
-| **蜂窝复燃·设备窗执行卡（备料毕）** | docs/cellular-reactivation-card-20261107.md |
 | 已收官轮次卡 / 历史研究档（10 张，✅/📚 标注） | docs/archive/（考古用，勿接排面） |
 | 历史战报全量（10-13~10-30 接续卡原文 + 带话四轮回信） | docs/AGENTS-ARCHIVE-20261101.md（只读快照） |
 | 出一车产物 | docs/PIPELINE.md + script/ |
