@@ -56,6 +56,11 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
   **failed 0**（首 boot 竞态零出现）/ journal 无新红 / **读回双对**（boot_b 逐字节
   350386e0 + recovery_a 0a102220）/ wowlan 武装 ✓ / bloff=1 日用态 ✓ /
   iio-sensor-proxy + meizu-wowlan 双 active ✓ / cpuidle psci_idle ✓。
+  **devselfcheck 首跑 11-19**（--light 4 过/2 警/1 败）：A7 5G「零频点」= 判读器
+  假阴性（iw 6.17 格式，实测频点全在位；适配件 = TECH-DEBT 候补 6）；**新发现 =
+  传感器链 iio 零节点**（meizu-sensorspd session active + ADSP running + /mnt/dsp
+  在，但 /sys/bus/iio/devices 空；restart 复探一次仍空）——挂设备窗查因（对照
+  10-03 配方 -R/-d 参数与节点产生机制）。
   **SIM 已插（可用卡）→ 蜂窝复燃窗开**。iOS 线并行走用户——**iOS 工作区/
   文档零接触，传话 = 用户转告**。
 - **预备件（验证件不上机不发布，照 r88/v69 先例）**：apk **r92**（vmlinuz

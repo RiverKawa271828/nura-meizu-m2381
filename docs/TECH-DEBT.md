@@ -14,7 +14,7 @@
 | TD-01 | `no_console_suspend` 保险件（内核 cmdline） | 内核包 cmdline，r72 起随包 | printk console 挂起路径上游回归（9e70a5e109a4），挂死=s2idle 睡死时代真凶；上游未修（7.3 复核） | 零成本保险件；副作用≈无 | **上游修复合入 stable + 本机连续多轮 Y 态实机验证稳定**。10-21 设备日 Y 态 3/3 全活 = 摘除候选（rc6 亦 3/3 未死 = 回归时序依赖，保险件零成本建议留），r92 轮留用户拍板 | 在册 |
 | TD-02 | ath12k 0012 三件 carry（5G 频段修复族） | 内核 fork meizu20-t4b | 单 pdev freq range 回归（0d777aa2ca77）上游未修（v7.3 复核：Shenghan 系列全不在），不 carry 则 5G 塌缩 | 每次重放随车；语义 sanity 负担 | 上游合入 Shenghan 系列即摘 | 在册 |
 | TD-03 | bloff=1 工程解（灭屏不让 DDIC 睡） | device 包 preset / 设备日用态 | 唤醒花屏病根（§4.4 DDIC sleep-out 自重初始化）未根治前的日用绕行；10-19 定谳 suspend 同走 unprepare ⇒ 日用结构性免疫毒源 | bloff 分支在 unprepare，真睡实验须 knob default 可达态 | **S5 根治达成**（knob default 真睡×5 全干净）后可关，日用默认态是否保留 bloff 留用户拍板 | 在册 |
-| TD-04 | 在机 rootfs = CI r86-phosh（非发布面） | 设备现态 | 10-18 深夜刷回取证用；非 r91 发布面 | waydroid/flatpak 缺位、device r60（无 iio fork r3 闭合时曾热修）、fw r3 | 择时重刷 r91 rootfs（发布面 8 件制）即清账；不急 | 在册 |
+| TD-04 | 在机 rootfs = CI r86-phosh（非发布面） | 设备现态 | 10-18 深夜刷回取证用；非 r91 发布面 | waydroid/flatpak 缺位、device r60（无 iio fork r3 闭合时曾热修）、fw r3 | 择时重刷 r91 rootfs（发布面 8 件制）即清账；不急 | **已还（11-19 回位直刷 r91-phosh rootfs，首 boot 验收全绿）** |
 | TD-05 | apk 腿 `--allow-untrusted` 配方 | upgrade.sh / flash-batch 配方 | CI rootfs 烤 CI 临时钥（pmos@local-6acea657），本地钥（6aaed2ab）签的包必 UNTRUSTED 假绿（RC=99 零输出） | 绕过签名校验=信任链降级（仅本地升级腿）；换钥路径无人审计 | CI rootfs 改烤发布面本地钥，或包目录统一钥源后撤旗子 | 在册 |
 | TD-06 | NCM 网段漂移（172.16.42.x→10.42.0.x） | 设备重启后；devsh 硬编码 172.16.42.1 | NM 双系统残留行为，未钉死 gadget 网段 | devsh/devpush 失效时须绑接口直连新网段:23（手工步骤） | NM 配置钉住 USB gadget 地址，或 devsh 改动态发现（后者更省） | 在册 |
 | TD-07 | ESP v71 同号异字节（CI gz `f08139e3` vs 本地 gz `6fe7811a`=#92 在机件） | Release r91 发布面 vs 在机 | CI ESP 推导撞号（v71 已被本地先建先钉占用，CI 又生成一份同号件） | 发布面 ESP 与在机 ESP 字节不同但同源同版本；读回验收口径已按"CI 件对 CI 件"记档 | 下次发布轮验证「max(release, pin)+1」推导防撞号后转记档 | 在册 |
@@ -77,7 +77,11 @@
 2. ~~设备侧自检脚本~~ **✅ 已落地（11-06 离线轮主件 A）= `script/devselfcheck.sh`**：
    自动七项只读（uname 对期望/wowlan show 直读/cpuidle 锁/failed 分型/GPU busy_deltas
    钳零/iio/WiFi 5G）+ 人工眼判四项 + rtcwake 显式门（红线 `-d /dev/rtc1`）；
-   结果落 `/var/lib/nura-selfcheck/` 自动与上一份对比。真机首跑挂下个设备窗。
+   结果落 `/var/lib/nura-selfcheck/` 自动与上一份对比。✅ **真机首跑 11-19**（--light：
+   4 过/2 警/1 败；判读器两坑记档见条 6）。
+6. **devselfcheck 判读器 iw 6.17 格式适配**（11-19 首跑发现，小件）：新版 iw 频点行
+   `5180.0 MHz` 带小数点 + wowlan show 输出格式变 ⇒ A7 假阴性 FAIL（5G 实测频点全在
+   位）+ A2 WARN。适配后 A2/A7 应双绿。
 3. **干净机首航**：发布面成立判据（第二台机器/容器从零 setup→build→flash）——
    项目自 10-07 起在册的遗留，恰 = skill 第 7 步完成标准；排队等条件（第二台机器
    或容器）。
