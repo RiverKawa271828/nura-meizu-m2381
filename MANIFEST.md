@@ -3,20 +3,24 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-19 回位直刷轮更钉：设备自 iOS 链回 nura，fastboot **三件全刷** = boot_b **mu-r91**（首刷，dtb 同源 c061acd9）+ recovery_a **v71** + userdata **Release r91-phosh rootfs**（裸 16147c7d = CI 发布件逐字节同源，内含 r91/device r63/fw r3/iio fork r3/waydroid 五件/flatpak 商店全烤入，**TD-04 闭合、CI r86 底退役**）——**首 boot 验收全绿**（uname #92 / MEIZU20 声卡 / 背光 / failed 0 / journal 无新红 / **读回双对** boot_b 350386e0 逐字节 + recovery_a 0a102220 / wowlan 武装 / bloff=1 / iio+wowlan 服务双 active / cpuidle 开）；**SIM 已插 → 蜂窝复燃窗同步开**；**发布面 = Release r91（Latest）**）
+## 工作态（2026-11-19 根治轮·设备窗更钉：**r94/v74 双腿 upgrade.sh 上机判过**——D4-1 冷启等价化（真睡尾 reset 拉低+VREG 全断+5/5/10 轨拍数+背光恢复），**真睡×5 用户眼判 5/5 全净+屏亮 = 花屏战役首个正面治疗结果**；在机 = **#95 + v74（读回 03f2b162）** + mu-r91 + r91-phosh rootfs；回归全绿（rtcwake resume 0.43s×5 / 出声 / GPU 钳零 / 传感器 / WiFi 5G / failed 0 / kprobe 通道 OK[pmaports 51a38c0 拼车]）；r92 判负退役（治疗臂 5/5 全花）；**发布面 = Release r91（Latest）不变，r94 是否发 Release 留用户**）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**91**（CI 件在机；本地同轮件 df13faa6 异字节同源） | d2f0c51b | 机上 apk add |
-| ESP | **v71**（r91 内核腿；本地 gz `6fe7811a` = **#92 在机件**，裸 `0a102220` 读回对 ✓；CI 发布件 gz `f08139e3` 同号异字节 = TD-07） | 0a102220（裸） | recovery_a |
+| 内核 apk | 7.3.0_**rc6**-r**94**（**11-19 上机在役**，本地件 `6b89fd03`；fork c23b9afb+4daca081） | 6b89fd03 | 机上 apk add |
+| ESP | **v74**（r94 内核腿；本地 gz `51af67b3` = **#95 在机件**，裸 `03f2b162` 读回对 ✓） | 03f2b162（裸） | recovery_a |
 | Mu 镜像 | r91（**11-19 首刷在机**；r87 起 DTS 零改动沿用，dtb 同源 c061acd9；r69 前代留档） | 350386e0 | boot_b |
 | 设备包 / 固件包 | **r63**（depends +iio-sensor-proxy 闭合；r61 起继承 waydroid 五件/r62 起 flatpak 商店）/ r3（零改动） | 2013b691 / 29c1ee88 | 机上 apk add |
 | rootfs | Release r91-phosh（**11-19 直刷在机**；裸 16147c7d = CI 发布件同字节；waydroid 五件/flatpak 商店/iio fork r3 烤入） | 16147c7d | userdata |
-| 上机期望 | `uname -v` → **#92**（10-21 双腿升级实测 ✓；11-19 直刷首 boot 复测 ✓ 读回双对） | — | — |
+| 上机期望 | `uname -v` → **#95**（11-19 双腿升级实测 ✓ 读回双对） | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。
 - **r90/v70**（`msm.msm_dsc_stock_content` 旋钮，10-21 上机 A/B）→ **内容值轴判负**（控臂 6/6 花 / 治疗臂 2/2 花，PANEL §6 条 4）→ S5 RE 升主线。
+
+- **r92/v72**（D4 三件拼车轮，10-29 构建 → **11-19 上机 A/B 判负**：D4-2/3/4 + knob stock 可达态真睡×5 用户眼判 **5/5 全花**——D4-2 RD_PTR 门控 / D4-3 PPS 后置 / D4-4 LP sanity 全部零疗效，标准命令域主机可达维度排除面闭合[含 D4 内核件]，病根收缩 = 非命令维度[重载语境] → D4-1 升主线，PANEL §6 条 9）。
+- **r93/v73**（D4-1 无背光修复版，11-19 上机）→ 冷启/RTC 唤醒通路实证但**真睡醒后屏黑**（DDIC 断电亮度锁存归零无人重写）→ 背光恢复补丁升 r94，本版退役。
+- **r94/v74**（D4-1 完整版，11-19 上机）→ **判过**：真睡×5 用户眼判 5/5 全净+屏亮（背光恢复生效：醒后 bl=442 非零）；pmaports 拼车 KPROBES/KPROBE_EVENTS/FTRACE/PM_QOS + 摘 KVM/F2FS 死件（config 陈旧重复行坑两连记档）。
 
 **r92/v72 D4 三件拼车轮（2026-10-29 设备日预备轮；验证件不上机不发布照 r88/v69 先例）**：
 fork `c7abcd61`（D4-2 = m2582 fb4e8c5d 移植：RDPTR 注销门控 PANEL_DEAD +

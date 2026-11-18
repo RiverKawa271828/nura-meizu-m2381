@@ -13,7 +13,7 @@
 |---|---|---|---|---|---|---|
 | TD-01 | `no_console_suspend` 保险件（内核 cmdline） | 内核包 cmdline，r72 起随包 | printk console 挂起路径上游回归（9e70a5e109a4），挂死=s2idle 睡死时代真凶；上游未修（7.3 复核） | 零成本保险件；副作用≈无 | **上游修复合入 stable + 本机连续多轮 Y 态实机验证稳定**。10-21 设备日 Y 态 3/3 全活 = 摘除候选（rc6 亦 3/3 未死 = 回归时序依赖，保险件零成本建议留），r92 轮留用户拍板 | 在册 |
 | TD-02 | ath12k 0012 三件 carry（5G 频段修复族） | 内核 fork meizu20-t4b | 单 pdev freq range 回归（0d777aa2ca77）上游未修（v7.3 复核：Shenghan 系列全不在），不 carry 则 5G 塌缩 | 每次重放随车；语义 sanity 负担 | 上游合入 Shenghan 系列即摘 | 在册 |
-| TD-03 | bloff=1 工程解（灭屏不让 DDIC 睡） | device 包 preset / 设备日用态 | 唤醒花屏病根（§4.4 DDIC sleep-out 自重初始化）未根治前的日用绕行；10-19 定谳 suspend 同走 unprepare ⇒ 日用结构性免疫毒源 | bloff 分支在 unprepare，真睡实验须 knob default 可达态 | **S5 根治达成**（knob default 真睡×5 全干净）后可关，日用默认态是否保留 bloff 留用户拍板 | 在册 |
+| TD-03 | bloff=1 工程解（灭屏不让 DDIC 睡） | device 包 preset / 设备日用态 | 唤醒花屏病根（§4.4 DDIC sleep-out 自重初始化）未根治前的日用绕行；10-19 定谳 suspend 同走 unprepare ⇒ 日用结构性免疫毒源 | bloff 分支在 unprepare，真睡实验须 knob default 可达态 | **S5 根治达成（2026-11-19 D4-1 判过：真睡×5 全净）**——真睡面已治愈；**DPMS 灭屏面未复测**（D4-1 断电路径同覆盖 unprepare，理论同治），日用默认是否摘 bloff 留用户拍板 | 根治达成，摘除待拍板 |
 | TD-04 | 在机 rootfs = CI r86-phosh（非发布面） | 设备现态 | 10-18 深夜刷回取证用；非 r91 发布面 | waydroid/flatpak 缺位、device r60（无 iio fork r3 闭合时曾热修）、fw r3 | 择时重刷 r91 rootfs（发布面 8 件制）即清账；不急 | **已还（11-19 回位直刷 r91-phosh rootfs，首 boot 验收全绿）** |
 | TD-05 | apk 腿 `--allow-untrusted` 配方 | upgrade.sh / flash-batch 配方 | CI rootfs 烤 CI 临时钥（pmos@local-6acea657），本地钥（6aaed2ab）签的包必 UNTRUSTED 假绿（RC=99 零输出） | 绕过签名校验=信任链降级（仅本地升级腿）；换钥路径无人审计 | CI rootfs 改烤发布面本地钥，或包目录统一钥源后撤旗子 | 在册 |
 | TD-06 | ~~NCM 网段漂移（172.16.42.x→10.42.0.x）~~ | ~~设备重启后；devsh 硬编码 172.16.42.1~~ | ~~NM 双系统残留行为~~ **2026-11-19 用户定谳：非 NM 漂移，是用户手动更改 USB 模式所致，设备行为正常** | 无（正常态） | 无需去债 | **关闭（根因 = 人工操作）** |
@@ -85,3 +85,15 @@
 3. **干净机首航**：发布面成立判据（第二台机器/容器从零 setup→build→flash）——
    项目自 10-07 起在册的遗留，恰 = skill 第 7 步完成标准；排队等条件（第二台机器
    或容器）。
+7. **Gunyah VM 通道移植**（11-19 评估轮，用户拍板「以后再说」）：硬件/固件面全通
+   （stock FDT 自带 gunyah-hypervisor-1.0 全套节点）；缺口 = 主线驱动已删需旧版
+   （6.8 时代 v1.0 语义，SM8550 = 原参考平台）树外移植 + DT 节点（⚠主线
+   sm8550.dtsi 无 gunyah_hyp_mem 保留区不补会雷）+ crosvm 打包 + librevm quirks
+   平移。中型战役，评估全文 = 记忆 meizu20-gunyah-vm-feasibility。
+8. **s2idle 睡中拔线 = 硬复位 3/3**（11-19 设备窗实锤，面板路径无关）：候选域 =
+   typec/ucsi/pmic-glink wake IRQ 深 suspend 语境崩溃；复现配方 = rtcwake 长睡中
+   拔线；判别 = RTC 唤醒同态全净。独立小战役，与 D4-1/花屏无涉。
+9. **s2idle freeze 活锁 waker 识别**（11-19 kprobe 判词续）：活锁期系统仍响应但
+   dwc3 掉总线 ⇒ netconsole 唯一通道；配方 = livelock 轮 + /proc/interrupts 差分
+   （或 irq trace）→ 定名 waker → 定向修复。A1 疗效存疑（实测全 WFI）——挂 fd
+   一发判生死，同窗拼车。

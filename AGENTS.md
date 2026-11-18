@@ -11,9 +11,8 @@
 >    ≥40 才继续干活；**旧目录保留勿删（底档）**。
 > 2. **主档必读**：pmos_linux 私有仓 `AGENTS.md` = 硬定律/硬性禁令/交互通道
 >    与操作纪律/坑册的单一事实源（本文不复制）。
-> 3. **任务链**：读下文「现态」节 → 按 `docs/rootcure-window-card-20261101.md`
->    开工（等门时先跑开工惯例检查）。**每项独立可停，commit 不 push
->    （推送窗口 = 用户）**。
+> 3. **任务链**：读下文「现态」节（根治轮主件已判过收官，残面在队列节）。
+>    开工先跑开工惯例检查。**每项独立可停，commit 不 push（推送窗口 = 用户）**。
 
 ## 这是什么 / 不是什么（边界，2026-10-06 定）
 
@@ -43,41 +42,41 @@ docs/FLASHING.md 刷机教程（每步带验证点）——动手前必读
 docs/PIPELINE.md 构建管线 + Phase-2 发布清单
 MANIFEST.md      现役产物表 + 已知非回归失败（首 boot 看到别慌的三件）
 artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
-docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
+docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.md；根治卡已收官归档）
 ```
 
-## 现态（2026-11-19 更；新会话从这里接）
+## 现态（2026-11-19 根治轮设备窗夜更；新会话从这里接）
 
-- **设备**：**11-19 回位直刷 ✅ 验收全绿**（设备自 iOS 链回 nura，用户在场授权）：
-  boot_b **mu-r91**（首刷，dtb 同源）+ recovery_a **v71** + userdata **Release
-  r91-phosh rootfs**（= CI 发布件同字节，device r63 + fw r3 + iio fork r3 +
-  waydroid 五件 + flatpak 商店全烤入；**TD-04 闭合，CI r86 底退役**）。
-  在机实测 = **#92 + v71 + apk r91**：uname #92 ✓ / MEIZU20 声卡 ✓ / 背光 ✓ /
-  **failed 0**（首 boot 竞态零出现）/ journal 无新红 / **读回双对**（boot_b 逐字节
-  350386e0 + recovery_a 0a102220）/ wowlan 武装 ✓ / bloff=1 日用态 ✓ /
-  iio-sensor-proxy + meizu-wowlan 双 active ✓ / cpuidle psci_idle ✓。
-  **devselfcheck 首跑 11-19**（--light 4 过/2 警/1 败）：A7 5G「零频点」= 判读器
-  假阴性（iw 6.17 格式，实测频点全在位；适配件 = TECH-DEBT 候补 6）；**新发现 =
-  传感器链 iio 零节点**（meizu-sensorspd session active + ADSP running + /mnt/dsp
-  在，但 /sys/bus/iio/devices 空；restart 复探一次仍空）——挂设备窗查因（对照
-  10-03 配方 -R/-d 参数与节点产生机制）。
+- **设备**：**11-19 根治轮·设备窗 ✅ 收官（用户全程在场）**——在机 = **#95 + v74
+  （读回 03f2b162）+ mu-r91 + r91-phosh rootfs**；knob 日用态（bloff=1/pps_late=1）/
+  wowlan 武装 / failed 0 / kprobe 通道 OK（KPROBE_EVENTS 首次上机）。
+  **花屏 D4-1 判过 = 花屏战役首个正面治疗**：r92（D4 三件）判负[治疗臂 5/5 全花，
+  标准命令域排除面闭合]→ D4-1 冷启等价化[真睡尾 reset 拉低+VREG 全断+轨拍
+  5/5/10+背光恢复；真睡×5 用户眼判 5/5 全净+屏亮；dsi_err 零新增；M3 留轨退役；
+  fork `c23b9afbfdab`+`4daca08159fe`]。**r94 升现役钉，发 Release 留用户**
+  （TD-03 bloff 改「根治达成摘除待拍板」；DPMS 灭屏面未复测）。
+  **S2IDLE 段 4 kprobe 判词反转**：limit 无界实锤 + **「深塌缩」证伪**（全
+  WFI + psci_in=0）+ **freeze 唤醒风暴活锁**定位（黑屏假挂死，电源键可打回）；
+  A1 疗效存疑；下一手 = waker 识别（netconsole 唯一通道）+ A1 挂 fd 一发判生死。
+  **新雷 = s2idle 睡中拔线 = 硬复位 3/3**（面板路径无关，候补池独立查）。
+  **E 长跑跑中**（60 轮观测窗版，R1/R2 = 302s 真睡真醒 2/2 全净；(开,开)），
+  ~中午收全量日志；**E 结果未出前不碰设备**（睡中拔线/电源键都会污染轮次）。
+  devselfcheck A7 判读器适配 + iio 零节点查因仍挂设备窗（TECH-DEBT 候补 6）。
   **SIM 已插（可用卡）→ 蜂窝复燃窗开**。iOS 线并行走用户——**iOS 工作区/
   文档零接触，传话 = 用户转告**。
-- **预备件（验证件不上机不发布，照 r88/v69 先例）**：apk **r92**（vmlinuz
-  `c1583825`）+ ESP **v72**（裸 `37e3f9c7` / gz `18fd54a0`）= D4 三件拼车轮
-  （D4-2 m2582 fb4e8c5d 移植 + D4-3 wake_pps_late default=true + D4-4 sanity LP
-  读），verify 全绿，**期望 #93**；**fw r4**（11-07 蜂窝复燃备料：+modem_pr
-  mcfg/so 158 件，pmaports `f2885ef`，本地 apk 全绿未发布，S3 拦截点缺料假说弹药）。
-- **发布面**：**Release r91 = Latest**（8 件制；7.3 stable rebase 首发 + device
-  r63 传感器依赖闭合）；回退 = r87/v68/r62。升级口径 = apk 腿 + ESP 腿原地升级
-  （`script/upgrade.sh`，⚠真跑须显式 --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
-- **队列**（**设备回链门 ✅ 11-19 开**；SIM 已插）：①**根治轮·设备窗 =
-  [docs/rootcure-window-card-20261101.md](docs/rootcure-window-card-20261101.md)**
-  （花屏 r92 上机 A/B[upgrade.sh 双腿
-  --apk r92 --esp v72 → #93 → 真睡×5 用户眼判]∥ S2IDLE E 长跑 + 段 4 kprobe；
-  一窗双案；花屏腿剩余门 = **用户在场窗**；
-  ★花屏腿 21 Note 门已判毕收门（11-06 空样本判词 = PANEL §6 条 10）；S2IDLE
-  腿本不受门）；
+- **版本钉**：apk **r94**（vmlinuz `6b89fd03`，在机 #95）+ ESP **v74**（裸
+  `03f2b162` / gz `51af67b3`，在机）= D4-1 冷启等价化轮**判过**；r92/v72 判负
+  退役（治疗臂 5/5 全花）；r93/v73 = D4-1 无背光修复版退役（真睡醒屏黑）；
+  pmaports 拼车 `51a38c0`（KPROBES/KPROBE_EVENTS/FTRACE/PM_QOS + 摘 KVM/F2FS；
+  ⚠config 陈旧重复行坑两连，config 改动必须解包 apk 验 /proc/config 再上机）；
+  **fw r4**（11-07 蜂窝复燃备料：+modem_pr mcfg/so 158 件，pmaports `f2885ef`，
+  本地 apk 全绿未发布）。
+- **发布面**：**Release r91 = Latest 不变**（8 件制）；r94 是否发 Release 留用户。
+  升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑须显式
+  --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
+- **队列**：①**根治轮 = 花屏主件已判过收官**（PANEL §6 条 11）；残面 = **E 长跑
+  收日志**（跑中）→ **waker 识别**（netconsole）+ A1 一发判生死 + 拔线雷独立查
+  （TECH-DEBT 候补 8-9）；
   ②**蜂窝复燃·设备窗 = [docs/cellular-reactivation-card-20261107.md](docs/cellular-reactivation-card-20261107.md)**
   （11-06 用户点名复燃「参考 21 Note 仓来修」→ 11-07 离线备料 ✅：fw r4
   [+modem_pr mcfg/so 158 件 = S3 DeviceNotReady 头号新嫌疑的缺料]pmaports
@@ -88,10 +87,12 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
   卡归档 docs/archive/）
-- **开工惯例**：stable 检查 30s（11-06 复核：v7.3.1 已出 = **40 修批零交集**
-  io_uring/keys/tracing 域，TD-01 printk 修复未进、TD-02 ath12k 未进 → **不跟进**；
-  v7.4-rc1 已出照政策不追；下轮复查起点 = 7.3.2 / 7.4 正式）；
+- **开工惯例**：stable 检查 30s（11-19 复核：**v7.3.2~7.3.5 已出 = printk/ath12k/
+  msm 三域零交集不跟进**[7.3.1 同判延续]；v7.4-rc3 已出照政策不追；下轮复查
+  起点 = **7.3.6 / 7.4 正式**）；
   设备现态探测先行（devsh 连通 / uname / wowlan / cpuidle / failed 计数）。
+  ⚠E 长跑跑中时（B-1）设备探测降级为只读轮间观测窗（睡中拔线/电源键 = 污染轮次，
+  拔线还有复位雷）。
 - **已关闭（勿重做/勿再提）**：rc7 演练、路线 D、NCM 漂移修、ath12k B 路（挂起
   待点名）、stock 唤醒 DCS 抓取（窗口已关）、上游化（10-14 用户终判 fork=终态）、
   DP 外接（⛔硬件断）、GPT 外脑通道（花屏自研攻坚）。
@@ -165,7 +166,7 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
 | 面板花屏 case 包（排雷表 / bloff 工程解 / S5 对拍 / D1-D4） | docs/PANEL-CORRUPTION.md |
 | 音频 bring-up 方法论（出声必需清单 / probe 竞态 / 工作点 / UCM 坑 / 录音边界） | docs/AUDIO-METHOD.md |
 | 技术债唯一出处（去债条件 / NO-GO 集 / 候补小件池） | docs/TECH-DEBT.md |
-| **下一轮执行卡（根治轮·设备窗）** | docs/rootcure-window-card-20261101.md |
+| **下一轮执行卡（蜂窝复燃·设备窗）** | docs/cellular-reactivation-card-20261107.md |
 | **蜂窝复燃·设备窗执行卡（备料毕）** | docs/cellular-reactivation-card-20261107.md |
 | 已收官轮次卡 / 历史研究档（10 张，✅/📚 标注） | docs/archive/（考古用，勿接排面） |
 | 历史战报全量（10-13~10-30 接续卡原文 + 带话四轮回信） | docs/AGENTS-ARCHIVE-20261101.md（只读快照） |

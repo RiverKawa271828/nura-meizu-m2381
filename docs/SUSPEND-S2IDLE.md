@@ -507,6 +507,40 @@ magic packet 不通的根因（代码级，可复燃）：root port 的 of_node 
 
 ---
 
+## 7.5 段 4 kprobe 实证 = 「深塌缩」证伪 + freeze 活锁定位（2026-11-19 设备窗，r94/KPROBE_EVENTS 首验）
+
+> 依据 = `docs/meizu20/s2idle-seg4-paradox-20261029.md` §4 方案 +
+> `s2idle-hang-data-20261024/kprobe-seg4.sh`；(关,开) 配置（wowlan disable +
+> cpuidle 开）rtcwake 300s 挂死轮，探针 3056 事件全量落 `/var/log/kprobe-seg4.log`
+> （ext4 复位存活），日志拉回宿主分析。
+
+1. **悖论上半场坐实**：`s2i_in limit_ns` = **3056/3056 全部 `0x1f3fffffc18`**
+   ≈ S32_MAX×1000 = **NO_CONSTRAINT 实锤**——freeze 选态路径确实无延迟约束，
+   A1 的立论前提（`/dev/cpu_wakeup_latency` 持 fd 可界）成立。
+2. **「深塌缩」当场证伪（判词反转）**：`s2i_out index` = **100% `0x0`（WFI）**
+   + `psci_in` = **0**（全程零 PSCI 深态调用）——整个挂死轮 CPU 从未进过
+   state1/深态。「freeze 中簇塌缩可达」（§源码面推演）= 可达 ≠ 实测路径。
+   A1（限 10µs → 只剩 WFI）对本家族**疗效存疑：实测已经全是 WFI，限界不改变
+   行为**。
+3. **真机制 = freeze 期唤醒风暴活锁**：时间线 t=70s→225s **连续无间断**
+   （~155s，~60 ev/s 均匀率，无冻结窗）——CPU 持续 s2i_in/s2i_out 循环，
+   **freeze 永不凑齐**（某设备 IRQ 周期性打醒），系统卡在 suspend 半途 =
+   外观「黑屏挂死」实为活锁。电源键（唤醒 IRQ）可把轮打回（本轮 boot_id 不变，
+   用户实按恢复）。
+4. **同族事故分离（同窗新数据）**：**s2idle 睡眠中拔线 = 硬复位触发器
+   3/3**（r93/r94-stock/r94-bloff 三种面板路径同款，复位 ~35-40s = 外部看
+   门狗签名；RTC 唤醒×5 同态全净）——候选域 = typec/ucsi/pmic-glink wake IRQ
+   在深 suspend 语境的崩溃，与面板路径无关，**挂候补池独立调查**；E 长跑无人
+   值守不受影响。
+5. **下一手（按新判词重排）**：①**waker 识别** = livelock 期间
+   `/proc/interrupts` 差分（系统在活锁期仍响应，netconsole 在场抓；livelock
+   期 dwc3 掉总线 ⇒ SSH 不通，netconsole 是唯一通道）；②A1 便宜验证照跑
+   （config 已进 r94，挂 fd 一发判生死）；③ E 长跑（B-1）量化 (开,开) 真实
+   挂死率。判据工具 = kprobe-seg4.sh 复用 + `docs/meizu20/s2idle-hang-data-`
+   目录收编本轮日志。
+
+---
+
 ## 8. 已知残留与未决（截至 2026-10-12，如实）
 
 | 项 | 状态 |

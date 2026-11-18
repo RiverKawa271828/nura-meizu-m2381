@@ -603,6 +603,37 @@ leluo123/m2468-mainline，11-05 加门条件触发即审）**——
    我方管线一致（ESP 固件过多不稳/Mu 吃预编译 dtb 非 Linux 树 dts/ESP 须
    128MB），零新增风险。蜂窝情报不入本档（见记忆 m2468 审计件）。
 
+**条 11·D4 上机 A/B 判负 + D4-1 冷启等价化判过 = 花屏战役首个正面治疗结果（2026-11-19
+设备窗；r92 判负 → r94 判过，同窗两轮）**：
+1. **D4 三件判负（r92/v72，knob stock 可达态真睡×5 用户眼判 = 5/5 全花）**：
+   D4-2（RD_PTR 注销门控 PANEL_DEAD + frame-done 84ms 平值，m2582 移植）+
+   D4-3（wake_pps_late default=true，knob 实测 pps_late=1 生效）+ D4-4（sanity
+   LP 读）零疗效。**判词 = 标准命令域主机可达维度排除面闭合**（S2 表 #9-#15 +
+   D4 内核件全集），病根维持非命令维度 → D4-1（唤醒冷启等价化）升主线，照
+   rootcure 卡判负出口执行。
+2. **D4-1 实现**（fork `c23b9afbfdab` + `4daca08159fe`）：真睡尾 = enter sleep
+   后 **reset 拉低 + VREG 全断**（stock unprepare tail 形态，keep_rails 撤销）
+   + power_on 轨拍数 **2/5/0 → 5/5/10ms**（DisplayDxe case 0 ground truth）+
+   **背光恢复补丁**（首轮 r93 发现真睡醒屏黑：DDIC 断电亮度锁存归零、背光核
+   缓存不重写 0x51；全冷启路径补 backlight_update_status，同 bloff 捷径/cycle
+   路径形态）。bloff/d28 日用捷径零改动。
+3. **r94/v74 判过证据链**：真睡×5（40s 轮，knob stock 可达态）用户眼判 **5/5
+   全净 + 屏亮正常**；客观面 = susp_success 5/5、resume 0.43s×5、**醒后背光
+   442/3515 非零**、**dsi_err 全程零新增**（冷启等价化后链路干净拆卸重建，
+   M3 时代每轮 1 条的 status=4 marker 消失）、零 recovery 事件、dsi_err 基线
+   1 条 = boot 期已知 recovery 双遍。回归全绿（rtcwake/出声/GPU 钳零/传感器/
+   WiFi 5G/failed 0）。
+4. **M3 立论翻案记录**：旧判词「reset/断电清 DDIC 补偿态 → 花屏」（2026-09-29
+   E1 轮，keep_rails 由此立）与今日实证矛盾——E1 的花屏真因 = 非冷启语境的
+   重放（留轨+重放），不是断电本身；stock 每睡必断电且全净（七缝对拍）。
+   keep_rails/M3 从 r94 起退役（真睡路径无断电保轨）。
+5. **副产品坑**：真睡×5 协议轮间隔 ≥30s（NCM 重枚举 10-30s，40s 轮背靠背发
+   射会吃掉输出）；r92/r94 首跑读回败一次（重启竞态误伤，重刷即净）——upgrade
+   读回败 = 先重刷再怀疑镜像。
+6. **判过去向**：r94 升现役钉（config.sh/MANIFEST 已更）；**是否发 Release 留
+   用户**。残面：bloff 兜底继续留（冷启治愈现屏语义不变）；D4-1 上车后的
+   E 长跑（B-1）= 顺带的 100 轮量级真睡 soak。
+
 ---
 
 ## 7. 移植者检查单（在你的 DSC AMOLED 机上撞到同款病时）
