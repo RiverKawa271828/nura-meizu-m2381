@@ -3,16 +3,16 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-19 根治轮·设备窗更钉：**r94/v74 双腿 upgrade.sh 上机判过**——D4-1 冷启等价化（真睡尾 reset 拉低+VREG 全断+5/5/10 轨拍数+背光恢复），**真睡×5 用户眼判 5/5 全净+屏亮 = 花屏战役首个正面治疗结果**；在机 = **#95 + v74（读回 03f2b162）** + mu-r91 + r91-phosh rootfs；回归全绿（rtcwake resume 0.43s×5 / 出声 / GPU 钳零 / 传感器 / WiFi 5G / failed 0 / kprobe 通道 OK[pmaports 51a38c0 拼车]）；r92 判负退役（治疗臂 5/5 全花）；**发布面 = Release r91（Latest）不变，r94 是否发 Release 留用户**）
+## 工作态（2026-11-19 根治轮·设备窗更钉：**r95/v75 双腿上机 #96 = 花屏科学解达成且验收属实**——D4-1 冷启等价化判过 + 三形态×两时长×灭屏面全净验收 + **bloff 工程解摘除**（TD-03 已还，日用灭屏 = 真睡路径，新默认态抽查全净）；在机 = **#96 + v75（读回 09759c87）** + mu-r91 + r91-phosh rootfs；回归全绿；r92 判负退役；**发布面 = Release r91（Latest）不变，r95 是否发 Release 留用户**）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**94**（**11-19 上机在役**，本地件 `6b89fd03`；fork c23b9afb+4daca081） | 6b89fd03 | 机上 apk add |
-| ESP | **v74**（r94 内核腿；本地 gz `51af67b3` = **#95 在机件**，裸 `03f2b162` 读回对 ✓） | 03f2b162（裸） | recovery_a |
+| 内核 apk | 7.3.0_**rc6**-r**95**（**11-19 上机在役**，本地件 `16a8a872`；bloff 摘除 = 日用灭屏走真睡路径；fork c23b9afb+4daca081+2da7ac41） | 16a8a872 | 机上 apk add |
+| ESP | **v75**（r95 内核腿；本地 gz `c97f3e11` = **#96 在机件**，裸 `09759c87` 读回对 ✓） | 09759c87（裸） | recovery_a |
 | Mu 镜像 | r91（**11-19 首刷在机**；r87 起 DTS 零改动沿用，dtb 同源 c061acd9；r69 前代留档） | 350386e0 | boot_b |
 | 设备包 / 固件包 | **r63**（depends +iio-sensor-proxy 闭合；r61 起继承 waydroid 五件/r62 起 flatpak 商店）/ r3（零改动） | 2013b691 / 29c1ee88 | 机上 apk add |
 | rootfs | Release r91-phosh（**11-19 直刷在机**；裸 16147c7d = CI 发布件同字节；waydroid 五件/flatpak 商店/iio fork r3 烤入） | 16147c7d | userdata |
-| 上机期望 | `uname -v` → **#95**（11-19 双腿升级实测 ✓ 读回双对） | — | — |
+| 上机期望 | `uname -v` → **#96**（11-19 r95/v75 双腿实测 ✓ 读回双对） | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。
@@ -20,7 +20,8 @@
 
 - **r92/v72**（D4 三件拼车轮，10-29 构建 → **11-19 上机 A/B 判负**：D4-2/3/4 + knob stock 可达态真睡×5 用户眼判 **5/5 全花**——D4-2 RD_PTR 门控 / D4-3 PPS 后置 / D4-4 LP sanity 全部零疗效，标准命令域主机可达维度排除面闭合[含 D4 内核件]，病根收缩 = 非命令维度[重载语境] → D4-1 升主线，PANEL §6 条 9）。
 - **r93/v73**（D4-1 无背光修复版，11-19 上机）→ 冷启/RTC 唤醒通路实证但**真睡醒后屏黑**（DDIC 断电亮度锁存归零无人重写）→ 背光恢复补丁升 r94，本版退役。
-- **r94/v74**（D4-1 完整版，11-19 上机）→ **判过**：真睡×5 用户眼判 5/5 全净+屏亮（背光恢复生效：醒后 bl=442 非零）；pmaports 拼车 KPROBES/KPROBE_EVENTS/FTRACE/PM_QOS + 摘 KVM/F2FS 死件（config 陈旧重复行坑两连记档）。
+- **r94/v74**（D4-1 完整版，11-19 上机）→ **判过 + 科学解验收属实**（三形态×两时长×灭屏面全净）；pmaports 拼车 KPROBES/KPROBE_EVENTS/FTRACE/PM_QOS + 摘 KVM/F2FS 死件（config 陈旧重复行坑两连记档）。
+- **r95/v75**（bloff 摘除轮，11-19 用户拍板）→ 日用灭屏改走真睡路径（`bloff_default=false`），新默认态 bloff=0+pps_late=1 上机抽查全净；**TD-03 已还**。
 
 **r92/v72 D4 三件拼车轮（2026-10-29 设备日预备轮；验证件不上机不发布照 r88/v69 先例）**：
 fork `c7abcd61`（D4-2 = m2582 fb4e8c5d 移植：RDPTR 注销门控 PANEL_DEAD +

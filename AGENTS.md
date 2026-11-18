@@ -45,16 +45,19 @@ artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜
 docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.md；根治卡已收官归档）
 ```
 
-## 现态（2026-11-19 根治轮设备窗夜更；新会话从这里接）
+## 现态（2026-11-19 根治轮设备窗收官+科学解验收+bloff 摘除；新会话从这里接）
 
-- **设备**：**11-19 根治轮·设备窗 ✅ 收官（用户全程在场）**——在机 = **#95 + v74
-  （读回 03f2b162）+ mu-r91 + r91-phosh rootfs**；knob 日用态（bloff=1/pps_late=1）/
-  wowlan 武装 / failed 0 / kprobe 通道 OK（KPROBE_EVENTS 首次上机）。
-  **花屏 D4-1 判过 = 花屏战役首个正面治疗**：r92（D4 三件）判负[治疗臂 5/5 全花，
+- **设备**：**11-19 根治轮·设备窗 ✅ 收官 + 花屏科学解验收属实 + bloff 摘除**——
+  在机 = **#96 + v75（读回 09759c87）+ mu-r91 + r91-phosh rootfs**；新默认态
+  （bloff=0+pps_late=1 = 日用灭屏走真睡路径）/ wowlan 武装 / failed 0 /
+  kprobe 通道 OK（KPROBE_EVENTS 首次上机）。
+  **花屏 D4-1 判过 + 科学解验收属实**：r92（D4 三件）判负[治疗臂 5/5 全花，
   标准命令域排除面闭合]→ D4-1 冷启等价化[真睡尾 reset 拉低+VREG 全断+轨拍
-  5/5/10+背光恢复；真睡×5 用户眼判 5/5 全净+屏亮；dsi_err 零新增；M3 留轨退役；
-  fork `c23b9afbfdab`+`4daca08159fe`]。**r94 升现役钉，发 Release 留用户**
-  （TD-03 bloff 改「根治达成摘除待拍板」；DPMS 灭屏面未复测）。
+  5/5/10+背光恢复；M3 留轨退役；fork `c23b9afbfdab`+`4daca08159fe`]→ **验收 =
+  三形态（stock/legacy/构建默认）× 两时长（40s/300s）× 灭屏面（面板单循环
+  ×5）全净，用户全程眼判**（PANEL §6 条 11.7）。**bloff 工程解摘除**（用户拍板：
+  fork `2da7ac419574` bloff_default→false → r95/v75 上机 #96，TD-03 **已还**；
+  module_param 保留 = 逃生门）。**r95 升现役钉，发 Release 留用户**。
   **S2IDLE 段 4 kprobe 判词反转**：limit 无界实锤 + **「深塌缩」证伪**（全
   WFI + psci_in=0）+ **freeze 唤醒风暴活锁**定位（黑屏假挂死，电源键可打回）；
   A1 疗效存疑；下一手 = waker 识别（netconsole 唯一通道）+ A1 挂 fd 一发判生死。
@@ -64,8 +67,8 @@ docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.
   devselfcheck A7 判读器适配 + iio 零节点查因仍挂设备窗（TECH-DEBT 候补 6）。
   **SIM 已插（可用卡）→ 蜂窝复燃窗开**。iOS 线并行走用户——**iOS 工作区/
   文档零接触，传话 = 用户转告**。
-- **版本钉**：apk **r94**（vmlinuz `6b89fd03`，在机 #95）+ ESP **v74**（裸
-  `03f2b162` / gz `51af67b3`，在机）= D4-1 冷启等价化轮**判过**；r92/v72 判负
+- **版本钉**：apk **r95**（vmlinuz `16a8a872`，在机 #96）+ ESP **v75**（裸
+  `09759c87` / gz `c97f3e11`，在机）= bloff 摘除轮（r94 = D4-1 判过+验收属实底座）；r92/v72 判负
   退役（治疗臂 5/5 全花）；r93/v73 = D4-1 无背光修复版退役（真睡醒屏黑）；
   pmaports 拼车 `51a38c0`（KPROBES/KPROBE_EVENTS/FTRACE/PM_QOS + 摘 KVM/F2FS；
   ⚠config 陈旧重复行坑两连，config 改动必须解包 apk 验 /proc/config 再上机）；
@@ -74,10 +77,11 @@ docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.
 - **发布面**：**Release r91 = Latest 不变**（8 件制）；r94 是否发 Release 留用户。
   升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑须显式
   --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
-- **队列**：①**根治轮 = 花屏主件已判过收官**（PANEL §6 条 11）；残面 = **E 长跑
-  收日志**（跑中）→ **waker 识别**（netconsole）+ A1 一发判生死 + 拔线雷独立查
-  （TECH-DEBT 候补 8-9）；
-  ②**蜂窝复燃·设备窗 = [docs/cellular-reactivation-card-20261107.md](docs/cellular-reactivation-card-20261107.md)**
+- **队列**：①**花屏科学解 ✅ 达成验收属实收官**（PANEL §6 条 11.7-8）；
+  残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
+  （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
+  「放到以后做」）；
+  ②**蜂窝复燃·设备窗 = 下个会话主件（用户令 11-19）= [docs/cellular-reactivation-card-20261107.md](docs/cellular-reactivation-card-20261107.md)**
   （11-06 用户点名复燃「参考 21 Note 仓来修」→ 11-07 离线备料 ✅：fw r4
   [+modem_pr mcfg/so 158 件 = S3 DeviceNotReady 头号新嫌疑的缺料]pmaports
   `f2885ef` 本地 apk 全绿未发布；全序 S-0~S8 = tqftpserv 根直读判据 → 解封

@@ -633,6 +633,21 @@ leluo123/m2468-mainline，11-05 加门条件触发即审）**——
 6. **判过去向**：r94 升现役钉（config.sh/MANIFEST 已更）；**是否发 Release 留
    用户**。残面：bloff 兜底继续留（冷启治愈现屏语义不变）；D4-1 上车后的
    E 长跑（B-1）= 顺带的 100 轮量级真睡 soak。
+7. **✅ 科学解验收属实（2026-11-19 同日加验，用户全程眼判）**：r94 上三形态
+   独立过——stock 形态（真睡×5）+ **legacy 形态**（knob default 显式
+   pps_late=0 前置，短睡×4）+ 构建默认形态（bloff=0+pps_late=1）；两时长——
+   40s 短睡 + **300s 长睡×2**（resume 0.436/0.440s）；**灭屏面**——面板单循环
+   ×5（cycle 旋钮 = unprepare→prepare→enable 真掉电重建，journal 5 次
+   `r22: sleep/wake cycle done`）+ 新默认态抽查×2。客观面每轮 = 背光恢复在位
+   （bl=442/140 非零）+ dsi_err 零新增 + D4-4 sanity 每次冷启应答 + 零
+   recovery。**判词：D4-1 治愈与包形态无关、覆盖长短睡与灭屏面，花屏科学解
+   达成属实。**
+8. **✅ bloff 工程解摘除（2026-11-19 用户拍板「摘除，现在做」）**：fork
+   `2da7ac419574` `bloff_default=false` → r95/v75 双腿上机 **#96**（读回
+   `09759c87`）——日用灭屏改走真睡路径，新默认态（bloff=0+pps_late=1）开机
+   即验 + 面板循环×2 + 真睡×1 抽查全净；**TD-03 已还**。module_param 保留 =
+   逃生门（`boe_meizu20.bloff_default=1` / `knob bloff`）。功耗面微变（真睡
+   sleep-mode 电流 vs 黑帧近零）已知悉。§5 bloff 节自此文起 = 历史档案态。
 
 ---
 
