@@ -46,11 +46,17 @@ artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜
 docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
 ```
 
-## 现态（2026-11-01 更；新会话从这里接）
+## 现态（2026-11-19 更；新会话从这里接）
 
-- **设备**：pmOS 出厂组合回位可用 = **#92 + ESP v71 + apk r91 + CI r86-phosh
-  rootfs**（device r63 + fw r3 + iio fork r3；bloff 日用态 + failed 0 + wowlan
-  武装 + cpuidle 锁）。iOS 线并行走用户——**iOS 工作区/文档零接触，传话 = 用户转告**。
+- **设备**：**11-19 回位直刷**（设备自 iOS 链回 nura，用户在场授权）：boot_b
+  **mu-r91**（首刷，dtb 同源）+ recovery_a **v71** + userdata **Release
+  r91-phosh rootfs**（= CI 发布件同字节，device r63 + fw r3 + iio fork r3 +
+  waydroid 五件 + flatpak 商店全烤入；**TD-04 闭合，CI r86 底退役**）。
+  在机期望 = **#92 + v71 + apk r91**。⚠**首 boot 验证 + 读回对 sha 未做**
+  （fastboot reboot 宿主挂为老毛病未及）——**下会话 S0 第一件先补**：
+  FLASHING §5 清单 + `readback.sh` 350386e0 / 0a102220 + 第一小时清单。
+  **SIM 已插（可用卡）→ 蜂窝复燃窗开**。iOS 线并行走用户——**iOS 工作区/
+  文档零接触，传话 = 用户转告**。
 - **预备件（验证件不上机不发布，照 r88/v69 先例）**：apk **r92**（vmlinuz
   `c1583825`）+ ESP **v72**（裸 `37e3f9c7` / gz `18fd54a0`）= D4 三件拼车轮
   （D4-2 m2582 fb4e8c5d 移植 + D4-3 wake_pps_late default=true + D4-4 sanity LP
@@ -59,19 +65,19 @@ docs/*-card-*.md 各轮执行卡（现役 = rootcure-window-card-20261101.md）
 - **发布面**：**Release r91 = Latest**（8 件制；7.3 stable rebase 首发 + device
   r63 传感器依赖闭合）；回退 = r87/v68/r62。升级口径 = apk 腿 + ESP 腿原地升级
   （`script/upgrade.sh`，⚠真跑须显式 --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
-- **队列**：①**根治轮·设备窗 = [docs/rootcure-window-card-20261101.md](docs/rootcure-window-card-20261101.md)**
-  （花屏 r92 上机 A/B ∥ S2IDLE E 长跑 + 段 4 kprobe；一窗双案；**等设备 + 用户在场窗**；
-  ★花屏腿加门（11-05 立，**11-06 判毕收门**）：21 Note 仓已开源
-  [leluo123/m2468-mainline]，当日审计判词 = **空样本**——彼屏 = 天马 ILI7838E
-  Ilitek 系**非 NT37700**，无第 2 个 ground truth 可移植；彼自身花屏另病相且修法
-  E44 未验证（对拍全录 = PANEL §6 条 10）。r92/v72 冻结照旧，排面回归原两门 =
-  设备回链 + 用户在场；S2IDLE 腿本不受门）；
+- **队列**（**设备回链门 ✅ 11-19 开**；SIM 已插）：①**根治轮·设备窗 =
+  [docs/rootcure-window-card-20261101.md](docs/rootcure-window-card-20261101.md)**
+  （S0 先补 11-19 直刷首 boot 验证 + 读回 → 花屏 r92 上机 A/B[upgrade.sh 双腿
+  --apk r92 --esp v72 → #93 → 真睡×5 用户眼判]∥ S2IDLE E 长跑 + 段 4 kprobe；
+  一窗双案；花屏腿剩余门 = **用户在场窗**；
+  ★花屏腿 21 Note 门已判毕收门（11-06 空样本判词 = PANEL §6 条 10）；S2IDLE
+  腿本不受门）；
   ②**蜂窝复燃·设备窗 = [docs/cellular-reactivation-card-20261107.md](docs/cellular-reactivation-card-20261107.md)**
   （11-06 用户点名复燃「参考 21 Note 仓来修」→ 11-07 离线备料 ✅：fw r4
   [+modem_pr mcfg/so 158 件 = S3 DeviceNotReady 头号新嫌疑的缺料]pmaports
   `f2885ef` 本地 apk 全绿未发布；全序 S-0~S8 = tqftpserv 根直读判据 → 解封
-  → aid provision → DMS 舞步 → 注册里程碑 → PLL 墙预期管理；**等设备回链 +
-  用户在场窗，与①同门可拼车/让路，用户定序**）；
+  → aid provision → DMS 舞步 → 注册里程碑 → PLL 墙预期管理；**设备回链 ✅ +
+  SIM 已插 ✅，剩余门 = 用户在场窗，与①同门可拼车/让路，用户定序**）；
   ③推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；

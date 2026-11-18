@@ -3,16 +3,16 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-10-21 rebase 正式轮更钉：在机 = **#92 + v71 + apk r91 + device r63**（upgrade.sh 双腿全绿 10-21 深夜，读回 0a102220 对 ✓ + 眼判四项过；device r63 = depends +iio-sensor-proxy 10-21 用户拍板，装机 RC=0；boot_b mu-r69 沿用）——**底 = CI r86-phosh rootfs + fw r3**（非 r87 发布面：waydroid/flatpak 缺位，补齐 = 择时重刷 r87 rootfs 或 apk 腿补 device r62+）+ iio-sensor-proxy fork r3 热修在机；**发布面 = Release r91（2026-10-21 上线 Latest）**）
+## 工作态（2026-11-19 回位直刷轮更钉：设备自 iOS 链回 nura，fastboot **三件全刷** = boot_b **mu-r91**（首刷，dtb 同源 c061acd9）+ recovery_a **v71** + userdata **Release r91-phosh rootfs**（裸 16147c7d = CI 发布件逐字节同源，内含 r91/device r63/fw r3/iio fork r3/waydroid 五件/flatpak 商店全烤入，**TD-04 闭合、CI r86 底退役**）——⚠**首 boot 验证 + 读回对 sha 未做**（fastboot reboot 宿主挂为老毛病，会话内未及）：下会话 S0 先补 = FLASHING §5 清单 + readback 350386e0/0a102220 + 用户第一小时清单；**SIM 已插 → 蜂窝复燃窗同步开**；**发布面 = Release r91（Latest）**）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
 | 内核 apk | 7.3.0_**rc6**-r**91**（CI 件在机；本地同轮件 df13faa6 异字节同源） | d2f0c51b | 机上 apk add |
 | ESP | **v71**（r91 内核腿；本地 gz `6fe7811a` = **#92 在机件**，裸 `0a102220` 读回对 ✓；CI 发布件 gz `f08139e3` 同号异字节 = TD-07） | 0a102220（裸） | recovery_a |
-| Mu 镜像 | r69（r87 起 DTS 零改动沿用；dtb 同源 c061acd9 verify ✓） | 97cdea20 | boot_b |
+| Mu 镜像 | r91（**11-19 首刷在机**；r87 起 DTS 零改动沿用，dtb 同源 c061acd9；r69 前代留档） | 350386e0 | boot_b |
 | 设备包 / 固件包 | **r63**（depends +iio-sensor-proxy 闭合；r61 起继承 waydroid 五件/r62 起 flatpak 商店）/ r3（零改动） | 2013b691 / 29c1ee88 | 机上 apk add |
-| rootfs | CI r86-phosh（**TD-04**：非发布面底，waydroid/flatpak 缺位，择时重刷 r91 rootfs） | — | userdata |
-| 上机期望 | `uname -v` → **#92**（10-21 双腿升级实测 ✓，读回 0a102220 对） | — | — |
+| rootfs | Release r91-phosh（**11-19 直刷在机**；裸 16147c7d = CI 发布件同字节；waydroid 五件/flatpak 商店/iio fork r3 烤入） | 16147c7d | userdata |
+| 上机期望 | `uname -v` → **#92**（10-21 双腿升级实测 ✓；11-19 直刷后**待下会话 S0 复验**） | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。

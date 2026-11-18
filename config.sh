@@ -48,8 +48,8 @@ APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推�
 REL_LINUX_PKGREL="92"      # r92 = D4 三件拼车轮（10-29：D4-2 m2582 fb4e8c5d 移植[RDPTR 注销门控 PANEL_DEAD + frame-done 84ms 平值，c7abcd61] + D4-3 wake_pps_late default=true + D4-4 sanity 0x0A 改 LP 读[bfc79f41]；vmlinuz c1583825；验证件不上机不发布照 r88/v69 先例，期望 #93）；r91 = 7.3 stable rebase 正式轮（在机 #92）；r90 = 首枪 stock-content 旋钮（A/B 判负）；r87 = 发布面（Release r87 Latest 不变）
 REL_DEVICE_PKGREL="63"     # r63 = depends +iio-sensor-proxy（10-21 用户拍板补名；CI rootfs 闭合根治的 depends 面收口——fork r3 自此必进构建闭合，与 build-device 预编双保险）；r62 = 摘 discover + flatpak 商店；r61 = waydroid 五件；r60 = modules-load.d 补 uhid
 REL_FW_PKGREL="3"
-REL_MU_IMG="$NURA_ROOT/artifacts/mu-r69-97cdea20.img"
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v72.img.gz"  # v72 = r92 内核（裸 37e3f9c7 / gz 18fd54a0，10-29 本地构建；v72↔r92 手工对拍 c1583825 同源；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑——沙箱背景调用不等待，首跑曾吃 r91 旧 vmlinuz 假件已重造覆盖）；v71 = r91（裸 0a102220 / gz 6fe7811a，#92 在机验过）；v70 = r90；v68 = r87 发布面
+REL_MU_IMG="$NURA_ROOT/artifacts/mu-r91-350386e0.img"      # mu-r91 = 11-19 回位直刷在机（dtb 同源 c061acd9，r87 起 DTS 零改动；mu-r69 前代沿用件留档 artifacts）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v71.img.gz"  # v71 = r91 ESP 腿（裸 0a102220 / gz 6fe7811a，#92 在机验过；11-19 回位直刷在机）；v72 = r92 验证件**待 upgrade.sh 双腿上机勿单刷**（裸 37e3f9c7 / gz 18fd54a0，10-29 构建，v72↔r92 对拍 c1583825 同源；r92 判过转现役再换钉；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑——沙箱背景调用不等待，首跑曾吃旧 vmlinuz 假件已重造覆盖）；v70 = r90；v68 = r87 发布面
 REL_KERNEL_VER="#93"       # r92 期望（#N=pkgrel+1 定律；**待上机**）
 
 # ---- 回滚锚 ----
