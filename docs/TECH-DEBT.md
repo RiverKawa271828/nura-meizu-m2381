@@ -16,7 +16,7 @@
 | TD-03 | bloff=1 工程解（灭屏不让 DDIC 睡） | device 包 preset / 设备日用态 | 唤醒花屏病根（§4.4 DDIC sleep-out 自重初始化）未根治前的日用绕行；10-19 定谳 suspend 同走 unprepare ⇒ 日用结构性免疫毒源 | bloff 分支在 unprepare，真睡实验须 knob default 可达态 | **S5 根治达成**（knob default 真睡×5 全干净）后可关，日用默认态是否保留 bloff 留用户拍板 | 在册 |
 | TD-04 | 在机 rootfs = CI r86-phosh（非发布面） | 设备现态 | 10-18 深夜刷回取证用；非 r91 发布面 | waydroid/flatpak 缺位、device r60（无 iio fork r3 闭合时曾热修）、fw r3 | 择时重刷 r91 rootfs（发布面 8 件制）即清账；不急 | **已还（11-19 回位直刷 r91-phosh rootfs，首 boot 验收全绿）** |
 | TD-05 | apk 腿 `--allow-untrusted` 配方 | upgrade.sh / flash-batch 配方 | CI rootfs 烤 CI 临时钥（pmos@local-6acea657），本地钥（6aaed2ab）签的包必 UNTRUSTED 假绿（RC=99 零输出） | 绕过签名校验=信任链降级（仅本地升级腿）；换钥路径无人审计 | CI rootfs 改烤发布面本地钥，或包目录统一钥源后撤旗子 | 在册 |
-| TD-06 | NCM 网段漂移（172.16.42.x→10.42.0.x） | 设备重启后；devsh 硬编码 172.16.42.1 | NM 双系统残留行为，未钉死 gadget 网段 | devsh/devpush 失效时须绑接口直连新网段:23（手工步骤） | NM 配置钉住 USB gadget 地址，或 devsh 改动态发现（后者更省） | 在册 |
+| TD-06 | ~~NCM 网段漂移（172.16.42.x→10.42.0.x）~~ | ~~设备重启后；devsh 硬编码 172.16.42.1~~ | ~~NM 双系统残留行为~~ **2026-11-19 用户定谳：非 NM 漂移，是用户手动更改 USB 模式所致，设备行为正常** | 无（正常态） | 无需去债 | **关闭（根因 = 人工操作）** |
 | TD-07 | ESP v71 同号异字节（CI gz `f08139e3` vs 本地 gz `6fe7811a`=#92 在机件） | Release r91 发布面 vs 在机 | CI ESP 推导撞号（v71 已被本地先建先钉占用，CI 又生成一份同号件） | 发布面 ESP 与在机 ESP 字节不同但同源同版本；读回验收口径已按"CI 件对 CI 件"记档 | 下次发布轮验证「max(release, pin)+1」推导防撞号后转记档 | 在册 |
 | TD-08 | 内核 fork tarball（270MB）gitignore + pmaports 提交 `--no-verify` | pmaports APKBUILD 提交流程 | pre-commit 钩子要求 source= 全件入 index，但 tarball 不进仓 | 校验被绕过（checksum 由构建实证兜底）；新人不知情会困惑 | 无干净解（上游化已终判弃用）；保留惯例，靠本文档知会 | 转永久 |
 | TD-09 | Mu 链无 initramfs（root=/dev/sda22 烤死在 cmdline） | 内核包 cmdline + Mu | Mu 不传 initrd，结构如此非权宜 | 换根分区/UUID 即废；救援必须走 9008 或 apk 腿 | 非债——结构性设计（见 DESIGN.md），列此防误判 | 转永久 |
