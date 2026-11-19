@@ -1,15 +1,20 @@
 # Plasma Mobile 出件 + 蜂窝续攻·执行卡（2026-11-19 交接；用户令「下个会话出件 plasma mobile，最新版，完成之后继续攻蜂窝网络；phosh 不方便看蜂窝状态」）
 
-> **状态 = 主件 A ✅ 出件 + 主件 D1 ✅ 双墙根治（2026-11-19，用户令本会话改跑蜂窝线、
-> plasma 自刷）**。A = plasma-mobile **6.8.3-r0** 上墙（world 对拍零混装，
-> `artifacts/meizu-meizu20-plasma-mobile-local.img` 3.4G + r95 gz 1.2G）——**userdata
-> 重刷 = 用户自行执行**（B 清单照 §2 跑）。D1 = **DPM Open Port 缺位实锤根治双墙**：
-> DPM open（endpoint TX=2/RX=24）→ mux bind 0xF1 (0,0) → start network (0,0) →
-> **IP 10.17.132.15 + DNS 全分 = 空口 PDP 首次建立**；残墙 = IPA 硬件通路（μC 崩尸态
-> → TX dropped 包不出 AP）须 reboot 冷启重试（候补，禁令待用户拍板）。
+> **状态 = A ✅ 出件 + B ✅ 用户自刷查收 + D1 ✅ 双墙根治（2026-11-19 同日三捷）**。
+> A = plasma-mobile **6.8.3-r0** 出件（local.img 3.4G + r95 gz 1.2G）；B = **用户已刷，
+> 查收全绿**：plasma 会话 active / failed 0 / #96 / fw r4 烤入实证（modem_pr
+> mcfg/so 在位）/ wowlan 武装 / 音频链 active——⚠新坑 = meizu-dsp-mount boot
+> 早期时序雷（by-partlabel 未就绪探测 → no dsp partition found failed；
+> restart 即愈，/mnt/dsp 挂上；候补 = 脚本加重试）+ iio 零节点复现（dsp 非因，
+> TECH-DEBT 候补 6 维持）。D1 = DPM Open Port 缺位实锤根治双墙 → 空口 PDP 首建
+> （IP 10.17.132.15）；残墙 = IPA 硬件通路。
+> **下会话主件 = C（用户令「继续攻蜂窝」）**：C1 重装蜂窝用户态（件源 =
+> tools/cellular/ 收编镜像 + 宿主 pmbootstrap cache 钉版件）→ C2 解封 →
+> **头号新判据 = 新 boot 的 IPA fatal 计数**（刷完重启后第一解封窗：
+> fatal=0 → μC 活，DPM open + /root/d1_bindmux.py 判数据面当场生死；
+> fatal 复发 → 每 boot 必现实锤 = D3 墙主体）→ C3 MM/plasma-nm 状态面实验
+> （用户核心诉求 = UI 看到蜂窝状态；禁拨号红线；需用户在场眼判托盘）。
 > 战报 = experiment-log（一百零二）+ 记忆 cellular-d1-dataplane-dpm-open-20261119。
-> 剩余 = B（用户自刷 plasma）→ C（含 plasma-nm 状态面实验 = 用户核心诉求）→
-> D 残面（IPA fatal 墙 + 端到端真包）。
 
 ## 0. 版本底数（本轮已核）
 

@@ -119,12 +119,19 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   dropped 包不出 AP，-110 永不重试）→ reboot 冷启重试 = 候补（禁令待用户拍板，
   一发判生死：fatal 不复发则 DPM+dial 配方当场打通数据）**+ 用户面（短信/通话
   = 需 VoLTE/IMS，未开）；
-  ③**Plasma Mobile 出件 ✅（同日一百零二）+ 蜂窝续攻 = [docs/plasma-mobile-cellular-card-20261119.md](docs/plasma-mobile-cellular-card-20261119.md）**
-  （**A 出件完成 = plasma-mobile 6.8.3-r0 上墙**[world 对拍零混装，
-  artifacts/meizu-meizu20-plasma-mobile-local.img 3.4G + r95 gz 1.2G 落盘，
-  **userdata 重刷 = 用户自行执行**，B 清单照卡 §2]；剩 = B 上机回归 → C 蜂窝
-  用户态回归 + MM/plasma-nm 状态面实验[禁拨号红线；用户核心诉求 = UI 看到蜂窝
-  状态]→ D 残面[IPA fatal 墙 + 端到端真包 + rf_keeper 适配候补]）；
+  ③**Plasma Mobile 出件+上机 ✅（同日一百零二；A 出件 6.8.3-r0 + B 用户自刷查收全绿
+  2026-11-19 深夜）= [docs/plasma-mobile-cellular-card-20261119.md](docs/plasma-mobile-cellular-card-20261119.md）**
+  （在机 = #96 + v75 + mu-r91 + **plasma-mobile 6.8.3-r0 rootfs**；failed 0 /
+  wowlan 武装 / fw r4 烤入实证；⚠plasma rootfs 新坑 = meizu-dsp-mount boot 早期
+  时序雷[no dsp partition found → restart 即愈，候补脚本加重试] + iio 零节点
+  复现[dsp 非因，TECH-DEBT 候补 6 维持]；蜂窝资产已刷前回收 = tools/cellular/
+  8 件收编镜像 + EFS 快照 efs-snapshot-20261119-plasma-reflash[sha 与 11-19 份
+  逐字一致 = dial 零 EFS 写入实证]）；**下会话主件 = C 蜂窝用户态回归 + 续攻
+  （用户令 11-19）**：C1 重装[卡 §3；件源 = tools/cellular/ + pmbootstrap cache
+  钉版件]→ C2 解封 → **头号新判据 = 新 boot IPA fatal 计数**（0 → μC 活 =
+  DPM open + d1_bindmux 判数据面当场生死；复发 → 每 boot 必现实锤 = D3 墙
+  主体）→ C3 MM/plasma-nm 状态面实验[禁拨号红线；用户核心诉求 = UI 看到蜂窝
+  状态；需用户在场眼判托盘]→ D 残面[端到端真包 + rf_keeper 适配候补]；
   ④推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
