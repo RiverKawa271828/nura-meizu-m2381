@@ -1,0 +1,12 @@
+[Unit]
+Description=Meizu20: cellular registration self-heal guard (rf_keeper)
+After=rmtfs.service
+
+[Service]
+Type=simple
+ExecStart=/bin/sh /usr/libexec/cell-keeper.sh
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

@@ -4,6 +4,25 @@
 C1 重装配方 = 卡 docs/plasma-mobile-cellular-card-20261119.md §3）。目录结构
 = 设备侧原路径（`root/` → `/root`，`etc/` → `/etc`）。
 
+**2026-11-19 双卡轮（一百零四）新增（根目录平铺件）**：
+
+| 件 | 设备路径 | 说明 |
+|---|---|---|
+| wms_probe.py | /root/ | QMI WMS ctypes 短信探针（info/listen/send/read；TPDU GSM7+UCS2 编解码；⚠本机 modem 响应 flags=2 的怪癖已内建适配） |
+| uim_read.py | /root/ | UIM Read Transparent ctypes（本机全拒 58，留作判别工具） |
+| ims_dial.py | /root/ | IMS PDN 拨号（mux 0xF2 + APN ims；本机网络拒 38，留档） |
+| cell-keeper.sh | /usr/libexec/ | **注册面自愈守卫（rf_keeper 落地）**：45s 轮询，session 丢失→自动 re-provision+舞步，DMS offline 死锁→舞步；受控复验通过。⚠`Q="qmicli -d qrtr://0"` 引号必须带（无引号 = sh 把 -d 当命令） |
+| cell-switch.sh | /usr/local/bin/ | **双卡切换**：`cell-switch.sh <1\|2>` = 另槽 power off → 目标槽 power on → provision → 舞步 → MM rescan；双向实证 46015(广电)↔4600(移动) |
+| units/cell-keeper.service | /etc/systemd/system/ | keeper unit（After=rmtfs；⚠勿依赖 meizu-pas——其 After=multi-user 自环会拖死 ordering cycle） |
+| units/cell-dataup.service | /etc/systemd/system/ | 开机数据面 oneshot（等 QMI→d1_dataup；boot 自动 PASS 实证） |
+| units/meizu-pas-unseal.conf | /etc/systemd/system/meizu-pas.service.d/ | **解封自动化 drop-in**（封印流程原样保留，尾接清 override+bind mpss+start；boot 后三 remoteproc running 实证）|
+
+插卡即用链（reboot 全验通过）：meizu-pas(drop-in 解封) → mpss up → rmtfs → msm-modem-uim-selection(选槽) → MM(enabled) → cell-keeper(session 兜底) + cell-dataup(数据面)。
+
+双卡形态 = **单 active 槽 + 切换脚本**（非 DSDS 双 standby）：MM qcom-soc 插件在双
+active 槽下 SIM identifier 漂移 → enable 后毫秒级 disable 循环（NM auto-enable 加速）；
+slot 2 power-off 单卡化后稳。真 DSDS 挂候补等 upstream MM。
+
 ## 出处
 
 | 件 | 出处 | 设备路径 |

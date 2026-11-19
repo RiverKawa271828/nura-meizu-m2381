@@ -1,0 +1,14 @@
+[Unit]
+Description=Meizu20: cellular data plane (DPM+dial+rmnet0 via d1_dataup)
+After=rmtfs.service
+Wants=cell-keeper.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# 等 mpss/QMI 族起来（rmtfs 收敛）后拨数据面；超时 120s 兜底
+ExecStartPre=/bin/sh -c 'for i in $(seq 1 24); do timeout 10 qmicli -d qrtr://0 --dms-get-operating-mode 2>/dev/null | grep -q "Mode:" && exit 0; sleep 5; done; exit 0'
+ExecStart=/bin/sh -c 'sleep 15; sh /root/d1_dataup.sh 223.5.5.5 >> /var/log/cell-keeper.log 2>&1'
+
+[Install]
+WantedBy=multi-user.target

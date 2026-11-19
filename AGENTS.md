@@ -45,48 +45,51 @@ artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜
 docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119.md；蜂窝复燃卡+根治卡已 ✅ 归档 docs/archive/）
 ```
 
-## 现态（2026-11-19 C 轮收官 = 蜂窝数据面端到端全通 + 托盘蜂窝态可见 ✅；新会话从这里接）
+## 现态（2026-11-19 双卡轮收官 = 插卡即用全自动链 + 双卡切换实证 ✅；新会话从这里接）
 
-- **设备**：**11-19 C 轮 ✅（一百零三）= 蜂窝「半通」→「全通+可见」：数据面端到端
-  打通（ping 60/60 零丢）+ plasma-nm 托盘蜂窝态落地（用户眼判通过）+ 流量实测
-  （用户授权）**（战报 = experiment-log 一百零三；承接一百零一 registered +
-  一百零二 DPM 根治，同日三捷）——
-  **registered/PS attached lte 460-15 广电（RSSI -72/RSRP -99/SNR 10.2）**。
-  **数据面三定律 = 蜂窝战役新圣经**（tools/cellular/README）：①主线
-  `ipa_data-v5.5.c` AP_MODEM_TX 端点 `.qmap=true` → 裸 IP 包静默丢弃
-  （TX dropped/RX 0/零 error），**rmnet0(mux_id 1) 上层件必需**
-  （CONFIG_RMNET=m 树里现成）；②SSR/dial/DPM reopen 后回程死 = RX buffer
-  无重铺 → **rmnet_ipa0 down/up bounce 重铺**（PDP 不动）；③落定窗不定
-  （5s/25s 败、裸 bounce 通）→ **bounce+ping 收敛环硬兜**（`/root/d1_dataup.sh`
-  五步环，PASS RC=0；dial 非 idempotent 可能新地址）。实测 = HTTP 0.08s /
-  HTTPS 0.13s / DNS 真解析；大文件 403 = CDN 反爬广电段源 IP 非路径。
-  C3 = MM unmask（⚠**新坑：MM 预置 Requires=msm-modem-uim-selection 摆链与
-  uim-selection 被 mask 相撞 → start rc=1 假死；摘 requires 链解**）→ qcom-soc
-  认领 → mmcli registered/home/attached/65%/IMEI/SIM 全读出 → **托盘蜂窝图标 +
-  SIM 条目 + 3/4 格信号（用户眼判）**，手工 dial 共存零干扰；**Mobile Data
-  开关灰 = 预期态**（红线禁建 NM APN profile + NM/MM 拨号链不懂 DPM+rmnet0；
-  整合轮候补）。新稳态 = MM 活 + modem-gnss/uim-selection 双 mask + 手工数据面。
-  本 boot 新崩 = `dog stalled initialization` 单发不复发（**单 SSR 后 provisioning
-  session 存活** = 101 粒度修正：session 消失 = 双 SSR/整机重启档）；EFS 三份
-  快照全等（b85cad2f/c40223e6）= 蜂窝战役零 EFS 写入。
-  底案：mcfg TFTP 缺料兑现（fw r4）/ IPA fatal 墙（101）/ DPM Open 缺位根治
-  （102，endpoint TX=2/RX=24，空口 PDP 首建）。
-  解封仪式 = 清 override（字面量 "none"≠空串坑）→bind→start→查 session→
-  re-provision（AID 显式 `A0000000871002FF86FFFF89FFFFFFFF`）→舞步；数据判活 =
-  `sh /root/d1_dataup.sh`；取证一律 journalctl -k（dmesg 环形被 GPU IFPC 刷洗）；
-  ⚠apk3 + devsh arg-less `apk info` 挂死占锁（`</dev/null` 解或清锁尸）；boot 中
-  装的 unit 只 enable 不 start（rmtfs/tqftpserv 手动拉起）；NM restart 冲
-  default route + 孤死 modem 呼叫（重跑 d1_dataup 愈）。
-  在机 = **#96 + v75（读回 09759c87）+ mu-r91 + plasma-mobile 6.8.3-r0 rootfs**；
-  新默认态（bloff=0+pps_late=1）/ wowlan 武装 / failed 0 / kprobe 通道 OK。
-  **花屏 D4-1 判过 + 科学解验收属实**（三形态×两时长×灭屏面全净，用户眼判；
-  r95 升现役钉）；**bloff 工程解摘除**（fork `2da7ac419574`，TD-03 已还）。
-  **S2IDLE 段 4 kprobe 判词反转**：limit 无界 + 深塌缩证伪（全 WFI）+ freeze
-  唤醒风暴活锁定位（电源键可打回）；waker 识别（netconsole）+ A1 一发判生死挂候补。
-  **新雷 = s2idle 睡中拔线 = 硬复位 3/3**（候补池独立查）。
-  devselfcheck A7 判读器适配 + iio 零节点查因仍挂设备窗（TECH-DEBT 候补 6）。
-  **SIM = 广电测试卡（460-15/cbnet 已证，流量已授权测试）**。iOS 线并行走用户——
-  **iOS 工作区/文档零接触，传话 = 用户转告**。
+- **设备**：**11-19 双卡轮 ✅（一百零四）= 蜂窝自动化 + 双卡（用户令「插卡即用/
+  随意切换/设置状态栏显示」，离场授权捣鼓；战报 = experiment-log 一百零四；
+  承接一百零三数据面全通）——**
+  **registered/PS attached 5gnr 460-15 广电；rmnet0 活（ping 2/2 26ms）；
+  MM enabled 稳态+信号读出（41-48%）；failed 0**。
+  **插卡即用全自动链（reboot 全验×2 通过）** = meizu-pas **drop-in 解封**
+  （`unseal.conf`：封印流程保留+尾接清 override+bind mpss+start；⚠勿另立 unit
+  挂 meizu-pas 依赖——其 After=multi-user+WantedBy 自环拖死 ordering cycle，
+  systemd 会砍新件）→ mpss up → rmtfs → msm-modem-uim-selection（**pmOS 官方
+  形态 enable**：RequiredBy=MM+multi-user；单 active 槽下与 MM 零冲突）→
+  MM enabled → **cell-keeper**（rf_keeper 落地：45s 轮询，session 丢失→自动
+  re-provision slot1+舞步，DMS offline 死锁→舞步；受控复验通过：deactivate 后
+  75s 自动回 registered）+ **cell-dataup**（boot 自动 d1_dataup，PASS 实证
+  = 队列⑥ rmnet0 持久化落地形态）。全部件收编 tools/cellular/。
+  **双卡形态 = 单 active 槽 + 切换脚本**：MM qcom-soc 插件双 active 槽 hot-swap
+  误判（enable 内毫秒级 SIM identifier 漂移→disable 循环 21 次/min；**NM
+  auto-enable = 循环加速器**实锤[autoconnect check 特征；stop NM 循环消失]）→
+  `uim-sim-power-off=2` 单卡化即稳；**cell-switch.sh 双向实证**（46015 广电 ↔
+  4600 移动；两卡同 AID[UICC 模板]，区分靠 slot 参数）。真 DSDS 双 standby 挂
+  候补等 upstream MM。
+  **短信主件 A 半武装收兵（三墙记档）**：①WMS transport (1,52) DeviceNotReady
+  （投递域未激活，LTE/5G 同态，无用户态旋钮；实发两条 test 未达设备）②IMS PDN
+  网络拒（mux 0xF2+APN ims bind 全绿 → start IPv4=3GPP_NETWORK_FAILURE/38、
+  IPv6=IPv6 类 1 = 测试卡 IMS 接入未授权，运营商面）③SMSC 缺失（bare→73/
+  空头→58 双签名）+ UIM 文件读取系统性拒（EF_MSISDN/SMSC/ICCID 三文件变体矩阵
+  全 58）。探针链全通（wms_probe.py：ctypes WMS+libqmi 定义+TPDU GSM7/UCS2）。
+  复燃路 = MM enable 序列 / 运营商 IMS 订阅。收发工具链留机+收编。
+  **坑册新增**：本机 modem WMS 响应 flags=2（tid==0 才是 indication，tid 回显
+  非零=响应）；Raw Send format=0x06（GSM_WCDMA_POINT_TO_POINT）；qmicli NAS
+  组合 mode 语法不认（单值 `5gnr` 可）；sh 无引号 `Q=qmicli -d qrtr://0` =
+  `-d: not found`（keeper/switch 双中招）；DMS offline 态机死锁（reset 也只回
+  offline，唯一恢复=reboot）；mpss stop 无 fatal 也静默拒（101 判词升级：本平台
+  stop 常态不可用）；MM restart 搅注册（init 碰 UIM；静态 active 共存零干扰，
+  init/enable 流程是干扰源）；libqmi 拉定义 = gitlab API tree 找 data/qmi-service-*.json。
+  **D3 签名 ledger 更新**：fatal boot 数据面照通（本 boot fatal ×2 + dataup PASS
+  ——「fatal 必瘫数据面」102 判词作废）；签名不定根治仍挂。
+  解封仪式（手工形态备查）= 清 override（"none"≠空串）→bind→start→查 session→
+  re-provision（AID `A0000000871002FF86FFFF89FFFFFFFF`）→舞步；数据判活 =
+  `sh /root/d1_dataup.sh`；切换 = `cell-switch.sh <1|2>`；取证 journalctl -k。
+  在机 = **#96 + v75 + mu-r91 + plasma-mobile rootfs**；slot 2 移动卡 power-off
+  待命；EFS 快照**四份全等**（b85cad2f/c40223e6；第四份 = efs-snapshot-20261119
+  -sms-round）；NAS 5gnr-only 偏好非持久（reboot 回 auto，网络侧自驻 5gnr）。
+  iOS 线并行走用户——**iOS 工作区/文档零接触，传话 = 用户转告**。
 - **版本钉**：apk **r95**（vmlinuz `16a8a872`，在机 #96）+ ESP **v75**（裸
   `09759c87` / gz `c97f3e11`，在机）= bloff 摘除轮（r94 = D4-1 判过+验收属实底座）；r92/v72 判负
   退役（治疗臂 5/5 全花）；r93/v73 = D4-1 无背光修复版退役（真睡醒屏黑）；
@@ -101,20 +104,20 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
   「放到以后做」）；
-  ②**蜂窝线 ✅ 同日三捷收官（11-19）：复燃 registered（一百零一）→ DPM 根治
-  空口 PDP 首建（一百零二）→ **数据面端到端全通 + 托盘可见（一百零三 C 轮）**。
-  **下会话主件 = 蜂窝用户面轮（用户令 11-19 深夜）=
-  [docs/cellular-userplane-card-20261119.md](docs/cellular-userplane-card-20261119.md）**：
-  主件 A 短信收发探针（首选，MM messaging/qmicli WMS，流量成本零）→ B 5G SA
-  偏好钉住（搭车件）→ C 双卡/DSDS（**槽 2 中国移动卡已插、modem 已识别**；
-  uim-selection 摘 mask = 独立变量）→ D VoLTE 信令（IMS PDN 变体→注册→网络面
-  振铃；**音频不做** = 主线普遍墙单独战役）。**⛔流量总预算 ≤100MB（用户钉死）**；
-  slot 使能/uim-selection 摘 mask 前 EFS 快照先行（第四份）。做不完 = 候补逐个
-  解决（用户令）。残面候补 = **①NM/MM 整合轮**（Mobile Data 开关点亮：dispatcher
-  预发 DPM open + 建 rmnet0 学真经；需用户在场）**②rf_keeper 自愈 unit**（UniXNU
-  pdp.h status indication 0x22 钩子现成）**③per-boot modem init 崩根治**（dog/
-  ipa fatal 签名不定 = D3）**④MM 活态跨 reboot 验证**⑤rmnet0 持久化（进 device
-  包候选）⑥通话音频战役（大后期，ADSP voice session RE）；
+  ②**蜂窝线 ✅ 六连收官（11-19 同日）：复燃 registered（一百零一）→ DPM 根治
+  空口 PDP 首建（一百零二）→ 数据面端到端全通+托盘可见（一百零三 C 轮）→
+  **双卡轮（一百零四）：插卡即用全自动链 + 双卡切换实证 + keeper 自愈 +
+  rmnet0 持久化落地 + MM 跨 reboot 验证通过**（执行卡 cellular-userplane-card
+  已执行大半 → 状态行更新；残面见下）。残面候补 = **①NM/MM 整合轮**
+  （Mobile Data 开关点亮：NM connection profile = 红线待用户拍板 + dispatcher
+  预发 DPM open/学 rmnet0 真经；需用户在场）**②真 DSDS 双 standby**（等
+  upstream MM 双 active 槽 hot-swap bug 修复）**③短信三墙复燃**（投递域
+  not ready / IMS PDN 网络拒 38 / SMSC 缺失——复燃条件在案）**④B 件 NAS 模式
+  偏好持久化**（单值 set 可用但不持久）**⑤per-boot modem init 崩根治**（dog/
+  ipa fatal 签名不定 = D3；fatal boot 数据面照通判词更新）**⑥设备包化**：
+  cell-keeper/cell-dataup/meizu-pas drop-in/cell-switch 四件进 device-meizu
+  -meizu20 候补（设备侧 /etc+/usr 层已验，进包 = 下轮构建拼车）**⑦通话音频
+  战役**（大后期，ADSP voice session RE）；
   ③**Plasma Mobile 出件+上机+蜂窝用户态回归 ✅ 全链收官（同日；A 6.8.3-r0 出件 +
   B 用户自刷查收全绿 + C ✅ 本轮 = 卡 docs/plasma-mobile-cellular-card-20261119
   全项达成 → ✅ 已归档 docs/archive/）**（在机 = #96 + v75 + mu-r91 +
