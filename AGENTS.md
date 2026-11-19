@@ -176,8 +176,18 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   历史包袱）；⚠已知交接点 = cell-dataup 虽 simple 但 ExecStartPre 120s QMI 等待仍属
   start job 阻塞 multi-user ~2min（critical-chain 铁证）→ 等待移入 ExecStart 脚本体；
   拨号面保持 dataup 后台化（MM bearer dial = IPA fatal 炸弹在册，官方 bearer 路不可
-  抄）；风险预案 = mpss 内核态首波 EFS 无应答 crash 1-2 轮收敛（crash-recovery +
-  rmtfs 无限重试兜底），boot 挂 = blacklist 单文件 devpush 秒回滚 ②相机 CSI 扫频续攻
+  抄）；**官方时序 ground truth（11-20 取证定谳，Alpine/一加6/FP 三源）**：
+  内核 PAS 自动 probe（无 blacklist，DSP/mpss 早于一切服务）→ udev-settle → rmtfs
+  （simple 守护，respawn 1s 无限重试内置 = 我们的无限重试 drop-in 与官方等价；官方
+  命令行带 `-s` = modem remoteproc 与 rmtfs 联动启停 = 官方 modem 生命周期机制，无
+  解封服务；r69 决策点 = 内核 autoprobes 后 `-s` 语义自动满足，检查我们的 rmtfs 启动
+  参数是否带 -s）→ MM/NM（After=rmtfs）→ 数据按需拨（官方无 boot 拨号件；我们 dataup
+  后台化保留 = IPA 特殊性）；**uim-selection 官方 FIXME 实锤背书 r67 摘件**（pmaports
+  main 归档一加5/5T 原文：「hangs boot for some 20 seconds when installed with
+  non-free FW」，官方同构坑早踩过并绕开）；modem-gnss = 官方 soc-qcom-modem-systemd
+  原样件（刷屏观察）。预期效果 = graphical 2min→~1min（ADSP 内核态 + multi-user 不再
+  被 dataup 拖 2min）；风险预案 = mpss 内核态首波 EFS 无应答 crash 1-2 轮收敛（
+  crash-recovery + rmtfs 无限重试兜底），boot 挂 = blacklist 单文件 devpush 秒回滚 ②相机 CSI 扫频续攻
   （用户拍板推入；每档 systemd-run 隔离 + timeout，禁 kill 流进程；先取证 D 态挂点
   /proc/pid/stack）③hub_3 竞态自动踢候补（设备包 service/tmpfiles 小件）④GN5 主摄
   [CPHY 5.66G 难度峰值]→ GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件] → 5E9 景深
