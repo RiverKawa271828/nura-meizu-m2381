@@ -167,9 +167,19 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   ③`.requires/` 链接不吃 drop-in 空赋值重置 ④打包前查旧手工件在跑（单例资源）
   ⑤qmicli 单横线吃 stderr = devsh 假空输出。候补小件 = 解封尾段×rmtfs 时序竞态
   （boot 期静默失败手动即中）+ temp.json 刷屏限速（非致命）+ reboot 挂死干净态观察。
-  详录 = experiment-log（一百零九）。**下会话排面 = ①相机 CSI 扫频续攻（用户拍板
-  推入；每档 systemd-run 隔离 + timeout，禁 kill 流进程；先取证 D 态挂点
-  /proc/pid/stack）②hub_3 竞态自动踢候补（设备包 service/tmpfiles 小件）③GN5 主摄
+  详录 = experiment-log（一百零九）。**下会话排面 = ①r69 开机顺序官方化（用户拍板
+  「不要历史包袱」+ 参照一加6[官方 main 档高通，启动顺序最正统]与 FP5/FP6）：摘
+  `qcom_q6v5_pas`/`qcom_q6v5_mss` blacklist[定位 = /lib/modprobe.d/
+  device-meizu-meizu20.conf:10-11，包内源文件待查]→ PAS 内核态自动 probe（ADSP/CDSP/
+  mpss 比一切服务早）→ meizu-pas.service 退役 + keeper 解封段撤[mpss 内核自起]；
+  **i2c_qcom_geni/hv_haptics blacklist 保留** = 活安全律（880000.i2c 致死在案，非
+  历史包袱）；⚠已知交接点 = cell-dataup 虽 simple 但 ExecStartPre 120s QMI 等待仍属
+  start job 阻塞 multi-user ~2min（critical-chain 铁证）→ 等待移入 ExecStart 脚本体；
+  拨号面保持 dataup 后台化（MM bearer dial = IPA fatal 炸弹在册，官方 bearer 路不可
+  抄）；风险预案 = mpss 内核态首波 EFS 无应答 crash 1-2 轮收敛（crash-recovery +
+  rmtfs 无限重试兜底），boot 挂 = blacklist 单文件 devpush 秒回滚 ②相机 CSI 扫频续攻
+  （用户拍板推入；每档 systemd-run 隔离 + timeout，禁 kill 流进程；先取证 D 态挂点
+  /proc/pid/stack）③hub_3 竞态自动踢候补（设备包 service/tmpfiles 小件）④GN5 主摄
   [CPHY 5.66G 难度峰值]→ GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件] → 5E9 景深
   ④回归清单补全（zram✓/输入✓ 已抽查）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
