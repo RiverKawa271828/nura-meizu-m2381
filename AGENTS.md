@@ -104,20 +104,18 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
   「放到以后做」）；
-  ②**蜂窝线 ✅ 六连收官（11-19 同日）：复燃 registered（一百零一）→ DPM 根治
-  空口 PDP 首建（一百零二）→ 数据面端到端全通+托盘可见（一百零三 C 轮）→
-  **双卡轮（一百零四）：插卡即用全自动链 + 双卡切换实证 + keeper 自愈 +
-  rmnet0 持久化落地 + MM 跨 reboot 验证通过**（执行卡 cellular-userplane-card
-  已执行大半 → 状态行更新；残面见下）。残面候补 = **①NM/MM 整合轮**
-  （Mobile Data 开关点亮：NM connection profile = 红线待用户拍板 + dispatcher
-  预发 DPM open/学 rmnet0 真经；需用户在场）**②真 DSDS 双 standby**（等
-  upstream MM 双 active 槽 hot-swap bug 修复）**③短信三墙复燃**（投递域
-  not ready / IMS PDN 网络拒 38 / SMSC 缺失——复燃条件在案）**④B 件 NAS 模式
-  偏好持久化**（单值 set 可用但不持久）**⑤per-boot modem init 崩根治**（dog/
-  ipa fatal 签名不定 = D3；fatal boot 数据面照通判词更新）**⑥设备包化**：
-  cell-keeper/cell-dataup/meizu-pas drop-in/cell-switch 四件进 device-meizu
-  -meizu20 候补（设备侧 /etc+/usr 层已验，进包 = 下轮构建拼车）**⑦通话音频
-  战役**（大后期，ADSP voice session RE）；
+  ②**蜂窝线 ✅ 七连收官（11-19 同日，用户拍板「做到现在这样就可以了」）：
+  registered（一百零一）→ DPM 根治（一百零二）→ 数据面全通+托盘（一百零三）→
+  双卡自动化：插卡即用全自动链+切换实证+keeper 自愈+rmnet0 持久化（一百零四）→
+  **NM/MM 整合轮判负（一百零五）= 103 红线三死路实验级钉死**（MM bearer dial =
+  IPA fatal 炸弹 kernel 实锤 / NM×qrtr0 link-not-init / NM enable = 循环加速器；
+  Mobile Data 开关灰 = 结构性常态）。线上成果 = registered 5gnr + 数据面全自动
+  + 双卡切换 + keeper 自愈 + 官方核查（一加6 三项全 P/无 DSDS 承诺）。
+  **残面全部挂候补（用户拍板「以后做」）**：①NM/MM 整合复燃（upstream MM 修复
+  或 plasma-nm 直连 MM）②真 DSDS（同 upstream 前提）③短信三墙（投递域 not
+  ready/IMS 网络拒 38/SMSC 缺失）④B 件 NAS 偏好持久化 ⑤D3 init 崩根治
+  ⑥通话音频（大后期）。**设备包化四件（keeper/dataup/drop-in/switch 进 device
+  包）转全局候补非蜂窝专属**；
   ③**Plasma Mobile 出件+上机+蜂窝用户态回归 ✅ 全链收官（同日；A 6.8.3-r0 出件 +
   B 用户自刷查收全绿 + C ✅ 本轮 = 卡 docs/plasma-mobile-cellular-card-20261119
   全项达成 → ✅ 已归档 docs/archive/）**（在机 = #96 + v75 + mu-r91 +
