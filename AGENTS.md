@@ -133,6 +133,13 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   相机/NFC/通话音频（点名制）；蜂窝残面全挂起（复燃条件在册，见上②）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
+  **蜂窝用户面探针轮 ✅（同日深夜，四域一窗快扫；战报 = experiment-log 一百零六·乙）**：
+  短信 transport **协议层健康**（get-protocol 0,0；104 的 not-ready 未复现；MO 实发
+  待用户授权+号码）；**IMS 真卡复现拒 38 = 运营商订阅面钉死**（通话线前置卡运营商，
+  非本机可修）；**GNSS = LOC 引擎启动固件侧 GeneralError 46**（服务活/读配全通，
+  疑 PDS/GNSS mcfg 缺料；gnss-share 0.8.2 已装机 active，正路 = mm 后端，复燃 =
+  fw 取证补料大后期档）；**ofono 2.19 零枚举本机 modem**（SFOS 三门之 2 首查负，
+  需适配工程）。现场恢复全绿。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
   卡归档 docs/archive/）
