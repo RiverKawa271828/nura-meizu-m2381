@@ -104,18 +104,23 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
   「放到以后做」）；
-  ②**蜂窝线 ✅ 七连收官（11-19 同日，用户拍板「做到现在这样就可以了」）：
+  ②**蜂窝线 ✅ 八连收官（11-19~20，短信破墙轮 = 用户点名复燃后收官）：
   registered（一百零一）→ DPM 根治（一百零二）→ 数据面全通+托盘（一百零三）→
   双卡自动化：插卡即用全自动链+切换实证+keeper 自愈+rmnet0 持久化（一百零四）→
   **NM/MM 整合轮判负（一百零五）= 103 红线三死路实验级钉死**（MM bearer dial =
   IPA fatal 炸弹 kernel 实锤 / NM×qrtr0 link-not-init / NM enable = 循环加速器；
-  Mobile Data 开关灰 = 结构性常态）。线上成果 = registered 5gnr + 数据面全自动
-  + 双卡切换 + keeper 自愈 + 官方核查（一加6 三项全 P/无 DSDS 承诺）。
+  Mobile Data 开关灰 = 结构性常态）→ **★短信破墙轮 ✅（一百零六·丙，11-20）=
+  MT/MO 双向往返全通（移动卡）**：MT = WMS→MM→SpaceBar 全链（用户实发 "test"
+  DB 实录）+ MO = MM send 成功 SMSC 零障碍；**104 三墙改写** = transport/SMSC
+  两假墙（当时注册态波动语境）+ 广电 = 结构性不通（SA-only 网短信唯一路 = IMS，
+  未授权拒 38；复燃 = 用户向运营商开通 VoLTE，非技术债）。线上成果 = registered
+  5gnr + 数据面全自动 + 双卡切换 + keeper 自愈 + 官方核查（一加6 三项全 P/无
+  DSDS 承诺）+ **短信收发（移动卡）**。
   **残面全部挂候补（用户拍板「以后做」）**：①NM/MM 整合复燃（upstream MM 修复
-  或 plasma-nm 直连 MM）②真 DSDS（同 upstream 前提）③短信三墙（投递域 not
-  ready/IMS 网络拒 38/SMSC 缺失）④B 件 NAS 偏好持久化 ⑤D3 init 崩根治
-  ⑥通话音频（大后期）。**设备包化四件（keeper/dataup/drop-in/switch 进 device
-  包）转全局候补非蜂窝专属**；
+  或 plasma-nm 直连 MM）②真 DSDS（同 upstream 前提）③~~短信~~ ✅ 已破（移动
+  卡双向往返；广电卡待 VoLTE 开通）④B 件 NAS 偏好持久化 ⑤D3 init 崩根治
+  ⑥通话音频（大后期；前置 IMS attach = 运营商订阅面钉死，广电真卡拒 38 复现）。
+  **设备包化四件 ✅ + 链腿包化 ✅（11-19 深夜两轮，见⑤）**；
   ③**Plasma Mobile 出件+上机+蜂窝用户态回归 ✅ 全链收官（同日；A 6.8.3-r0 出件 +
   B 用户自刷查收全绿 + C ✅ 本轮 = 卡 docs/plasma-mobile-cellular-card-20261119
   全项达成 → ✅ 已归档 docs/archive/）**（在机 = #96 + v75 + mu-r91 +
@@ -130,12 +135,14 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   在机 #96 双轮 apk 腿升级+冒烟全绿[failed 0/keeper/dataup/pas/rmtfs/MM 全 active/
   registered 保持]，在机手工腿幂等零变化）**。下会话排面 = 待定（用户令）；候选池
   剩 = 干净机首航（Phase-2 判据）/ S2IDLE 深睡线复燃（需设备窗+用户在场）/
-  相机/NFC/通话音频（点名制）；蜂窝残面全挂起（复燃条件在册，见上②）。
+  相机/NFC/通话音频（点名制）；蜂窝残面 = 短信 ✅ 已破（见上②），余全挂起（复燃
+  条件在册，见上②）。**设备当前态 = 移动卡（slot 2）在役**（短信实测后留置，广电
+  卡 power-off 待命；切回 = `cell-switch.sh 1`）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
   **蜂窝用户面探针轮 ✅（同日深夜，四域一窗快扫；战报 = experiment-log 一百零六·乙）**：
-  短信 transport **协议层健康**（get-protocol 0,0；104 的 not-ready 未复现；MO 实发
-  待用户授权+号码）；**IMS 真卡复现拒 38 = 运营商订阅面钉死**（通话线前置卡运营商，
+  短信 transport **协议层健康**（get-protocol 0,0；104 的 not-ready 未复现）→
+  **当晚升级为破墙轮（见②，一百零六·丙）**；**IMS 真卡复现拒 38 = 运营商订阅面钉死**（通话线前置卡运营商，
   非本机可修）；**GNSS = LOC 引擎启动固件侧 GeneralError 46**（服务活/读配全通，
   疑 PDS/GNSS mcfg 缺料；gnss-share 0.8.2 已装机 active，正路 = mm 后端，复燃 =
   fw 取证补料大后期档）；**ofono 2.19 零枚举本机 modem**（SFOS 三门之 2 首查负，
