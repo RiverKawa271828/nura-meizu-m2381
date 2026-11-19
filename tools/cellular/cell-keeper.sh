@@ -22,6 +22,14 @@ dance() {
 # 等 QMI 活（未解封 boot 时 mpss 不在 = NAS 查询超时 = 静默跳过）
 qmi_alive() { timeout 12 $Q --dms-get-operating-mode 2>/dev/null | grep -q "Mode:"; }
 
+# boot 首步：槽 2 归位 power-off（运行态非持久，reboot 后双 active 会触发 MM 双卡
+# 漂移循环；boot 后只做一次，不干预 cell-switch 的后续切换）
+slot2_off_once() {
+  for i in $(seq 1 12); do qmi_alive && break; sleep 5; done
+  qmicli -d qrtr://0 --uim-sim-power-off=2 >/dev/null 2>&1 && log "slot2 power-off (boot reposition)" || true
+}
+slot2_off_once
+
 while :; do
   if qmi_alive; then
     MODE=$(timeout 12 $Q --dms-get-operating-mode 2>/dev/null | grep -o "'[a-z-]*'" | tr -d "'")
