@@ -1,20 +1,13 @@
 # Plasma Mobile 出件 + 蜂窝续攻·执行卡（2026-11-19 交接；用户令「下个会话出件 plasma mobile，最新版，完成之后继续攻蜂窝网络；phosh 不方便看蜂窝状态」）
 
-> **状态 = A ✅ 出件 + B ✅ 用户自刷查收 + D1 ✅ 双墙根治（2026-11-19 同日三捷）**。
-> A = plasma-mobile **6.8.3-r0** 出件（local.img 3.4G + r95 gz 1.2G）；B = **用户已刷，
-> 查收全绿**：plasma 会话 active / failed 0 / #96 / fw r4 烤入实证（modem_pr
-> mcfg/so 在位）/ wowlan 武装 / 音频链 active——⚠新坑 = meizu-dsp-mount boot
-> 早期时序雷（by-partlabel 未就绪探测 → no dsp partition found failed；
-> restart 即愈，/mnt/dsp 挂上；候补 = 脚本加重试）+ iio 零节点复现（dsp 非因，
-> TECH-DEBT 候补 6 维持）。D1 = DPM Open Port 缺位实锤根治双墙 → 空口 PDP 首建
-> （IP 10.17.132.15）；残墙 = IPA 硬件通路。
-> **下会话主件 = C（用户令「继续攻蜂窝」）**：C1 重装蜂窝用户态（件源 =
-> tools/cellular/ 收编镜像 + 宿主 pmbootstrap cache 钉版件）→ C2 解封 →
-> **头号新判据 = 新 boot 的 IPA fatal 计数**（刷完重启后第一解封窗：
-> fatal=0 → μC 活，DPM open + /root/d1_bindmux.py 判数据面当场生死；
-> fatal 复发 → 每 boot 必现实锤 = D3 墙主体）→ C3 MM/plasma-nm 状态面实验
-> （用户核心诉求 = UI 看到蜂窝状态；禁拨号红线；需用户在场眼判托盘）。
-> 战报 = experiment-log（一百零二）+ 记忆 cellular-d1-dataplane-dpm-open-20261119。
+> **状态 = ✅ 全项收官（2026-11-19，卡归档 docs/archive/）**：A ✅ plasma 6.8.3-r0
+> 出件 + B ✅ 用户自刷查收 + D1 ✅ 双墙根治（一百零二）+ **C ✅ 用户态回归+数据面
+> 端到端全通+托盘蜂窝态落地（一百零三：rmnet0 QMAP 缺件实锤 + bounce 收敛环 +
+> d1_dataup 配方 + MM unmask 托盘/开关灰判词；用户眼判通过）**。残面候补移交
+> nura AGENTS 队列②（NM/MM 整合 / rf_keeper / init 崩 D3 / SMS 探针 / MM 跨
+> reboot 验证 / rmnet0 持久化）。
+> 战报 = experiment-log（一百零二 C 前半 + 一百零三 C 轮）+ 记忆
+> cellular-d1-dataplane-dpm-open-20261119 / cellular-dataplane-open-20261119。
 
 ## 0. 版本底数（本轮已核）
 
