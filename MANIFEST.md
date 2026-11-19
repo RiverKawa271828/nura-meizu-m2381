@@ -3,16 +3,16 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-19 根治轮·设备窗更钉：**r95/v75 双腿上机 #96 = 花屏科学解达成且验收属实**——D4-1 冷启等价化判过 + 三形态×两时长×灭屏面全净验收 + **bloff 工程解摘除**（TD-03 已还，日用灭屏 = 真睡路径，新默认态抽查全净）；在机 = **#96 + v75（读回 09759c87）** + mu-r91 + plasma-mobile 6.8.3-r0 rootfs（11-19 用户自刷，蜂窝资产刷前已回收）；回归全绿；r92 判负退役；**发布面 = Release r91（Latest）不变，r95 是否发 Release 留用户**）
+## 工作态（2026-11-20 相机驱动轮·第一段更钉（一百零八）：**首 ACK 0x3109 命中 + s5k3p9sx 上机健康在流**（camx bin 格式全破解 + 自写驱动 + RDI 管线全链配置通；残墙 = MIPI 零包/settle 扫频，用户令收兵留档下会话）；在机 = **#98（内核 r97）+ 模块 r99 混态[无害]** + **boot_b mu-r97（读回 2fa98a12 ✓）** + **recovery_a v76（读回 730fd782 ✓）** + plasma rootfs + 移动卡 slot 2；⚠下会话 = ESP v77 重打（r99 vmlinuz）+重刷统一 #100；发布面 = Release r91（Latest）不变）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**95**（**11-19 上机在役**，本地件 `16a8a872`；bloff 摘除 = 日用灭屏走真睡路径；fork c23b9afb+4daca081+2da7ac41） | 16a8a872 | 机上 apk add |
-| ESP | **v75**（r95 内核腿；本地 gz `c97f3e11` = **#96 在机件**，裸 `09759c87` 读回对 ✓） | 09759c87（裸） | recovery_a |
-| Mu 镜像 | r91（**11-19 首刷在机**；r87 起 DTS 零改动沿用，dtb 同源 c061acd9；r69 前代留档） | 350386e0 | boot_b |
-| 设备包 / 固件包 | **r65**（11-19 蜂窝链腿包化：rmtfs 三件/uim-selection 两件/MM 三件+base-ui 两件/soc-qcom/tqftpserv/qrtr 十三腿进 depends——**新 rootfs 开箱插卡即用全自动**；r64 四件包化+preset 全继承；在机 #96 冒烟全绿[failed 0/全家 active/registered 保持]）/ **r4**（11-19 蜂窝复燃轮上机 = +modem_pr mcfg/so 158 件，pmaports `f2885ef`，未发布；发布面仍 r3） | 8e63856e / bb2e9399（apk） | 机上 apk add |
+| 内核 apk | 7.3.0_**rc6**-r**99**（**11-20 上机在装**；相机轮三连 = r97 首发[s5k3p9sx 驱动+DTS，fork ca1c283b+c65d4a6] → r98 全量 init 修复[da5af35] → r99 link-freq 扫频网格[3bc4f16]；运行内核仍 r97，模块 = r99[仅 s5k3p9sx 差异，无害]） | 在机 apk（模块文件 live） | 机上 apk add |
+| ESP | **v76**（r97 内核腿；裸 `730fd782` = **在机件读回全等 ✓**，gz `22176505`；⚠下会话 v77 重打统一 r99） | 730fd782（裸） | recovery_a |
+| Mu 镜像 | **mu-r97-2fa98a12**（**11-20 首刷在机**，dtb 同源 7f9737f1 [r97/r98/r99 apk 共同 dtb，DTS 自此零改]；Mu 树 dc70f810） | 2fa98a12 | boot_b |
+| 设备包 / 固件包 | **r65**（11-19 蜂窝链腿包化：十三腿进 depends——新 rootfs 开箱插卡即用全自动）/ **r4**（11-19 蜂窝复燃轮上机 = +modem_pr mcfg/so 158 件，pmaports `f2885ef`，未发布；发布面仍 r3） | 8e63856e / bb2e9399（apk） | 机上 apk add |
 | rootfs | Release r91-phosh（**11-19 直刷在机**；裸 16147c7d = CI 发布件同字节；waydroid 五件/flatpak 商店/iio fork r3 烤入） | 16147c7d | userdata |
-| 上机期望 | `uname -v` → **#96**（11-19 r95/v75 双腿实测 ✓ 读回双对） | — | — |
+| 上机期望 | `uname -v` → **#98**（11-20 实测 ✓；boot_b 读回截镜像长度逐字节全等；ESP v77 + reboot 后 → #100） | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。

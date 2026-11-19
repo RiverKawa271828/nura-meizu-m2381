@@ -138,16 +138,27 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   内部 EFS/NV 记录域，AP 用户态无旋钮；TFTP 根结构性坑修讫[手工根会失，机上已
   重建正确形态 image→meizu 目录，包化 tmpfiles 挂候补小件]；复燃路改写 = stock
   对照/Flyme 窗取证真料/upstream PDS 语义，全大后期档；战报 = experiment-log
-  一百零七）**。下会话排面 = **相机驱动轮（11-20 用户点名 + 授权无人值守自刷）**：
-  宿主段照战卡施工（首发 3P9 超广角破 ACK 0x3109@0x2d → GN5 主摄[CPHY 5.66G 难度
-  峰值] → GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件，不依赖传感器]；卡 =
-  pmos `docs/meizu20/s5k3p9-driver-round-card.md` 全配方 + `camera-static-prep.md`
-  平台全史）→ 内核 apk + Mu 重编 → verify 全绿 → **boot_b/ESP 腿自刷（规则 5 豁免
-  在案，灭屏执行，fastboot 单通道照旧）** → 上机验证（拍件自判/闪光抓帧/回归清单）
-  → 战报。候选池余项照旧 = 干净机首航（Phase-2 判据）/ S2IDLE 深睡线复燃（之后，
-  需设备窗+用户在场）/ NFC/通话音频（点名制）/ TFTP 根 tmpfiles 包化（小件，
-  相机轮搭车或点名）；蜂窝残面 = 短信 ✅ 已破（见上②），余全挂起（复燃条件在册，
-  见上②）。
+  一百零七）**。**▶ 相机驱动轮·第一段 ✅（11-20，一百零八；用户点名「能驱动多少
+  就算多少」+ 自刷授权豁免执行）：camx sensormodule .bin 格式全破解
+  （40B 记录+子链下标寻值；解码器 = meizu20-m1/vendor-dig/camx_regs_decode.py，
+  四星全组 0 未解）→ **s5k3p9sx.c 自写上机（首 ACK 0x3109 命中）**+ RDI 管线
+  全链 fmt 配置通 + **传感器健康在流实证**（流中 i2c 回读 0x0100=0x0103）；
+  残墙 = MIPI 零包（csiphy settle 未校准，扫频网格已备：驱动 12 档可写
+  link-freq 200M-950M）；**新雷三件** = hub_3 竞态两连 boot（手踢
+  `echo 98c000.i2c > /sys/bus/platform/drivers/geni_i2c/bind`，挡相机）/
+  camss 流挂 D 态（load 34，sysrq-b 才救回，**流进程禁 kill**）/ probe 期
+  mclk WARN 杂音；在机 = boot_b mu-r97 + recovery_a v76（r97 vmlinuz）+
+  r99 apk = **#98 + 模块 r99 混态（无害）**；fork 四连 commit
+  ca1c283b/c65d4a6/da5af35/3bc4f16 + pmaports 65c41f6/1c0bb77；详录 =
+  experiment-log（一百零八）。**下会话排面 = ①ESP v77 重打（r99 vmlinuz）+
+  recovery_a 重刷 + reboot 统一 #100 ②CSI 扫频续攻（每档 systemd-run 隔离 +
+  timeout，禁 kill 流进程；先取证 D 态挂点 /proc/pid/stack）③hub_3 竞态
+  自动踢候补（设备包 service/tmpfiles 小件）④GN5 主摄[CPHY 5.66G 难度峰值]
+  → GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件] → 5E9 景深 ⑤回归清单
+  补全（zram✓/输入✓ 已抽查）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
+  S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
+  TFTP 根 tmpfiles 包化（小件）；蜂窝残面 = 短信 ✅ 已破（见上②），余全
+  挂起（复燃条件在册，见上②）。
   **设备当前态 = 移动卡（slot 2）在役**（短信实测后留置，广电卡 power-off 待命；
   切回 = `cell-switch.sh 1`；TFTP 根已重建 /readonly/firmware/image→
   /lib/firmware/qcom/sm8550/meizu + /readwrite 目录）。
