@@ -102,13 +102,19 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
   「放到以后做」）；
   ②**蜂窝线 ✅ 同日三捷收官（11-19）：复燃 registered（一百零一）→ DPM 根治
-  空口 PDP 首建（一百零二）→ **数据面端到端全通 + 托盘可见（一百零三 C 轮）**；
-  残面候补 = **①NM/MM 整合轮**（Mobile Data 开关点亮：dispatcher 预发 DPM open
-  + 建 rmnet0 学真经；需用户在场）**②rf_keeper 自愈 unit**（UniXNU pdp.h status
-  indication 0x22 钩子现成 = D2 原案升级）**③per-boot modem init 崩根治**
-  （本 boot dog stalled-init / 前两 boot ipa fatal，签名不定 = D3）**④SMS 便宜
-  探针**（qmicli 标准 WMS；UniXNU 零库存判词）**⑤MM 活态跨 reboot 验证**（下
-  boot C2 仪式重验共存）⑥rmnet0 持久化（进 device 包候选）；
+  空口 PDP 首建（一百零二）→ **数据面端到端全通 + 托盘可见（一百零三 C 轮）**。
+  **下会话主件 = 蜂窝用户面轮（用户令 11-19 深夜）=
+  [docs/cellular-userplane-card-20261119.md](docs/cellular-userplane-card-20261119.md）**：
+  主件 A 短信收发探针（首选，MM messaging/qmicli WMS，流量成本零）→ B 5G SA
+  偏好钉住（搭车件）→ C 双卡/DSDS（**槽 2 中国移动卡已插、modem 已识别**；
+  uim-selection 摘 mask = 独立变量）→ D VoLTE 信令（IMS PDN 变体→注册→网络面
+  振铃；**音频不做** = 主线普遍墙单独战役）。**⛔流量总预算 ≤100MB（用户钉死）**；
+  slot 使能/uim-selection 摘 mask 前 EFS 快照先行（第四份）。做不完 = 候补逐个
+  解决（用户令）。残面候补 = **①NM/MM 整合轮**（Mobile Data 开关点亮：dispatcher
+  预发 DPM open + 建 rmnet0 学真经；需用户在场）**②rf_keeper 自愈 unit**（UniXNU
+  pdp.h status indication 0x22 钩子现成）**③per-boot modem init 崩根治**（dog/
+  ipa fatal 签名不定 = D3）**④MM 活态跨 reboot 验证**⑤rmnet0 持久化（进 device
+  包候选）⑥通话音频战役（大后期，ADSP voice session RE）；
   ③**Plasma Mobile 出件+上机+蜂窝用户态回归 ✅ 全链收官（同日；A 6.8.3-r0 出件 +
   B 用户自刷查收全绿 + C ✅ 本轮 = 卡 docs/plasma-mobile-cellular-card-20261119
   全项达成 → ✅ 已归档 docs/archive/）**（在机 = #96 + v75 + mu-r91 +
@@ -198,7 +204,8 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
 | 面板花屏 case 包（排雷表 / bloff 工程解 / S5 对拍 / D1-D4） | docs/PANEL-CORRUPTION.md |
 | 音频 bring-up 方法论（出声必需清单 / probe 竞态 / 工作点 / UCM 坑 / 录音边界） | docs/AUDIO-METHOD.md |
 | 技术债唯一出处（去债条件 / NO-GO 集 / 候补小件池） | docs/TECH-DEBT.md |
-| **下一轮执行卡（plasma mobile 出件 + 蜂窝续攻 ✅ 已归档 docs/archive/）** | docs/archive/plasma-mobile-cellular-card-20261119.md |
+| **下一轮执行卡（蜂窝用户面轮：短信/5G/双卡/VoLTE 信令）** | docs/cellular-userplane-card-20261119.md |
+| 上一轮执行卡（plasma 出件 + 蜂窝续攻 ✅ 已归档 docs/archive/） | docs/archive/plasma-mobile-cellular-card-20261119.md |
 | 蜂窝复燃卡（✅ 收官 11-19，registered 里程碑） | docs/archive/cellular-reactivation-card-20261107.md |
 | 已收官轮次卡 / 历史研究档（10 张，✅/📚 标注） | docs/archive/（考古用，勿接排面） |
 | 历史战报全量（10-13~10-30 接续卡原文 + 带话四轮回信） | docs/AGENTS-ARCHIVE-20261101.md（只读快照） |

@@ -83,7 +83,7 @@ XBL → ABL → boot_b: Mu-UEFI (m2381Pkg) ──送核──→ 主线内核 (E
 为什么长这样、每件镜像内部是什么 → **[docs/DESIGN.md](docs/DESIGN.md)**（启动链原理与镜像解剖）；
 启动链完整逆向（stock ABL 反汇编级结论、为什么直刷必死、Mu/BootShim 如何工作、在你设备上的复现指南）→ **[docs/BOOT-CHAIN-RE.md](docs/BOOT-CHAIN-RE.md)**。
 
-## 硬件状态（2026-10-12 @ r84；本表只保现态，进度叙事在私有工作区 experiment-log）
+## 硬件状态（2026-11-19 @ r95；本表只保现态，进度叙事在私有工作区 experiment-log）
 
 **✅ 可工作**
 显示（120Hz OLED + 背光/自动亮度）｜触控｜GPU 加速｜WiFi 双频含 5G（睡眠保连接 WoWLAN）｜
@@ -91,18 +91,22 @@ XBL → ABL → boot_b: Mu-UEFI (m2381Pkg) ──送核──→ 主线内核 (E
 无杂音；听筒留通话）｜视频硬解（H.264）｜传感器四类 + 转屏｜震动（AW8697）｜zram｜Docker 容器｜
 NCM USB 网络（调试通道）｜**suspend（s2idle：空闲自动睡 + 电源键/RTC 唤醒 + WoWLAN 保链路）**。
 
+**◐ 实验态（开发机已通；Release rootfs 默认仍摘除）**
+蜂窝数据（**registered/PS attached + QMAP 数据通路端到端：ping/HTTP/HTTPS 实测通，
+plasma-nm 托盘蜂窝状态可见**；短信/语音/双卡未验证，解封与数据配方在私有工作区
+`tools/cellular/README.md`）｜USB-C host/扩展坞（typec 栈已点亮，整机实测随手验）｜Waydroid。
+
 **◐ 挂起（战役冻结、判决与素材都在档，复燃有路径）**
-蜂窝数据/短信/语音（控制面已点亮 = 全球首个 SM8550 pmOS 蜂窝；卡在 S3 RF init，**用户态默认摘除**）｜
-NFC（芯片应答、NCI init 不完成；**用户态默认摘除**）｜USB-C host/扩展坞（typec 栈已点亮，整机实测随手验）｜
-Waydroid。
+NFC（芯片应答、NCI init 不完成；**用户态默认摘除**）。
 
 **✗ 不可工作**
-录音/麦克风（SWR 域 bring-up，大后期）｜相机（平台已开放，传感器驱动未做）｜指纹｜GNSS（随蜂窝）｜
-DP 视频外接（板上未焊 fsa4480，判负终审）｜深睡 MPM/AOSS（大后期；普通 sleep 已可用见 ✅）｜
-IR/UWB（身份未定）。
+录音/麦克风（SWR 域 bring-up，大后期）｜相机（平台已开放，传感器驱动未做）｜指纹｜GNSS（随蜂窝，未开）｜
+通话音频（modem 语音会话层缺，主线普遍态；呼叫信令面待验证）｜DP 视频外接（板上未焊 fsa4480，判负终审）｜
+深睡 MPM/AOSS（大后期；普通 sleep 已可用见 ✅）｜IR/UWB（身份未定）。
 硬件不存在：3.5mm 耳机孔、SD 卡槽。
 
-> 蜂窝/NFC 默认摘除是省电与稳定性的**拍板形态**（设备包随包 mask），不是功能缺失。
+> Release rootfs 的蜂窝/NFC 默认摘除是省电与稳定性的**拍板形态**（设备包随包 mask），
+> 不是功能缺失；开发机上的蜂窝现态 = 手工解封态。
 
 ## 三条红线（先读再动手）
 
@@ -143,3 +147,16 @@ IR/UWB（身份未定）。
 - 版本纪律：`#N = pkgrel + 1`（上机 `uname -v` 直接对）；包状态随改随提交；构建前 checksum。
 - 硬定律与操作纪律的单一事实源在私有工作区仓的 AGENTS.md（未公开），本仓不复制、只引用。
 - 项目名 `nura-meizu-m2381`（全小写 kebab；机器引用一律此名，人读标题随意）。
+
+## 致谢
+
+- [UniXNU/QcomBaseband](https://github.com/UniXNU/QcomBaseband) —— 蜂窝数据面破案的关键情报源：
+  DPM Open Port 端口真值与 WDS 生命周期状态机（iPad 基带 QMI 结构的公开整理）。
+- [leluo123/m2468-mainline](https://github.com/leluo123/m2468-mainline) —— 魅族 21 Note 主线移植：
+  蜂窝 userspace 白嫖件（bind_all/data_daemon/modem_daemon/mux_matrix）与 bind-mux/DMS 配方
+  （`tools/cellular/` 内收编件出处同仓）。
+- [Project-Silicium/Mu-Silicium](https://github.com/Project-Silicium/Mu-Silicium) —— m2381Pkg
+  UEFI 固件的上游基础（本仓 fork `meizu20-mars-port`；mars 初始支持出自 silime 的早期工作）。
+- [silime](https://github.com/silime/linux) —— 魅族 20 早期主线研究与启动链基点。
+- 上游 Linux / [postmarketOS](https://postmarketos.org) / Alpine —— `drivers/net/ipa`、`rmnet`
+  内核件与 pmbootstrap 工具链底座。
