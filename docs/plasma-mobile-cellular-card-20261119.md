@@ -1,10 +1,15 @@
 # Plasma Mobile 出件 + 蜂窝续攻·执行卡（2026-11-19 交接；用户令「下个会话出件 plasma mobile，最新版，完成之后继续攻蜂窝网络；phosh 不方便看蜂窝状态」）
 
-> **状态 = 备料毕，等下会话执行**。主件 A（plasma rootfs 出件）→ 主件 B（上机回归）
-> → 主件 C（蜂窝用户态回归 + plasma-nm 状态面实验 = 用户核心诉求）→ 主件 D（蜂窝续攻）。
-> 每件独立可停，commit 不 push（推送窗口 = 用户）。
-> 底档 = experiment-log（一百零一）（11-19 蜂窝复燃 registered 里程碑全序战报）+
-> 记忆 cellular-reactivation-registered-20261119。
+> **状态 = 主件 A ✅ 出件 + 主件 D1 ✅ 双墙根治（2026-11-19，用户令本会话改跑蜂窝线、
+> plasma 自刷）**。A = plasma-mobile **6.8.3-r0** 上墙（world 对拍零混装，
+> `artifacts/meizu-meizu20-plasma-mobile-local.img` 3.4G + r95 gz 1.2G）——**userdata
+> 重刷 = 用户自行执行**（B 清单照 §2 跑）。D1 = **DPM Open Port 缺位实锤根治双墙**：
+> DPM open（endpoint TX=2/RX=24）→ mux bind 0xF1 (0,0) → start network (0,0) →
+> **IP 10.17.132.15 + DNS 全分 = 空口 PDP 首次建立**；残墙 = IPA 硬件通路（μC 崩尸态
+> → TX dropped 包不出 AP）须 reboot 冷启重试（候补，禁令待用户拍板）。
+> 战报 = experiment-log（一百零二）+ 记忆 cellular-d1-dataplane-dpm-open-20261119。
+> 剩余 = B（用户自刷 plasma）→ C（含 plasma-nm 状态面实验 = 用户核心诉求）→
+> D 残面（IPA fatal 墙 + 端到端真包）。
 
 ## 0. 版本底数（本轮已核）
 

@@ -54,8 +54,10 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   tqftpserv RRQ 直读 modem 拉 China/CBN/Commercial mcfg_sw）。**新墙 = IPA fatal**
   （`ipa_hal.c:2957` modem 侧 IPA μC 崩，非彼仓 PLL 墙；SSR 自愈 + DMS 舞步买窗）
   + **注册面真因 = provisioning session**（重启/SSR 后消失，re-provision 后 20s 即
-  registered）+ **数据面双墙**（WDS mux bind (1,3) 72 组合全域拒 + start-network
-  (70)，健康注册窗内复现 = firmware 级差异）→ 候补轮（DSD raw/PDC/firmware 对拍）。
+  registered）+ **数据面双墙 → ✅ 已根治（同日一百零二）**：真因 = DPM Open Port
+  缺位（非 firmware 差异——DPM open 后 mux bind/start network/IP+DNS 全通 =
+  空口 PDP 首建 10.17.132.15；PDC 出局[CBN Active]；残墙 = IPA 硬件通路须
+  reboot 冷启重试）。
   解封仪式 = 清 override（字面量 "none"≠空串坑）→bind→start→查 session→舞步；
   取证一律 journalctl -k（dmesg 环形被 GPU IFPC 刷洗）；/root/*.py 白嫖件留机。
   在机 = **#96 + v75（读回 09759c87）+ mu-r91 + r91-phosh rootfs**；新默认态
@@ -109,13 +111,20 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   ②**蜂窝复燃 ✅ 收官（11-19）：registered 里程碑达成 = 蜂窝挂起→半通**
   （卡头状态行 ✅ = docs/archive/cellular-reactivation-card-20261107.md；
   战报 = experiment-log 一百零一）。残面候补 = **数据面双墙轮**（WDS mux bind
-  (1,3) 全域拒 + start-network (70)，候补弹药 = DSD raw start-data-call / PDC
-  profile / firmware 对拍[彼仓 c3-00008 vs 我方 MPSS.DE.3.0-KAILUA]）+ IPA fatal
-  墙（rf_keeper 式 DMS 自愈件可选）+ 用户面（短信/通话 = 需 VoLTE/IMS，未开）；
-  ③**下会话主件 = Plasma Mobile 出件 + 蜂窝续攻（用户令 11-19）= [docs/plasma-mobile-cellular-card-20261119.md](docs/plasma-mobile-cellular-card-20261119.md）**
-  （动机 = phosh 无蜂窝状态面板，plasma-nm 托盘可直读 MM 注册/信号态；全序 = zap→
-  build-rootfs[默认 plasma-mobile 6.8.3]→userdata 重刷→蜂窝用户态回归→MM/plasma-nm
-  状态面实验[禁拨号红线]→数据面双墙轮 DSD raw/PDC/firmware 对拍）；
+  (1,3) 全域拒 + start-network (70)）
+  **→ ✅ 同日一百零二根治（用户令本会话转蜂窝线）：真因 = DPM Open Port 缺位
+  （endpoint TX=2/RX=24），DPM 一发 → mux bind 0xF1 (0,0) → start network (0,0)
+  → IP 10.17.132.15 + DNS 全分 = 空口 PDP 首建；PDC 出局（CBN_Commercial
+  Active）；手工 dial 全程 RF 不崩；残墙 = IPA 硬件通路（μC 崩尸态 → TX
+  dropped 包不出 AP，-110 永不重试）→ reboot 冷启重试 = 候补（禁令待用户拍板，
+  一发判生死：fatal 不复发则 DPM+dial 配方当场打通数据）**+ 用户面（短信/通话
+  = 需 VoLTE/IMS，未开）；
+  ③**Plasma Mobile 出件 ✅（同日一百零二）+ 蜂窝续攻 = [docs/plasma-mobile-cellular-card-20261119.md](docs/plasma-mobile-cellular-card-20261119.md）**
+  （**A 出件完成 = plasma-mobile 6.8.3-r0 上墙**[world 对拍零混装，
+  artifacts/meizu-meizu20-plasma-mobile-local.img 3.4G + r95 gz 1.2G 落盘，
+  **userdata 重刷 = 用户自行执行**，B 清单照卡 §2]；剩 = B 上机回归 → C 蜂窝
+  用户态回归 + MM/plasma-nm 状态面实验[禁拨号红线；用户核心诉求 = UI 看到蜂窝
+  状态]→ D 残面[IPA fatal 墙 + 端到端真包 + rf_keeper 适配候补]）；
   ④推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
