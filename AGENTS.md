@@ -133,21 +133,29 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   （r65，apk `8e63856e`，十三腿[rmtfs 三件/uim-selection 两件/MM 三件+base-ui 两件/
   soc-qcom-modem-systemd/tqftpserv/qrtr]进 depends = 新 rootfs 开箱插卡即用全自动；
   在机 #96 双轮 apk 腿升级+冒烟全绿[failed 0/keeper/dataup/pas/rmtfs/MM 全 active/
-  registered 保持]，在机手工腿幂等零变化）**。下会话排面 = **GNSS fw 取证宿主段
-  + solo 上机 LOC 验证**（用户拍板 11-20：零动手活优先，主件已开工一轮 = stable
-  检查过 + fw 包源定位；深睡线 = 之后「用户没空」，需设备窗+用户在场）。候选池剩
-  = 干净机首航（Phase-2 判据）/ S2IDLE 深睡线复燃（之后）/ 相机/NFC/通话音频
-  （点名制）；蜂窝残面 = 短信 ✅ 已破（见上②），余全挂起（复燃条件在册，见上②）。
+  registered 保持]，在机手工腿幂等零变化）**。**GNSS 取证轮 ✅（11-20 一百零七：
+  fw 补料路判负[发料面=stock 全量清白 + LOC 启动零讨料] + PDS 闸门改判 modem
+  内部 EFS/NV 记录域，AP 用户态无旋钮；TFTP 根结构性坑修讫[手工根会失，机上已
+  重建正确形态 image→meizu 目录，包化 tmpfiles 挂候补小件]；复燃路改写 = stock
+  对照/Flyme 窗取证真料/upstream PDS 语义，全大后期档；战报 = experiment-log
+  一百零七）**。下会话排面 = **无新点名**（候选池剩 = 干净机首航（Phase-2 判据）/
+  S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ 相机/NFC/通话音频（点名制）/
+  TFTP 根 tmpfiles 包化（小件，搭车制））；蜂窝残面 = 短信 ✅ 已破（见上②），
+  余全挂起（复燃条件在册，见上②）。
   **设备当前态 = 移动卡（slot 2）在役**（短信实测后留置，广电卡 power-off 待命；
-  切回 = `cell-switch.sh 1`）。
+  切回 = `cell-switch.sh 1`；TFTP 根已重建 /readonly/firmware/image→
+  /lib/firmware/qcom/sm8550/meizu + /readwrite 目录）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
   **蜂窝用户面探针轮 ✅（同日深夜，四域一窗快扫；战报 = experiment-log 一百零六·乙）**：
   短信 transport **协议层健康**（get-protocol 0,0；104 的 not-ready 未复现）→
   **当晚升级为破墙轮（见②，一百零六·丙）**；**IMS 真卡复现拒 38 = 运营商订阅面钉死**（通话线前置卡运营商，
   非本机可修）；**GNSS = LOC 引擎启动固件侧 GeneralError 46**（服务活/读配全通，
-  疑 PDS/GNSS mcfg 缺料；gnss-share 0.8.2 已装机 active，正路 = mm 后端，复燃 =
-  fw 取证补料大后期档）；**ofono 2.19 零枚举本机 modem**（SFOS 三门之 2 首查负，
+  ~~疑 PDS/GNSS mcfg 缺料~~ → **11-20 一百零七改判：闸门 = modem 内部 PDS 态
+  （EFS NV/记录域），fw 补料路判负**[发料面 = stock 全量清白 + 引擎启动零讨料；
+  rf_static_521 404 = stock 本无此文件非漏发]；gnss-share 0.8.2 已装机 active，
+  正路 = mm 后端，复燃 = stock 对照/Flyme 窗取证/upstream PDS 语义，大后期档）；
+  **ofono 2.19 零枚举本机 modem**（SFOS 三门之 2 首查负，
   需适配工程）。现场恢复全绿。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
