@@ -42,7 +42,7 @@ docs/FLASHING.md 刷机教程（每步带验证点）——动手前必读
 docs/PIPELINE.md 构建管线 + Phase-2 发布清单
 MANIFEST.md      现役产物表 + 已知非回归失败（首 boot 看到别慌的三件）
 artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
-docs/archive/*-card-*.md 各轮执行卡（蜂窝复燃卡+根治卡均已 ✅ 收官归档；无现役卡）
+docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119.md；蜂窝复燃卡+根治卡已 ✅ 归档 docs/archive/）
 ```
 
 ## 现态（2026-11-19 蜂窝复燃 registered 里程碑 ✅ + 根治轮收官；新会话从这里接）
@@ -112,7 +112,11 @@ docs/archive/*-card-*.md 各轮执行卡（蜂窝复燃卡+根治卡均已 ✅ �
   (1,3) 全域拒 + start-network (70)，候补弹药 = DSD raw start-data-call / PDC
   profile / firmware 对拍[彼仓 c3-00008 vs 我方 MPSS.DE.3.0-KAILUA]）+ IPA fatal
   墙（rf_keeper 式 DMS 自愈件可选）+ 用户面（短信/通话 = 需 VoLTE/IMS，未开）；
-  ③推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
+  ③**下会话主件 = Plasma Mobile 出件 + 蜂窝续攻（用户令 11-19）= [docs/plasma-mobile-cellular-card-20261119.md](docs/plasma-mobile-cellular-card-20261119.md）**
+  （动机 = phosh 无蜂窝状态面板，plasma-nm 托盘可直读 MM 注册/信号态；全序 = zap→
+  build-rootfs[默认 plasma-mobile 6.8.3]→userdata 重刷→蜂窝用户态回归→MM/plasma-nm
+  状态面实验[禁拨号红线]→数据面双墙轮 DSD raw/PDC/firmware 对拍）；
+  ④推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
   卡归档 docs/archive/）
@@ -195,7 +199,8 @@ docs/archive/*-card-*.md 各轮执行卡（蜂窝复燃卡+根治卡均已 ✅ �
 | 面板花屏 case 包（排雷表 / bloff 工程解 / S5 对拍 / D1-D4） | docs/PANEL-CORRUPTION.md |
 | 音频 bring-up 方法论（出声必需清单 / probe 竞态 / 工作点 / UCM 坑 / 录音边界） | docs/AUDIO-METHOD.md |
 | 技术债唯一出处（去债条件 / NO-GO 集 / 候补小件池） | docs/TECH-DEBT.md |
-| **蜂窝复燃卡（✅ 收官 11-19，registered 里程碑）** | docs/archive/cellular-reactivation-card-20261107.md |
+| **下一轮执行卡（plasma mobile 出件 + 蜂窝续攻）** | docs/plasma-mobile-cellular-card-20261119.md |
+| 蜂窝复燃卡（✅ 收官 11-19，registered 里程碑） | docs/archive/cellular-reactivation-card-20261107.md |
 | 已收官轮次卡 / 历史研究档（10 张，✅/📚 标注） | docs/archive/（考古用，勿接排面） |
 | 历史战报全量（10-13~10-30 接续卡原文 + 带话四轮回信） | docs/AGENTS-ARCHIVE-20261101.md（只读快照） |
 | 出一车产物 | docs/PIPELINE.md + script/ |
