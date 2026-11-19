@@ -122,7 +122,7 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   plasma-mobile 6.8.3-r0 rootfs；⚠plasma rootfs 坑两连 = meizu-dsp-mount boot
   早期时序雷[restart 即愈，候补加重试] + iio 零节点[TECH-DEBT 候补 6 维持]；
   蜂窝资产 = tools/cellular/ 收编 + d1_dataup.sh 配方 + EFS 快照三份全等）；
-  ④推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
+  ④推送窗口 ✅ 已清（11-19 深夜：nura 六笔 + pmaports r95 bump 追补全推 [dc38852 / 4789107]；⚠SSH 22 断坑再现 = https + 宿主 /home/ri/bin/gh helper 走通；内核/Mu 零未推不涉及）。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
   卡归档 docs/archive/）
