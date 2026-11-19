@@ -73,8 +73,9 @@ qmicli -d qrtr://0 --dpm-open-port="hw-data-ep-type=embedded,hw-data-ep-iface-nu
 
 ## 关联
 
-- 装包腿钉版件 = 宿主 pmbootstrap cache（rmtfs 三件/uim-selection 两件/
-  soc-qcom-modem-systemd + tqftpserv-1.0-r0 + qrtr/qmi-utils）——不在本目录。
+- 装包腿钉版件（rmtfs 三件/uim-selection 两件/MM 底座/soc-qcom-modem-systemd +
+  tqftpserv + qrtr/qmi-utils）——**r65 起已全部烤进 device 包 depends**（2026-11-19
+  深夜链腿包化收口），新 rootfs 开箱即全链；qmi-utils 亦 r64 进 depends。
   ⚠apk3 + devsh 会话 arg-less `apk info` 挂死占锁（须 `</dev/null` 或清锁尸）。
 - 解封仪式 / provisioning session / DMS 舞步配方 = pmos_linux
   docs/meizu20/experiment-log（一百零一/一百零二/一百零三）。

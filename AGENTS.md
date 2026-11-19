@@ -123,14 +123,16 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   早期时序雷[restart 即愈，候补加重试] + iio 零节点[TECH-DEBT 候补 6 维持]；
   蜂窝资产 = tools/cellular/ 收编 + d1_dataup.sh 配方 + EFS 快照三份全等）；
   ④推送窗口 ✅ 已清（11-19 深夜：nura 六笔 + pmaports r95 bump 追补全推 [dc38852 / 4789107]；⚠SSH 22 断坑再现 = https + 宿主 /home/ri/bin/gh helper 走通；内核/Mu 零未推不涉及）。
-  ⑤**下会话排面**：**设备包化四件 ✅（11-19 深夜零设备轮完成）** = keeper/dataup/
-  drop-in/switch + 两伴生件（rmtfs 无限重试 drop-in + NM qrtr unmanaged）入
-  device 包 **r64**（pmaports `4dca91f`，apk `11f96db7`；九件仓↔机 sha256 对拍
-  等价；depends +qmi-utils+python3，preset +2 只作用新装机；构建+verify 全绿
-  **未上机**——机上 r63+手工件等价，升级走 `upgrade.sh --apk`；⚠链腿 apk
-  [rmtfs 三件/uim-selection 两件/MM 底座]包化 = 留用户拍板）。候选池剩 =
-  干净机首航（Phase-2 判据）/ S2IDLE 深睡线复燃（需设备窗+用户在场）/
+  ⑤**本轮（11-19 深夜两连）+ 下会话排面**：设备包化四件 ✅（**r64**，pmaports
+  `4dca91f`/apk `11f96db7`，九件仓↔机对拍后入库，preset +2）→ **链腿包化 ✅
+  （r65，apk `8e63856e`，十三腿[rmtfs 三件/uim-selection 两件/MM 三件+base-ui 两件/
+  soc-qcom-modem-systemd/tqftpserv/qrtr]进 depends = 新 rootfs 开箱插卡即用全自动；
+  在机 #96 双轮 apk 腿升级+冒烟全绿[failed 0/keeper/dataup/pas/rmtfs/MM 全 active/
+  registered 保持]，在机手工腿幂等零变化）**。下会话排面 = 待定（用户令）；候选池
+  剩 = 干净机首航（Phase-2 判据）/ S2IDLE 深睡线复燃（需设备窗+用户在场）/
   相机/NFC/通话音频（点名制）；蜂窝残面全挂起（复燃条件在册，见上②）。
+  **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
+  不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
   卡归档 docs/archive/）
