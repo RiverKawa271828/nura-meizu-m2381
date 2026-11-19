@@ -23,6 +23,10 @@ echo "== provision slot $T =="
 $Q --uim-change-provisioning-session="session-type=primary-gw-provisioning,activate=yes,slot=$T,aid=$AID" 2>&1 | tail -1
 sleep 2
 
+# r66: 写在役槽状态文件（cell-keeper 的 boot 归位/双 active 守卫/恢复路径都按它定向）
+mkdir -p /var/lib/cell-keeper
+echo "$T" > /var/lib/cell-keeper/active-slot
+
 echo "== dance =="
 $Q --dms-set-operating-mode=low-power >/dev/null 2>&1
 sleep 8

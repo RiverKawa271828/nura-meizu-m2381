@@ -90,17 +90,15 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   待命；EFS 快照**四份全等**（b85cad2f/c40223e6；第四份 = efs-snapshot-20261119
   -sms-round）；NAS 5gnr-only 偏好非持久（reboot 回 auto，网络侧自驻 5gnr）。
   iOS 线并行走用户——**iOS 工作区/文档零接触，传话 = 用户转告**。
-- **版本钉**：apk **r100**（vmlinuz `d9713ed1`，在机 **#101**）+ ESP **v78**（裸
-  `b57f8605` / gz `ea1fbc97`，在机，读回全等 ✓；v77 号位留白 = 原 r99 计划被 r100
-  顺位吸收）= **多档刷新率轮**（fork `ac949b2fd8ef`：modes 1→4 条 60/90/120/144 stock
-  verbatim）；r99/r97 = 相机轮·第一段（一百零八）；r95 = bloff 摘除轮；r91 = 7.3 stable
-  rebase 正式轮；**设备包 r67**（一百零九事故修复：摘 uim-selection 照官方单卡形态 +
-  keeper slot 参数化 + sensorspd mask）；**fw r4**（11-07 蜂窝复燃备料，本地全绿未发布）。
-- **发布面**：**Release r91 = Latest 不变**（8 件制）；r95-r100/r64-r67 是否发 Release
+- **版本钉**：apk **r101**（vmlinuz `a7fd6265`，在机 **#102**）+ ESP **v79**（裸
+  `11f67de8` / gz `a442e509`，在机，读回全等 ✓）+ **mu-r101-a6fb2158**（boot_b，读回 ✓
+  按镜像字节截取对拍）= **modem autostart-off 轮**（fork `12dcde3033c8`：pas 驱动 DT
+  开关一行 + DTS 4080000 关自启 = IPA 握手死窗时序修复）；r100 = 多档刷新率轮；r99/r97 =
+  相机轮·第一段（一百零八）；r95 = bloff 摘除轮；r91 = 7.3 stable rebase 正式轮；
+  **设备包 r70**（r69 官方化轮 + r70 判据诚实化，见下排面段）；**fw r4**（11-07 蜂窝
+  复燃备料，本地全绿未发布）。
+- **发布面**：**Release r91 = Latest 不变**（8 件制）；r95-r101/r64-r70 是否发 Release
   留用户。升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑须显式
-  --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
-- **发布面**：**Release r91 = Latest 不变**（8 件制）；r95 是否发 Release 留用户。
-  升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑须显式
   --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
 - **队列**：①**花屏科学解 ✅ 达成验收属实收官**（PANEL §6 条 11.7-8）；
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
@@ -165,40 +163,33 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   accel=true/audio/四档/广电 slot1 registered + 数据面 PASS）。坑册五连 = ①oneshot+
   无限 StartLimit+硬依赖 = boot 死锁 ②/etc 与 /usr/local/bin = 包化影子层，收编必清
   ③`.requires/` 链接不吃 drop-in 空赋值重置 ④打包前查旧手工件在跑（单例资源）
-  ⑤qmicli 单横线吃 stderr = devsh 假空输出。候补小件 = 解封尾段×rmtfs 时序竞态
-  （boot 期静默失败手动即中）+ temp.json 刷屏限速（非致命）+ reboot 挂死干净态观察。
-  详录 = experiment-log（一百零九）。**下会话排面 = ①r69 开机顺序官方化（用户拍板
-  「不要历史包袱」+ 参照一加6[官方 main 档高通，启动顺序最正统]与 FP5/FP6）：摘
-  `qcom_q6v5_pas`/`qcom_q6v5_mss` blacklist[定位 = /lib/modprobe.d/
-  device-meizu-meizu20.conf:10-11，包内源文件待查]→ PAS 内核态自动 probe（ADSP/CDSP/
-  mpss 比一切服务早）→ meizu-pas.service 退役 + keeper 解封段撤[mpss 内核自起]；
-  **i2c_qcom_geni/hv_haptics blacklist 保留** = 活安全律（880000.i2c 致死在案，非
-  历史包袱）；⚠已知交接点 = cell-dataup 虽 simple 但 ExecStartPre 120s QMI 等待仍属
-  start job 阻塞 multi-user ~2min（critical-chain 铁证）→ 等待移入 ExecStart 脚本体；
-  拨号面保持 dataup 后台化（MM bearer dial = IPA fatal 炸弹在册，官方 bearer 路不可
-  抄）；**官方时序 ground truth（11-20 取证定谳，Alpine/一加6/FP 三源）**：
-  内核 PAS 自动 probe（无 blacklist，DSP/mpss 早于一切服务）→ udev-settle → rmtfs
-  （simple 守护，respawn 1s 无限重试内置 = 我们的无限重试 drop-in 与官方等价；官方
-  命令行带 `-s` = modem remoteproc 与 rmtfs 联动启停 = 官方 modem 生命周期机制，无
-  解封服务；r69 决策点 = 内核 autoprobes 后 `-s` 语义自动满足，检查我们的 rmtfs 启动
-  参数是否带 -s）→ MM/NM（After=rmtfs）→ 数据按需拨（官方无 boot 拨号件；我们 dataup
-  后台化保留 = IPA 特殊性）；**uim-selection 官方 FIXME 实锤背书 r67 摘件**（pmaports
-  main 归档一加5/5T 原文：「hangs boot for some 20 seconds when installed with
-  non-free FW」，官方同构坑早踩过并绕开）；modem-gnss = 官方 soc-qcom-modem-systemd
-  原样件（刷屏观察）。预期效果 = graphical 2min→~1min（ADSP 内核态 + multi-user 不再
-  被 dataup 拖 2min）；风险预案 = mpss 内核态首波 EFS 无应答 crash 1-2 轮收敛（
-  crash-recovery + rmtfs 无限重试兜底），boot 挂 = blacklist 单文件 devpush 秒回滚 ②相机 CSI 扫频续攻
+  ⑤qmicli 单横线吃 stderr = devsh 假空输出。候补小件 = ~~解封尾段×rmtfs 时序竞态~~ ✅ r69 官方化结构性消灭 + temp.json 刷屏
+  改判挂候补[hexagonrpcd 语义取证；tmpfiles 形态保留未根治] + reboot 挂死干净态观察。
+  详录 = experiment-log（一百零九）。**▶ r69/r70 官方化轮 + 数据面取证轮 ✅（11-20
+  一百一十，本轮收官）**：r69 = 摘 PAS/MSS blacklist + meizu-pas 退役 + keeper 解封段撤
+  + dataup ExecStartPre 移入本体 + tmpfiles 三件（TFTP 根/retire-pas/tempjson）+
+  touch-load +98c000（hub_3 自动踢）→ **boot 时序全绿**（内核三件自起/rmtfs 稳/multi-user
+  4.3s/graphical ~27s/failed 0/ordering cycle 0）；**数据面撞 IPA init 握手死窗**（modem
+  内核期早启 → modem 侧 IPA assert crash + AP 侧 -110 永不重试 → rmnet_ipa0 永不建；
+  5 boot 实证；恢复通道全试死[ipa 重载/sysfs stop+crash 注入双拒/DMS]）→ r101 内核 =
+  pas 驱动 DT 开关 qcom,autostart-off（fork 12dcde3033c8）+ keeper 延时 start ~boot+35s
+  （103 时序复刻）仍败 = **挂候补 TD-11 内核域专项**（ipa init retry / modem 固件域取证 /
+  105 fatal 炸弹语境考古[109 终验 PASS 高度存疑 = dataup 旧判据 WiFi 共存语境假绿，
+  r70 已 -I 硬判诚实化 + bounce 重铺路由 + addr flush]）；短信/注册面/双卡切换不受影响
+  （QMI 域全通）。详录 = experiment-log（一百一十）。
+  **下会话排面 = ①数据面 IPA 内核域专项（TD-11；ipa 驱动 init retry 补丁先探——SSR
+  事件链健康 = retry 有落点；modem 固件域取证次之）②相机 CSI 扫频续攻
   （用户拍板推入；每档 systemd-run 隔离 + timeout，禁 kill 流进程；先取证 D 态挂点
-  /proc/pid/stack）③hub_3 竞态自动踢候补（设备包 service/tmpfiles 小件）④GN5 主摄
+  /proc/pid/stack）③GN5 主摄
   [CPHY 5.66G 难度峰值]→ GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件] → 5E9 景深
   ④回归清单补全（zram✓/输入✓ 已抽查）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
-  TFTP 根 tmpfiles 包化（小件）；蜂窝残面 = 短信 ✅ 已破（见上②），余全
-  挂起（复燃条件在册，见上②）。
-  **设备当前态 = 广电卡 slot 1 在役**（registered + 数据面 PASS；移动卡用户拔出留手，
-  回归 = 插 slot 2 + `cell-switch.sh 2`；keeper 状态文件 = /var/lib/cell-keeper/
-  active-slot = 1；uim-selection 已卸载[单卡官方形态]；TFTP 根已重建 /readonly/
-  firmware/image→/lib/firmware/qcom/sm8550/meizu + /readwrite 目录）。
+  tempjson hexagonrpcd 语义取证（小件）；蜂窝残面 = 短信 ✅ 已破（见上②）+ 数据面 =
+  TD-11 挂候补，余全挂起（复燃条件在册，见上②）。
+  **设备当前态 = 广电卡 slot 1 在役**（registered 稳态 + **数据面挂候补断态**[TD-11，
+  dataup -I 硬判 FAIL 诚实呈现]；移动卡用户拔出留手，回归 = 插 slot 2 + `cell-switch.sh
+  2`；keeper 状态文件 = /var/lib/cell-keeper/active-slot = 1；uim-selection 已卸载[单卡
+  官方形态]；TFTP 根 tmpfiles 化[boot 自成形 image→meizu + readwrite]）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
   **蜂窝用户面探针轮 ✅（同日深夜，四域一窗快扫；战报 = experiment-log 一百零六·乙）**：

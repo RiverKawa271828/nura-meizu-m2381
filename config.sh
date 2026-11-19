@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="100"     # r100 = 多档刷新率轮（11-20 插队：面板 modes 表 +3 条 60/90/144 stock verbatim，fork ac949b2fd8ef；profile 机制半成品早已在位[0x91/0x2F 表+vrefresh 选档]，当年 r22g 回退[boot 竞态 2/2]解封 = D4-1+设备包排序已落地；r99 = 相机轮·第一段[一百零八]；r95 = bloff 摘除轮；r91 = 7.3 stable rebase 正式轮）
-REL_DEVICE_PKGREL="68"     # r68 = 开机提速轮（11-20 用户拍板安卓式：meizu-pas 摘 After=multi-user[ADSP 秒起→barrier 3min16s→26s]；解封 mpss 挪 keeper 立即解封[等 rmtfs = 循环死锁当日即踩]；unseal.conf 退役；cell-dataup Type=simple+TimeoutStartSec=300）；r67 = 摘 uim-selection 官方单卡形态；r66 = keeper 参数化+双 active 守卫+sensor mask
+REL_LINUX_PKGREL="101"     # r101 = modem autostart-off 轮（11-20，fork 12dcde3033c8：pas 驱动 DT 开关 qcom,autostart-off 一行 + DTS 4080000 关自启 = IPA init 握手死窗修复[r69 上机两 boot 实证：内核期 modem 早启 → modem 侧 IPA assert crash ×3 + AP 侧 -110 永不重试 → rmnet_ipa0 永不建]；r100 = 多档刷新率轮；r99 = 相机轮·第一段；r95 = bloff 摘除轮；r91 = 7.3 stable rebase 正式轮）
+REL_DEVICE_PKGREL="70"     # r70 = 数据面判据诚实化 + keeper 延时 start（11-20：d1_dataup 三处[;-I rmnet0 硬判/bounce 后重铺默认路由/addr flush 防双地址] + keeper start 延时化 ~boot+35s[复刻 103 实证好窗]）；r69 = 开机顺序官方化轮（摘 PAS/MSS blacklist + meizu-pas 退役 + keeper 解封段撤 + dataup ExecStartPre 移入本体 + tmpfiles 三件[TFTP 根/retire-pas/tempjson] + touch-load +98c000）；r68 = 开机提速轮；r67 = 摘 uim-selection；r66 = keeper 参数化
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；发布面 tarball 仍 r3/29c1ee88）
-REL_MU_IMG="$NURA_ROOT/artifacts/mu-r97-2fa98a12.img"      # mu-r97 = 11-20 相机轮 boot_b 腿在机（dtb 同源 7f9737f1 = r97/r98/r99 apk 共同 dtb [DTS 自 r97 后零改]；Mu 树 commit dc70f810）；mu-r91 = 11-19 前役件留档
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v78.img.gz"  # v78 = 多档刷新率轮 ESP（r100 vmlinuz，11-20：裸 b57f8605 / gz ea1fbc97）；v76 = 相机轮件（r97 vmlinuz，裸 730fd782 / gz 22176505）；v77 号位留白未落盘（原排 r99 vmlinuz，被 r100 顺位吸收）；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑（另记：沙箱后台发射 systemd-run 有提交通道竞态秒死坑，须前台发射+落稳确认）
-REL_KERNEL_VER="#101"      # 期望（r100 内核 = pkgrel+1；上机实测后核对）
+REL_MU_IMG="$NURA_ROOT/artifacts/mu-r101-a6fb2158.img"     # mu-r101 = 11-20 modem autostart-off 轮（DTS 4080000 qcom,autostart-off，fork 12dcde3033c8 同源 r101 apk）；mu-r97 = 相机轮件留档（11-20）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v79.img.gz"  # v79 = modem autostart-off 轮 ESP（r101 vmlinuz，11-20：裸 11f67de8 / gz a442e509）；v78 = 多档轮件留档（r100 vmlinuz，裸 b57f8605）；v77 号位留白未落盘；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑（另记：沙箱后台发射 systemd-run 有提交通道竞态秒死坑，须前台发射+落稳确认）
+REL_KERNEL_VER="#102"      # 期望（r101 内核 = pkgrel+1；上机实测后核对）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。

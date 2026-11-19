@@ -21,6 +21,8 @@
 | TD-08 | 内核 fork tarball（270MB）gitignore + pmaports 提交 `--no-verify` | pmaports APKBUILD 提交流程 | pre-commit 钩子要求 source= 全件入 index，但 tarball 不进仓 | 校验被绕过（checksum 由构建实证兜底）；新人不知情会困惑 | 无干净解（上游化已终判弃用）；保留惯例，靠本文档知会 | 转永久 |
 | TD-09 | Mu 链无 initramfs（root=/dev/sda22 烤死在 cmdline） | 内核包 cmdline + Mu | Mu 不传 initrd，结构如此非权宜 | 换根分区/UUID 即废；救援必须走 9008 或 apk 腿 | 非债——结构性设计（见 DESIGN.md），列此防误判 | 转永久 |
 | TD-10 | **meizu-wfi.service = 开机 disable 全部深度 cpuidle 态**（K30 r24 同款 WFI workaround，设备包 r5 时代入包，当时未登记本表——本表建档后追认的首条） | device 包 `meizu-wfi.service`，boot 时 `echo 1 > …/cpuidle/state[1-9]*/disable` | 当年治「s2idle flakiness」——**10-23 证实 flake 是真的**：cpuidle 使能态 4 次挂起尝试 3 次挂死（看门狗复位），cpuidle 关全干净，与 wowlan 无关 | **待机功耗全案真凶**：CPU 永不簇塌缩→APSS 26h 仅 7 次/0.19s→清醒 idle 0.95W、s2idle 睡眠 1.15W（≈清醒功耗）→12h 掉电 75%。disable 清零后 120s 进 1122 次簇睡 = 机制全好，但挂起随机挂死 | **退役被阻断，转内核根治轮依赖**：修好「cpuidle 使能×s2idle 挂死」即退役（下会话排面 = S2IDLE 挂死根治轮，见接续卡）；治本超窗则维持现状，功耗问题挂起 | 退役取消，根治中 |
+| TD-11 | **数据面 IPA init 握手死窗**（r69 官方化轮发现，2026-11-20） | 内核域（drivers/net/ipa × modem IPA 固件握手）+ 设备包 keeper 延时 start 配套 | modem 内核期自起早于握手窗 → modem 侧 IPA assert（「Init message from A7 not yet received」）+ 硬件 FATAL IRQ crash 泥潭；AP 侧 ipa 驱动 -110 永不重试 → rmnet_ipa0 永不建。r101 = pas DT 开关 qcom,autostart-off + keeper 延时 start ~boot+35s（103 时序复刻）仍 5/5 boot 败；恢复通道全试死（ipa 重载/stop/crash 注入/DMS） | **数据面断**（rmnet0/IPA 通道）；短信/注册面/双卡切换不受影响（QMI 域全通）；dataup -I 硬判 FAIL 诚实呈现 | **内核域专项**：ipa 驱动 init retry 补丁（SSR 事件链健康 = retry 有落点）/ modem IPA 固件域取证（105「MM bearer dial = IPA fatal 炸弹」语境考古：105 轮 fatal 或已把通路炸进慢性态，109 终验 PASS 高度存疑[dataup 旧判据 WiFi 共存语境 = 假绿，r70 已诚实化]） | 在册 |
+
 
 ## 二、交叉印证线索（非债，待排程；2026-10-23 skill 审计产出入册）
 
@@ -94,6 +96,7 @@
    typec/ucsi/pmic-glink wake IRQ 深 suspend 语境崩溃；复现配方 = rtcwake 长睡中
    拔线；判别 = RTC 唤醒同态全净。独立小战役，与 D4-1/花屏无涉。
 9. **s2idle freeze 活锁 waker 识别**（11-19 kprobe 判词续）：活锁期系统仍响应但
+10. **temp.json 刷屏根治 = hexagonrpcd 文件服务语义取证**（11-20 r70 还债改判）：persist 未挂载 → PD 字面路径写开失败刷 ~980 行/boot；tmpfiles 可写路径已造**但刷屏未止** = 白名单/alias 层另有乾坤；无害留机，根治需读 hexagonrpcd 源码 open-for-writing 语义。
    dwc3 掉总线 ⇒ netconsole 唯一通道；配方 = livelock 轮 + /proc/interrupts 差分
    （或 irq trace）→ 定名 waker → 定向修复。A1 疗效存疑（实测全 WFI）——挂 fd
    一发判生死，同窗拼车。
