@@ -127,7 +127,7 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   plasma-mobile 6.8.3-r0 rootfs；⚠plasma rootfs 坑两连 = meizu-dsp-mount boot
   早期时序雷[restart 即愈，候补加重试] + iio 零节点[TECH-DEBT 候补 6 维持]；
   蜂窝资产 = tools/cellular/ 收编 + d1_dataup.sh 配方 + EFS 快照三份全等）；
-  ④推送窗口 ✅ 已清（**11-20 再清零：nura 四笔[af01686..10b8c88] + pmaports 两笔[4dca91f/d0ef5ee = r64+r65]全推**；11-19 深夜曾清[nura 六笔+pmaports r95 bump，dc38852/4789107]；⚠SSH 22 断坑=https 通道走通；pmos_linux 永久私有无远端不推；sfos 新仓无远端 = 建仓决策留用户）。
+  ④推送窗口 ✅ 已清（**11-20 再清零：nura 四笔[af01686..10b8c88] + pmaports 两笔[4dca91f/d0ef5ee = r64+r65]全推**；11-19 深夜曾清[nura 六笔+pmaports r95 bump，dc38852/4789107]；⚠SSH 22 断坑=https 通道走通；pmos_linux 永久私有无远端不推；**sfos = 独立项目本仓无远端不建不推（用户拍板 11-20，勿再提）**）。
   ⑤**本轮（11-19 深夜两连）+ 下会话排面**：设备包化四件 ✅（**r64**，pmaports
   `4dca91f`/apk `11f96db7`，九件仓↔机对拍后入库，preset +2）→ **链腿包化 ✅
   （r65，apk `8e63856e`，十三腿[rmtfs 三件/uim-selection 两件/MM 三件+base-ui 两件/
