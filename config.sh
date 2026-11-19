@@ -46,7 +46,7 @@ APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推�
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="95"      # r95 = bloff 摘除轮（11-19 用户拍板「工程解摘除现在做」：fork `2da7ac419574` bloff_default→false，日用灭屏 = 真睡路径；vmlinuz 16a8a872；新默认态 bloff=0+pps_late=1 抽查全净）；r94 = D4-1 冷启等价化轮（11-19 判过 + **科学解验收属实**：三形态×两时长×灭屏面全净；fork c23b9afbfdab+4daca08159fe；pmaports 51a38c0 拼车）；r93 = D4-1 无背光修复版（退役）；r92 = D4 三件**判负**退役；r91 = 7.3 stable rebase 正式轮
-REL_DEVICE_PKGREL="63"     # r63 = depends +iio-sensor-proxy（10-21 用户拍板补名；CI rootfs 闭合根治的 depends 面收口——fork r3 自此必进构建闭合，与 build-device 预编双保险）；r62 = 摘 discover + flatpak 商店；r61 = waydroid 五件；r60 = modules-load.d 补 uhid
+REL_DEVICE_PKGREL="64"     # r64 = 蜂窝四件设备包化（11-19：keeper/dataup/drop-in/switch + NM/rmtfs 伴生件入库 tools/cellular 收编，depends +qmi-utils+python3，preset +2；pmaports 4dca91f，apk 11f96db7，构建+verify 全绿，未上机[机上 r63+手工件等价]）；r63 = depends +iio-sensor-proxy（10-21）；r62 = 摘 discover + flatpak 商店；r61 = waydroid 五件；r60 = modules-load.d 补 uhid
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；发布面 tarball 仍 r3/29c1ee88）
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r91-350386e0.img"      # mu-r91 = 11-19 回位直刷在机（dtb 同源 c061acd9，r87 起 DTS 零改动；mu-r69 前代沿用件留档 artifacts）
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v75.img.gz"  # v75 = r95 ESP 腿（裸 09759c87 / gz c97f3e11，#96 在机验过）；v74 = r94（裸 03f2b162）；v73 = r93（裸 30d5d58c）；v72 = r92 判负退役（裸 37e3f9c7）；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑（另记：沙箱后台发射 systemd-run 有提交通道竞态秒死坑，须前台发射+落稳确认）

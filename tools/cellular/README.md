@@ -19,6 +19,14 @@ C1 重装配方 = 卡 docs/plasma-mobile-cellular-card-20261119.md §3）。目�
 
 插卡即用链（reboot 全验通过）：meizu-pas(drop-in 解封) → mpss up → rmtfs → msm-modem-uim-selection(选槽) → MM(enabled) → cell-keeper(session 兜底) + cell-dataup(数据面)。
 
+**2026-11-19 深夜设备包化（device r64，pmaports `4dca91f`）**：上述四件 + 两伴生件
+（rmtfs 无限重试 drop-in / NM qrtr unmanaged）已收编 device-meizu-meizu20 包——
+新路径 = `/usr/lib/meizu20/{cell-keeper.sh,d1_dataup.sh,d1_bindmux.py}` +
+`/usr/bin/cell-switch.sh` + `/usr/lib/systemd/system/{cell-keeper,cell-dataup}.service`
++ 两 drop-in/conf；preset 新装机自动 enable，现网升级零行为变化（机上手工件同内容，
+九件 sha256 对拍等价）。⚠链腿 apk（rmtfs 三件/uim-selection 两件/MM 底座等）仍为
+手工腿，全链自动待拍板。本目录保留 = 收编镜像（包版路径适配 diff 见 pmaports r64）。
+
 双卡形态 = **单 active 槽 + 切换脚本**（非 DSDS 双 standby）：MM qcom-soc 插件在双
 active 槽下 SIM identifier 漂移 → enable 后毫秒级 disable 循环（NM auto-enable 加速）；
 slot 2 power-off 单卡化后稳。真 DSDS 挂候补等 upstream MM。

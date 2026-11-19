@@ -10,7 +10,7 @@
 | 内核 apk | 7.3.0_**rc6**-r**95**（**11-19 上机在役**，本地件 `16a8a872`；bloff 摘除 = 日用灭屏走真睡路径；fork c23b9afb+4daca081+2da7ac41） | 16a8a872 | 机上 apk add |
 | ESP | **v75**（r95 内核腿；本地 gz `c97f3e11` = **#96 在机件**，裸 `09759c87` 读回对 ✓） | 09759c87（裸） | recovery_a |
 | Mu 镜像 | r91（**11-19 首刷在机**；r87 起 DTS 零改动沿用，dtb 同源 c061acd9；r69 前代留档） | 350386e0 | boot_b |
-| 设备包 / 固件包 | **r63**（depends +iio-sensor-proxy 闭合；r61 起继承 waydroid 五件/r62 起 flatpak 商店）/ **r4**（11-19 蜂窝复燃轮上机 = +modem_pr mcfg/so 158 件，pmaports `f2885ef`，未发布；发布面仍 r3） | 2013b691 / bb2e9399（apk） | 机上 apk add |
+| 设备包 / 固件包 | **r64**（11-19 蜂窝四件设备包化：keeper/dataup/drop-in/switch + NM/rmtfs 伴生件入库，preset +2；**构建+verify 全绿未上机**——机上仍 r63+手工件[九件 sha256 对拍等价]，升级 = `upgrade.sh --apk`）/ **r4**（11-19 蜂窝复燃轮上机 = +modem_pr mcfg/so 158 件，pmaports `f2885ef`，未发布；发布面仍 r3） | 11f96db7 / bb2e9399（apk） | 机上 apk add |
 | rootfs | Release r91-phosh（**11-19 直刷在机**；裸 16147c7d = CI 发布件同字节；waydroid 五件/flatpak 商店/iio fork r3 烤入） | 16147c7d | userdata |
 | 上机期望 | `uname -v` → **#96**（11-19 r95/v75 双腿实测 ✓ 读回双对） | — | — |
 
