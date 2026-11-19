@@ -3,16 +3,16 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-20 相机驱动轮·第一段更钉（一百零八）：**首 ACK 0x3109 命中 + s5k3p9sx 上机健康在流**（camx bin 格式全破解 + 自写驱动 + RDI 管线全链配置通；残墙 = MIPI 零包/settle 扫频，用户令收兵留档下会话）；在机 = **#98（内核 r97）+ 模块 r99 混态[无害]** + **boot_b mu-r97（读回 2fa98a12 ✓）** + **recovery_a v76（读回 730fd782 ✓）** + plasma rootfs + 移动卡 slot 2；⚠下会话 = ESP v77 重打（r99 vmlinuz）+重刷统一 #100；发布面 = Release r91（Latest）不变）
+## 工作态（2026-11-20 多档刷新率轮更钉（一百零九）：**60/90/120/144 四档暴露上机**（面板 modes 表 +3 条 stock verbatim，fork ac949b2fd8ef；profile 机制半成品已在位，当年 r22g boot 竞态回退解封；真率判据[0x91 座档 60Hz 族异常]上机验证在案）；在机 = **#101（r100）** + **recovery_a v78** + boot_b mu-r97 不动[dtb 同源 7f9737f1] + plasma rootfs + 移动卡 slot 2；发布面 = Release r91（Latest）不变）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**99**（**11-20 上机在装**；相机轮三连 = r97 首发[s5k3p9sx 驱动+DTS，fork ca1c283b+c65d4a6] → r98 全量 init 修复[da5af35] → r99 link-freq 扫频网格[3bc4f16]；运行内核仍 r97，模块 = r99[仅 s5k3p9sx 差异，无害]） | 在机 apk（模块文件 live） | 机上 apk add |
-| ESP | **v76**（r97 内核腿；裸 `730fd782` = **在机件读回全等 ✓**，gz `22176505`；⚠下会话 v77 重打统一 r99） | 730fd782（裸） | recovery_a |
-| Mu 镜像 | **mu-r97-2fa98a12**（**11-20 首刷在机**，dtb 同源 7f9737f1 [r97/r98/r99 apk 共同 dtb，DTS 自此零改]；Mu 树 dc70f810） | 2fa98a12 | boot_b |
-| 设备包 / 固件包 | **r65**（11-19 蜂窝链腿包化：十三腿进 depends——新 rootfs 开箱插卡即用全自动）/ **r4**（11-19 蜂窝复燃轮上机 = +modem_pr mcfg/so 158 件，pmaports `f2885ef`，未发布；发布面仍 r3） | 8e63856e / bb2e9399（apk） | 机上 apk add |
+| 内核 apk | 7.3.0_**rc6**-r**100**（**11-20 多档刷新率轮**：modes 表 +3 条[60/90/144 stock porch verbatim，144 = h 32/32]，fork ac949b2fd8ef；前役 = 相机轮三连 r97/r98/r99[s5k3p9sx+init 修复+扫频网格]） | 在机 apk（模块文件 live） | 机上 apk add |
+| ESP | **v78**（r100 内核腿，11-20；裸 `b57f8605` / gz `ea1fbc97`；v77 号位留白未落盘[原排 r99 vmlinuz 被 r100 顺位吸收]） | b57f8605（裸） | recovery_a |
+| Mu 镜像 | **mu-r97-2fa98a12**（11-20 在机，dtb 同源 7f9737f1 [r97~r100 apk 共同 dtb，DTS 自 r97 零改]；Mu 树 dc70f810） | 2fa98a12 | boot_b |
+| 设备包 / 固件包 | **r67**（11-20 一百零九事故修复：**摘 msm-modem-uim-selection 两件**照官方单卡形态[FP5/FP6 depends 零 uim-selection，`.requires` 链接随包卸载消失]；keeper slot 参数化[状态文件 /var/lib/cell-keeper/active-slot]+双 active 守卫；sensorspd 冲突件 mask——事故链 = r66 无限重试 drop-in × oneshot 硬依赖 = multi-user 永久 waiting = boot 服务面瘫）/ **r4**（11-19 蜂窝复燃轮上机，未发布；发布面仍 r3） | 0b596392 / bb2e9399（apk） | 机上 apk add |
 | rootfs | Release r91-phosh（**11-19 直刷在机**；裸 16147c7d = CI 发布件同字节；waydroid 五件/flatpak 商店/iio fork r3 烤入） | 16147c7d | userdata |
-| 上机期望 | `uname -v` → **#98**（11-20 实测 ✓；boot_b 读回截镜像长度逐字节全等；ESP v77 + reboot 后 → #100） | — | — |
+| 上机期望 | `uname -v` → **#101**（r100，**11-20 实测 ✓** 多次 boot 复验） | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。

@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="99"      # r99 = 相机轮·第一段在机 apk（11-20 一百零八：r97 首发驱动+r97 三腿 → r98 全量 init 修复 → r99 link-freq 扫频网格；fork ca1c283b/c65d4a6/da5af35/3bc4f16；pmaports 65c41f6/1c0bb77；在机 = 内核 r97/#98 + 模块 r99 混态[仅 s5k3p9sx 差异，无害]；ESP v77 统一挂下会话）；r95 = bloff 摘除轮；r91 = 7.3 stable rebase 正式轮
-REL_DEVICE_PKGREL="65"     # r65 = 蜂窝链腿包化（11-19：rmtfs 三件/uim-selection 两件/MM 三件+base-ui 两件/soc-qcom-modem-systemd/tqftpserv/qrtr 十三腿进 depends = 新 rootfs 开箱插卡即用全自动；在机手工腿幂等零变化，上机冒烟 failed 0/registered 保持）；r64 = 蜂窝四件设备包化（keeper/dataup/drop-in/switch + NM/rmtfs 伴生件入库，preset +2）；r63 = depends +iio-sensor-proxy（10-21）；r62 = 摘 discover + flatpak 商店；r61 = waydroid 五件；r60 = modules-load.d 补 uhid
+REL_LINUX_PKGREL="100"     # r100 = 多档刷新率轮（11-20 插队：面板 modes 表 +3 条 60/90/144 stock verbatim，fork ac949b2fd8ef；profile 机制半成品早已在位[0x91/0x2F 表+vrefresh 选档]，当年 r22g 回退[boot 竞态 2/2]解封 = D4-1+设备包排序已落地；r99 = 相机轮·第一段[一百零八]；r95 = bloff 摘除轮；r91 = 7.3 stable rebase 正式轮）
+REL_DEVICE_PKGREL="67"     # r67 = 一百零九事故修复（11-20：摘 msm-modem-uim-selection 两件 depends 照官方单卡形态[FP5/FP6 实测零 uim-selection]；r66 无限重试 drop-in 是 boot 死锁钥匙已撤；keeper slot 参数化+双 active 守卫；sensorspd 冲突件 mask）；r66 = keeper/switch 状态文件+双 active 守卫+sensor mask+boot 竞态三缺口修（其一引发事故）；r65 = 蜂窝链腿包化；r64 = 蜂窝四件包化；r63 = depends +iio-sensor-proxy（10-21）
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；发布面 tarball 仍 r3/29c1ee88）
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r97-2fa98a12.img"      # mu-r97 = 11-20 相机轮 boot_b 腿在机（dtb 同源 7f9737f1 = r97/r98/r99 apk 共同 dtb [DTS 自 r97 后零改]；Mu 树 commit dc70f810）；mu-r91 = 11-19 前役件留档
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v76.img.gz"  # v76 = 在机 recovery_a（r97 vmlinuz，裸 730fd782 / gz 22176505，读回全等 ✓）；⚠下会话 = v77 重打（r99 vmlinuz）+重刷统一；v75 = r95（裸 09759c87）；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑（另记：沙箱后台发射 systemd-run 有提交通道竞态秒死坑，须前台发射+落稳确认）
-REL_KERNEL_VER="#98"       # 在机实测（r97 内核；r99 apk 已装待 ESP v77 + reboot → #100）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v78.img.gz"  # v78 = 多档刷新率轮 ESP（r100 vmlinuz，11-20：裸 b57f8605 / gz ea1fbc97）；v76 = 相机轮件（r97 vmlinuz，裸 730fd782 / gz 22176505）；v77 号位留白未落盘（原排 r99 vmlinuz，被 r100 顺位吸收）；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑（另记：沙箱后台发射 systemd-run 有提交通道竞态秒死坑，须前台发射+落稳确认）
+REL_KERNEL_VER="#101"      # 期望（r100 内核 = pkgrel+1；上机实测后核对）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。

@@ -90,13 +90,15 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   待命；EFS 快照**四份全等**（b85cad2f/c40223e6；第四份 = efs-snapshot-20261119
   -sms-round）；NAS 5gnr-only 偏好非持久（reboot 回 auto，网络侧自驻 5gnr）。
   iOS 线并行走用户——**iOS 工作区/文档零接触，传话 = 用户转告**。
-- **版本钉**：apk **r95**（vmlinuz `16a8a872`，在机 #96）+ ESP **v75**（裸
-  `09759c87` / gz `c97f3e11`，在机）= bloff 摘除轮（r94 = D4-1 判过+验收属实底座）；r92/v72 判负
-  退役（治疗臂 5/5 全花）；r93/v73 = D4-1 无背光修复版退役（真睡醒屏黑）；
-  pmaports 拼车 `51a38c0`（KPROBES/KPROBE_EVENTS/FTRACE/PM_QOS + 摘 KVM/F2FS；
-  ⚠config 陈旧重复行坑两连，config 改动必须解包 apk 验 /proc/config 再上机）；
-  **fw r4**（11-07 蜂窝复燃备料：+modem_pr mcfg/so 158 件，pmaports `f2885ef`，
-  本地 apk 全绿未发布）。
+- **版本钉**：apk **r100**（vmlinuz `d9713ed1`，在机 **#101**）+ ESP **v78**（裸
+  `b57f8605` / gz `ea1fbc97`，在机，读回全等 ✓；v77 号位留白 = 原 r99 计划被 r100
+  顺位吸收）= **多档刷新率轮**（fork `ac949b2fd8ef`：modes 1→4 条 60/90/120/144 stock
+  verbatim）；r99/r97 = 相机轮·第一段（一百零八）；r95 = bloff 摘除轮；r91 = 7.3 stable
+  rebase 正式轮；**设备包 r67**（一百零九事故修复：摘 uim-selection 照官方单卡形态 +
+  keeper slot 参数化 + sensorspd mask）；**fw r4**（11-07 蜂窝复燃备料，本地全绿未发布）。
+- **发布面**：**Release r91 = Latest 不变**（8 件制）；r95-r100/r64-r67 是否发 Release
+  留用户。升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑须显式
+  --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
 - **发布面**：**Release r91 = Latest 不变**（8 件制）；r95 是否发 Release 留用户。
   升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑须显式
   --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
@@ -150,18 +152,33 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   mclk WARN 杂音；在机 = boot_b mu-r97 + recovery_a v76（r97 vmlinuz）+
   r99 apk = **#98 + 模块 r99 混态（无害）**；fork 四连 commit
   ca1c283b/c65d4a6/da5af35/3bc4f16 + pmaports 65c41f6/1c0bb77；详录 =
-  experiment-log（一百零八）。**下会话排面 = ①ESP v77 重打（r99 vmlinuz）+
-  recovery_a 重刷 + reboot 统一 #100 ②CSI 扫频续攻（每档 systemd-run 隔离 +
-  timeout，禁 kill 流进程；先取证 D 态挂点 /proc/pid/stack）③hub_3 竞态
-  自动踢候补（设备包 service/tmpfiles 小件）④GN5 主摄[CPHY 5.66G 难度峰值]
-  → GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件] → 5E9 景深 ⑤回归清单
-  补全（zram✓/输入✓ 已抽查）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
+  experiment-log（一百零八）。**▶ 多档刷新率轮 + boot 事故轮 ✅（11-20 一百零九，
+  用户插队点名）：四档 60/90/120/144 上机全验证（kwin 全暴露+真掉电重建 dsi_err 零
+  新增；0x91 座档四档全等 60Hz 族+bit7 = 座档不跟命令档[H2 扩展]，多档现阶段 =
+  DPU pacing 面切换，真玻璃率待眼判/仪器判）；中途引爆 boot 服务面事故 = r66 无限
+  重试 drop-in × oneshot 硬依赖 = multi-user 永久 waiting 全服务面瘫（触控失效/
+  sensor 刷屏/audio failed/devshell 死，boot-3/4 两度复现；**相机轮与多档内核改动
+  因果清白**——boot-1 r100 无 r66 零事故）→ 用户点名照官方做 = FP5/FP6 depends
+  实测零 uim-selection → **r67 摘 uim-selection 两件** + r64 影子层清算（/etc 手工
+  unit + /usr/local/bin 遮蔽全清）+ sensorspd 双实例冲突 mask（正主 = udev 触发的
+  meizu-sensorspd 完整配方）→ 终验全绿（boot 完整/failed 0/触控/电池 100%/传感器
+  accel=true/audio/四档/广电 slot1 registered + 数据面 PASS）。坑册五连 = ①oneshot+
+  无限 StartLimit+硬依赖 = boot 死锁 ②/etc 与 /usr/local/bin = 包化影子层，收编必清
+  ③`.requires/` 链接不吃 drop-in 空赋值重置 ④打包前查旧手工件在跑（单例资源）
+  ⑤qmicli 单横线吃 stderr = devsh 假空输出。候补小件 = 解封尾段×rmtfs 时序竞态
+  （boot 期静默失败手动即中）+ temp.json 刷屏限速（非致命）+ reboot 挂死干净态观察。
+  详录 = experiment-log（一百零九）。**下会话排面 = ①相机 CSI 扫频续攻（用户拍板
+  推入；每档 systemd-run 隔离 + timeout，禁 kill 流进程；先取证 D 态挂点
+  /proc/pid/stack）②hub_3 竞态自动踢候补（设备包 service/tmpfiles 小件）③GN5 主摄
+  [CPHY 5.66G 难度峰值]→ GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件] → 5E9 景深
+  ④回归清单补全（zram✓/输入✓ 已抽查）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
   TFTP 根 tmpfiles 包化（小件）；蜂窝残面 = 短信 ✅ 已破（见上②），余全
   挂起（复燃条件在册，见上②）。
-  **设备当前态 = 移动卡（slot 2）在役**（短信实测后留置，广电卡 power-off 待命；
-  切回 = `cell-switch.sh 1`；TFTP 根已重建 /readonly/firmware/image→
-  /lib/firmware/qcom/sm8550/meizu + /readwrite 目录）。
+  **设备当前态 = 广电卡 slot 1 在役**（registered + 数据面 PASS；移动卡用户拔出留手，
+  回归 = 插 slot 2 + `cell-switch.sh 2`；keeper 状态文件 = /var/lib/cell-keeper/
+  active-slot = 1；uim-selection 已卸载[单卡官方形态]；TFTP 根已重建 /readonly/
+  firmware/image→/lib/firmware/qcom/sm8550/meizu + /readwrite 目录）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
   **蜂窝用户面探针轮 ✅（同日深夜，四域一窗快扫；战报 = experiment-log 一百零六·乙）**：
