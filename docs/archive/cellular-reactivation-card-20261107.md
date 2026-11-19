@@ -1,11 +1,12 @@
 # 蜂窝复燃·设备窗执行卡（2026-11-07 备料轮产出；复燃 = 用户 11-06 点名「参考 21 Note 仓来修」）
 
-> **状态 = 离线备料 ✅ 完成，等设备回链 + 用户在场窗**（与根治卡 rootcure-window-card
-> 两门同源，可拼车/让路，用户定序）。
-> 配方 ground truth = **leluo123/m2468-mainline**（同 SM8550/Kailua：注册+5G n41+
-> WDS 拨号真 IP 已通，剩射频 30-45s PLL 崩墙）+ 我方 10-04 第一轮底档
-> （pmos experiment-log 五十五/五十五乙：S0/S1/S2 全过 = 控制面全活，S3 拦截于
-> DMS online DeviceNotReady）。
+> **状态 = ✅ 收官（2026-11-19 设备窗）：registered 里程碑达成，蜂窝「挂起」→「半通」**
+>（全量战报 = pmos experiment-log **（一百零一）**）。S-0~S-6 全过；S-7 新墙 =
+> **IPA fatal**（非彼仓 PLL，SSR 自愈 + DMS 舞步可恢复；session 每次重启/SSR 后须复查
+> re-provision）；S-8 数据面双墙（WDS mux bind (1,3) 全域拒 + start-network (70)，
+> 健康注册窗内复现 = firmware 级差异）判收单列候补轮。
+> 配方 ground truth = **leluo123/m2468-mainline**（同 SM8550/Kailua）+
+> 我方 10-04 第一轮底档（pmos experiment-log 五十五/五十五乙）。
 
 ## 0. 战局定位（复燃为什么现在便宜了）
 

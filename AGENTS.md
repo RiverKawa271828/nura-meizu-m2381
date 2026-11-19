@@ -42,12 +42,39 @@ docs/FLASHING.md 刷机教程（每步带验证点）——动手前必读
 docs/PIPELINE.md 构建管线 + Phase-2 发布清单
 MANIFEST.md      现役产物表 + 已知非回归失败（首 boot 看到别慌的三件）
 artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜像不入 git）
-docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.md；根治卡已收官归档）
+docs/archive/*-card-*.md 各轮执行卡（蜂窝复燃卡+根治卡均已 ✅ 收官归档；无现役卡）
 ```
 
-## 现态（2026-11-19 根治轮设备窗收官+科学解验收+bloff 摘除；新会话从这里接）
+## 现态（2026-11-19 蜂窝复燃 registered 里程碑 ✅ + 根治轮收官；新会话从这里接）
 
-- **设备**：**11-19 根治轮·设备窗 ✅ 收官 + 花屏科学解验收属实 + bloff 摘除**——
+- **设备**：**11-19 蜂窝复燃·设备窗 ✅ registered 里程碑收官 = 蜂窝「挂起」→「半通」**
+  （卡 = docs/archive/cellular-reactivation-card-20261107 ✅，战报 = experiment-log 一百零一）——
+  **registered + PS attached，PLMN 460-15 广电，RSSI -71dBm/SINR 9.0，5gnr/lte**，
+  胜彼仓 30-45s 窗；10-04 S3 头号新嫌疑兑现 = **mcfg TFTP 缺料**（fw r4 落位后
+  tqftpserv RRQ 直读 modem 拉 China/CBN/Commercial mcfg_sw）。**新墙 = IPA fatal**
+  （`ipa_hal.c:2957` modem 侧 IPA μC 崩，非彼仓 PLL 墙；SSR 自愈 + DMS 舞步买窗）
+  + **注册面真因 = provisioning session**（重启/SSR 后消失，re-provision 后 20s 即
+  registered）+ **数据面双墙**（WDS mux bind (1,3) 72 组合全域拒 + start-network
+  (70)，健康注册窗内复现 = firmware 级差异）→ 候补轮（DSD raw/PDC/firmware 对拍）。
+  解封仪式 = 清 override（字面量 "none"≠空串坑）→bind→start→查 session→舞步；
+  取证一律 journalctl -k（dmesg 环形被 GPU IFPC 刷洗）；/root/*.py 白嫖件留机。
+  在机 = **#96 + v75（读回 09759c87）+ mu-r91 + r91-phosh rootfs**；新默认态
+  （bloff=0+pps_late=1 = 日用灭屏走真睡路径）/ wowlan 武装 / failed 0 /
+  kprobe 通道 OK（KPROBE_EVENTS 首次上机）。
+  **花屏 D4-1 判过 + 科学解验收属实**：r92（D4 三件）判负[治疗臂 5/5 全花，
+  标准命令域排除面闭合]→ D4-1 冷启等价化[真睡尾 reset 拉低+VREG 全断+轨拍
+  5/5/10+背光恢复；M3 留轨退役；fork `c23b9afbfdab`+`4daca08159fe`]→ **验收 =
+  三形态（stock/legacy/构建默认）× 两时长（40s/300s）× 灭屏面（面板单循环
+  ×5）全净，用户全程眼判**（PANEL §6 条 11.7）。**bloff 工程解摘除**（用户拍板：
+  fork `2da7ac419574` bloff_default→false → r95/v75 上机 #96，TD-03 **已还**；
+  module_param 保留 = 逃生门）。**r95 升现役钉，发 Release 留用户**。
+  **S2IDLE 段 4 kprobe 判词反转**：limit 无界实锤 + **「深塌缩」证伪**（全
+  WFI + psci_in=0）+ **freeze 唤醒风暴活锁**定位（黑屏假挂死，电源键可打回）；
+  A1 疗效存疑；下一手 = waker 识别（netconsole 唯一通道）+ A1 挂 fd 一发判生死。
+  **新雷 = s2idle 睡中拔线 = 硬复位 3/3**（面板路径无关，候补池独立查）。
+  devselfcheck A7 判读器适配 + iio 零节点查因仍挂设备窗（TECH-DEBT 候补 6）。
+  **SIM = 广电测试卡（460-15/cbnet 已证）**。iOS 线并行走用户——**iOS 工作区/
+  文档零接触，传话 = 用户转告**。
   在机 = **#96 + v75（读回 09759c87）+ mu-r91 + r91-phosh rootfs**；新默认态
   （bloff=0+pps_late=1 = 日用灭屏走真睡路径）/ wowlan 武装 / failed 0 /
   kprobe 通道 OK（KPROBE_EVENTS 首次上机）。
@@ -79,12 +106,12 @@ docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
   「放到以后做」）；
-  ②**蜂窝复燃·设备窗 = 下个会话主件（用户令 11-19）= [docs/cellular-reactivation-card-20261107.md](docs/cellular-reactivation-card-20261107.md)**
-  （11-06 用户点名复燃「参考 21 Note 仓来修」→ 11-07 离线备料 ✅：fw r4
-  [+modem_pr mcfg/so 158 件 = S3 DeviceNotReady 头号新嫌疑的缺料]pmaports
-  `f2885ef` 本地 apk 全绿未发布；全序 S-0~S8 = tqftpserv 根直读判据 → 解封
-  → aid provision → DMS 舞步 → 注册里程碑 → PLL 墙预期管理；**设备回链 ✅ +
-  SIM 已插 ✅，剩余门 = 用户在场窗，与①同门可拼车/让路，用户定序**）；
+  ②**蜂窝复燃 ✅ 收官（11-19）：registered 里程碑达成 = 蜂窝挂起→半通**
+  （卡头状态行 ✅ = docs/archive/cellular-reactivation-card-20261107.md；
+  战报 = experiment-log 一百零一）。残面候补 = **数据面双墙轮**（WDS mux bind
+  (1,3) 全域拒 + start-network (70)，候补弹药 = DSD raw start-data-call / PDC
+  profile / firmware 对拍[彼仓 c3-00008 vs 我方 MPSS.DE.3.0-KAILUA]）+ IPA fatal
+  墙（rf_keeper 式 DMS 自愈件可选）+ 用户面（短信/通话 = 需 VoLTE/IMS，未开）；
   ③推送窗口 = 用户（本轮及此前多轮 commit 均未 push）。
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
@@ -168,7 +195,7 @@ docs/*-card-*.md 各轮执行卡（现役 = cellular-reactivation-card-20261107.
 | 面板花屏 case 包（排雷表 / bloff 工程解 / S5 对拍 / D1-D4） | docs/PANEL-CORRUPTION.md |
 | 音频 bring-up 方法论（出声必需清单 / probe 竞态 / 工作点 / UCM 坑 / 录音边界） | docs/AUDIO-METHOD.md |
 | 技术债唯一出处（去债条件 / NO-GO 集 / 候补小件池） | docs/TECH-DEBT.md |
-| **下一轮执行卡（蜂窝复燃·设备窗）** | docs/cellular-reactivation-card-20261107.md |
+| **蜂窝复燃卡（✅ 收官 11-19，registered 里程碑）** | docs/archive/cellular-reactivation-card-20261107.md |
 | 已收官轮次卡 / 历史研究档（10 张，✅/📚 标注） | docs/archive/（考古用，勿接排面） |
 | 历史战报全量（10-13~10-30 接续卡原文 + 带话四轮回信） | docs/AGENTS-ARCHIVE-20261101.md（只读快照） |
 | 出一车产物 | docs/PIPELINE.md + script/ |
