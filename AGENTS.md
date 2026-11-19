@@ -138,10 +138,16 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   内部 EFS/NV 记录域，AP 用户态无旋钮；TFTP 根结构性坑修讫[手工根会失，机上已
   重建正确形态 image→meizu 目录，包化 tmpfiles 挂候补小件]；复燃路改写 = stock
   对照/Flyme 窗取证真料/upstream PDS 语义，全大后期档；战报 = experiment-log
-  一百零七）**。下会话排面 = **无新点名**（候选池剩 = 干净机首航（Phase-2 判据）/
-  S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ 相机/NFC/通话音频（点名制）/
-  TFTP 根 tmpfiles 包化（小件，搭车制））；蜂窝残面 = 短信 ✅ 已破（见上②），
-  余全挂起（复燃条件在册，见上②）。
+  一百零七）**。下会话排面 = **相机驱动轮（11-20 用户点名 + 授权无人值守自刷）**：
+  宿主段照战卡施工（首发 3P9 超广角破 ACK 0x3109@0x2d → GN5 主摄[CPHY 5.66G 难度
+  峰值] → GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件，不依赖传感器]；卡 =
+  pmos `docs/meizu20/s5k3p9-driver-round-card.md` 全配方 + `camera-static-prep.md`
+  平台全史）→ 内核 apk + Mu 重编 → verify 全绿 → **boot_b/ESP 腿自刷（规则 5 豁免
+  在案，灭屏执行，fastboot 单通道照旧）** → 上机验证（拍件自判/闪光抓帧/回归清单）
+  → 战报。候选池余项照旧 = 干净机首航（Phase-2 判据）/ S2IDLE 深睡线复燃（之后，
+  需设备窗+用户在场）/ NFC/通话音频（点名制）/ TFTP 根 tmpfiles 包化（小件，
+  相机轮搭车或点名）；蜂窝残面 = 短信 ✅ 已破（见上②），余全挂起（复燃条件在册，
+  见上②）。
   **设备当前态 = 移动卡（slot 2）在役**（短信实测后留置，广电卡 power-off 待命；
   切回 = `cell-switch.sh 1`；TFTP 根已重建 /readonly/firmware/image→
   /lib/firmware/qcom/sm8550/meizu + /readwrite 目录）。
@@ -211,6 +217,9 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
 5. **红线继承**（全在 FLASHING.md §8）：写分区必须 `--i-am-present`；只碰
    boot_b/recovery_a；xbl/abl/tz/modem/dtbo_b/super/modemst/persist 永不碰；
    刷写时长不算证据，只看 dd 读回；**fastboot 单通道**（两侧刷写必须互斥）。
+   **⚠11-20 用户拍板豁免：DTS 变更类刷写（boot_b Mu + ESP 腿）= 授权无人值守
+   自刷**（相机轮起适用；apk 腿本来可 solo；红线分区照旧永不碰；无人值守轮
+   按灭屏纪律执行）。
 6. **本机并发**：pmbootstrap work dir 单实例，构建前确认无并发构建
    （`setup.sh` 已带该检查；K30 已退役，防本机并发即可）。
 7. 仓库命名纪律：全小写 kebab `nura-meizu-m2381`；机器引用一律此名。
