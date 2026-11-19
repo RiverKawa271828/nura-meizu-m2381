@@ -133,11 +133,13 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   （r65，apk `8e63856e`，十三腿[rmtfs 三件/uim-selection 两件/MM 三件+base-ui 两件/
   soc-qcom-modem-systemd/tqftpserv/qrtr]进 depends = 新 rootfs 开箱插卡即用全自动；
   在机 #96 双轮 apk 腿升级+冒烟全绿[failed 0/keeper/dataup/pas/rmtfs/MM 全 active/
-  registered 保持]，在机手工腿幂等零变化）**。下会话排面 = 待定（用户令）；候选池
-  剩 = 干净机首航（Phase-2 判据）/ S2IDLE 深睡线复燃（需设备窗+用户在场）/
-  相机/NFC/通话音频（点名制）；蜂窝残面 = 短信 ✅ 已破（见上②），余全挂起（复燃
-  条件在册，见上②）。**设备当前态 = 移动卡（slot 2）在役**（短信实测后留置，广电
-  卡 power-off 待命；切回 = `cell-switch.sh 1`）。
+  registered 保持]，在机手工腿幂等零变化）**。下会话排面 = **GNSS fw 取证宿主段
+  + solo 上机 LOC 验证**（用户拍板 11-20：零动手活优先，主件已开工一轮 = stable
+  检查过 + fw 包源定位；深睡线 = 之后「用户没空」，需设备窗+用户在场）。候选池剩
+  = 干净机首航（Phase-2 判据）/ S2IDLE 深睡线复燃（之后）/ 相机/NFC/通话音频
+  （点名制）；蜂窝残面 = 短信 ✅ 已破（见上②），余全挂起（复燃条件在册，见上②）。
+  **设备当前态 = 移动卡（slot 2）在役**（短信实测后留置，广电卡 power-off 待命；
+  切回 = `cell-switch.sh 1`）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
   **蜂窝用户面探针轮 ✅（同日深夜，四域一窗快扫；战报 = experiment-log 一百零六·乙）**：
@@ -154,6 +156,7 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   msm 三域零交集不跟进**[7.3.1 同判延续]；v7.4-rc3 已出照政策不追；下轮复查
   起点 = **7.3.6 / 7.4 正式**）；
   设备现态探测先行（devsh 连通 / uname / wowlan / cpuidle / failed 计数）。
+  11-20 stable 复查 = 7.3.6 / 7.4 正式均未出（7.4-rc3 不追），零动作。
   ⚠若复活 S2IDLE E 长跑（挂起线）：设备探测降级为只读轮间观测窗
   （睡中拔线/电源键 = 污染轮次，拔线还有复位雷）。
 - **已关闭（勿重做/勿再提）**：rc7 演练、路线 D、NCM 漂移修、ath12k B 路（挂起
