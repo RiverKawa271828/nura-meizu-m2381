@@ -177,7 +177,7 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   105 fatal 炸弹语境考古[109 终验 PASS 高度存疑 = dataup 旧判据 WiFi 共存语境假绿，
   r70 已 -I 硬判诚实化 + bounce 重铺路由 + addr flush]）；短信/注册面/双卡切换不受影响
   （QMI 域全通）。详录 = experiment-log（一百一十）。
-  **下会话主线（用户 11-20 拍板「下个会话继续主线」）= 相机驱动轮·第二段**：
+  **下会话主线（用户 11-20 拍板）= 相机多摄扩展轮（卡 = docs/camera-multi-round-card-20261120.md；一百一十一首光达成+撕裂挂候补后）**：S0 前置小件（pm8008i 细胞竞态 r72[GD2 供电 blocker] + r105 PLL 回读骑乘）→ S1 GD2 前摄（用户点名优先；3P9 配方复刻，难度闸=CPHY/异常轨则跳）→ S2 闪光灯（leds-qcom-flash 独立件）→ S3 5E9 余力；GN5 主摄 CPHY 5.66G = 难度峰值挂大后期。撕裂修复 = 候补（一百一十一 §6 假设链）。原排面（相机第二段 CSI 扫频）已收官一百一十一：
   ①CSI 扫频续攻（残墙 = MIPI 零包/csiphy settle 未校准；扫频网格已备 = 驱动 12 档可写
   link-freq 200M-950M 逐档试；纪律 = 每档 systemd-run 隔离 + timeout、禁 kill 流进程、
   先取证 D 态挂点 /proc/pid/stack；新雷规避三件 = hub_3 竞态[r70 已自动踢 boot 即通]/
