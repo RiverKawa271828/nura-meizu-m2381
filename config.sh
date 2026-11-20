@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="112"     # r112 = GD2 总线真值轮（11-21：**GD2 真走 cci1 m1 = AON CCI gpio208/209**（stock cam-sensor1 父节点 = cam_cci1 + cci_aon_i2c_active 真值；cci2/gpio0/1 归属误判 = 死扫根因，r111 定谳）+ cci1 i2c-bus@1/cci1_1 组补件 + micbias 恢复 stock 门控[伪案撤销]）；r111/r109/r110 = 诊断插桩轮（keep_power/no_probe 参数 + 70ms stock 时序 + identify 重试日志）；r108 = micbias always-on（后撤销）；r107 = s5kgd2sp03.c + 3P9 libcamera 合规 + CFA 改 SGBRG10
+REL_LINUX_PKGREL="116"     # r116 = 在机现役（11-21 一百一十四：r115/r116 = -32 插桩轮[camss-video s_stream 失败点名 + s5kgd2sp03 步日志]；**-32 判定 = 脚本 bug 内核无罪**，插桩保留为 GD2 残墙取证资产；在机 = r116 模块 + #113 vmlinuz[ESP v85 = r112 件]无害混态）；r112 = GD2 总线真值轮（11-21：**GD2 真走 cci1 m1 = AON CCI gpio208/209**（stock cam-sensor1 父节点 = cam_cci1 + cci_aon_i2c_active 真值；cci2/gpio0/1 归属误判 = 死扫根因，r111 定谳）+ cci1 i2c-bus@1/cci1_1 组补件 + micbias 恢复 stock 门控[伪案撤销]）；r111/r109/r110 = 诊断插桩轮（keep_power/no_probe 参数 + 70ms stock 时序 + identify 重试日志）；r108 = micbias always-on（后撤销）；r107 = s5kgd2sp03.c + 3P9 libcamera 合规 + CFA 改 SGBRG10
 REL_DEVICE_PKGREL="72"     # r72 = pm8008i 细胞显式等待环 + hub_2(988000) bind（GD2 供电 blocker 修复；上机 #108 boot 双细胞即绑实证）；⚠touch-load 里 3P9 补绑仍硬编码 0-002d（cci 适配器改数后 = 2-002d，服务标 failed 但 udev 兜底已绑——r73 顺手件）；r71 = 相机开机即通轮
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；发布面 tarball 仍 r3/29c1ee88）
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r112-a3dbcf6c.img"     # mu-r112 = 11-21 GD2 cci1-m1 真值轮（FdtBlob 自 r112 apk 同源）；mu-r108 = r108 件留档（首 boot 一次卡死 + "cpu vectors region not present in cfg file" 信息行，读回完好非边写，二启自愈未定谳）；mu-r102 = 相机轮·第二段件留档
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v85.img.gz"  # v85 = r112 ESP（11-21：裸 44f25038 / gz e2e6c1e6）；v84/v83 = r108/r107 件留档；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑（沙箱后台发射 systemd-run 提交通道竞态秒死坑，前台发射+落稳确认）
-REL_KERNEL_VER="#113"      # 期望（r112 内核 = pkgrel+1；上机实测后核对）
+REL_KERNEL_VER="#113"      # 上机实测 ✓（11-21 一百一十四：uname #113；ESP v85 = r112 vmlinuz，r116 apk = 模块腿差异）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。

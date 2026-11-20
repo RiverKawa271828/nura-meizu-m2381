@@ -92,13 +92,14 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   待命；EFS 快照**四份全等**（b85cad2f/c40223e6；第四份 = efs-snapshot-20261119
   -sms-round）；NAS 5gnr-only 偏好非持久（reboot 回 auto，网络侧自驻 5gnr）。
   iOS 线并行走用户——**iOS 工作区/文档零接触，传话 = 用户转告**。
-- **版本钉**：apk **r101**（vmlinuz `a7fd6265`，在机 **#102**）+ ESP **v79**（裸
-  `11f67de8` / gz `a442e509`，在机，读回全等 ✓）+ **mu-r101-a6fb2158**（boot_b，读回 ✓
-  按镜像字节截取对拍）= **modem autostart-off 轮**（fork `12dcde3033c8`：pas 驱动 DT
-  开关一行 + DTS 4080000 关自启 = IPA 握手死窗时序修复）；r100 = 多档刷新率轮；r99/r97 =
-  相机轮·第一段（一百零八）；r95 = bloff 摘除轮；r91 = 7.3 stable rebase 正式轮；
-  **设备包 r70**（r69 官方化轮 + r70 判据诚实化，见下排面段）；**fw r4**（11-07 蜂窝
-  复燃备料，本地全绿未发布）。
+- **版本钉**：apk **r116**（在机；**#113 = ESP v85 的 r112 vmlinuz，r116 模块腿
+  差异态无害**——**-32 双案破译 + GD2 链上机轮，11-21 一百一十四**）+ ESP **v85**
+  （裸 `44f25038` / gz `e2e6c1e6`，在机，读回全等 ✓）+ **mu-r112-a3dbcf6c**（boot_b，
+  读回 ✓ 按镜像字节截取对拍）= **GD2 总线真值链**（r112 = cci1-m1 AON 真值轮；r115/r116
+  = -32 插桩轮）；r107 = s5kgd2sp03.c + 3P9 libcamera 合规；r104 = 相机轮·第二段；
+  r101 = modem autostart-off 轮；r100 = 多档刷新率轮；r95 = bloff 摘除轮；r91 = 7.3
+  stable rebase 正式轮；**设备包 r72**（pm8008 双细胞等待环 + hub_2 bind + dataup 清死
+  路由）；**fw r4**（11-07 蜂窝复燃备料，本地全绿未发布）。
 - **发布面**：**Release r91 = Latest 不变**（8 件制）；r95-r101/r64-r70 是否发 Release
   留用户。升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑须显式
   --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
@@ -192,17 +193,20 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   单发间隔 ≥10s，cam-shot 注记）。pm8008i 竞态本 boot 复现实锤（cell2 NO-DRIVER，广角
   pm8008j 不受影响）→ r72 随 GD2 轮修。**零源码/包变更，钉子不变 = #105 + v82 +
   mu-r102**。详录 = experiment-log（一百一十二）。
-  **下会话主线 = S1 GD2 前摄（用户点名优先；卡 = docs/camera-multi-round-card-20261120.md 已改序）**：
-  前置 = 先修 pm8008i 竞态（r72）→ GD2 配方复刻（stock FDT 真值/bin 解码/s5kgd2.c/
-  DTS/r105 构建自刷/cam-shot 改实体名复用；难度闸=CPHY/异常轨则跳）→ S2 闪光灯 →
-  S3 5E9 余力；GN5 主摄 CPHY 5.66G = 难度峰值挂大后期。广角（3P9）= 已做实参照件
-  = 对照基准。原排面（相机第二段 CSI 扫频）已收官一百一十一：
-  ①CSI 扫频续攻（残墙 = MIPI 零包/csiphy settle 未校准；扫频网格已备 = 驱动 12 档可写
-  link-freq 200M-950M 逐档试；纪律 = 每档 systemd-run 隔离 + timeout、禁 kill 流进程、
-  先取证 D 态挂点 /proc/pid/stack；新雷规避三件 = hub_3 竞态[r70 已自动踢 boot 即通]/
-  camss 流挂 D 态[load 34，sysrq-b 才救回]/probe 期 mclk WARN 杂音）②扫通后 GN5 主摄
-  [CPHY 5.66G 难度峰值]→ GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件] → 5E9 景深
-  ③回归清单补全（zram✓/输入✓ 已抽查）。**数据面 IPA 内核域专项（TD-11）= 已排入计划**
+  **▶ 一百一十三→一百一十四（11-21）GD2 轮两连 ✅**：一百一十三 = GD2 真值全闭合
+  + 首试 ACK 0x842 命中（cci1-m1 = AON CCI gpio208/209，bin 差分三源互证），残墙
+  STREAMON -32 挂起；一百一十四（本会话）= **-32 全案破**（四层：video_check_format
+  静默 -EPIPE + 脚本 $Wx$H 展开吃宽 + read-back 锚错实体 + pgAA 小写 g——内核/boot
+  链全洗清；cam-shot 双脚本 fmt 自适应化）+ 设备混态定谳（上会话 r104 恢复 = 只换盘
+  未重载）+ **GD2 链上机全绿**（mu-r112 + v85 读回双对 + r116 模块；3-0010 ACK +
+  csiphy4 ENABLED + failed 0）+ **GD2 残墙定谳 = MIPI 零包**（s_stream 全通插桩零
+  触发 + 传感器在流 0x0100=0x0001 + MCLK4/引脚/rails 全绿 + csid0 IRQ delta 仅 +1
+  vs 应~1200 SOF → 断层 = 传感器 TX↔csiphy4 lane 层；3P9 同 boot 同下游满帧 = 管线
+  无罪；新雷 = s5kgd2sp03 int64 pixel_rate WARN[r117 顺手修]）。
+  **下轮 = GD2 残墙攻法（卡已更新）**：①r117 插桩（csiphy4 步日志+settle dump+
+  int64 修复）→ ②GD2 PLL 分页读回核 bin 落位 → ③stock AON 域考古 → ④扫频网格
+  适配。S2 闪光灯 + 顺手件包照旧在队。广角（3P9）= 参照件已自适应化复验（满帧）。
+  **数据面 IPA 内核域专项（TD-11）= 已排入计划**
   （用户 11-20 拍板「以后修」；非主线，主线相机段收官后顶上；修法序 = ipa 驱动 init
   retry 补丁先探——SSR 事件链健康 = retry 有落点，modem 固件域取证次之）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/

@@ -3,16 +3,16 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-20 相机轮·第二段更钉（一百一十一）：CSI 12 档扫频全零包（12/12 无挂[隔离姿势下 round-1 D 陷阱零复现]）→ 根因 = DTS data-lanes `<1 2 3 4>` 错位（camss lane pos 0 基，树内活例 = lemans imx577 `clock-lanes=<7> data-lanes=<0 1 2 3>`；旧值 CTRL5 lane0 使能位缺失 → 全档零包）→ r102 = DTS 双端点 0 基修正 + s5k3p9sx pixel_rate int64 setter WARN 修复（fork 8a5f43ab4549+07e16679b5aa）；**附带发现+根治 = r69 autoprobe 窗口吞 pm8008 mfd regulator 细胞**（i2c 总线独立 autoprobe 位不受影响 + drivers_autoprobe_store 只翻标志永不 rescan[drivers/base/bus.c 实锤] → 相机 PMIC 全轨不注册 → 传感器 deferred 永挂，每 boot 复现；r69/r70 之后相机链从未 boot 即通）→ r71 设备包 = touch-load 追加细胞 force-bind 重试环 + 3P9 补绑；在机 = **#103（r102）** + **recovery_a v80** + boot_b **mu-r102** + plasma rootfs + 广电卡 slot 1；发布面 = Release r91（Latest）不变）
+## 工作态（2026-11-21 -32 双案破译 + GD2 链上机更钉（一百一十四）：STREAMON EPIPE 全案破（四层脚本/框架 bug：video_check_format 静默 -EPIPE[pad 统一 SGBRG10 时 video 留 pRAA] + $Wx$H 展开吃宽 + read-back 锚错实体 + pgAA 小写 g；内核/boot 链全洗清）→ cam-shot 双脚本 fmt 自适应化（读回驱动实际 code 全链跟随）+ 设备混态定谳（上会话 r104 恢复=只换盘未重载；重启洗净 = 112 流程复刻暗场签名帧与 box2 直方图逐值同族 = 链健康）+ GD2 链上机全绿（mu-r112 boot_b 读回 a3dbcf6c ✓ + v85 recovery_a 读回 44f25038 ✓ + r116 模块 sideload[--no-network 破 APKINDEX 堵]；3-0010 ACK + csiphy4 ENABLED + failed 0）+ GD2 残墙 = MIPI 零包取证完整（s_stream 全通 + 传感器在流 0x0100=1 + MCLK4/引脚/rails 绿 + csid0 IRQ delta 仅 +1 vs 应~1200 SOF → 断层 = 传感器 TX↔csiphy4 lane 层；3P9 同 boot 同下游满帧 = 管线无罪；下轮 = r117 插桩 → GD2 PLL 分页读回 → stock AON 域考古）；在机 = **#113（ESP v85 = r112 vmlinuz）+ r116 模块** + boot_b mu-r112 + plasma rootfs + 广电卡 slot 1；发布面 = Release r91（Latest）不变）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**104**（**11-20 相机轮·第二段**：DTS CSI 双端点 lane 0 基修正 + pixel_rate int64 setter，fork ff597344636c（ctrl-setup 中毒修复）+f41a42ca299d（vendor 2.1.2 全表）；前役 = modem autostart-off 轮 r101 / 多档刷新率轮 r100 / 相机轮三连 r97-r99） | 在机 apk（模块文件 live） | 机上 apk add |
-| ESP | **v82**（r104 内核腿，11-20；裸 `086516b2` / gz `2d2a998f`，**读回 ✓**；v81/v80 = 前件留档[704ab5c5/12649659]） | 086516b2（裸） | recovery_a |
-| Mu 镜像 | **mu-r102-6e9e1204**（11-20 在机，CSI lane 修正 DTS 与 r102 apk 同源；mu-r101 = modem autostart-off 件留档[读回 ✓ 按镜像字节截取对拍]） | 6e9e1204 | boot_b |
-| 设备包 / 固件包 | **r71**（11-20：touch-load 追加 pm8008-regulator 细胞 force-bind 重试环 + 3P9 补绑 = 相机开机即通；前役 = r69 官方化轮 + r70 判据诚实化）/ **r4**（11-19，未发布；发布面仍 r3） | 在机 apk live / bb2e9399（apk） | 机上 apk add |
-| rootfs | Release r91-phosh（**11-19 直刷在机**；裸 16147c7d = CI 发布件同字节；waydroid 五件/flatpak 商店/iio fork r3 烤入） | 16147c7d | userdata |
-| 上机期望 | `uname -v` → **#103**（r102） | — | — |
+| 内核 apk | 7.3.0_**rc6**-r**116**（11-21 GD2 插桩轮：camss-video s_stream 失败点名 + s5kgd2sp03 步日志；**在机 = r116 模块 + #113 vmlinuz（ESP v85 = r112 件）= 无害混态**；前役 = r112 GD2 总线真值轮（cci1-m1 = AON CCI gpio208/209）/ r111-r109 诊断插桩 / r107 GD2 驱动+3P9 合规 / r104 相机二段） | 在机 apk（模块文件 live） | 机上 apk add |
+| ESP | **v85**（r112 内核腿，11-21；裸 `44f25038` / gz `e2e6c1e6`，**读回 ✓ 全分区**；v84/v83/v82 = 前件留档） | 44f25038（裸） | recovery_a |
+| Mu 镜像 | **mu-r112-a3dbcf6c**（11-21 在机，GD2 cci1-m1 真值 DTS 与 r112 apk 同源；**读回 ✓ 按镜像字节截取对拍**；mu-r108/mu-r107/mu-r102 = 前件留档） | a3dbcf6c | boot_b |
+| 设备包 / 固件包 | **r72**（11-21：pm8008 双细胞显式等待环 + hub_2(988000) bind + dataup FAIL 清死路由；前役 = r71 相机开机即通 + r69/r70 官方化轮）/ **r4**（11-19，未发布；发布面仍 r3） | 在机 apk live / bb2e9399（apk） | 机上 apk add |
+| rootfs | Release r91-phosh（11-19 直刷在机；plasma-mobile 6.8.3-r0 换装态） | 16147c7d（rootfs 底） | userdata |
+| 上机期望 | `uname -v` → **#113**（r112）+ 模块 r116 | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。

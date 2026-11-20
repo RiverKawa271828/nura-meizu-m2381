@@ -1,5 +1,48 @@
 # 相机多摄扩展轮执行卡（2026-11-20 立；11-20 晚广角做实轮 ✅ 后改序：用户拍板「先解决广角，其他摄有问题才有参照」）
 
+## ✅ 一百一十四（11-21）：-32 双案破译 + GD2 链上机（接续一百一十三排面，全项达成）
+
+- [x] **-32 案全破 ✅**（四层：①camss `video_check_format` 静默 -EPIPE[全拆脚本
+      pad 统一 SGBRG10 时 video 节点留 pRAA=SRGGB10 → 必炸且零打印；pGAA 一发
+      满帧实锤] ②脚本 `$Wx$H` 展开吃宽[/3488 残废 fmt → pad set 全静默失败 →
+      响版 -32] ③read-back grep 锚错实体[撞 csiphy 链接行] ④pgAA 小写 g）——
+      **内核/boot 链/pm-Runtime 全洗清**；cam-shot.sh + cam-shot-front.sh
+      **fmt 自适应版**落库+上机（读回驱动实际 code → 全 pad+video 跟随）。
+- [x] **设备混态定谳 ✅**：上会话"r104 原版模块恢复"= 只换盘未重载（apk 锁尸 +
+      devsh 短窗双坑），运行态 = r116 模块；重启洗净后 112 精确流程复刻 =
+      暗场签名帧（与 box2 直方图逐值同族）= **链健康**。判据 = gain ctrl 有无 +
+      crop/selection 有无 + .ko 常量位移扫。
+- [x] **GD2 链上机全绿 ✅**（授权自刷）：r116 apk sideload（`--no-network` 破
+      APKINDEX 网络堵；锁尸 pkill）→ mu-r112 boot_b（读回 a3dbcf6c ✓ 按镜像
+      字节截取）+ v85 recovery_a（44f25038 ✓ 全分区）；3-0010 ACK + csiphy4
+      [ENABLED,IMMUTABLE] + failed 0。**在机 = #113 + r116 模块 + device r72**。
+- [x] **GD2 残墙定谳 ✅ = MIPI 零包（一百一十一同族）**：s_stream 全通（r116
+      插桩零触发 = 无 subdev 报错）+ STREAMON 接受、dqbuf 干等 + **传感器在流
+      （流中 i2c 直读 0x0100=0x0001，bin 精确命中）** + MCLK4 19.2M on +
+      GPIO104 = cam_aon_mclk4 引脚绿 + pm8008i/j 轨活 + csiphy4 clk 400M on +
+      **csid0 IRQ delta：40s@30fps 流内仅 +1（边界）vs 应 ~1200 SOF** → 断层 =
+      **传感器 TX ↔ csiphy4 lane 层之间**。3P9 同 boot 同下游满帧 rc=0 =
+      管线机制无罪。候选 = ①GD2 PLL 块 bin 真值从未硬件验证（19.2M/7×145×2=
+      795.43MHz 数学闭合但寄存器未在硬件活着过）②csiphy4 AON 域 PHY 层
+      （GD2 全链 = AON 域[cci1/mclk4/前摄]，3P9 = 非 AON）。
+- [x] **新雷挂账**：s5kgd2sp03.c int64 pixel_rate WARN（`__v4l2_ctrl_s_ctrl ←
+      s5kgd2_set_pad_format+0x164`，-22，libcamera 枚举触发）= 3P9 已修款
+      （59b2cd1ca8e3）的同款未修 → **r117 顺手件**。timeout -s KILL 杀流后
+      REQBUFS EBUSY 瞬态（秒级自愈）。csiphy 计数非包级（成功帧也 0），csid
+      计数 = SOF 级有用。
+
+## 下轮排面（GD2 残墙攻法，按优先）
+
+1. **r117 内核插桩**：csiphy4 power-on/lanes_enable 步日志 + settle_cnt/实际
+   timer rate dump + s5kgd2sp03 int64 修复（顺手件同轮）。
+2. **GD2 PLL 寄存器读回**：分页协议（0x6028 页选 / 0x602A 地址 / 0x6F12 值）——
+   先解间接写窗的真实地址映射，再逐条核对 bin 真值落位。
+3. **stock AON 域考古**：stock FDT csiphy4/AON 域配置 + Flyme 窗真值（stock 前摄
+   在同域工作过 = 有地面真值）。
+4. CSI 扫频网格适配 GD2（一百一十一的 12 档是 3P9 驱动的；GD2 单档 → 扫 settle
+   需驱动面改动，排 2/3 之后）。
+
+
 > 接续一百一十一（首光）+ 一百一十二（广角做实 ✅）。在机 = #105（r104）+ v82 +
 > mu-r102 + device r71 + fw r4（本轮零源码/包变更，钉子不变）。
 > 广角（3P9）= **已做实参照件**：`tools/camera/cam-shot.sh`（机上 /root/bin/）+
