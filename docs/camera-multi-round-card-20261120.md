@@ -46,6 +46,19 @@
       信号 16 倍（类均值 1.3→20.7），暗场彩色从此有门。
 - 判据链：WB 后场景自然（白=白/木=暖/垫=深蓝）、盒面金字竖排可辨。
 
+## ✅ 一百一十二·乙（同夜，用户问「VP9/HEVC 什么时候加」）：Iris 硬解码冒烟 ✅ = 已在内，三编码全通
+
+- [x] **底态零成本**：Iris（aa00000.video-codec）随主线在内——qcom-iris 已绑定，
+      /dev/video0/1 = 硬解码/编码节点，fw vpu30_4v.mbn 在包，caps = H264/HEVC/
+      VP90/AV01。**「加解码器」这个问题不存在——已经在了**。
+- [x] **冒烟实证**：gst-play 无头 + `GST_PLUGIN_FEATURE_RANK` 提权，h264/hevc/
+      vp9 三路测试流全通（v4l2h264dec/v4l2h265dec/v4l2vp9dec → DMABuf NV12
+      零拷贝 + EOS）；AV1 留流抽验。
+- 候补小件：①日用化 = v4l2 解码器 rank 持久化（默认 rank=0 不自动入选）+
+  真机屏上播放眼判 ②AV1 流抽验 ③编码面（video1，相机录像/录屏未来用）④设备
+  apk 网络路堵（wifi 无 CDN 流量，装包走 sideload；修复挂小件）。测试流留机
+  /tmp/vdec/。
+
 ## 下一轮主线：S1 GD2 前摄（配方 = 3P9 全套复刻，模板/工具全在）
 
 - [ ] stock FDT 真值：GD2 节点（S5KGD2SP03，stock-fdt.dts ~27637 行带）=
