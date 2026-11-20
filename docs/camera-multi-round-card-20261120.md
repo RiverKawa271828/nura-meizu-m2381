@@ -11,9 +11,10 @@
       自动绑定 ✓ 但 cell2(pm8008i) NO-DRIVER——touch-load 只踢 98c000，pm8008i 挂
       988000（hub_2，meizu-bind-988000.sh 另一条时序链）。修法 = bind-988000 脚本同款
       force-bind 补绑（或 touch-load 尾部延时代跑），r72 设备包。
-- [ ] **r105 PLL 回读骑乘车**（撕裂案判决工具，~15min 不展开研究）：s5k3p9sx streamon 后
-      CCI 回读 PLL/几何寄存器（0x6028=0x4000 页内 0x6214/0x6218 + 尺寸域）dev_info 打印
-      → 读回=vendor 值 → 传感侧洗清（撕裂归 RX 域）；不符 → page-select 写错实锤。
+- [ ] **stride/bytesperline 核对**（撕裂案已破 = VFE 实际行 stride 5808[5800 取 16 对齐]，
+      5800-stride 解码伪影全案定谳；数据没坏）：v4l2-ctl --get-fmt 实报 bytesperline 核对
+      → mainline camss RDI 16 对齐 gap 判定（kernel 一行对齐 or userspace 适配，大概率小件）
+      + 行尾 8B 性质取证（pad/元数据）。修复后原生直出干净帧，无需任何还原算法。
 
 ## S1 GD2 前摄（主线，难度预判 = 中）
 配方 = 3P9 全套复刻（模板现成：驱动 s5k3p9sx.c + DTS 端点形态 + 解码器）：
