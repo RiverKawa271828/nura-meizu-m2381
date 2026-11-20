@@ -177,12 +177,15 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   105 fatal 炸弹语境考古[109 终验 PASS 高度存疑 = dataup 旧判据 WiFi 共存语境假绿，
   r70 已 -I 硬判诚实化 + bounce 重铺路由 + addr flush]）；短信/注册面/双卡切换不受影响
   （QMI 域全通）。详录 = experiment-log（一百一十）。
-  **下会话排面 = ①数据面 IPA 内核域专项（TD-11；ipa 驱动 init retry 补丁先探——SSR
-  事件链健康 = retry 有落点；modem 固件域取证次之）②相机 CSI 扫频续攻
-  （用户拍板推入；每档 systemd-run 隔离 + timeout，禁 kill 流进程；先取证 D 态挂点
-  /proc/pid/stack）③GN5 主摄
+  **下会话主线（用户 11-20 拍板「下个会话继续主线」）= 相机驱动轮·第二段**：
+  ①CSI 扫频续攻（残墙 = MIPI 零包/csiphy settle 未校准；扫频网格已备 = 驱动 12 档可写
+  link-freq 200M-950M 逐档试；纪律 = 每档 systemd-run 隔离 + timeout、禁 kill 流进程、
+  先取证 D 态挂点 /proc/pid/stack；新雷规避三件 = hub_3 竞态[r70 已自动踢 boot 即通]/
+  camss 流挂 D 态[load 34，sysrq-b 才救回]/probe 期 mclk WARN 杂音）②扫通后 GN5 主摄
   [CPHY 5.66G 难度峰值]→ GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件] → 5E9 景深
-  ④回归清单补全（zram✓/输入✓ 已抽查）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
+  ③回归清单补全（zram✓/输入✓ 已抽查）。**数据面 IPA 内核域专项（TD-11）= 点名制候补
+  非主线**（ipa 驱动 init retry 补丁先探——SSR 事件链健康 = retry 有落点；modem 固件域
+  取证次之；复燃条件 = 用户点名）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
   tempjson hexagonrpcd 语义取证（小件）；蜂窝残面 = 短信 ✅ 已破（见上②）+ 数据面 =
   TD-11 挂候补，余全挂起（复燃条件在册，见上②）。
