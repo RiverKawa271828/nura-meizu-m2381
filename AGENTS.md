@@ -177,7 +177,24 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   105 fatal 炸弹语境考古[109 终验 PASS 高度存疑 = dataup 旧判据 WiFi 共存语境假绿，
   r70 已 -I 硬判诚实化 + bounce 重铺路由 + addr flush]）；短信/注册面/双卡切换不受影响
   （QMI 域全通）。详录 = experiment-log（一百一十）。
-  **下会话主线（用户 11-20 拍板）= 相机多摄扩展轮（卡 = docs/camera-multi-round-card-20261120.md；一百一十一首光达成+撕裂挂候补后）**：S0 前置小件（pm8008i 细胞竞态 r72[GD2 供电 blocker] + stride/bytesperline 核对[撕裂案已破=VFE 实际 stride 5808，mainline gap 小件]）→ S1 GD2 前摄（用户点名优先；3P9 配方复刻，难度闸=CPHY/异常轨则跳）→ S2 闪光灯（leds-qcom-flash 独立件）→ S3 5E9 余力；GN5 主摄 CPHY 5.66G = 难度峰值挂大后期。撕裂修复 = 候补（一百一十一 §6 假设链）。原排面（相机第二段 CSI 扫频）已收官一百一十一：
+  **▶ 广角做实轮 ✅（11-20 晚，一百一十二；用户改序拍板「先解决广角，其他摄有问题才有参照」）**：
+  **bytesperline 案子闭环 = 内核零 gap**（机上实报 bpl=5808/sizeimage=20258304 与 HW
+  stride 自洽[camss-vfe.c vfe_bpl_align_rdi 8550=16→roundup(5800,16)；vfe_wm_start HW
+  stride 寄存器 = bytesperline 本身]；一百一十一·补「V4L2 报 5800」=未实测假设，唯一
+  错件 = 解码器 5800 连续解包）→ decode-raw10.py stride 感知修正 + 行尾 8B 定谳（亮场
+  取证 = 异族 pad 渣无信息量）+ **cam-shot.sh 参照件**（机上 /root/bin + 仓内 tools/
+  camera；动态发现+幂等链路+时间戳输出；boot 后 ~2.5min 可拍）→ 红盒场景实证（盒面
+  文字/徽标可辨；默认曝/长曝/开关灯四态全绿，单发 5/5 rc=0 满帧）。**新雷挂候补 = 长
+  曝连拍后立即重发 → csiphy 上电 async_synchronize_full_domain D 态死锁**（无超时；
+  救砖 = setsid 脱会话 sysrq-b；reboot -f 后台进程会被 devsh 会话关闭连带杀；纪律 =
+  单发间隔 ≥10s，cam-shot 注记）。pm8008i 竞态本 boot 复现实锤（cell2 NO-DRIVER，广角
+  pm8008j 不受影响）→ r72 随 GD2 轮修。**零源码/包变更，钉子不变 = #105 + v82 +
+  mu-r102**。详录 = experiment-log（一百一十二）。
+  **下会话主线 = S1 GD2 前摄（用户点名优先；卡 = docs/camera-multi-round-card-20261120.md 已改序）**：
+  前置 = 先修 pm8008i 竞态（r72）→ GD2 配方复刻（stock FDT 真值/bin 解码/s5kgd2.c/
+  DTS/r105 构建自刷/cam-shot 改实体名复用；难度闸=CPHY/异常轨则跳）→ S2 闪光灯 →
+  S3 5E9 余力；GN5 主摄 CPHY 5.66G = 难度峰值挂大后期。广角（3P9）= 已做实参照件
+  = 对照基准。原排面（相机第二段 CSI 扫频）已收官一百一十一：
   ①CSI 扫频续攻（残墙 = MIPI 零包/csiphy settle 未校准；扫频网格已备 = 驱动 12 档可写
   link-freq 200M-950M 逐档试；纪律 = 每档 systemd-run 隔离 + timeout、禁 kill 流进程、
   先取证 D 态挂点 /proc/pid/stack；新雷规避三件 = hub_3 竞态[r70 已自动踢 boot 即通]/

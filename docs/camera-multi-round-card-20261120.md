@@ -1,49 +1,60 @@
-# 相机多摄扩展轮执行卡（2026-11-20 立；用户拍板：撕裂挂以后修，先攻 GD2 前摄 + 闪光灯，难度不大先做、太大放后）
+# 相机多摄扩展轮执行卡（2026-11-20 立；11-20 晚广角做实轮 ✅ 后改序：用户拍板「先解决广角，其他摄有问题才有参照」）
 
-> 接续一百一十一（首光达成）。在机 = #105（r104）+ v82 + mu-r102 + device r71 + fw r4。
-> 资产 = tools/camera/（扫频/恢复/解码五件）+ vendor GPL 源（/tmp/zcode/camera-driver，
-> 重克隆：qualcomm-linux/camera-driver @ camera-kernel.qclinux.0.0）+ 解码器
-> meizu20-m1/vendor-dig/camx_regs_decode.py（GD2 已 10 组解出）。
+> 接续一百一十一（首光）+ 一百一十二（广角做实 ✅）。在机 = #105（r104）+ v82 +
+> mu-r102 + device r71 + fw r4（本轮零源码/包变更，钉子不变）。
+> 广角（3P9）= **已做实参照件**：`tools/camera/cam-shot.sh`（机上 /root/bin/）+
+> `decode-raw10.py`（stride 感知修正版）= 一键捕获+原生直出可视帧。
 > ⚠ 会话首跑：记忆搬家惯例 + pmos 主档必读 + 设备探测（devsh 连通/uname/failed）。
 
-## S0 前置小件（~30min，GD2 blocker + 顺路骑乘车）
-- [ ] **pm8008i 细胞 boot 竞态**（GD2 供电侧 blocker）：r71 验收 boot 实测 cell1(pm8008j)
-      自动绑定 ✓ 但 cell2(pm8008i) NO-DRIVER——touch-load 只踢 98c000，pm8008i 挂
-      988000（hub_2，meizu-bind-988000.sh 另一条时序链）。修法 = bind-988000 脚本同款
-      force-bind 补绑（或 touch-load 尾部延时代跑），r72 设备包。
-- [ ] **stride/bytesperline 核对**（撕裂案已破 = VFE 实际行 stride 5808[5800 取 16 对齐]，
-      5800-stride 解码伪影全案定谳；数据没坏）：v4l2-ctl --get-fmt 实报 bytesperline 核对
-      → mainline camss RDI 16 对齐 gap 判定（kernel 一行对齐 or userspace 适配，大概率小件）
-      + 行尾 8B 性质取证（pad/元数据）。修复后原生直出干净帧，无需任何还原算法。
+## ✅ 已收官（一百一十二，11-20 晚：广角做实）
 
-## S1 GD2 前摄（主线，难度预判 = 中）
-配方 = 3P9 全套复刻（模板现成：驱动 s5k3p9sx.c + DTS 端点形态 + 解码器）：
-- [ ] stock FDT 真值：GD2 节点（S5KGD2SP03，stock-fdt.dts ~27637 行带）= csiphy-sd-index /
-      CCI 总线+从地址（前摄惯例 i2c 不同 master）/ cell-index / gpio（MCLK/RESET 位）
-- [ ] 供电轨：pm8008i 哪几路 LDO（rgltr 表 RT 75 轨在档）→ DTS 引用（依赖 S0 cell2 修复）
-- [ ] bin 解码全组（GD2 10 组已解）→ 模式选择（前摄常 2-lane 低速 = 若成立则是撕裂案
+- [x] **bytesperline 核对（S0-a）✅ = 案子闭环，内核零 gap**：v4l2-ctl 实报
+      bytesperline=5808 / sizeimage=20258304 = HW RDI stride 自洽
+      （camss-vfe.c `vfe_bpl_align_rdi` CAMSS_8550=16 → roundup(5800,16)=5808；
+      `vfe_wm_start` HW stride 寄存器 = bytesperline 本身）。「V4L2 报 5800」=
+      一百一十一·补里**未实测的假设**；唯一错件 = 解码器按 5800 连续解包。
+      修 = decode-raw10.py 认 stride（行尾 8B pad 跳过）+ 高字节渲染 + 亮度拉伸。
+- [x] **行尾 8B 取证 ✅**：亮场帧定谳 = 异族字节（散布 0x60-0xb4 大值，行数据
+      族外）= pad/残留渣，无信息量、非元数据、非移位数据——解码跳过即正确。
+- [x] **cam-shot.sh 参照件 ✅**：动态发现实体 + 幂等链路（tear all→csid0/rdi0
+      实证路）+ stride 实报回读 + 时间戳命名输出；机上 /root/bin/ + 仓内
+      tools/camera/。boot 后 ~2.5 分钟即可拍（自动 bind 链 r71 工作）。
+- [x] **验证链 ✅**：idx7（名义档 657.5MHz）单发 5/5 rc=0 满帧；默认曝光/长曝
+      （exposure=3655+vblank=62047）/关灯/开灯四态全实证；红盒场景盒面文字
+      与徽标可辨、切割垫 45°/60° 角标清晰 = 广角全链原生直出。
+- [x] **新雷挂账 ⚠**：长曝 5 连拍后**立即重发** → 第二发 streamon 上电在
+      `csiphy_set_power→regulator_bulk_enable→async_synchronize_full_domain`
+      D 态死锁（无超时；sysrq-b 落地前 reboot -f/trigger 写也被堵——**恢复
+      = setsid 脱会话 sysrq-b**，`reboot -f` 后台进程会被 devsh 会话关闭连带
+      杀掉）。108 流挂 D 态雷家族新签名，挂 TECH-DEBT 候补；cam-shot.sh 已
+      注记纪律：单发间隔 ≥10s、禁长曝连拍后立即重拍。
+- [x] **S0-b pm8008i 竞态复现实锤**（非本轮修）：重启后 pm8008-regulator.2.auto
+      又 NO-DRIVER（cell1/pm8008j = 广角 7 轨不受影响；cell2/pm8008i = GD2
+      供电 blocker）→ 留 GD2 轮修（bind-988000 同款 force-bind，r72）。
+
+## 下一轮主线：S1 GD2 前摄（配方 = 3P9 全套复刻，模板/工具全在）
+
+- [ ] stock FDT 真值：GD2 节点（S5KGD2SP03，stock-fdt.dts ~27637 行带）=
+      csiphy-sd-index / CCI 总线+从地址（前摄惯例 i2c 不同 master）/ cell-index /
+      gpio（MCLK/RESET 位）
+- [ ] 供电轨：pm8008i 哪几路 LDO → DTS 引用（**前置 = 先修 S0-b pm8008i 竞态**）
+- [ ] bin 解码全组（GD2 10 组已解）→ 模式选择（前摄常 2-lane 低速 = 撕裂案
       速率裕量的旁证对照，一石二鸟）
 - [ ] 驱动 s5kgd2.c（ident/模式表/streamon 序列照 .bin）+ DTS 端点 + config =m
-- [ ] 构建 r105+ → 自刷（授权在案）→ 捕获验收 = csi-sweep 脚本改实体名复用
-- 判据：满帧落盘 + 行均值剖面过 scene 靶（撕裂不影响判「第二颗传感器通链」里程碑）
+- [ ] 构建 r105+ → 自刷（授权在案）→ 捕获验收 = **cam-shot.sh 改实体名复用**
+- 判据：满帧落盘 + cam-shot 渲染场景可辨（广角已做实 = 对照基准在案）
 - **难度闸**：若 bin/stock 真值显示 CPHY 或异常轨组 → 记档跳 S2，GD2 降候补
 
-## S2 闪光灯（独立件，零 CSI 污染，难度 = 低-中）
-- [ ] stock FDT 闪光节点（led-flash-src 挂在传感器节点下，pm8550 flash 通道）
-- [ ] 内核 leds-qcom-flash 驱动（config 检查，主线在树）+ DTS
-- [ ] 验收 = /sys/class/leds 节点 + 亮灯眼判（用户在场）+ 电流档
-- **难度闸**：驱动不在树或需 PMI 大改 → 记档放后
+## 后排（难度规则不变）
 
-## S3 5E9 景深（余力点名制）
-- 同配方第三遍（10 组已解）；价值=凑齐四摄面，难度同 GD2 再降（景深低速率）
+- S2 闪光灯（leds-qcom-flash 独立件，零 CSI 污染）
+- S3 5E9 景深（同配方第三遍）
+- GN5 主摄 = CPHY 5.66G 难度峰值 → 大后期
 
-## 候补（默认放后，按用户难度规则）
-- GN5 主摄 = CPHY 5.66G 难度峰值（mainline sm8550 表仅 2PH DPHY，需 3ph CPHY 表移植
-  + 高速裕量战，且撕裂案未结前 CPHY 更难判伤）→ 大后期
-- 撕裂修复（一百一十一 §6 假设链：r105 PLL 回读 → Flyme 窗 stock 对照）
-- pm8008i 竞态若 S0 未根治则升正式件
+## 纪律（增补）
 
-## 纪律
 - 自刷授权在案（boot_b/ESP 腿 solo，apk 腿 solo；红线分区永不碰）
 - 长构建 systemd-run；devsh 长命令拆短+落文件；流进程禁 kill（timeout 包 systemd-run）
+- **捕获纪律**：单发间隔 ≥10s；长曝连拍后勿立即重拍（死锁雷，见上）；devsh
+  超时后设备侧命令仍会跑完（本次 c5/c6 互踩教训 → 输出已时间戳命名防覆写）
 - 每阶段收官 commit 不 push；推送/Release = 用户拍板
