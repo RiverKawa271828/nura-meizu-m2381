@@ -73,10 +73,27 @@
    0114/0136）驱动流前写不驻留（读回 0）而流中用户态写驻留精确**；
    0x0136/0116 读回漂移 = FW 状态；五连实验全无帧 → **判词 = 传感器流启动
    FW 过渡丢弃驱动预流写，stock 编排层（bin 之外）= 残墙**。
-3. **★下一步 = REA 反编译 com.qti.sensor.s5kgd2sp03.so**（vendor-root/
-   lib64/camera/，23.8KB ARM64，入口 GetSensorLibraryAPIs）提 stream-on
-   真序列（候补三面：组保持 0x0104 编排[bin g5/g6 我方从未用]/流启动后补
-   序列/FIFO 窗协议写）→ r119 按真值改驱动。
+3. **★下会话主件（一百一十七排面，用户 11-21 拍板「安排下个会话」）= sensor
+   lib REA 轮**：
+   - **目标件**：`meizu20-m1/vendor-dig/vendor-root/lib64/camera/
+     com.qti.sensor.s5kgd2sp03.so`（23824B ARM64，入口
+     **GetSensorLibraryAPIs**；★差分锚 = **com.qti.sensor.s5k3p9sx.so
+     同尺寸 23824B 异 md5**[643374f3 vs a6f8d325] = 同模板异嵌入表，
+     3P9 在机工作 = 差分真值参照）。
+   - **REA 车道**：env = `source /home/ri/work/tools/rea/env.sh`
+     （Ghidra 12.1.4 + jdk21 + rea-cli；九十五轮 PE 车道跑通先例
+     `rea analyze/decompile --snapshot <名>`）；GD2 lib 全函数反编译，
+     提 stream-on/power/init 真序列；先 byte-diff 两 lib 找嵌入表差异区
+     再定点反编译。
+   - **候补三面**（一百一十六判词）：组保持 0x0104 编排[bin g5/g6 专设
+     而我方从未用；Volla s_gph 挂点=adaptor 在用] / 流启动后补序列
+     [传感器 FW 过渡丢驱动预流写] / FIFO 窗（0x602A/0x6F12）协议写
+     模式寄存器。
+   - **r119 = 按真值改 s5kgd2sp03.c stream-on** → 构建（**改源必先 commit
+     再 build**[r117 死包律]）→ apk 腿 solo → 净 boot → cam-shot-front
+     捕获验收。
+   - 破墙后 = 首帧验收（4-cell HW bayer Gr-first 真实行序）+ CFA/decode
+     验证；不破 = 差分 3P9 lib 定位缺失件继续。
 4. **stock AON 域考古**：stock FDT csiphy4/AON 域配置 + Flyme 窗真值（stock 前摄
    在同域工作过 = 有地面真值）。
 5. CSI 扫频网格适配 GD2（一百一十一的 12 档是 3P9 驱动的；GD2 单档 → 扫 settle
