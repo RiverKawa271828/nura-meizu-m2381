@@ -32,6 +32,20 @@
       又 NO-DRIVER（cell1/pm8008j = 广角 7 轨不受影响；cell2/pm8008i = GD2
       供电 blocker）→ 留 GD2 轮修（bind-988000 同款 force-bind，r72）。
 
+## ✅ 一百一十二·补（11-20 深夜，用户令「拍个彩色的看看」）：彩色直出 + 真实 CFA 定谳 + 曝光上限发现
+
+- [x] **decode-color.py**：Bayer→RGB 纯 stdlib（2×2 Bayer 块直映一 RGB 像素零插值 +
+      黑位扣除 + 高分位 WB + 全局拉伸 + gamma）；彩色首图 =
+      `tools/camera/color-first-20261120.png`（红盒金字/木桌/垫面/G-SYNC 绿标全可辨）。
+- [x] **★真实 CFA = GBRG**（首行 G 行；红盒眼判定谳：GRBG 版盒蓝/桌蓝/垫棕 = R/B
+      互换特征，GBRG 版全自然）——**驱动 mbus 标 SRGGB10 与实际线序不符**（灰度
+      无影响、彩色才暴露）。小件候补：s5k3p9sx.c mbus code/卷名修正（随 GD2 轮顺手，
+      或至少 userspace 记死 GBRG）。
+- [x] **★曝光上限跟帧长走**：max = height+vblank-8（vblank=175 时 3655；
+      vblank=62047 时 **65527 ≈ 0.66s/frame → 300ms 级长曝解锁**）——夜景色彩
+      信号 16 倍（类均值 1.3→20.7），暗场彩色从此有门。
+- 判据链：WB 后场景自然（白=白/木=暖/垫=深蓝）、盒面金字竖排可辨。
+
 ## 下一轮主线：S1 GD2 前摄（配方 = 3P9 全套复刻，模板/工具全在）
 
 - [ ] stock FDT 真值：GD2 节点（S5KGD2SP03，stock-fdt.dts ~27637 行带）=
