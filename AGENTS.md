@@ -85,7 +85,9 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   ——「fatal 必瘫数据面」102 判词作废）；签名不定根治仍挂。
   解封仪式（手工形态备查）= 清 override（"none"≠空串）→bind→start→查 session→
   re-provision（AID `A0000000871002FF86FFFF89FFFFFFFF`）→舞步；数据判活 =
-  `sh /root/d1_dataup.sh`；切换 = `cell-switch.sh <1|2>`；取证 journalctl -k。
+  `sh /usr/lib/meizu20/d1_dataup.sh 223.5.5.5`（包化路径；/root/d1_dataup.sh
+  = 手工别名件，内容与包内源镜像同步[11-21 网络诊断轮起含 FAIL 清死路由]）；
+  切换 = `cell-switch.sh <1|2>`；取证 journalctl -k。
   在机 = **#96 + v75 + mu-r91 + plasma-mobile rootfs**；slot 2 移动卡 power-off
   待命；EFS 快照**四份全等**（b85cad2f/c40223e6；第四份 = efs-snapshot-20261119
   -sms-round）；NAS 5gnr-only 偏好非持久（reboot 回 auto，网络侧自驻 5gnr）。
@@ -225,11 +227,9 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   （✅离线轮 11-06 收官：B1 `script/devselfcheck.sh` + B3 FLASHING 第一小时清单落地；
   B2 容器首航用户砍单——setup.sh 两缺口已修[9472de7]；主件 B 未跑[设备在 iOS 链]；
   卡归档 docs/archive/）
-- **开工惯例**：stable 检查 30s（11-19 复核：**v7.3.2~7.3.5 已出 = printk/ath12k/
-  msm 三域零交集不跟进**[7.3.1 同判延续]；v7.4-rc3 已出照政策不追；下轮复查
-  起点 = **7.3.6 / 7.4 正式**）；
-  设备现态探测先行（devsh 连通 / uname / wowlan / cpuidle / failed 计数）。
-  11-20 stable 复查 = 7.3.6 / 7.4 正式均未出（7.4-rc3 不追），零动作。
+- **开工惯例**：设备现态探测先行（devsh 连通 / uname / wowlan / cpuidle / failed
+  计数）。**stable 检查已取消（2026-11-21 用户拍板：不用每轮查，需要 rebase 用户
+  点名）**；历史底档 = 7.3.2~7.3.5 已出但 printk/ath12k/msm 三域零交集不跟进。
   ⚠若复活 S2IDLE E 长跑（挂起线）：设备探测降级为只读轮间观测窗
   （睡中拔线/电源键 = 污染轮次，拔线还有复位雷）。
 - **已关闭（勿重做/勿再提）**：rc7 演练、路线 D、NCM 漂移修、ath12k B 路（挂起
