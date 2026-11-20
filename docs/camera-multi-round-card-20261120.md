@@ -59,7 +59,22 @@
   apk 网络路堵（wifi 无 CDN 流量，装包走 sideload；修复挂小件）。测试流留机
   /tmp/vdec/。
 
-## 下一轮主线：S1 GD2 前摄（配方 = 3P9 全套复刻，模板/工具全在）
+## 下会话排面（用户 11-21 拍板）：S1 GD2 前摄 + S2 闪光灯 + 顺手件包
+
+- **S1 GD2 前摄**（主线，前置 = r72 pm8008i 竞态）
+- **S2 闪光灯**（leds-qcom-flash）
+- **顺手件包**（GD2 轮搭车，各 ~小件）：
+  - ★**libcamera 合规补件（s5k3p9sx.c）**：真因在案（11-21 探针）——plasma-camera
+    本体好着，差的是驱动强制控制项：`V4L2_CID_ANALOGUE_GAIN`（0x009e0903）缺失
+    [致命] + HBLANK 只读[须可写] + selection/PixelArray + orientation ctrl[警告级
+    可默认]——补齐后 libcamera simple pipeline 出相机 → pipewire-spa-libcamera
+    节点 → plasma-camera 出画面（debayer 须按真 CFA **GBRG** 配，见一百一十二·补）
+  - ★**CFA 标签修正**：驱动 mbus 标 SRGGB 与实际线序 GBRG 不符
+  - ★**录像编码面（video1 Iris encoder）**（用户 11-21 点名入计划）：录像要编码，
+    与相机线搭车；验证形态 = v4l2 编码 M2M 产流冒烟
+  - DmaBufAllocator 无 provider 警告（dma_heap 用户态权限，出画面后按需）
+
+## 原排面存档（11-20 版）
 
 - [ ] stock FDT 真值：GD2 节点（S5KGD2SP03，stock-fdt.dts ~27637 行带）=
       csiphy-sd-index / CCI 总线+从地址（前摄惯例 i2c 不同 master）/ cell-index /
