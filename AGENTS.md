@@ -183,12 +183,12 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   先取证 D 态挂点 /proc/pid/stack；新雷规避三件 = hub_3 竞态[r70 已自动踢 boot 即通]/
   camss 流挂 D 态[load 34，sysrq-b 才救回]/probe 期 mclk WARN 杂音）②扫通后 GN5 主摄
   [CPHY 5.66G 难度峰值]→ GD2 前摄 + 双 LED 闪光[leds-qcom-flash 独立件] → 5E9 景深
-  ③回归清单补全（zram✓/输入✓ 已抽查）。**数据面 IPA 内核域专项（TD-11）= 点名制候补
-  非主线**（ipa 驱动 init retry 补丁先探——SSR 事件链健康 = retry 有落点；modem 固件域
-  取证次之；复燃条件 = 用户点名）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
+  ③回归清单补全（zram✓/输入✓ 已抽查）。**数据面 IPA 内核域专项（TD-11）= 已排入计划**
+  （用户 11-20 拍板「以后修」；非主线，主线相机段收官后顶上；修法序 = ipa 驱动 init
+  retry 补丁先探——SSR 事件链健康 = retry 有落点，modem 固件域取证次之）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
   tempjson hexagonrpcd 语义取证（小件）；蜂窝残面 = 短信 ✅ 已破（见上②）+ 数据面 =
-  TD-11 挂候补，余全挂起（复燃条件在册，见上②）。
+  TD-11 已排程（见上），余全挂起（复燃条件在册，见上②）。
   **设备当前态 = 广电卡 slot 1 在役**（registered 稳态 + **数据面挂候补断态**[TD-11，
   dataup -I 硬判 FAIL 诚实呈现]；移动卡用户拔出留手，回归 = 插 slot 2 + `cell-switch.sh
   2`；keeper 状态文件 = /var/lib/cell-keeper/active-slot = 1；uim-selection 已卸载[单卡
