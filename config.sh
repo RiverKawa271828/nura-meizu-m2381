@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="101"     # r101 = modem autostart-off 轮（11-20，fork 12dcde3033c8：pas 驱动 DT 开关 qcom,autostart-off 一行 + DTS 4080000 关自启 = IPA init 握手死窗修复[r69 上机两 boot 实证：内核期 modem 早启 → modem 侧 IPA assert crash ×3 + AP 侧 -110 永不重试 → rmnet_ipa0 永不建]；r100 = 多档刷新率轮；r99 = 相机轮·第一段；r95 = bloff 摘除轮；r91 = 7.3 stable rebase 正式轮）
-REL_DEVICE_PKGREL="70"     # r70 = 数据面判据诚实化 + keeper 延时 start（11-20：d1_dataup 三处[;-I rmnet0 硬判/bounce 后重铺默认路由/addr flush 防双地址] + keeper start 延时化 ~boot+35s[复刻 103 实证好窗]）；r69 = 开机顺序官方化轮（摘 PAS/MSS blacklist + meizu-pas 退役 + keeper 解封段撤 + dataup ExecStartPre 移入本体 + tmpfiles 三件[TFTP 根/retire-pas/tempjson] + touch-load +98c000）；r68 = 开机提速轮；r67 = 摘 uim-selection；r66 = keeper 参数化
+REL_LINUX_PKGREL="104"     # r103 = 相机轮·第二段（11-20，fork 8a5f43ab4549+07e16679b5aa+ff597344636c：DTS CSI lane 0 基修正 + s5k3p9sx pixel_rate int64 setter + **ctrl-setup 中毒修复**[s_ctrl default -EINVAL 令 handler_setup 全灭 → enable_streams error 路径 put_autosuspend → 流中 1s 断电 = 零包真根因，kprobe power_off@+1.29s 实锤]；r102 = lane 修正轮；r101 = modem autostart-off 轮）
+REL_DEVICE_PKGREL="71"     # r71 = 相机开机即通轮（11-20：meizu-touch-load.sh 追加 pm8008-regulator 细胞 force-bind 重试环 + 3P9 传感器补绑——r69 的 autoprobe=0 窗口吞 mfd 细胞[i2c 总线独立 autoprobe 位不受影响，drivers_autoprobe_store 只翻标志永不 rescan] → 相机 PMIC 全轨不注册 → 传感器 deferred 永挂，每 boot 复现）；r70 = 数据面判据诚实化 + keeper 延时 start；r69 = 开机顺序官方化轮
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；发布面 tarball 仍 r3/29c1ee88）
-REL_MU_IMG="$NURA_ROOT/artifacts/mu-r101-a6fb2158.img"     # mu-r101 = 11-20 modem autostart-off 轮（DTS 4080000 qcom,autostart-off，fork 12dcde3033c8 同源 r101 apk）；mu-r97 = 相机轮件留档（11-20）
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v79.img.gz"  # v79 = modem autostart-off 轮 ESP（r101 vmlinuz，11-20：裸 11f67de8 / gz a442e509）；v78 = 多档轮件留档（r100 vmlinuz，裸 b57f8605）；v77 号位留白未落盘；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑（另记：沙箱后台发射 systemd-run 有提交通道竞态秒死坑，须前台发射+落稳确认）
-REL_KERNEL_VER="#102"      # 期望（r101 内核 = pkgrel+1；上机实测后核对）
+REL_MU_IMG="$NURA_ROOT/artifacts/mu-r102-6e9e1204.img"     # mu-r102 = 11-20 相机轮·第二段（CSI lane 0 基修正，fork 8a5f43ab4549 同源 r102 apk）；mu-r101 = modem autostart-off 件留档
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v82.img.gz"  # v82 = 相机轮·第二段 ESP（r104 vmlinuz，11-20：裸 086516b2 / gz 2d2a998f）；v81 = ctrl 中毒修复件留档（r103，裸 704ab5c5）；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑（另记：沙箱后台发射 systemd-run 有提交通道竞态秒死坑，须前台发射+落稳确认）
+REL_KERNEL_VER="#105"      # 期望（r103 内核 = pkgrel+1；上机实测后核对）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。

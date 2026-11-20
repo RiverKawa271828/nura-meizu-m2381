@@ -3,16 +3,16 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-20 官方化轮+数据面取证轮更钉（一百一十）：r69 摘 PAS/MSS blacklist 照一加6/FP 官方时序（PAS 内核态自起 + meizu-pas 退役 + keeper 解封段撤 + tmpfiles 三件[TFTP 根/retire-pas/tempjson] + hub_3 自动踢）= 开机时序全绿（multi-user 4.3s / graphical ~27s）；**数据面撞 IPA init 握手死窗**（modem 侧 assert crash + AP 侧 -110 永不重试 → rmnet_ipa0 永不建，5 boot 实证）→ r101 内核 = pas DT 开关 qcom,autostart-off + keeper 延时 start ~boot+35s（fork 12dcde3033c8）+ r70 = dataup 判据诚实化（-I rmnet0 硬判/bounce 后重铺路由/addr flush——103~109 PASS 判据 WiFi 共存语境 = 假绿）；在机 = **#102（r101）** + **recovery_a v79** + boot_b **mu-r101** + plasma rootfs + 广电卡 slot 1；发布面 = Release r91（Latest）不变；数据面挂候补内核域专项，短信/注册面/双卡切换不受影响）
+## 工作态（2026-11-20 相机轮·第二段更钉（一百一十一）：CSI 12 档扫频全零包（12/12 无挂[隔离姿势下 round-1 D 陷阱零复现]）→ 根因 = DTS data-lanes `<1 2 3 4>` 错位（camss lane pos 0 基，树内活例 = lemans imx577 `clock-lanes=<7> data-lanes=<0 1 2 3>`；旧值 CTRL5 lane0 使能位缺失 → 全档零包）→ r102 = DTS 双端点 0 基修正 + s5k3p9sx pixel_rate int64 setter WARN 修复（fork 8a5f43ab4549+07e16679b5aa）；**附带发现+根治 = r69 autoprobe 窗口吞 pm8008 mfd regulator 细胞**（i2c 总线独立 autoprobe 位不受影响 + drivers_autoprobe_store 只翻标志永不 rescan[drivers/base/bus.c 实锤] → 相机 PMIC 全轨不注册 → 传感器 deferred 永挂，每 boot 复现；r69/r70 之后相机链从未 boot 即通）→ r71 设备包 = touch-load 追加细胞 force-bind 重试环 + 3P9 补绑；在机 = **#103（r102）** + **recovery_a v80** + boot_b **mu-r102** + plasma rootfs + 广电卡 slot 1；发布面 = Release r91（Latest）不变）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**101**（**11-20 modem autostart-off 轮**：pas 驱动 DT 开关一行 + DTS 4080000 关自启，fork 12dcde3033c8；前役 = 多档刷新率轮 r100[modes 表 +3 条]/相机轮三连 r97/r98/r99） | 在机 apk（模块文件 live） | 机上 apk add |
-| ESP | **v79**（r101 内核腿，11-20；裸 `11f67de8` / gz `a442e509`，**读回 ✓**；v78 = 多档轮件留档[裸 b57f8605]；v77 号位留白） | 11f67de8（裸） | recovery_a |
-| Mu 镜像 | **mu-r101-a6fb2158**（11-20 在机，DTS 4080000 qcom,autostart-off 与 r101 apk 同源，**读回 ✓**[按镜像字节截取对拍]；mu-r97 = 相机轮件留档） | a6fb2158 | boot_b |
-| 设备包 / 固件包 | **r70**（11-20：r69 官方化轮[摘 PAS/MSS blacklist + meizu-pas 退役 + keeper 解封段撤 + dataup 交接点 + tmpfiles 三件 + hub_3 自动踢] + r70 判据诚实化[dataup -I 硬判/bounce 重铺路由/addr flush + keeper 延时 start 配套 r101]；前役 = r67 一百零九事故修复）/ **r4**（11-19，未发布；发布面仍 r3） | 在机 apk live / bb2e9399（apk） | 机上 apk add |
+| 内核 apk | 7.3.0_**rc6**-r**104**（**11-20 相机轮·第二段**：DTS CSI 双端点 lane 0 基修正 + pixel_rate int64 setter，fork ff597344636c（ctrl-setup 中毒修复）+f41a42ca299d（vendor 2.1.2 全表）；前役 = modem autostart-off 轮 r101 / 多档刷新率轮 r100 / 相机轮三连 r97-r99） | 在机 apk（模块文件 live） | 机上 apk add |
+| ESP | **v82**（r104 内核腿，11-20；裸 `086516b2` / gz `2d2a998f`，**读回 ✓**；v81/v80 = 前件留档[704ab5c5/12649659]） | 086516b2（裸） | recovery_a |
+| Mu 镜像 | **mu-r102-6e9e1204**（11-20 在机，CSI lane 修正 DTS 与 r102 apk 同源；mu-r101 = modem autostart-off 件留档[读回 ✓ 按镜像字节截取对拍]） | 6e9e1204 | boot_b |
+| 设备包 / 固件包 | **r71**（11-20：touch-load 追加 pm8008-regulator 细胞 force-bind 重试环 + 3P9 补绑 = 相机开机即通；前役 = r69 官方化轮 + r70 判据诚实化）/ **r4**（11-19，未发布；发布面仍 r3） | 在机 apk live / bb2e9399（apk） | 机上 apk add |
 | rootfs | Release r91-phosh（**11-19 直刷在机**；裸 16147c7d = CI 发布件同字节；waydroid 五件/flatpak 商店/iio fork r3 烤入） | 16147c7d | userdata |
-| 上机期望 | `uname -v` → **#102**（r101，**11-20 实测 ✓** 三次 boot 复验） | — | — |
+| 上机期望 | `uname -v` → **#103**（r102） | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。
