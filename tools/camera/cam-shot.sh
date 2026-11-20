@@ -24,18 +24,24 @@ SD=$($M -p 2>/dev/null | grep -A3 "$ENT" | grep "device node" | awk '{print $4}'
 VID=$($M -p 2>/dev/null | grep -A3 "msm_vfe0_video0 " | grep "device node" | awk '{print $4}')
 {
 echo "== cam-shot idx=$IDX n=$N start $(date +%T) sd=$SD vid=$VID ent=$ENT"
-for C in 0 1 2 3 4; do
-	$M -l "'msm_csiphy2':1 -> 'msm_csid$C':0[0]" >/dev/null 2>&1
-	$M -l "'msm_csid$C':1 -> 'msm_vfe0_rdi$C':0[0]" >/dev/null 2>&1
+# FULL tear: boot-time libcamera reconfigures the graph for ITS chosen
+# camera (two-camera era) — every csiphy->csid and csid->rdi link must go
+# before we enable exactly one chain, else media_pipeline_start walks an
+# ambiguous graph and fails -EPIPE (2026-11-21 round-113 verdict).
+for P in 0 1 2 3 4; do
+	for C in 0 1 2 3 4; do
+		$M -l "'msm_csiphy$P':1 -> 'msm_csid$C':0[0]" >/dev/null 2>&1
+		$M -l "'msm_csid$C':1 -> 'msm_vfe0_rdi$C':0[0]" >/dev/null 2>&1
+	done
 done
 $M -l "'msm_csiphy2':1 -> 'msm_csid0':0[1]" >/dev/null 2>&1 && echo ok-link-phy-csid || echo LINK-BUSY-OR-FAIL-phy-csid0
 $M -l "'msm_csid0':1 -> 'msm_vfe0_rdi0':0[1]" >/dev/null 2>&1 && echo ok-link-csid-rdi || echo LINK-BUSY-OR-FAIL-csid-rdi0
-$M -V "'$ENT':0[fmt:SRGGB10_1X10/4640x3488]" >/dev/null && echo ok-sensor
-$M -V "'msm_csiphy2':0[fmt:SRGGB10_1X10/4640x3488]" >/dev/null && echo ok-csiphy0
-$M -V "'msm_csiphy2':1[fmt:SRGGB10_1X10/4640x3488]" >/dev/null && echo ok-csiphy1
-$M -V "'msm_csid0':0[fmt:SRGGB10_1X10/4640x3488]" >/dev/null && echo ok-csid0
-$M -V "'msm_csid0':1[fmt:SRGGB10_1X10/4640x3488]" >/dev/null && echo ok-csid1
-$M -V "'msm_vfe0_rdi0':0[fmt:SRGGB10_1X10/4640x3488]" >/dev/null && echo ok-rdi0
+$M -V "'$ENT':0[fmt:SGBRG10_1X10/4640x3488]" >/dev/null && echo ok-sensor
+$M -V "'msm_csiphy2':0[fmt:SGBRG10_1X10/4640x3488]" >/dev/null && echo ok-csiphy0
+$M -V "'msm_csiphy2':1[fmt:SGBRG10_1X10/4640x3488]" >/dev/null && echo ok-csiphy1
+$M -V "'msm_csid0':0[fmt:SGBRG10_1X10/4640x3488]" >/dev/null && echo ok-csid0
+$M -V "'msm_csid0':1[fmt:SGBRG10_1X10/4640x3488]" >/dev/null && echo ok-csid1
+$M -V "'msm_vfe0_rdi0':0[fmt:SGBRG10_1X10/4640x3488]" >/dev/null && echo ok-rdi0
 v4l2-ctl -d $SD --set-ctrl=link_frequency=$IDX >/dev/null && echo ok-lfset
 v4l2-ctl -d $VID --set-fmt-video=width=4640,height=3488,pixelformat=pRAA >/dev/null && echo ok-vfmt
 # stride authority: what the kernel reports is what the write master programs
