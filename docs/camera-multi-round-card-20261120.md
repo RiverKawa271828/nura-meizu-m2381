@@ -33,21 +33,41 @@
 
 ## 下轮排面（用户 11-21 拍板改序：「误入歧途」审计优先——先验真值再动内核）
 
-0. **★寄存器真值审计（纯宿主侧，零设备时间，先于 r117）**：
-   - **修 bin 解码记录步长重解**：out/*.regs 的 `plausible=198/396` = 解码器
-     字段对齐疑点（g1 半数记录不认）；g3 按原始对齐读出 `{0x077f←0x0001}` 与
-     笔记 `0x0100←0x0001` 分歧未收敛 → 修正后拿真序列。
-   - **Volla 公共驱动逐条对拍**（mt6878 s5kgd2sp，同硅片真机在役）：PLL 块 +
-     MIPI TX lane 寄存器优先 diff。
-   - **stock FDT GD2 节点重审**：lane 数 + MCLK 字段的魅族原生真值（现 4-lane
-     主张 = A54+MTK 外部借来的，未对过魅族自己的 FDT；一百一十一广角同症状
-     墙根因 = lane 配置）。
-   - **对拍 diff vs 驱动上传值**：有差 = 岐途实锤顺手修；全等 = 排除解码嫌疑，
-     放心进 1。
+0. **★寄存器真值审计 ✅（一百一十五，11-21，纯宿主侧全案收官——「误入歧途」
+   假说寄存器面否决）**：
+   - **bin 解码全案成立 ✅**：字节级 slot 不变式（记录 w[1]/w[4]/w[9] = 三字段
+     节点槽位下标 [registerData/delayUs/trailing]，addr = w[2] 立即数）四 bin
+     **12011/12011 零失配**（GD2 1866/3P9 1937/5E9 160/GN5 9048；审计器 =
+     vendor-dig/camx_regs_audit.py）。`plausible=198/396` 定谳 = **旧 20B 步长
+     产物的化石**（records=2×真数、plausible=真数 7920/40），非现行解码器疑点；
+     g3 `{0x077f}` = w[1] 节点下标 1919 误读成数据，真值 = **0x0100←0x0001**
+     与笔记一致。
+   - **Volla 真机驱动对拍 ✅**（mt6878 s5kgd2sp，HelloVolla/
+     android_kernel_modules_volla_mt6878，源件存 vendor-dig/volla-ref/）：
+     寄存器集结构同构（0x0114/0116/0136/0x0300 块/0340/0342 全对上）；**boot
+     链 = 标准 GD2 唤醒+patch 配方**（Volla sensor_init 与我方 bin 头逐条同款：
+     0x0000←ID 值→0x0000←0x0842→0x6010←1→delay→0x6214/0x6218 kick）；
+     **4-lane 双源**（bin 0x0114←0x0300 + Volla SENSOR_MIPI_4_LANE）；
+     stream 0x0100/gain 0x0204 双源。**MCLK 编码考据**：0x0136 = Q8.8 MHz
+     （Volla 0x1800=24 头注释锚定；3P9 0x1333=19.2 在机活体锚定）；GD2 bin 写
+     0x1300（=19.0）而 **stock FDT 喂 19.2M**（clock-rates 0x124f800）→ 1.05%
+     差记档，**非墙源**（一百一十一 3P9 settle 网格 idx0/3/5/7=200~657MHz 全
+     出帧 = 窗宽容差实证）。
+   - **stock FDT GD2 节点重审 ✅**（flyme-forensics-20261019/fdt）：
+     MCLK4=19.2M + cci-master=1 + gpio104/120 + csiphy-sd-index=4 + 四轨
+     phandle 全部与我方 DTS/驱动**相等**；Qualcomm camx 形态传感器节点
+     **无 lane 属性**（运行时域）→ 4-lane 站 bin+Volla 双源；csiphy4 =
+     `csiphy-v2.1.2` @acec000 + **shared-clks=<1 0 0 0>（AON 共享时钟 stock
+     实证，一百一十四 b 候选加持）**。
+   - **驱动保真 ✅**：mode 序列 0/198 diff；boot(6)+kick(2)+patch(1256) =
+     bin g7 1264 全等 + 双 delay（5ms/11ms）时序保留。
+   - 顺手件：camx_regs_audit.py（不变式审计器）+ camx_vs_driver_diff.py
+     （驱动↔bin verbatim diff）+ volla-ref/ 五件源码入库。
 1. **r117 内核插桩**：csiphy4 power-on/lanes_enable 步日志 + settle_cnt/实际
    timer rate dump + s5kgd2sp03 int64 修复（顺手件同轮）。
-2. **GD2 PLL 寄存器读回**：分页协议（0x6028 页选 / 0x602A 地址 / 0x6F12 值）——
-   先解间接写窗的真实地址映射，再逐条核对 bin 真值落位。
+2. **GD2 PLL 寄存器读回**：读路径 = 0x6028←0x4000 页选后**直接读** 0x0300-0x0312/
+   0x0340/0x0342/0x0100/0x0114/0x0116（0x602A/0x6F12 = 只写 FIFO 窗，读回不走）；
+   逐条核对 bin 真值落位（Volla 同款页协议互证）。
 3. **stock AON 域考古**：stock FDT csiphy4/AON 域配置 + Flyme 窗真值（stock 前摄
    在同域工作过 = 有地面真值）。
 4. CSI 扫频网格适配 GD2（一百一十一的 12 档是 3P9 驱动的；GD2 单档 → 扫 settle

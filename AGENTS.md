@@ -204,10 +204,18 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   vs 应~1200 SOF → 断层 = 传感器 TX↔csiphy4 lane 层；3P9 同 boot 同下游满帧 = 管线
   无罪；新雷 = s5kgd2sp03 int64 pixel_rate WARN[r117 顺手修]）。
   **下轮 = GD2 残墙攻法（用户 11-21 拍板改序：真值审计优先，卡已更新）**：
-  ⓪寄存器真值审计（纯宿主侧先于 r117：bin 解码步长修正重解[plausible=198/396
-  自疑标记 + g3 {0x077f←1} vs 笔记 0x0100←1 分歧] + Volla 真机驱动逐条对拍 +
-  stock FDT GD2 节点 lane/MCLK 原生真值重审[4-lane 主张 = 外部借来的]）→ ①r117
-  插桩（csiphy4 步日志+settle dump+int64 修复）→ ②GD2 PLL 分页读回核 bin 落位
+  **⓪寄存器真值审计 ✅（11-21 一百一十五，纯宿主侧全案收官——「误入歧途」
+  假说寄存器面否决；REA/Ghidra 车道未触发[bin 格式 108 已破译，本轮字节级
+  不变式+文本源对拍收敛]**：bin 解码 slot 不变式四 bin 12011/12011 零失配
+  [plausible=198/396 = 旧 20B 步长化石；g3 真值 0x0100←0x0001 与笔记一致] +
+  Volla 真机驱动对拍[boot 链 = 标准 GD2 唤醒+patch 配方逐条同款；4-lane 双源；
+  ★0x0136 = MCLK Q8.8 编码：GD2 bin 0x1300=19.0 vs stock FDT 喂 19.2M =
+  1.05% 差记档非墙源] + stock FDT GD2 节点全等[MCLK/cci1-m1/gpio/csiphy4/
+  四轨；csiphy4 shared-clks=<1 0 0 0> = AON 共享 stock 实证] + 驱动保真
+  [mode 0/198 + g7 1264 全等含双 delay 时序]→ 残墙保持物理层[传感器 TX↔
+  csiphy4 lane 层]）→ ①r117 插桩（csiphy4 步日志+settle dump+int64 修复）
+  → ②GD2 PLL 分页读回核 bin 落位（读路径 = 0x6028←0x4000 页选后直接读
+  0x0300-0312/0340/0342/0100/0114/0116；0x602A/0x6F12 = 只写 FIFO 不走读）
   → ③stock AON 域考古 → ④扫频网格适配。S2 闪光灯 + 顺手件包照旧在队。广角
   （3P9）= 参照件已自适应化复验（满帧）。**数据面 IPA 内核域专项（TD-11）= 已排入计划**
   （用户 11-20 拍板「以后修」；非主线，主线相机段收官后顶上；修法序 = ipa 驱动 init
