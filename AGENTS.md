@@ -203,10 +203,13 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   触发 + 传感器在流 0x0100=0x0001 + MCLK4/引脚/rails 全绿 + csid0 IRQ delta 仅 +1
   vs 应~1200 SOF → 断层 = 传感器 TX↔csiphy4 lane 层；3P9 同 boot 同下游满帧 = 管线
   无罪；新雷 = s5kgd2sp03 int64 pixel_rate WARN[r117 顺手修]）。
-  **下轮 = GD2 残墙攻法（卡已更新）**：①r117 插桩（csiphy4 步日志+settle dump+
-  int64 修复）→ ②GD2 PLL 分页读回核 bin 落位 → ③stock AON 域考古 → ④扫频网格
-  适配。S2 闪光灯 + 顺手件包照旧在队。广角（3P9）= 参照件已自适应化复验（满帧）。
-  **数据面 IPA 内核域专项（TD-11）= 已排入计划**
+  **下轮 = GD2 残墙攻法（用户 11-21 拍板改序：真值审计优先，卡已更新）**：
+  ⓪寄存器真值审计（纯宿主侧先于 r117：bin 解码步长修正重解[plausible=198/396
+  自疑标记 + g3 {0x077f←1} vs 笔记 0x0100←1 分歧] + Volla 真机驱动逐条对拍 +
+  stock FDT GD2 节点 lane/MCLK 原生真值重审[4-lane 主张 = 外部借来的]）→ ①r117
+  插桩（csiphy4 步日志+settle dump+int64 修复）→ ②GD2 PLL 分页读回核 bin 落位
+  → ③stock AON 域考古 → ④扫频网格适配。S2 闪光灯 + 顺手件包照旧在队。广角
+  （3P9）= 参照件已自适应化复验（满帧）。**数据面 IPA 内核域专项（TD-11）= 已排入计划**
   （用户 11-20 拍板「以后修」；非主线，主线相机段收官后顶上；修法序 = ipa 驱动 init
   retry 补丁先探——SSR 事件链健康 = retry 有落点，modem 固件域取证次之）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
