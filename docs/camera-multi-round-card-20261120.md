@@ -63,14 +63,23 @@
      bin g7 1264 全等 + 双 delay（5ms/11ms）时序保留。
    - 顺手件：camx_regs_audit.py（不变式审计器）+ camx_vs_driver_diff.py
      （驱动↔bin verbatim diff）+ volla-ref/ 五件源码入库。
-1. **r117 内核插桩**：csiphy4 power-on/lanes_enable 步日志 + settle_cnt/实际
-   timer rate dump + s5kgd2sp03 int64 修复（顺手件同轮）。
-2. **GD2 PLL 寄存器读回**：读路径 = 0x6028←0x4000 页选后**直接读** 0x0300-0x0312/
-   0x0340/0x0342/0x0100/0x0114/0x0116（0x602A/0x6F12 = 只写 FIFO 窗，读回不走）；
-   逐条核对 bin 真值落位（Volla 同款页协议互证）。
-3. **stock AON 域考古**：stock FDT csiphy4/AON 域配置 + Flyme 窗真值（stock 前摄
+1. **r117/r118 内核插桩 ✅（一百一十六）**：csiphy4 三点插桩全绿
+   [set_clock_rates bpp10/4lanes/795.43M + power-on 双 400M + lanes_enable
+   settle=29/lane_mask=0x8f/pos[0,1,2,3] = 与工作 3P9 链同构 = **RX 无罪**]
+   + s5kgd2sp03 int64 修复。⚠r117 = 空 bump 死包（APKBUILD git-archive
+   取源吃未提交编辑——**改源必先 commit 再 build**）；真件 = r118。
+2. **GD2 PLL 寄存器读回 ✅（一百一十六）**：PLL 头 0x0300-0306 落位读回全等；
+   **PLL 尾 0x0308-0310 = NAK/FW 管控区**；**VTS/LLP/MIPI TX（0x0340/0342/
+   0114/0136）驱动流前写不驻留（读回 0）而流中用户态写驻留精确**；
+   0x0136/0116 读回漂移 = FW 状态；五连实验全无帧 → **判词 = 传感器流启动
+   FW 过渡丢弃驱动预流写，stock 编排层（bin 之外）= 残墙**。
+3. **★下一步 = REA 反编译 com.qti.sensor.s5kgd2sp03.so**（vendor-root/
+   lib64/camera/，23.8KB ARM64，入口 GetSensorLibraryAPIs）提 stream-on
+   真序列（候补三面：组保持 0x0104 编排[bin g5/g6 我方从未用]/流启动后补
+   序列/FIFO 窗协议写）→ r119 按真值改驱动。
+4. **stock AON 域考古**：stock FDT csiphy4/AON 域配置 + Flyme 窗真值（stock 前摄
    在同域工作过 = 有地面真值）。
-4. CSI 扫频网格适配 GD2（一百一十一的 12 档是 3P9 驱动的；GD2 单档 → 扫 settle
+5. CSI 扫频网格适配 GD2（一百一十一的 12 档是 3P9 驱动的；GD2 单档 → 扫 settle
    需驱动面改动，排 2/3 之后）。
 
 

@@ -203,20 +203,22 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   触发 + 传感器在流 0x0100=0x0001 + MCLK4/引脚/rails 全绿 + csid0 IRQ delta 仅 +1
   vs 应~1200 SOF → 断层 = 传感器 TX↔csiphy4 lane 层；3P9 同 boot 同下游满帧 = 管线
   无罪；新雷 = s5kgd2sp03 int64 pixel_rate WARN[r117 顺手修]）。
-  **下轮 = GD2 残墙攻法（用户 11-21 拍板改序：真值审计优先，卡已更新）**：
-  **⓪寄存器真值审计 ✅（11-21 一百一十五，纯宿主侧全案收官——「误入歧途」
-  假说寄存器面否决；REA/Ghidra 车道未触发[bin 格式 108 已破译，本轮字节级
-  不变式+文本源对拍收敛]**：bin 解码 slot 不变式四 bin 12011/12011 零失配
-  [plausible=198/396 = 旧 20B 步长化石；g3 真值 0x0100←0x0001 与笔记一致] +
-  Volla 真机驱动对拍[boot 链 = 标准 GD2 唤醒+patch 配方逐条同款；4-lane 双源；
-  ★0x0136 = MCLK Q8.8 编码：GD2 bin 0x1300=19.0 vs stock FDT 喂 19.2M =
-  1.05% 差记档非墙源] + stock FDT GD2 节点全等[MCLK/cci1-m1/gpio/csiphy4/
-  四轨；csiphy4 shared-clks=<1 0 0 0> = AON 共享 stock 实证] + 驱动保真
-  [mode 0/198 + g7 1264 全等含双 delay 时序]→ 残墙保持物理层[传感器 TX↔
-  csiphy4 lane 层]）→ ①r117 插桩（csiphy4 步日志+settle dump+int64 修复）
-  → ②GD2 PLL 分页读回核 bin 落位（读路径 = 0x6028←0x4000 页选后直接读
-  0x0300-0312/0340/0342/0100/0114/0116；0x602A/0x6F12 = 只写 FIFO 不走读）
-  → ③stock AON 域考古 → ④扫频网格适配。S2 闪光灯 + 顺手件包照旧在队。广角
+  **下轮 = GD2 残墙攻法·REA 车道（一百一十六判词收束：stock 编排层 = 残墙）**：
+  **①r118 csiphy4 插桩 ✅ + ②PLL 读回 ✅（11-21 一百一十六）**：csiphy4 RX
+  三点插桩全绿[settle=29/lane_mask=0x8f/4lanes/timer 400M/link 795.43M =
+  与工作 3P9 链同构 = **RX 无罪**] + s5kgd2sp03 int64 修复；PLL 读回 =
+  PLL 头（0x0300-0306）落位读回全等 + **PLL 尾（0x0308-0310）= NAK/FW 管控区**
+  + **VTS/LLP/MIPI TX（0x0340/0342/0114/0136）驱动流前写不驻留（读回 0）而
+  流中用户态写驻留精确** + 0x0136/0116 读回漂移（FW 状态寄存器）+ 五连实验
+  全无帧（VTS 写/全组补写/读页/PLL 重踢/0x6010；csid0 = 每流边界 +1）→
+  **判词 = 传感器流启动 FW 过渡丢弃驱动预流写，stock 在 bin 之外有 stream-on
+  编排 = 残墙**；r117 = 空 bump 死包（APKBUILD git-archive 取源吃未提交编辑，
+  坑册：改源必先 commit 再 build）。**下一步 = REA 反编译
+  com.qti.sensor.s5kgd2sp03.so**（vendor-root/lib64/camera/，23.8KB ARM64，
+  入口 GetSensorLibraryAPIs）提 stream-on 真序列[候补三面 = 组保持 0x0104
+  编排[bin g5/g6 我方从未用，Volla s_gph 在用]/流启动后补序列/FIFO 窗协议写]
+  → r119 按真值改驱动 → ③stock AON 考古 → ④扫频网格适配。S2 闪光灯 +
+  顺手件包照旧在队。广角
   （3P9）= 参照件已自适应化复验（满帧）。**数据面 IPA 内核域专项（TD-11）= 已排入计划**
   （用户 11-20 拍板「以后修」；非主线，主线相机段收官后顶上；修法序 = ipa 驱动 init
   retry 补丁先探——SSR 事件链健康 = retry 有落点，modem 固件域取证次之）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
