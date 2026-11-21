@@ -3,16 +3,16 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-22 一百一十九+乙（GD2 收官 + S2 环闪排障，双挂候补）：**GD2 判负挂候补池**（m2391 = 魅族 20 Pro 四层对拍全负：blob md5 全等/bin 与工作 3P9 同构/KMD 纯 CAF/datasheet NDA）∥ **S2 环闪 = 驱动面全绿但物理全黑挂候补**（stock leds_qti_flash.ko 反汇编 = 主线图谱同款 + 零 regulator；dbg_dump 插桩实证寄存器 100% 落位[全 4 sink×125mA 也黑]；总线零隐藏芯片；全 stock 树无阳极供电链；bob1 钉 3960mV 出局；6 LED 真环网查实锤；**残墙 = 阳极供电真相**，复燃 = stock 全寄存器画像 REA/硬件探针，dbg_dump 在机默认关）；在机 = **#131（ESP v89 = r130 vmlinuz）+ r130 模块** + boot_b mu-r130 + plasma rootfs + 广电卡 slot 1[MM failed/sim-missing = UIM card absent 待用户]；发布面 = Release r91（Latest）不变）
+## 工作态（2026-11-22 一百二十（WiFi 无网络修复轮 + TD-11 根修 ✅）：**「连 WiFi 无网络」双凶定谳修复**——①WiFi 黑洞 = 数据面静默死[TX 出 RX 0 无 fatal]后的死路由残留[metric 50 压过 wlan0 600]→ r73/r74 = WiFi 优先路由[蜂窝 metric 700] + keeper 数据面看门两连败撤路 + dial 硬败不走缓存；②TD-11 IPA init 死窗真凶 = 主线 DT 缺 IPA IMEM 恒等映射[stock qcom,additional-mapping <0x146a8000 0x146a8000 0x2000>]→ r131 DTS 补齐，上机 reserved_regions 实锤 `0x146a8000-0x146a9fff direct`（修复手法出处 = shum-elli/meizu20-linux 下游仓分析轮；数据面终验待 SIM 重插[双槽 card absent 用户环节]）；在机 = **#132（ESP v90 = r131 vmlinuz）+ r131 模块** + boot_b mu-r131 + plasma rootfs + 广电卡 slot 1[UIM 双槽 card absent 待用户重插]；发布面 = Release r91（Latest）不变）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**130**（11-22 一百一十九·乙收尾：S2 实验系 r126-r129 回滚态[stock torch 同构 + dbg_dump 插桩默认关]；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
-| ESP | **v89**（r130 内核腿，11-22；裸 `af5a69f9` / gz `0ac7715f`，**读回 ✓ 全分区**；v87 = 118 件留档；⚠v86 = 半写 apk 竞态废件已 void） | af5a69f9（裸） | recovery_a |
-| Mu 镜像 | **mu-r130-ae176e9d**（11-22 在机，收尾 DTS 与 r130 apk 同源；**读回 ✓ 按镜像字节截取对拍**；mu-r129/r128/r126 = S2 实验系留档） | ae176e9d | boot_b |
-| 设备包 / 固件包 | **r72**（11-21：pm8008 双细胞显式等待环 + hub_2(988000) bind + dataup FAIL 清死路由）/ **r4**（11-19，未发布；发布面仍 r3） | 在机 apk live / bb2e9399（apk） | 机上 apk add |
+| 内核 apk | 7.3.0_**rc6**-r**131**（11-22 一百二十：DTS +IPA IMEM 恒等映射 ipa-imem@146a8000，fork cf99fc7ad737；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
+| ESP | **v90**（r131 内核腿，11-22；裸 `6efc31e0` / gz `3de0b018`，**读回 ✓ 全分区**；v89 = r130 件留档；⚠v86 = 半写 apk 竞态废件已 void） | 6efc31e0（裸） | recovery_a |
+| Mu 镜像 | **mu-r131-099b15d8**（11-22 在机，FdtBlob 与 r131 apk 同源 35652d24；**读回 ✓ 按镜像字节截取对拍**；mu-r130 = S2 收尾件留档） | 099b15d8 | boot_b |
+| 设备包 / 固件包 | **r74**（11-22：WiFi 优先路由 metric 700 + keeper 数据面看门 + dial 硬败不走缓存；r73 首 boot 双 bug 修）/ **r4**（11-19，未发布；发布面仍 r3） | 在机 apk live / bb2e9399（apk） | 机上 apk add |
 | rootfs | Release r91-phosh（11-19 直刷在机；plasma-mobile 6.8.3-r0 换装态） | 16147c7d（rootfs 底） | userdata |
-| 上机期望 | `uname -v` → **#131**（r130）+ 模块 r130 + `/sys/class/leds/white:flash` 在位（物理黑 = S2 候补态） | — | — |
+| 上机期望 | `uname -v` → **#132**（r131）+ 模块 r131 + IPA reserved_regions 含 `146a8000 direct`（`cat /sys/bus/platform/devices/3f40000.ipa/iommu_group/reserved_regions`） | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。

@@ -92,14 +92,15 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   待命；EFS 快照**四份全等**（b85cad2f/c40223e6；第四份 = efs-snapshot-20261119
   -sms-round）；NAS 5gnr-only 偏好非持久（reboot 回 auto，网络侧自驻 5gnr）。
   iOS 线并行走用户——**iOS 工作区/文档零接触，传话 = 用户转告**。
-- **版本钉**：apk **r125**（在机；**#113 = ESP v85 的 r112 vmlinuz，模块腿差异态
-  无害**——r121-r125 = 一百一十八 settle-gap/排除法矩阵实验系）+ ESP **v85**
-  （裸 `44f25038` / gz `e2e6c1e6`，在机，读回全等 ✓）+ **mu-r112-a3dbcf6c**（boot_b，
-  读回 ✓ 按镜像字节截取对拍）= **GD2 总线真值链**（r112 = cci1-m1 AON 真值轮；r115/r116
-  = -32 插桩轮）；r107 = s5kgd2sp03.c + 3P9 libcamera 合规；r104 = 相机轮·第二段；
-  r101 = modem autostart-off 轮；r100 = 多档刷新率轮；r95 = bloff 摘除轮；r91 = 7.3
-  stable rebase 正式轮；**设备包 r72**（pm8008 双细胞等待环 + hub_2 bind + dataup 清死
-  路由）；**fw r4**（11-07 蜂窝复燃备料，本地全绿未发布）。
+- **版本钉**：apk **r131**（在机 #132；TD-11 根修 = DTS IPA IMEM 恒等映射
+  fork cf99fc7ad737；r126-r130 = S2 闪光灯实验系；**#113 = ESP v85 的 r112
+  vmlinuz 模块差异态已翻篇**）+ ESP **v90**（裸 `6efc31e0` / gz `3de0b018`，
+  在机，读回全等 ✓）+ **mu-r131-099b15d8**（boot_b，读回 ✓ 按镜像字节截取
+  对拍）；r112 = GD2 总线真值链；r107 = s5kgd2sp03.c + 3P9 libcamera 合规；
+  r101 = modem autostart-off 轮；r91 = 7.3 stable rebase 正式轮；
+  **设备包 r74**（WiFi 优先路由 metric 700 + keeper 数据面看门 + dial 硬败
+  不走缓存；r72 = pm8008 双细胞等待环 + hub_2 bind）；**fw r4**（11-07 蜂窝
+  复燃备料，本地全绿未发布）。
 - **发布面**：**Release r91 = Latest 不变**（8 件制）；r95-r101/r64-r70 是否发 Release
   留用户。升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑须显式
   --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
@@ -243,17 +244,25 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   ⑥**新基建（r123-r125）**：dbg_state（enable 内 regmap 快照 +5ms/+2s；⚠CCI
   地址必过 CCI_REG16 宏 = 位宽编码，裸地址 = -EINVAL）+ patch_limit（patch 截写
   二分）+ no_boot/no_patch/patch_once/settle_ms 模块参数族（全 0644）。
-  **下会话排面（用户 11-22 拍板）= 分析 https://github.com/shum-elli/meizu20-linux
-  并修复「连 WiFi 无网络」问题（用户判断与蜂窝网络有关）**：彼仓 = 我方 r91 的
-  下游增量适配发行版（蜂窝数据修复 + Mu v4.1 板级适配 + install/check-cellular.sh
-  + extract_modem_pr.py，README 明言基于 Nura r91）——分析其蜂窝编排形态
-  （服务/脚本/路由/DNS 面）与修复手法，找 WiFi↔蜂窝共存的路由/DNS 塌点
-  （我方 70 轮 dataup bounce 重铺路由 + 默认路由双叠 = 在册塌点族；
-  在机 MM failed/sim-missing 残态也可能向 NM 漏路由）。修复 = 设备侧网络面。
+  **▶ 一百二十（11-22）WiFi 无网络修复轮 ✅ + TD-11 根修上机实锤（shum-elli 下游
+  仓分析轮收官；用户 11-22 拍板排面）**：彼仓三段式修复分析毕 = modem_pr 158 件
+  （我方 fw r4 同源）/ **IPA IMEM 恒等映射 = TD-11 真凶**（stock
+  qcom,additional-mapping <0x146a8000 0x146a8000 0x2000> 主线化）/ MM 官方拨号
+  编排。**WiFi 黑洞双凶定谳修复**：①死路由残留（数据面静默死[TX 108/RX 0 无
+  fatal]后 metric 50 残留压过 wlan0 600；删路由 = WiFi 当场复活）→ r73/r74 =
+  WiFi 优先路由[蜂窝 metric 700] + keeper 数据面看门（两连败撤路）+ dial 硬败
+  不走缓存；②TD-11 = r131 DTS 恒等映射（fork cf99fc7ad737）三腿上机 readback
+  双对 ✓ + **reserved_regions 实锤 `0x146a8000-0x146a9fff direct`**；数据面终验
+  待 SIM 重插（UIM 双槽 card absent 用户环节）。坑册四连 = ip route 的 scope
+  link 夹中间勿假设相邻 grep / dataup PASS ≠ 长活（静默死 = boot 一次性判据
+  盲区看门补位）/ Type=simple exit 1 也显示 Deactivated successfully /
+  dd 读 /dev/block/by-name 空 sha = 路径不存在（正确 by-partlabel）。详录 =
+  experiment-log（一百二十）。
   **待办池（点名制，用户 11-22 排序拍板）**：①plasma-camera ANALOGUE_GAIN
   补件（快赢：3P9 进 GUI；真因 = 驱动缺 libcamera 强制 ctrl，见 11-21 探针）
-  ②TD-11 数据面 IPA 专项（相机段已收官顶上；修法序 = ipa init retry 先探）
-  ③SIM 重插（用户动手，解 UIM card absent/registered 回归）④S2 环闪阳极谜
+  ②TD-11 ~~数据面 IPA 专项~~ ✅ 根修已落（r131），剩 = SIM 重插后数据面终验收官
+  ③SIM 重插（用户动手，解 UIM card absent/registered 回归；重插后即 TD-11 终验）
+  ④S2 环闪阳极谜
   （复燃 = stock 画像 REA/硬件探针，dbg_dump 在机默认关）⑤GD2（复燃 = 文档级
   资料/新参照）⑥S3 5E9（配方 = S2 同款，价值有限不急）。
   备件照旧 = stock AON 考古 → 扫频网格 → 顺手件包。
@@ -264,10 +273,11 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
   tempjson hexagonrpcd 语义取证（小件）；蜂窝残面 = 短信 ✅ 已破（见上②）+ 数据面 =
   TD-11 已排程（见上），余全挂起（复燃条件在册，见上②）。
-  **设备当前态 = 广电卡 slot 1 在役**（registered 稳态 + **数据面挂候补断态**[TD-11，
-  dataup -I 硬判 FAIL 诚实呈现]；移动卡用户拔出留手，回归 = 插 slot 2 + `cell-switch.sh
-  2`；keeper 状态文件 = /var/lib/cell-keeper/active-slot = 1；uim-selection 已卸载[单卡
-  官方形态]；TFTP 根 tmpfiles 化[boot 自成形 image→meizu + readwrite]）。
+  **设备当前态 = 广电卡 slot 1 在役 + UIM 双槽 card absent**（SIM 物理缺席
+  [no-atr-received，待用户重插 = 待办池③]；registered/数据面 = 重插后自动回归 +
+  TD-11 终验；**WiFi 日用已修复**[r74 路由策略 + 死路由自动撤]；keeper 状态文件 =
+  /var/lib/cell-keeper/active-slot = 1；uim-selection 已卸载[单卡官方形态]；
+  TFTP 根 tmpfiles 化[boot 自成形 image→meizu + readwrite]）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
   **蜂窝用户面探针轮 ✅（同日深夜，四域一窗快扫；战报 = experiment-log 一百零六·乙）**：
