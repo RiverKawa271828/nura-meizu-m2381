@@ -244,24 +244,33 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   ⑥**新基建（r123-r125）**：dbg_state（enable 内 regmap 快照 +5ms/+2s；⚠CCI
   地址必过 CCI_REG16 宏 = 位宽编码，裸地址 = -EINVAL）+ patch_limit（patch 截写
   二分）+ no_boot/no_patch/patch_once/settle_ms 模块参数族（全 0644）。
-  **▶ 一百二十（11-22）WiFi 无网络修复轮 ✅ + TD-11 根修上机实锤（shum-elli 下游
-  仓分析轮收官；用户 11-22 拍板排面）**：彼仓三段式修复分析毕 = modem_pr 158 件
+  **▶ 一百二十（11-22）WiFi 无网络修复轮 ✅ + TD-11 全案收官 ✅（shum-elli 下游
+  仓分析轮 + 用户插卡终验）**：彼仓三段式修复分析毕 = modem_pr 158 件
   （我方 fw r4 同源）/ **IPA IMEM 恒等映射 = TD-11 真凶**（stock
   qcom,additional-mapping <0x146a8000 0x146a8000 0x2000> 主线化）/ MM 官方拨号
   编排。**WiFi 黑洞双凶定谳修复**：①死路由残留（数据面静默死[TX 108/RX 0 无
   fatal]后 metric 50 残留压过 wlan0 600；删路由 = WiFi 当场复活）→ r73/r74 =
-  WiFi 优先路由[蜂窝 metric 700] + keeper 数据面看门（两连败撤路）+ dial 硬败
-  不走缓存；②TD-11 = r131 DTS 恒等映射（fork cf99fc7ad737）三腿上机 readback
-  双对 ✓ + **reserved_regions 实锤 `0x146a8000-0x146a9fff direct`**；数据面终验
-  待 SIM 重插（UIM 双槽 card absent 用户环节）。坑册四连 = ip route 的 scope
-  link 夹中间勿假设相邻 grep / dataup PASS ≠ 长活（静默死 = boot 一次性判据
-  盲区看门补位）/ Type=simple exit 1 也显示 Deactivated successfully /
-  dd 读 /dev/block/by-name 空 sha = 路径不存在（正确 by-partlabel）。详录 =
-  experiment-log（一百二十）。
-  **待办池（点名制，用户 11-22 排序拍板）**：①plasma-camera ANALOGUE_GAIN
-  补件（快赢：3P9 进 GUI；真因 = 驱动缺 libcamera 强制 ctrl，见 11-21 探针）
-  ②TD-11 ~~数据面 IPA 专项~~ ✅ 根修已落（r131），剩 = SIM 重插后数据面终验收官
-  ③SIM 重插（用户动手，解 UIM card absent/registered 回归；重插后即 TD-11 终验）
+  WiFi 优先路由[蜂窝 metric 700] + keeper 数据面看门（两连败撤路实证工作）+
+  dial 硬败不走缓存；②TD-11 = r131 DTS 恒等映射（fork cf99fc7ad737）三腿上机
+  readback 双对 ✓ + **reserved_regions 实锤 direct**。**终验（插卡后）= 数据面
+  真通长稳**：手工 DPM+WDS 链判负退役（dial 通 bounce 一发 RX 秒死两 boot 复现
+  = 手工 DPM modem 侧通道语义缺）；**MM 拨号形态 = 正解**（MM failed sim-missing
+  死锁 → restart MM 重扫 → simple-connect apn=cbnet → MM 自建
+  qmapmux0.0@rmnet_ipa0 → 手工铺 bearer IP/route → **-I qmapmux0.0 硬判 12/12
+  全 PASS + RX 单调涨**）；**一百零五「MM dial = IPA fatal」判词作废**（缺映射
+  时代测的）。支线 = ipa.ko netdev 仅 modem starting 事件注册（重载无法重建）。
+  紧后 = r75 自动化固化（NM×qmapmux 不认 + mm-dial oneshot + keeper 看门适配）。
+  坑册五连 = ip route scope link 夹中间 grep 勿相邻 / dataup PASS ≠ 长活 /
+  Type=simple exit 1 也显示 Deactivated successfully / dd 读 by-name 空 sha =
+  路径不存在 / **无 -I ping 假绿再实证（qmapmux_rx=0 假 PASS 3 分钟自查纠正）**。
+  详录 = experiment-log（一百二十 + 终验节）。
+  **待办池（点名制，用户 11-22 排序拍板；终验后更新）**：①plasma-camera ANALOGUE_GAIN
+  补件（快赢：3P9 进 GUI；真因 = 驱动缺 libcamera 强制 ctrl）＋ **r75 数据面
+  自动化固化（新顶上）** = dataup 手工 DPM 链退役 + mm-dial oneshot（MM restart
+  重扫 + simple-connect + qmapmux IP/route 铺设）+ keeper 看门适配 qmapmux 路由
+  形态 + NM×qmapmux 集成工程（NM 不认 qmapmux0.0）
+  ②TD-11 ~~数据面 IPA 专项~~ ✅ 全案收官（r131 映射 + MM 拨号形态真通）
+  ③SIM 重插 ✅ 已办（11-22 用户插卡，终验完成）
   ④S2 环闪阳极谜
   （复燃 = stock 画像 REA/硬件探针，dbg_dump 在机默认关）⑤GD2（复燃 = 文档级
   资料/新参照）⑥S3 5E9（配方 = S2 同款，价值有限不急）。
