@@ -150,6 +150,10 @@ NFC（芯片应答、NCI init 不完成；**用户态默认摘除**）。
 
 ## 致谢
 
+- [shum-elli/meizu20-linux](https://github.com/shum-elli/meizu20-linux) —— 本仓 r91 的下游增量适配
+  发行版；蜂窝数据面（TD-11）破案的头号情报源：**IPA IMEM 恒等映射缺口**（stock
+  `qcom,additional-mapping` 的主线化修法）与 MM 拨号形态实证——映射修复与数据面
+  打通直接受其诊断指引。
 - [UniXNU/QcomBaseband](https://github.com/UniXNU/QcomBaseband) —— 蜂窝数据面破案的关键情报源：
   DPM Open Port 端口真值与 WDS 生命周期状态机（iPad 基带 QMI 结构的公开整理）。
 - [leluo123/m2468-mainline](https://github.com/leluo123/m2468-mainline) —— 魅族 21 Note 主线移植：
