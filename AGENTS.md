@@ -243,15 +243,17 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   ⑥**新基建（r123-r125）**：dbg_state（enable 内 regmap 快照 +5ms/+2s；⚠CCI
   地址必过 CCI_REG16 宏 = 位宽编码，裸地址 = -EINVAL）+ patch_limit（patch 截写
   二分）+ no_boot/no_patch/patch_once/settle_ms 模块参数族（全 0644）。
-  **下会话排面 = 墙剩余三候选轴**（按性价比）：**A. FIFO 窗写达性（首推**——
-  res 94 条 + patch 1253 条全走 0x6028/0x602A/0x6F12 窗口 = 唯一直读验证不到的
-  寄存器类；「FW 活、发射机哑」与「窗写静默丢弃」完全自洽；验证路 = JD1SP13
-  datasheet 窗协议精读[Scribd 在案]或窗记录行为差分**）→ B. I2C freq mode
-  （bin i2cInfo 结构节点未解出，stock KMD 按 freq_mode 配 CCI）→ C. 上电序微差
-  （bin (1,1,0)(2,1,0)(3,1,0)(8,1,1)(0,19.2M,70) vs 我方 mclk/rst 次序）→
-  D. **m2391 魅族 21 参照树**（同 die s5kgd2sp03 实锤于彼 proprietary-files；
-  第二个 stock 级对拍源）。备件 = stock AON 考古 → 扫频网格 → S2 闪光灯 +
-  顺手件包照旧在队。
+  **下会话排面（用户 11-21 拍板「下个会话打一轮吧，不行的话就换闪光灯了」）=
+  GD2 有界收官一轮**：主件 = **m2391 魅族 21 参照树对拍**（同 die
+  s5kgd2sp03；彼内核/vendor 树 = 第二个 stock 级集成，freq mode/上电序/patch
+  处理全能 diff，纯宿主考古）+ 顺带清仓两条便宜轴（B. I2C freq mode = bin
+  i2cInfo 结构节点解出 + 驱动 CCI 速率对拍；C. 上电序微差 = bin
+  (1,1,0)(2,1,0)(3,1,0)(8,1,1)(0,19.2M,70) vs 我方 mclk/rst 次序）+ JD1SP13
+  datasheet 窗协议侦察（Scribd 在案）。**判负出口 = GD2 正式挂起候补池**（复燃
+  条件 = m2391 树有货/GD2 文档级资料；恢复成本零 = 刷 r125 调参数族）→
+  **主线换 S2 闪光灯**（用户预判「这个应该简单」；三灯 campaign 复燃 = 驱动
+  轮活，配方参照 = 108 轮传感器 bring-up 法 + pm8008 轨族）。
+  备件照旧 = stock AON 考古 → 扫频网格 → 顺手件包。
   在机 = #113 + **r125 模块** + v85 + mu-r112 + device r72。广角（3P9）参照件
   rc=0 满帧恒真。
   **数据面 IPA 内核域专项（TD-11）= 已排入计划**
