@@ -92,8 +92,8 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   待命；EFS 快照**四份全等**（b85cad2f/c40223e6；第四份 = efs-snapshot-20261119
   -sms-round）；NAS 5gnr-only 偏好非持久（reboot 回 auto，网络侧自驻 5gnr）。
   iOS 线并行走用户——**iOS 工作区/文档零接触，传话 = 用户转告**。
-- **版本钉**：apk **r116**（在机；**#113 = ESP v85 的 r112 vmlinuz，r116 模块腿
-  差异态无害**——**-32 双案破译 + GD2 链上机轮，11-21 一百一十四**）+ ESP **v85**
+- **版本钉**：apk **r125**（在机；**#113 = ESP v85 的 r112 vmlinuz，模块腿差异态
+  无害**——r121-r125 = 一百一十八 settle-gap/排除法矩阵实验系）+ ESP **v85**
   （裸 `44f25038` / gz `e2e6c1e6`，在机，读回全等 ✓）+ **mu-r112-a3dbcf6c**（boot_b，
   读回 ✓ 按镜像字节截取对拍）= **GD2 总线真值链**（r112 = cci1-m1 AON 真值轮；r115/r116
   = -32 插桩轮）；r107 = s5kgd2sp03.c + 3P9 libcamera 合规；r104 = 相机轮·第二段；
@@ -223,16 +223,37 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   headless 直跑配方落地（Ghidra 12 = ghidra.Ghidra 启动器 + GhidraClassLoader + 全
   jar classpath + Java postScript；REA 26MB 撞 startup deadline）。**全量分析跑中，
   ROI 反编译落 scratch-super-vendor/dec-camx/roi_*.c**。
-  **下会话排面（用户 11-21 拍板「网上估计有资料，下个会话先查查」）= 网上资料
-  调研先行**：①camx 泄漏/dump 源码 GitHub 搜（camxsensor.cpp/SensorDriverData/
-  SettingsType/GetSensorLibraryAPIs，gh 认证搜索）②三星 GD2 系 datasheet/register
-  ref（组保持 0x0104/流过渡/FIFO 窗协议 0x6028/0x602A/0x6F12）③GD2 系 mainline
-  带机案例 ④sensormodule bin 解析器现成实现对拍。调研收敛后按资料改驱动（r121）
-  或接力 ROI 反编译稿（dec-camx/ 在盘；⚠字符串锚点有假阳性，26MB 库 RE = 多会话
-  工程）。若 camx 编排 = bin 全等 → 墙源收缩回 patch 数据面（g7 完整性/FW RAM
-  写达性）。备件 = ③stock AON 考古 → ④扫频网格适配 →
-  S2 闪光灯 + 顺手件包照旧在队。
-  在机 = #113 + r120 模块 + v85 + mu-r112 + device r72。广角（3P9）参照件在案。
+  **▶ 一百一十八（11-21）网上资料调研轮 + camx 源码到手 + 排除法六连矩阵 ✅（本轮）**：
+  ①**camx 全源码树到手 = 头号收获**（`comprehensive9/vendor_qcom_proprietary`
+  GitHub 分支 11se；sparse clone 拉 camx/chi-cdk）+ KMD（marble techpack/camera）
+  ——**编排真值源码级钉死：Init+Res 在 CONFIG_DEV 执行，STREAMON/STREAMOFF 包
+  KMD 只缓存（i2c_data.streamon_settings），0x0100=1 真写只在 CAM_START_DEV =
+  秒级 settle 架构**；apply_settings(STREAMON) = 纯缓存寄存器写零魔法；组保持
+  0x0104 只在曝光路径不在 stream-on 编排（r119 无对应物实证）；**117 ROI 反编译
+  接力作废（源码即答案键；roi_11fe260 = IPE upscaler 假阳性锚实锤）**。②JD1 同族
+  驱动源 s5kjd1sp_xr_sensor.cpp（277 行）= 纯曝光插件同构 → 117 架构改判源码级
+  独立确认；GD2 bin res 组零 delayUs（全 bin 仅 init 5ms/11ms 两条）。③**r121
+  settle-gap 判负**（settle 1s → FW 过渡后**异步**重建 MIPI 域[0x0116←0x1002 =
+  0x0110 值错位一格指纹]；8s → 寄存器 T+55s 完好驻留；**两态均零包** = 时序非
+  TX 门）。④**r122 patch 挪位事故 void**（patch 尾页 0x2001 → stream-on 0x0100
+  错 bank；★坑册 = res 组自洽页选但组间共享页态，插序列必审尾页）→ r125 正位
+  复归。⑤**排除法六连矩阵全负**（patch 全量/once/无 × 触发器发/跳 × no_boot g7
+  全跳 = TX 恒零；g7 内容非 TX 门；轨电压流中实测全绿；「csid0=911 洪流」=
+  **3P9 计数器跨相机累计误读**[csid0 行跨相机共享，GD2 从未发过任何包]）。
+  ⑥**新基建（r123-r125）**：dbg_state（enable 内 regmap 快照 +5ms/+2s；⚠CCI
+  地址必过 CCI_REG16 宏 = 位宽编码，裸地址 = -EINVAL）+ patch_limit（patch 截写
+  二分）+ no_boot/no_patch/patch_once/settle_ms 模块参数族（全 0644）。
+  **下会话排面 = 墙剩余三候选轴**（按性价比）：**A. FIFO 窗写达性（首推**——
+  res 94 条 + patch 1253 条全走 0x6028/0x602A/0x6F12 窗口 = 唯一直读验证不到的
+  寄存器类；「FW 活、发射机哑」与「窗写静默丢弃」完全自洽；验证路 = JD1SP13
+  datasheet 窗协议精读[Scribd 在案]或窗记录行为差分**）→ B. I2C freq mode
+  （bin i2cInfo 结构节点未解出，stock KMD 按 freq_mode 配 CCI）→ C. 上电序微差
+  （bin (1,1,0)(2,1,0)(3,1,0)(8,1,1)(0,19.2M,70) vs 我方 mclk/rst 次序）→
+  D. **m2391 魅族 21 参照树**（同 die s5kgd2sp03 实锤于彼 proprietary-files；
+  第二个 stock 级对拍源）。备件 = stock AON 考古 → 扫频网格 → S2 闪光灯 +
+  顺手件包照旧在队。
+  在机 = #113 + **r125 模块** + v85 + mu-r112 + device r72。广角（3P9）参照件
+  rc=0 满帧恒真。
   **数据面 IPA 内核域专项（TD-11）= 已排入计划**
   （用户 11-20 拍板「以后修」；非主线，主线相机段收官后顶上；修法序 = ipa 驱动 init
   retry 补丁先探——SSR 事件链健康 = retry 有落点，modem 固件域取证次之）。候选池余项照旧 = 干净机首航（Phase-2 判据）/

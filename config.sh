@@ -45,7 +45,7 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="120"     # r120 = 在机现役（11-21 一百一十七：r119 = stream-on 组保持{VTS} 实验件[判负] + r120 = 流后补写 MIPI 域实验件[判负，过渡 >5ms 画像]；两件均无帧但排除写法/时序两轴）；r118 = csiphy4 RX 插桩轮[settle=29/lane_mask=0x8f 与 3P9 同构 = RX 无罪] + int64 修复；r117 = 空 bump 死包[改源必先 commit 再 build]；r116 = -32 插桩轮；r112 = GD2 总线真值轮（cci1-m1 AON gpio208/209）；r107 = s5kgd2sp03.c 首发
+REL_LINUX_PKGREL="125"     # r125 = 在机现役（11-21 一百一十八：r121 = settle-gap 实验件[时序轴部分真实但非 TX 门] + r122 = patch 挪位事故[页上下文破坏，void] + r123/r124 = no_boot/dbg_state/patch_limit 探针基建 + r125 = patch 正位复归；六连矩阵全负，g7/patch/时序三轴出清）；r120 = r119/r120 双实验轮；r118 = csiphy4 RX 插桩轮 + int64 修复；r117 = 空 bump 死包[改源必先 commit 再 build]；r116 = -32 插桩轮；r112 = GD2 总线真值轮（cci1-m1 AON gpio208/209）；r107 = s5kgd2sp03.c 首发
 REL_DEVICE_PKGREL="72"     # r72 = pm8008i 细胞显式等待环 + hub_2(988000) bind（GD2 供电 blocker 修复；上机 #108 boot 双细胞即绑实证）；⚠touch-load 里 3P9 补绑仍硬编码 0-002d（cci 适配器改数后 = 2-002d，服务标 failed 但 udev 兜底已绑——r73 顺手件）；r71 = 相机开机即通轮
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；发布面 tarball 仍 r3/29c1ee88）
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r112-a3dbcf6c.img"     # mu-r112 = 11-21 GD2 cci1-m1 真值轮（FdtBlob 自 r112 apk 同源）；mu-r108 = r108 件留档（首 boot 一次卡死 + "cpu vectors region not present in cfg file" 信息行，读回完好非边写，二启自愈未定谳）；mu-r102 = 相机轮·第二段件留档
