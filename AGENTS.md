@@ -243,19 +243,21 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   ⑥**新基建（r123-r125）**：dbg_state（enable 内 regmap 快照 +5ms/+2s；⚠CCI
   地址必过 CCI_REG16 宏 = 位宽编码，裸地址 = -EINVAL）+ patch_limit（patch 截写
   二分）+ no_boot/no_patch/patch_once/settle_ms 模块参数族（全 0644）。
-  **下会话排面（用户 11-21 拍板「下个会话打一轮吧，不行的话就换闪光灯了」）=
-  GD2 有界收官一轮**：主件 = **m2391 魅族 21 参照树对拍**（同 die
-  s5kgd2sp03；彼内核/vendor 树 = 第二个 stock 级集成，freq mode/上电序/patch
-  处理全能 diff，纯宿主考古）+ 顺带清仓两条便宜轴（B. I2C freq mode = bin
-  i2cInfo 结构节点解出 + 驱动 CCI 速率对拍；C. 上电序微差 = bin
-  (1,1,0)(2,1,0)(3,1,0)(8,1,1)(0,19.2M,70) vs 我方 mclk/rst 次序）+ JD1SP13
-  datasheet 窗协议侦察（Scribd 在案）。**判负出口 = GD2 正式挂起候补池**（复燃
-  条件 = m2391 树有货/GD2 文档级资料；恢复成本零 = 刷 r125 调参数族）→
-  **主线换 S2 闪光灯**（用户预判「这个应该简单」；三灯 campaign 复燃 = 驱动
-  轮活，配方参照 = 108 轮传感器 bring-up 法 + pm8008 轨族）。
+  **下会话排面（用户 11-22 拍板）= 分析 https://github.com/shum-elli/meizu20-linux
+  并修复「连 WiFi 无网络」问题（用户判断与蜂窝网络有关）**：彼仓 = 我方 r91 的
+  下游增量适配发行版（蜂窝数据修复 + Mu v4.1 板级适配 + install/check-cellular.sh
+  + extract_modem_pr.py，README 明言基于 Nura r91）——分析其蜂窝编排形态
+  （服务/脚本/路由/DNS 面）与修复手法，找 WiFi↔蜂窝共存的路由/DNS 塌点
+  （我方 70 轮 dataup bounce 重铺路由 + 默认路由双叠 = 在册塌点族；
+  在机 MM failed/sim-missing 残态也可能向 NM 漏路由）。修复 = 设备侧网络面。
+  **待办池（点名制，用户 11-22 排序拍板）**：①plasma-camera ANALOGUE_GAIN
+  补件（快赢：3P9 进 GUI；真因 = 驱动缺 libcamera 强制 ctrl，见 11-21 探针）
+  ②TD-11 数据面 IPA 专项（相机段已收官顶上；修法序 = ipa init retry 先探）
+  ③SIM 重插（用户动手，解 UIM card absent/registered 回归）④S2 环闪阳极谜
+  （复燃 = stock 画像 REA/硬件探针，dbg_dump 在机默认关）⑤GD2（复燃 = 文档级
+  资料/新参照）⑥S3 5E9（配方 = S2 同款，价值有限不急）。
   备件照旧 = stock AON 考古 → 扫频网格 → 顺手件包。
-  在机 = #113 + **r125 模块** + v85 + mu-r112 + device r72。广角（3P9）参照件
-  rc=0 满帧恒真。
+  广角（3P9）参照件 rc=0 满帧恒真。
   **数据面 IPA 内核域专项（TD-11）= 已排入计划**
   （用户 11-20 拍板「以后修」；非主线，主线相机段收官后顶上；修法序 = ipa 驱动 init
   retry 补丁先探——SSR 事件链健康 = retry 有落点，modem 固件域取证次之）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
