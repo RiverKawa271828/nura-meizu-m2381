@@ -3,16 +3,16 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-21 GD2 残墙攻法两连（一百一十五审计 + 一百一十六插桩/读回）：⓪寄存器真值审计 ✅ = 「误入歧途」寄存器面否决（四 bin slot 不变式 12011/12011 零失配 + Volla 对拍同构 + stock FDT GD2 节点全等[csiphy4 shared-clks=AON stock 实证]；plausible=198/396 = 旧 20B 步长化石；g3 真值 0x0100←0x0001）→ ①r118 csiphy4 插桩 ✅ = **RX 侧全绿定谳**（lanes_enable 实测 settle=29/lane_mask=0x8f/4lanes/timer 400M/link 795.43M = 与工作 3P9 链同构）+ s5kgd2sp03 int64 修复（r117 = 空 bump 死包[APKBUILD git-archive 取源吃掉未提交编辑——坑册]）→ ②PLL 读回 ✅ = PLL 头（0x0300-0x0306）落位读回全等 + **PLL 尾（0x0308-0x0310）= NAK/FW 管控区** + **VTS/LLP/MIPI TX（0x0340/0342/0114/0136）驱动流前写不驻留（读回 0），用户态流中写却驻留读回精确** + 流中补写/重踢 PLL（0x6214/0x6010）均无帧（csid0 delta 0）→ **判词 = 传感器流启动 FW 过渡丢弃驱动预流写，stock 编排层（camx sensor lib）在 bin 之外有补充序列 = 下轮 REA 目标（com.qti.sensor.s5kgd2sp03.so 23.8KB 在盘）**；在机 = **#113（ESP v85 = r112 vmlinuz）+ r118 模块** + boot_b mu-r112 + plasma rootfs + 广电卡 slot 1；发布面 = Release r91（Latest）不变）
+## 工作态（2026-11-21 GD2 残墙攻法三连（一百一十五审计 + 一百一十六插桩/读回 + 一百一十七 REA/双实验）：…一百一十六收官（RX 无罪 + PLL 读回画像，详见 experiment-log）→ **一百一十七：①sensor lib REA = 架构改判**（lib = 纯曝光计算插件，stream-on 真序列真出处 = camx 核心）+ **bin g3-g9 全解析**（g5/g6=组保持/g8=testPattern FIFO 窗/g7 1264 全解）+ Volla 工作栈取证（=GD2SP 异件近亲）→ ②**r119 组保持{VTS} 判负 + r120 流后补写判负**（rc137 bytes0 两连；T+5ms 写落过渡窗被擦 = 过渡 >5ms；写法/时序两轴排除，缺口 = FW 过渡时 FW 内部态）→ ③**camx 核心取证新基建** = super.img→vendor_a EROFS→camera.qcom.so 26.7MB + StreamOn 四函数定位 + Ghidra headless 直跑配方 + 全量分析跑中（ROI 落 scratch-super-vendor/dec-camx/）→ **下轮 = 读 ROI 提 stock stream-on 编排真值 → r121 按真值改**；在机 = **#113（ESP v85 = r112 vmlinuz）+ r120 模块** + boot_b mu-r112 + plasma rootfs + 广电卡 slot 1；发布面 = Release r91（Latest）不变）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**118**（11-21 csiphy4 RX 插桩轮：lanes_enable settle/lane dump + power-on clock rates + set_clock_rates link_freq + s5kgd2sp03 int64 修复；**在机 = r118 模块 + #113 vmlinuz（ESP v85 = r112 件）= 无害混态**；前役 = r116 -32 插桩 / r112 GD2 总线真值轮 / r107 GD2 驱动首发；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
+| 内核 apk | 7.3.0_**rc6**-r**120**（11-21 一百一十七：r119 = stream-on 组保持{VTS} 实验件[判负] + r120 = 流后补写 MIPI 域实验件[判负]——两件均为实验记录保留；**在机 = r120 模块 + #113 vmlinuz（ESP v85 = r112 件）= 无害混态**；前役 = r118 csiphy4 RX 插桩轮[RX 无罪定谳] / r116 -32 插桩 / r112 GD2 总线真值轮 / r107 GD2 驱动首发；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
 | ESP | **v85**（r112 内核腿，11-21；裸 `44f25038` / gz `e2e6c1e6`，**读回 ✓ 全分区**；v84/v83/v82 = 前件留档） | 44f25038（裸） | recovery_a |
 | Mu 镜像 | **mu-r112-a3dbcf6c**（11-21 在机，GD2 cci1-m1 真值 DTS 与 r112 apk 同源；**读回 ✓ 按镜像字节截取对拍**；mu-r108/mu-r107/mu-r102 = 前件留档） | a3dbcf6c | boot_b |
 | 设备包 / 固件包 | **r72**（11-21：pm8008 双细胞显式等待环 + hub_2(988000) bind + dataup FAIL 清死路由；前役 = r71 相机开机即通 + r69/r70 官方化轮）/ **r4**（11-19，未发布；发布面仍 r3） | 在机 apk live / bb2e9399（apk） | 机上 apk add |
 | rootfs | Release r91-phosh（11-19 直刷在机；plasma-mobile 6.8.3-r0 换装态） | 16147c7d（rootfs 底） | userdata |
-| 上机期望 | `uname -v` → **#113**（r112）+ 模块 r118 | — | — |
+| 上机期望 | `uname -v` → **#113**（r112）+ 模块 r120 | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。

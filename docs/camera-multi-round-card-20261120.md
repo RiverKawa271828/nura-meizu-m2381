@@ -74,7 +74,7 @@
    0x0136/0116 读回漂移 = FW 状态；五连实验全无帧 → **判词 = 传感器流启动
    FW 过渡丢弃驱动预流写，stock 编排层（bin 之外）= 残墙**。
 3. **★下会话主件（一百一十七排面，用户 11-21 拍板「安排下个会话」）= sensor
-   lib REA 轮**：
+   lib REA 轮**（**✅ 一百一十七已收官 11-21，判词改写见下**）：
    - **目标件**：`meizu20-m1/vendor-dig/vendor-root/lib64/camera/
      com.qti.sensor.s5kgd2sp03.so`（23824B ARM64，入口
      **GetSensorLibraryAPIs**；★差分锚 = **com.qti.sensor.s5k3p9sx.so
@@ -94,6 +94,47 @@
      捕获验收。
    - 破墙后 = 首帧验收（4-cell HW bayer Gr-first 真实行序）+ CFA/decode
      验证；不破 = 差分 3P9 lib 定位缺失件继续。
+
+## ✅ 一百一十七（11-21）：REA 轮收官 = 架构改判 + 双实验判负 + camx 核心取证管线
+
+- [x] **架构改判 ✅**：com.qti.sensor.s5kgd2sp03.so = **纯曝光计算插件**
+      （全 80 函数反编译，导出面仅 GetSensorLibraryAPIs/CalculateExposure/
+      FillExposureSettings，AEC 填表循环）——**无寄存器序列，stream-on 真序列
+      真出处 = camx 核心 camera.qcom.so**；rodata 真差异 = 身份串 "exynos9810"
+      （.text 差异 = BL 布局噪音）。素材 = vendor-dig/out/gd2-lib-rea/。
+- [x] **bin g3-g9 全解析 ✅**（slot 不变式手工追值）：g3=startStream 0x0100←1 /
+      g4=stopStream←0 / **g5=组保持On 0x0104←1 / g6=组保持Off←0** / g7=
+      initSettings 1264 全解（旧 decoded.txt unresolved 625 全消）/
+      **g8=testPatternData 走 FIFO 窗协议**（0x6028←0x4000/0x602a←0x0600/
+      0x6f12←0）/ g9=vendorID 读件；g0 模式表 = 页 0x2000 FIFO 窗头（~45 窗）
+      + 直写尾（0x0114←0x0300 四 lane/0x0136←0x1300/PLL 块/0x0340←0x1408/
+      0x0342←0x5070/曝光族）。
+- [x] **Volla 工作栈全链取证 ✅**（GitHub 拉 adaptor-subdrv-ctrl/drv/i2c 三件
+      → /tmp/volla-adt/）：工作链 = patch→**模式表直写无组保持**→AE 组保持→
+      **set_dummy gph{VTS}→commit**→0x0100←0x01；⚠**Volla = GD2SP 异件近亲**
+      （wake 参数 0x26/0x0A02←0xFFFF/30ms/0xFCFC 全异，不可直平移）。
+- [x] **r119 组保持{VTS} 判负 ✅**：fork e7971b90182f → apk r119（md5 89cb49d2
+      装机）→ 净 boot → cam-shot-front rc=137 bytes=0；流中读回 MIPI 域仍全 0
+      = 组保持单写 commit 不改擦除画像。
+- [x] **r120 流后补写判负 ✅ + 过渡时长新画像**：fork 85ef83950ea4 → apk r120
+      （md5 c5c17f5f 装机）→ rc=137 bytes=0；**T+5ms 写落过渡窗被擦（驱动零错误
+      = CCI 全 ACK 但 T+22s 读回 0）→ 过渡时长 >5ms；T+秒级写才驻留（116 轮）
+      但引擎不消费** → 写法/时序两轴已排除，缺口 = FW 过渡时 FW 内部态正确性。
+- [x] **camx 核心取证新基建 ✅**：OTA 备份 super.img → lp metadata v10.2 手工
+      解析（三元组描述符@52/64/76/88）→ vendor_a 5 extents 1235MiB dd 拼装 →
+      **EROFS = fsck.erofs --extract** → **camera.qcom.so 26.7MB**（
+      scratch-super-vendor/）；capstone 锚点（★ADRP 两段立即数 immhi@5-23+
+      immlo@29-30，漏 immlo 全空报；日志宏死串，活锚 = bin 解析串）定位
+      **StreamOn 四函数** 0x11fe260(12.6KB 292calls)/0x12013e0/0x122df70/
+      0x1255cf0 + regSetting 解析器簇 0x168b580-0x169d46c；Ghidra headless
+      直跑配方（Ghidra 12 = `ghidra.Ghidra` 启动器 + `-Djava.system.class.
+      loader=ghidra.GhidraClassLoader` + 全 jar classpath + Java postScript；
+      AnalyzeHeadless 无 static main；REA 26MB 撞 startup deadline）。
+      **全量分析跑中 → ROI 反编译落 scratch-super-vendor/dec-camx/roi_*.c**。
+- **下轮排面**：读 ROI 反编译提 stock stream-on 编排真值（settings type 应用
+  顺序/FIFO 窗协议语义/组保持/0x0A02 类 bin 外补写）→ r121 按真值改 → apk 腿
+  solo → 净 boot → cam-shot-front；若 camx 编排 = bin 全等 → 墙源收缩回 patch
+  数据面（g7 完整性/FW RAM 写达性，页 0x2000 读路径不镜像写路径已证）。
 4. **stock AON 域考古**：stock FDT csiphy4/AON 域配置 + Flyme 窗真值（stock 前摄
    在同域工作过 = 有地面真值）。
 5. CSI 扫频网格适配 GD2（一百一十一的 12 档是 3P9 驱动的；GD2 单档 → 扫 settle

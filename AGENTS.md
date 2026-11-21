@@ -203,22 +203,34 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   触发 + 传感器在流 0x0100=0x0001 + MCLK4/引脚/rails 全绿 + csid0 IRQ delta 仅 +1
   vs 应~1200 SOF → 断层 = 传感器 TX↔csiphy4 lane 层；3P9 同 boot 同下游满帧 = 管线
   无罪；新雷 = s5kgd2sp03 int64 pixel_rate WARN[r117 顺手修]）。
-  **下会话排面（用户 11-21 拍板「安排下个会话」）= GD2 残墙攻法·sensor lib
-  REA 轮（一百一十七；卡 = camera-multi-round-card 项 3）**：
-  主件 = **REA 反编译 com.qti.sensor.s5kgd2sp03.so**（vendor-root/lib64/
-  camera/，23824B ARM64，入口 GetSensorLibraryAPIs）提 stream-on/power/init
-  真序列；★差分锚 = **com.qti.sensor.s5k3p9sx.so 同尺寸异 md5**（同模板异
-  嵌入表，3P9 在机工作 = 真值参照）——先 byte-diff 找表差异区再定点反编译；
-  REA env = `source /home/ri/work/tools/rea/env.sh`（九十五轮 PE 车道先例）。
-  候补三面（一百一十六判词 = 传感器流启动 FW 过渡丢弃驱动预流写，stock 在
-  bin 之外有编排）：组保持 0x0104 编排[bin g5/g6 我方从未用，Volla s_gph
-  在用]/流启动后补序列/FIFO 窗协议写 → **r119 按真值改 s5kgd2sp03.c**
-  （改源必先 commit 再 build[r117 死包律]）→ apk 腿 solo → 净 boot →
-  cam-shot-front 验收；破墙后 = 4-cell HW bayer 首帧行序 + CFA/decode 验证。
-  备件 = ③stock AON 考古 → ④扫频网格适配 → S2 闪光灯 + 顺手件包照旧在队。
-  在机 = #113 + r118 模块 + v85 + mu-r112 + device r72。广角（3P9）参照件
-  在案。**数据面 IPA 内核域专项（TD-11）= 已排入计划**
-  （3P9）= 参照件已自适应化复验（满帧）。**数据面 IPA 内核域专项（TD-11）= 已排入计划**
+  **▶ 一百一十七（11-21）sensor lib REA 轮 + 双实验判负 + camx 核心取证管线 ✅（本轮）**：
+  ①REA 全函数反编译 com.qti.sensor.s5kgd2sp03.so（80 函数）→ **架构改判 = lib 是
+  纯曝光计算插件（仅 GetSensorLibraryAPIs/CalculateExposure/FillExposureSettings），
+  无寄存器序列——stream-on 真序列真出处 = camx 核心**；rodata 真差异 = 身份串
+  "exynos9810"。②bin g3-g9 全解析（slot 不变式手工追值，unresolved 625 全消）：
+  g3=startStream/g4=stopStream/**g5/g6=组保持 On/Off 0x0104←1/0**/g7=initSettings
+  1264/**g8=testPatternData 走 FIFO 窗协议**/g9=vendorID。③Volla 工作栈全链取证
+  （adaptor 三件拉仓）= patch→模式表直写（无组保持！）→AE 组保持→**set_dummy
+  gph{VTS}**→stream-on；⚠Volla = **GD2SP 异件近亲**（wake 参数全异不可平移）。
+  ④**r119 组保持{VTS} 判负**（rc137 bytes0，MIPI 域读回仍 0）+ **r120 流后补写判负**
+  （T+5ms 写落过渡窗被擦[过渡 >5ms 新画像]，T+22s 读回仍 0，驱动零错误）→
+  **写法/时序两轴已排除，缺口 = FW 过渡时 FW 内部态的正确性**。⑤**camx 核心取证
+  新基建**：super.img lp metadata 手工解析（v10.2 三元组描述符）→ vendor_a EROFS
+  （fsck.erofs --extract）→ **camera.qcom.so 26.7MB** 到手（scratch-super-vendor/）；
+  capstone 锚点定位 StreamOn 四函数（0x11fe260 12.6KB 292calls/0x12013e0/0x122df70/
+  0x1255cf0）+ regSetting 解析器簇 0x168b580-0x169d46c（★坑 = ADRP 立即数两段
+  immhi@5-23+immlo@29-30，漏 immlo 全空报；日志宏死串要找 bin 解析活串）；Ghidra
+  headless 直跑配方落地（Ghidra 12 = ghidra.Ghidra 启动器 + GhidraClassLoader + 全
+  jar classpath + Java postScript；REA 26MB 撞 startup deadline）。**全量分析跑中，
+  ROI 反编译落 scratch-super-vendor/dec-camx/roi_*.c**。
+  **下会话排面 = 读 ROI 反编译提 stock stream-on 编排真值**（重点：settings type
+  应用顺序/FIFO 窗协议语义/组保持/0x0A02 类 bin 外补写）→ **r121 按真值改**（改源
+  必先 commit[r117 死包律]）→ apk 腿 solo → 净 boot → cam-shot-front；若 camx 编排
+  = bin 全等（无 bin 外补充）→ 墙源收缩回 patch 数据面（g7 完整性/FW RAM 写达性，
+  页 0x2000 读路径不镜像写路径已证）。备件 = ③stock AON 考古 → ④扫频网格适配 →
+  S2 闪光灯 + 顺手件包照旧在队。
+  在机 = #113 + r120 模块 + v85 + mu-r112 + device r72。广角（3P9）参照件在案。
+  **数据面 IPA 内核域专项（TD-11）= 已排入计划**
   （用户 11-20 拍板「以后修」；非主线，主线相机段收官后顶上；修法序 = ipa 驱动 init
   retry 补丁先探——SSR 事件链健康 = retry 有落点，modem 固件域取证次之）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
