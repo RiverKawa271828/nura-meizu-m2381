@@ -85,6 +85,20 @@ while :; do
           dance; sleep 20 ;;
       esac
     fi
+    # r73（2026-11-22 WiFi 无网络轮）：数据面看门。dataup PASS 铺的默认路由
+    # （metric 700 = WiFi 优先策略）若中途数据面静默死（TX 出 RX 0 无 fatal，
+    # 本轮 boot 实证），死路由残留 = 黑洞；WiFi 在时它只是备胎无害，WiFi 掉时
+    # 却独占默认路由吃掉全部流量。路由在位时每轮 -I rmnet0 硬判一发，两连败
+    # = 撤路由（复活 = 重启 dataup 或 cell-switch 后重跑 d1_dataup.sh）。
+    if ip route show 2>/dev/null | grep -q "default dev rmnet0"; then
+      if ! ping -c 1 -W 5 -I rmnet0 223.5.5.5 >/dev/null 2>&1; then
+        sleep 10
+        if ! ping -c 1 -W 5 -I rmnet0 223.5.5.5 >/dev/null 2>&1; then
+          ip route del default dev rmnet0 metric 700 2>/dev/null
+          log "data face dead (2x ping fail) -> rmnet0 default route withdrawn (WiFi/fallback takes over)"
+        fi
+      fi
+    fi
   fi
   sleep 45
 done

@@ -3,6 +3,10 @@
 # 前提：解封 + provision + DMS 舞步已完成（registered 态）、MM 已 mask、qrtr-lookup 有 WDS/DPM
 # 配方 = DPM open → d1_bindmux（dial）→ rmnet0(QMAP mux_id 1) → rmnet_ipa0 bounce（重铺
 #        RX buffer）→ 默认路由 → ping 判据
+# r73（2026-11-22 WiFi 无网络轮）：路由策略 = WiFi 优先——蜂窝默认路由 metric
+#        700 > wlan0 600（WiFi 在 = WiFi 接管日用，蜂窝兜底；WiFi 掉 = 蜂窝独占
+#        默认路由自动接管）。数据面中途静默死（TX 出 RX 0 无 fatal，本 boot 实证）
+#        的残路由由 cell-keeper 数据面看门撤除。
 # 判词（11-19 实证）：
 #   - AP_MODEM_TX 端点 .qmap=true（主线 ipa_data-v5.5.c）：裸 IP 包撞 xmit 静默丢弃分支
 #     （TX dropped 涨 / RX 0 / 零 error）——rmnet0 上层件是必需品非可选；
@@ -20,9 +24,18 @@ echo "== [1/5] DPM open port"
 qmicli -d qrtr://0 --dpm-open-port="hw-data-ep-type=embedded,hw-data-ep-iface-number=1,hw-data-rx-id=2,hw-data-tx-id=24" 2>&1 | tail -1
 
 echo "== [2/5] WDS dial (bind mux -> bind sub -> start network)"
-OUT=$(python3 /usr/lib/meizu20/d1_bindmux.py 2>&1)
+OUT=$(python3 /usr/lib/meizu20/d1_bindmux.py 2>&1); BMRC=$?
 echo "$OUT" | tail -2
 ADDR=$(echo "$OUT" | sed -n 's/.*addr=\([0-9.]*\) .*/\1/p')
+# r74: dial 层失败（bindmux rc≠0 = mux 全拒/start network 拒）且无 addr = 硬 FAIL，
+# 不再读缓存地址走全流程（无卡/未注册语境 = 铺一条注定死的默认路由；本 boot 实证
+# 旧地址 10.1.96.31 缓存兜底死路铺 metric 700）。rc=0 但 addr 行解析失败 = 保留
+# 缓存兜底（dial 非 idempotent 回现值场景，11-19 实测）。
+if [ "$BMRC" != 0 ] && [ -z "$ADDR" ]; then
+	echo "FAIL: dial 未通（bindmux rc=$BMRC，查 registered 态/卡在位）"
+	ip route del default dev rmnet0 metric 700 2>/dev/null
+	exit 1
+fi
 [ -z "$ADDR" ] && ADDR=$(cat /root/.d1-addr 2>/dev/null)
 [ -z "$ADDR" ] && { echo "FAIL: 无地址（dial 未通，查 registered 态）"; exit 1; }
 sleep 25  # ★modem 上下文落定窗：dial 后 ~25s 内 bounce 无效（11-19 三连实测钉死：5s 败/裸 bounce 通/25s 通）
@@ -38,7 +51,7 @@ ip link set rmnet0 up
 echo "== [4/5] bounce + 判据收敛环"
 # ★实测（11-19 三连）：dial/DPM reopen 后回程落定窗不定（25s 不够、裸 bounce 后
 # 一发即活）——不猜 T，收敛环硬兜：bounce → ping，败则 sleep 20 再来，≤3 轮。
-ip route replace default dev rmnet0 metric 50
+ip route replace default dev rmnet0 metric 700
 sysctl -w net.ipv6.conf.rmnet_ipa0.disable_ipv6=1 >/dev/null 2>&1
 bounce_ping() {
 	ip link set rmnet0 down
@@ -48,7 +61,7 @@ bounce_ping() {
 	ip link set rmnet0 up
 	# r70: 接口 down 时内核顺带删掉挂在它上面的默认路由，up 后必须重铺
 	# （11-20 实证：bounce 后 rmnet0 默认路由消失 = 数据面塌点之一）。
-	ip route replace default dev rmnet0 metric 50 2>/dev/null
+	ip route replace default dev rmnet0 metric 700 2>/dev/null
 	sleep 3
 	# r70: 判据硬判 = -I rmnet0——不带 -I 会走 wlan0/usb0 默认路由恒通
 	# （WiFi 共存语境 = 判据假绿，11-20 两 boot 实锤）。
@@ -66,7 +79,6 @@ while [ "$i" -le 3 ]; do
 done
 echo "FAIL: 3 轮未通（查 registered / TX-RX 计数 / 新崩）"
 # 死路不抢默认路由（2026-11-21 网络诊断轮）：dial 层成功≠IPA 数据面通，
-# TD-11 死窗语境下 metric 50 的 rmnet0 default 压过 wlan0(m600) 吃掉全部
-# 流量（WiFi 有网也"没网"）→ FAIL 时删掉，让 WiFi 接管日用；PASS 则保留。
-ip route del default dev rmnet0 metric 50 2>/dev/null
+# 数据面死态下任何 metric 的 rmnet0 default 都是黑洞 → FAIL 时删掉。
+ip route del default dev rmnet0 metric 700 2>/dev/null
 exit 1
