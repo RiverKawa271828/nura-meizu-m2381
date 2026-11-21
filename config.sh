@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="125"     # r125 = 在机现役（11-21 一百一十八：r121 = settle-gap 实验件[时序轴部分真实但非 TX 门] + r122 = patch 挪位事故[页上下文破坏，void] + r123/r124 = no_boot/dbg_state/patch_limit 探针基建 + r125 = patch 正位复归；六连矩阵全负，g7/patch/时序三轴出清）；r120 = r119/r120 双实验轮；r118 = csiphy4 RX 插桩轮 + int64 修复；r117 = 空 bump 死包[改源必先 commit 再 build]；r116 = -32 插桩轮；r112 = GD2 总线真值轮（cci1-m1 AON gpio208/209）；r107 = s5kgd2sp03.c 首发
+REL_LINUX_PKGREL="126"     # r126 = 在机现役目标（11-22 一百一十九：S2 闪光灯轮 = pm8550 flash led 板级启用[stock dtbo_b 反编译真值，双通道单白 LED]；r125 = 118 GD2 收官态；r121 = settle-gap 实验件 + r122 = patch 挪位事故 void + r123/r124 = 探针基建；六连矩阵全负）
 REL_DEVICE_PKGREL="72"     # r72 = pm8008i 细胞显式等待环 + hub_2(988000) bind（GD2 供电 blocker 修复；上机 #108 boot 双细胞即绑实证）；⚠touch-load 里 3P9 补绑仍硬编码 0-002d（cci 适配器改数后 = 2-002d，服务标 failed 但 udev 兜底已绑——r73 顺手件）；r71 = 相机开机即通轮
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；发布面 tarball 仍 r3/29c1ee88）
-REL_MU_IMG="$NURA_ROOT/artifacts/mu-r112-a3dbcf6c.img"     # mu-r112 = 11-21 GD2 cci1-m1 真值轮（FdtBlob 自 r112 apk 同源）；mu-r108 = r108 件留档（首 boot 一次卡死 + "cpu vectors region not present in cfg file" 信息行，读回完好非边写，二启自愈未定谳）；mu-r102 = 相机轮·第二段件留档
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v85.img.gz"  # v85 = r112 ESP（11-21：裸 44f25038 / gz e2e6c1e6）；v84/v83 = r108/r107 件留档；构建坑：build-esp 必须等 build-kernel 的 systemd-run 单元真完再跑（沙箱后台发射 systemd-run 提交通道竞态秒死坑，前台发射+落稳确认）
-REL_KERNEL_VER="#113"      # 上机实测 ✓（11-21 一百一十四：uname #113；ESP v85 = r112 vmlinuz，r116/r118 apk = 模块腿差异态）
+REL_MU_IMG="$NURA_ROOT/artifacts/mu-r126-0709afbe.img"     # mu-r126 = 11-22 S2 轮（FdtBlob 自 r126 apk 同源）；mu-r112 = 118 件留档；mu-r108 = r108 件留档
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v87.img.gz"  # v87 = r126 ESP（11-22：裸 b34f2965 / gz e7031780）；v85 = 118 件留档（裸 44f25038）；⚠v86 = 半写 apk 竞态废件已 void[build-esp 必须等 build-kernel 单元真完，坑⑤再实证]；构建坑：沙箱后台发射 systemd-run 提交通道竞态，前台发射+落稳确认
+REL_KERNEL_VER="#127"      # 期望值（#N = pkgrel+1；上机后 uname -v 实测回填）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。

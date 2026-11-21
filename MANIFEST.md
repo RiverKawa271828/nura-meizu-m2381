@@ -3,16 +3,16 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-21 一百一十八（调研+排除法矩阵）：**camx/KMD 全源码到手**（comprehensive9/vendor_qcom_proprietary + marble techpack/camera；编排真值 = Init+Res 在 CONFIG_DEV 执行、STREAMON 包 KMD 缓存到 CAM_START_DEV 才落笔 = 秒级 settle 架构；117 ROI 反编译接力作废——源码即答案键，roi_11fe260 = IPE 假阳性锚）→ **r121 settle-gap 判负**（1s→FW 过渡后异步重建 MIPI 域[0x0116=0x1002 = 0x0110 值错位指纹]、8s→寄存器 T+55s 完好，均零包 = 时序非 TX 门）→ **r122 patch 挪位事故 void**（尾页 0x2001 使 stream-on 0x0100 错 bank；组间共享页态坑册）→ **r123-r125 排除法六连矩阵全负**（patch 全量/once/无 × 触发器发/跳 + no_boot g7 全跳 = TX 恒零；g7 内容非门；轨电压流中实测全绿；「911 洪流」= 3P9 计数器跨相机累计误读）→ **墙剩余三候选 = FIFO 窗写达性（首推[唯一直读验证不到的寄存器类]）/ I2C freq mode（bin i2cInfo 未解出）/ 上电序微差**；新基建 = dbg_state + patch_limit + no_boot/no_patch/settle_ms 模块参数族；下轮排面 = JD1SP13 datasheet 窗协议精读 + m2391（魅族 21 同 die）参照树对拍 + 窗写行为差分；在机 = **#113（ESP v85 = r112 vmlinuz）+ r125 模块** + boot_b mu-r112 + plasma rootfs + 广电卡 slot 1；发布面 = Release r91（Latest）不变）
+## 工作态（2026-11-22 一百一十九（GD2 有界收官轮 + S2 闪光灯轮）：**GD2 判负挂候补池**——m2391（= 魅族 20 Pro，SM8550 同 SoC）参照树四层对拍全负：①blob 层字节全等（sensormodule bin / sensor lib / tuned bin md5 与我方逐一全等 = 同一次集成非第二参照）；②bin 配置层与在机工作的 3P9 完全同构（i2cFrequencyMode=0、laneAssign 10 32、上电序同构异延时）；③Meizu SM8550 KMD 源码到手（baizhi958216/android_kernel_meizu_m2391-modules = stock camera.ko 源级恢复件，sensor/cci/csiphy 路径纯 CAF，Meizu 私件只在 OIS/flash/eeprom/actuator）＝传感器路径无魔法；④camx core 近等构建（差 320B）。datasheet 轴 = GD2/JD1SP13 均 NDA 无门。**S2 闪光灯 ✅ = pm8550 flash LED 通**（stock dtbo_b 反编译：flash_led@ee00 qcom,pm8350c-flash-led，camera-flash1/2/3 全部 flash0+flash1 双通道单白 LED，torch 500mA/flash 1500mA 每通道 ires 12500µA = 主线 leds-qcom-flash.c 常量逐项对齐；单 led-0 led-sources <1>,<2> flash 2A；驱动注册 white:flash 全属性、torch 读写无错、strobe 路径全通、PMIC 零故障报；视觉确认待用户）；m2391 恢复件 cam_flash_meizu/sy7808 寄存器级真值在手（我方无 I2C flash 芯片，sy7808 = 死码）；在机 = **#127（ESP v87 = r126 vmlinuz）+ r126 模块** + boot_b mu-r126 + plasma rootfs + 广电卡 slot 1[**MM failed/sim-missing 态 = UIM 双槽 card absent，待用户重插或复燃指令**]；发布面 = Release r91（Latest）不变）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**125**（11-21 一百一十八：r121 = settle-gap 实验件[判负：1s/8s 两画像，时序非 TX 门] + r122 = patch 挪位事故[页上下文，void] + r123/r124 = no_boot/dbg_state/patch_limit 探针基建 + **r125 = patch 正位复归[在机]**；前役 = r119/r120 双实验轮[判负] / r118 csiphy4 RX 插桩[RX 无罪] / r116 -32 插桩 / r112 GD2 总线真值轮 / r107 GD2 驱动首发；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
-| ESP | **v85**（r112 内核腿，11-21；裸 `44f25038` / gz `e2e6c1e6`，**读回 ✓ 全分区**；v84/v83/v82 = 前件留档） | 44f25038（裸） | recovery_a |
-| Mu 镜像 | **mu-r112-a3dbcf6c**（11-21 在机，GD2 cci1-m1 真值 DTS 与 r112 apk 同源；**读回 ✓ 按镜像字节截取对拍**；mu-r108/mu-r107/mu-r102 = 前件留档） | a3dbcf6c | boot_b |
+| 内核 apk | 7.3.0_**rc6**-r**126**（11-22 一百一十九：**S2 = pm8550 flash LED 板级启用**[stock dtbo_b 真值，双通道单白 LED]；前役 = r125 GD2 收官态；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
+| ESP | **v87**（r126 内核腿，11-22；裸 `b34f2965` / gz `e7031780`，**读回 ✓ 全分区**；v85 = 118 件留档；⚠v86 = 半写 apk 竞态废件已 void[build-esp 必须等 build-kernel 单元真完]） | b34f2965（裸） | recovery_a |
+| Mu 镜像 | **mu-r126-0709afbe**（11-22 在机，S2 flash DTS 与 r126 apk 同源；**读回 ✓ 按镜像字节截取对拍**；mu-r112 = 118 件留档） | 0709afbe | boot_b |
 | 设备包 / 固件包 | **r72**（11-21：pm8008 双细胞显式等待环 + hub_2(988000) bind + dataup FAIL 清死路由；前役 = r71 相机开机即通 + r69/r70 官方化轮）/ **r4**（11-19，未发布；发布面仍 r3） | 在机 apk live / bb2e9399（apk） | 机上 apk add |
 | rootfs | Release r91-phosh（11-19 直刷在机；plasma-mobile 6.8.3-r0 换装态） | 16147c7d（rootfs 底） | userdata |
-| 上机期望 | `uname -v` → **#113**（r112）+ 模块 r125 | — | — |
+| 上机期望 | `uname -v` → **#127**（r126）+ 模块 r126 + `/sys/class/leds/white:flash` 在位 | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。
