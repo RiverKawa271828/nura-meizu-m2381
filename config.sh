@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="126"     # r126 = 在机现役目标（11-22 一百一十九：S2 闪光灯轮 = pm8550 flash led 板级启用[stock dtbo_b 反编译真值，双通道单白 LED]；r125 = 118 GD2 收官态；r121 = settle-gap 实验件 + r122 = patch 挪位事故 void + r123/r124 = 探针基建；六连矩阵全负）
+REL_LINUX_PKGREL="130"     # r130 = 在机现役（11-22 一百一十九·乙收尾：S2 环闪实验全黑挂候补，DTS 回滚 stock torch 同构态[led-0 sink 0+1 + bob1 RT 区间]，dbg_dump 插桩保留默认关；r126-r129 = S2 实验系[r126 板级启用/r127 插桩/r128 全 4 sink/r129 bob1 钉 3960]）
 REL_DEVICE_PKGREL="72"     # r72 = pm8008i 细胞显式等待环 + hub_2(988000) bind（GD2 供电 blocker 修复；上机 #108 boot 双细胞即绑实证）；⚠touch-load 里 3P9 补绑仍硬编码 0-002d（cci 适配器改数后 = 2-002d，服务标 failed 但 udev 兜底已绑——r73 顺手件）；r71 = 相机开机即通轮
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；发布面 tarball 仍 r3/29c1ee88）
-REL_MU_IMG="$NURA_ROOT/artifacts/mu-r126-0709afbe.img"     # mu-r126 = 11-22 S2 轮（FdtBlob 自 r126 apk 同源）；mu-r112 = 118 件留档；mu-r108 = r108 件留档
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v87.img.gz"  # v87 = r126 ESP（11-22：裸 b34f2965 / gz e7031780）；v85 = 118 件留档（裸 44f25038）；⚠v86 = 半写 apk 竞态废件已 void[build-esp 必须等 build-kernel 单元真完，坑⑤再实证]；构建坑：沙箱后台发射 systemd-run 提交通道竞态，前台发射+落稳确认
-REL_KERNEL_VER="#127"      # 期望值（#N = pkgrel+1；上机后 uname -v 实测回填）
+REL_MU_IMG="$NURA_ROOT/artifacts/mu-r130-ae176e9d.img"     # mu-r130 = 11-22 收尾件（FdtBlob 自 r130 apk 同源）；mu-r129/r128/r126 = S2 实验系留档
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v89.img.gz"  # v89 = r130 ESP（11-22：裸 af5a69f9 / gz 0ac7715f）；v87 = 118 件留档（裸 b34f2965）；⚠v86 = 半写 apk 竞态废件已 void；构建坑：build-esp 必须等 build-kernel 单元真完 + 定版三写在 verify 前
+REL_KERNEL_VER="#131"      # 期望值（#N = pkgrel+1；上机后 uname -v 实测回填）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。
