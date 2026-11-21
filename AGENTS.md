@@ -223,11 +223,14 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   headless 直跑配方落地（Ghidra 12 = ghidra.Ghidra 启动器 + GhidraClassLoader + 全
   jar classpath + Java postScript；REA 26MB 撞 startup deadline）。**全量分析跑中，
   ROI 反编译落 scratch-super-vendor/dec-camx/roi_*.c**。
-  **下会话排面 = 读 ROI 反编译提 stock stream-on 编排真值**（重点：settings type
-  应用顺序/FIFO 窗协议语义/组保持/0x0A02 类 bin 外补写）→ **r121 按真值改**（改源
-  必先 commit[r117 死包律]）→ apk 腿 solo → 净 boot → cam-shot-front；若 camx 编排
-  = bin 全等（无 bin 外补充）→ 墙源收缩回 patch 数据面（g7 完整性/FW RAM 写达性，
-  页 0x2000 读路径不镜像写路径已证）。备件 = ③stock AON 考古 → ④扫频网格适配 →
+  **下会话排面（用户 11-21 拍板「网上估计有资料，下个会话先查查」）= 网上资料
+  调研先行**：①camx 泄漏/dump 源码 GitHub 搜（camxsensor.cpp/SensorDriverData/
+  SettingsType/GetSensorLibraryAPIs，gh 认证搜索）②三星 GD2 系 datasheet/register
+  ref（组保持 0x0104/流过渡/FIFO 窗协议 0x6028/0x602A/0x6F12）③GD2 系 mainline
+  带机案例 ④sensormodule bin 解析器现成实现对拍。调研收敛后按资料改驱动（r121）
+  或接力 ROI 反编译稿（dec-camx/ 在盘；⚠字符串锚点有假阳性，26MB 库 RE = 多会话
+  工程）。若 camx 编排 = bin 全等 → 墙源收缩回 patch 数据面（g7 完整性/FW RAM
+  写达性）。备件 = ③stock AON 考古 → ④扫频网格适配 →
   S2 闪光灯 + 顺手件包照旧在队。
   在机 = #113 + r120 模块 + v85 + mu-r112 + device r72。广角（3P9）参照件在案。
   **数据面 IPA 内核域专项（TD-11）= 已排入计划**

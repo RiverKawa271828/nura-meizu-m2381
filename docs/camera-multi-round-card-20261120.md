@@ -131,10 +131,24 @@
       loader=ghidra.GhidraClassLoader` + 全 jar classpath + Java postScript；
       AnalyzeHeadless 无 static main；REA 26MB 撞 startup deadline）。
       **全量分析跑中 → ROI 反编译落 scratch-super-vendor/dec-camx/roi_*.c**。
-- **下轮排面**：读 ROI 反编译提 stock stream-on 编排真值（settings type 应用
-  顺序/FIFO 窗协议语义/组保持/0x0A02 类 bin 外补写）→ r121 按真值改 → apk 腿
-  solo → 净 boot → cam-shot-front；若 camx 编排 = bin 全等 → 墙源收缩回 patch
-  数据面（g7 完整性/FW RAM 写达性，页 0x2000 读路径不镜像写路径已证）。
+- **下轮排面（用户 11-21 拍板「网上估计有资料，下个会话先查查」）= 网上资料
+  调研先行，再决定 RE 深挖还是按资料改驱动**：
+  ①**camx 泄漏/dump 源码**（GitHub code search：`camxsensor.cpp` /
+  `SensorDriverData` / `SettingsType` / `ApplyGroupHoldOn` / `GetSensorLibraryAPIs`
+  ——vendor dump 镜像仓概率大；gh CLI 可认证搜索）；
+  ②**三星 ISOCELL GD2 系资料**：S5KGD2 datasheet/register ref（grouped parameter
+  hold 0x0104 语义/stream 过渡/FIFO 窗协议 0x6028/0x602A/0x6F12 固件 patch 协议
+  ——Volla 源已证该协议形状）；
+  ③**他人 GD2 系 mainline 带机案例**（Volla=GD2SP 异件已入档；搜 s5kgd2/s5kgn
+  系 mainline driver patch）；④MIT/Chromatix 侧：sensormodule bin 解析器现成
+  实现（"QTI Chromatix Header" 格式他人实现可对拍我方解码器）。
+  调研收敛后 → 按资料改驱动（r121）或继续 ROI 反编译稿（dec-camx/ 在盘）。
+- **ROI 反编译接力（调研无果时）**：读 ROI 反编译提 stock stream-on 编排真值
+  （settings type 应用顺序/FIFO 窗协议语义/组保持/0x0A02 类 bin 外补写）→ r121
+  按真值改 → apk 腿 solo → 净 boot → cam-shot-front；若 camx 编排 = bin 全等 →
+  墙源收缩回 patch 数据面（g7 完整性/FW RAM 写达性，页 0x2000 读路径不镜像
+  写路径已证）。⚠今日教训：字符串锚点有假阳性（0x167b92c 落插值模板 = 算术
+  巧合），26MB 混淆库 RE 是多会话工程。
 4. **stock AON 域考古**：stock FDT csiphy4/AON 域配置 + Flyme 窗真值（stock 前摄
    在同域工作过 = 有地面真值）。
 5. CSI 扫频网格适配 GD2（一百一十一的 12 档是 3P9 驱动的；GD2 单档 → 扫 settle
