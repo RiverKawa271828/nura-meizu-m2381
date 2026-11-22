@@ -1,16 +1,30 @@
 # build-release — nura 云端构建（2026-10-13 立项；研究 = docs/CLOUD-BUILD-RESEARCH.md）
 #
-# 产出（7 件制 + 第 8 件）= mu img + esp gz + rootfs gz(phosh) + 固件 tarball
-#   + 变更 apk（相对 config.sh 现役钉）+ SHA256SUMS + 手动升级包 upgrade-<tag>.zip。
+# 产出 = mu img + esp gz + rootfs gz ×2（双 UI：plasma-mobile + phosh，2026-11-22
+#   用户拍板「两个都传，以后默认 plasma」）+ 固件 tarball + 变更 apk（相对 config.sh
+#   现役钉）+ SHA256SUMS + 手动升级包 upgrade-<tag>.zip。
 #   **发布形态 = DRAFT release**：上传+字节对拍全过后留草稿，公网发布 = 用户拍板
 #   （r80 教训：草稿中途被杀 = 公网不可见，安全）。
 # 触发 = workflow_dispatch 手动（发版窗口人为；CI 只构建 HEAD，勿在 CI bump）。
+# fw tarball 引导：APKBUILD pkgrel=4 起 tarball 内容更新（modem_pr），而 CI 惯常
+#   从「上一版 Release」拉——旧料对 r4 sha512 必炸。解法 = fw_seed_tag 输入指向
+#   一个预建草稿（含 r4 tarball；草稿公网不可见；主流程结束可删，幂等重跑不受
+#   影响——主流程只删 TAG=r<LREL> 的草稿）。
 # 布局 = 树全部独立仓库（布局 v3），CI 经 NURA_*_DIR 钉子摆到 /mnt（runner 根盘
 #   ~14GB 装不下 chroot+ccache，/mnt ~65GB）——本地与云端仅根不同，相对形状同构。
 name: build-release
 
 on:
   workflow_dispatch:
+    inputs:
+      ui_list:
+        description: "rootfs UI 列表（空格分隔；每 UI 各出一个 rootfs gz）"
+        required: false
+        default: "plasma-mobile phosh"
+      fw_seed_tag:
+        description: "fw tarball 种子草稿 tag（空 = 从 config.sh PIN_RELEASE_BASE 拉）"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -21,7 +35,7 @@ concurrency:
 
 env:
   NURA_INSIDE_UNIT: "1"          # 脚本语义 =「已在宿主环境」→ 跳过 systemd-run 重入（CI 无 systemd）
-  NURA_UI: phosh                 # 发布面 = phosh（2026-10-12 用户拍板「以后专注 phosh」）
+  NURA_UI: plasma-mobile         # 默认 UI（2026-11-22 用户拍板「以后默认 plasma」；rootfs 段按 ui_list 逐个覆盖）
   NURA_LINUX_DIR: /mnt/nura-work/kernel
   NURA_MU_DIR: /mnt/nura-work/mu/Mu-Silicium
   NURA_PMAPORTS_DIR: /mnt/nura-work/pmaports
@@ -117,12 +131,22 @@ jobs:
           echo "work dir seeded: $NURA_PMB_WORK (version 8)"
 
       - name: Firmware tarball from Release → pmaports package dir
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          REL_BASE=$(bash -c '. ./config.sh && echo "$PIN_RELEASE_BASE"')
           PKGDIR="$NURA_PMAPORTS_DIR/device/downstream/firmware-meizu-meizu20"
           mkdir -p "$PKGDIR"
-          curl -fsSL --retry 3 -o "$PKGDIR/firmware-meizu-meizu20.tar.gz" \
-            "$REL_BASE/firmware-meizu-meizu20.tar.gz"
+          if [ -n "${{ github.event.inputs.fw_seed_tag }}" ]; then
+            # 种子草稿通道（r4 起 tarball 内容更新，旧 Release 料对不上 sha512；
+            # 草稿公网不可见，gh 走 token 鉴权可下）
+            gh release download "${{ github.event.inputs.fw_seed_tag }}" \
+              --repo "$GITHUB_REPOSITORY" --pattern "firmware-meizu-meizu20.tar.gz" \
+              --output "$PKGDIR/firmware-meizu-meizu20.tar.gz"
+          else
+            REL_BASE=$(bash -c '. ./config.sh && echo "$PIN_RELEASE_BASE"')
+            curl -fsSL --retry 3 -o "$PKGDIR/firmware-meizu-meizu20.tar.gz" \
+              "$REL_BASE/firmware-meizu-meizu20.tar.gz"
+          fi
           sha512sum "$PKGDIR/firmware-meizu-meizu20.tar.gz"   # APKBUILD 自验 sha512（不符即 build 报错）
 
       - name: Derive release vars (REL_BASE / ESP_VER / TAG)
@@ -221,9 +245,17 @@ jobs:
         timeout-minutes: 30
         run: bash script/build-mu.sh --no-sync
 
-      - name: Rootfs（pmbootstrap install --single-partition 铁律在脚本内）
-        timeout-minutes: 60
-        run: bash script/build-rootfs.sh
+      - name: Rootfs（双 UI 循环；pmbootstrap install --single-partition 铁律在脚本内）
+        timeout-minutes: 180
+        run: |
+          set -e
+          for ui in ${{ github.event.inputs.ui_list }}; do
+            echo "== rootfs build: $ui =="
+            # zap 防上一 UI 的 chroot world 残留（build-rootfs 对 world 不符直接
+            # die，脚本头有注记）；空 work dir 首轮 zap = 无害 no-op
+            bash script/pmbootstrap-meizu.sh -y zap >/dev/null 2>&1 || true
+            NURA_UI="$ui" bash script/build-rootfs.sh
+          done
 
       - name: Verify（交付链全对拍）
         timeout-minutes: 8
@@ -243,11 +275,13 @@ jobs:
 
           MU_IMG=$(ls -t "$ART"/mu-r*.img | head -1)
           ESP_GZ=$(ls "$ART"/esp-recovery-v"$ESP_VER".img.gz)
-          ROOTFS_GZ=$(ls "$ART"/meizu-meizu20-"$TAG"-"$NURA_UI".img.gz)
+          # 双 UI 件（2026-11-22 拍板：plasma + phosh 各一件）
+          ROOTFS_GZS=$(ls "$ART"/meizu-meizu20-"$TAG"-*.img.gz)
           FW_TB="$FDIR/firmware-meizu-meizu20.tar.gz"
           LREL=$(gp "$LDIR"); DREL=$(gp "$DDIR"); FREL=$(gp "$FDIR")
           LIN_APK="$APK/linux-meizu-meizu20-$(grep -m1 '^pkgver=' "$LDIR/APKBUILD" | cut -d= -f2)-r$LREL.apk"
-          cp -v "$MU_IMG" "$ESP_GZ" "$ROOTFS_GZ" "$FW_TB" "$LIN_APK" "$STAGE/"
+          cp -v $ROOTFS_GZS "$STAGE/"
+          cp -v "$MU_IMG" "$ESP_GZ" "$FW_TB" "$LIN_APK" "$STAGE/"
 
           # 升级包 = linux apk + ESP gz（+ 本轮相对现役钉有变的 device/fw apk）+ UPGRADE.md 抄本
           UP="$STAGE/upgrade-$TAG"; mkdir -p "$UP"
@@ -266,6 +300,7 @@ jobs:
             echo "## $TAG（云端构建草稿 — 公网发布前须用户验收）"
             echo
             echo "配对：mu $(basename "$MU_IMG") + ESP $(basename "$ESP_GZ") + 内核 apk r$LREL（期望 uname #=$((LREL+1))）"
+            echo "- rootfs 双 UI 件（2026-11-22 拍板：默认 plasma-mobile；phosh 并行供给）：meizu-meizu20-$TAG-*.img.gz 按需选刷"
             echo "- 升级（数据保留）：下载 \`upgrade-$TAG.zip\`，两步法见包内 UPGRADE.md"
             echo "- 全新装机：README → FLASHING 快速路径 A（三件直刷）"
             echo "- 上传验收：草稿上传后资产字节数逐件对拍全等（r72 教训）；发布真值 = SHA256SUMS"
