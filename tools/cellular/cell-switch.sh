@@ -41,4 +41,7 @@ log "switch->slot$T: $REG PLMN=$PLMN"
 
 echo "== MM rescan =="
 systemctl restart ModemManager
-echo "done. (MM rescan ~15s; d1_dataup.sh 数据面切换后需重跑)"
+# r75: 数据面自动化跟卡走——MM rescan 后重跑 mm-dial（新卡 simple-connect +
+# qmapmux 铺配置）。Type=simple job 随 fork 落地不等窗；无卡态 = 脚本内诚实 FAIL。
+systemctl try-restart mm-dial.service >/dev/null 2>&1 || true
+echo "done. (MM rescan ~15s; 数据面 = mm-dial 自动重拨)"

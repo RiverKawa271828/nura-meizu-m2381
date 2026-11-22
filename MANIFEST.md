@@ -3,14 +3,14 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-22 一百二十（WiFi 无网络修复轮 + TD-11 根修 ✅）：**「连 WiFi 无网络」双凶定谳修复**——①WiFi 黑洞 = 数据面静默死[TX 出 RX 0 无 fatal]后的死路由残留[metric 50 压过 wlan0 600]→ r73/r74 = WiFi 优先路由[蜂窝 metric 700] + keeper 数据面看门两连败撤路 + dial 硬败不走缓存；②TD-11 IPA init 死窗真凶 = 主线 DT 缺 IPA IMEM 恒等映射[stock qcom,additional-mapping <0x146a8000 0x146a8000 0x2000>]→ r131 DTS 补齐，上机 reserved_regions 实锤 `0x146a8000-0x146a9fff direct`（修复手法出处 = shum-elli/meizu20-linux 下游仓分析轮；数据面终验待 SIM 重插[双槽 card absent 用户环节]）；在机 = **#132（ESP v90 = r131 vmlinuz）+ r131 模块** + boot_b mu-r131 + plasma rootfs + 广电卡 slot 1[UIM 双槽 card absent 待用户重插]；发布面 = Release r91（Latest）不变）
+## 工作态（2026-11-22 一百二十一（新 Release 前置四件轮 ✅）：**A. r75-r77 数据面自动化固化** = 插卡即用全自动链 boot 全验通关（mm-dial oneshot：failed→restart 重扫→simple-connect cbnet→MM 自建 qmapmux0.0→bearer 活体铺配置 metric 700→resolvectl DNS→-I 硬判 PASS；keeper 看门 qmapmux 适配；cell-switch 尾接重拨；d1_dataup/DPM 手工链判负退役；NM unmanaged +qmapmux*；★三坑 = mmcli state 裸值/Status 头行锚定/管道下 ANSI 色码）；**B. plasma-camera** = 内核侧全绿（ANALOGUE_GAIN/HBLANK 可写已在 r131 在机 + CameraSensor 构造过 = 11-21 旧墙翻）+ dma_heap 自载落地（/dev/dma_heap 三节点）→ GUI 上电撞 **RPMH 平台雷**（csiphy2 power-on→rpmh AMC -110→icc 互斥锁雪崩→UFS 队列冻结，sysrq-b 救回，取证 = /tmp/zcode/hang-forensics-20261122/，108 camss 流挂家族 RPMH 级变体）→ **止损挂候补，GUI 相机根治前勿点**；**C. 完整回归 ✅** = 音频（双 sink+播放 rc0）/触控（active+5 输入节点）/睡眠（rtcwake 45s 真睡真醒+数据面跨睡存活）/GPU 钳零件（220MHz 地板 5 连读）/传感器（proxy+sensorspd+iio 5 节点）/多档（DSI-1 四模式）/S2 残留（white:flash stock 同构态）/boot 链（multi-user 4.18s failed 0）；**D. fw r4 备发布**（tarball gzip -t PASS 82381030B + Release 件盘点齐）→ 发布动作留用户窗口。在机 = **#132 + v90 + mu-r131 + device r77** + plasma rootfs + 广电卡 slot 1 registered+数据面通（全自动）；发布面 = Release r91（Latest）不变，新 Release 四件齐待发）
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
 | 内核 apk | 7.3.0_**rc6**-r**131**（11-22 一百二十：DTS +IPA IMEM 恒等映射 ipa-imem@146a8000，fork cf99fc7ad737；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
 | ESP | **v90**（r131 内核腿，11-22；裸 `6efc31e0` / gz `3de0b018`，**读回 ✓ 全分区**；v89 = r130 件留档；⚠v86 = 半写 apk 竞态废件已 void） | 6efc31e0（裸） | recovery_a |
 | Mu 镜像 | **mu-r131-099b15d8**（11-22 在机，FdtBlob 与 r131 apk 同源 35652d24；**读回 ✓ 按镜像字节截取对拍**；mu-r130 = S2 收尾件留档） | 099b15d8 | boot_b |
-| 设备包 / 固件包 | **r74**（11-22：WiFi 优先路由 metric 700 + keeper 数据面看门 + dial 硬败不走缓存；r73 首 boot 双 bug 修）/ **r4**（11-19，未发布；发布面仍 r3） | 在机 apk live / bb2e9399（apk） | 机上 apk add |
+| 设备包 / 固件包 | **r77**（11-22 一百二十一：数据面自动化固化 = mm-dial oneshot[MM 拨号形态 boot 全自动] + keeper 看门 qmapmux 适配 + cell-switch 尾接重拨 + d1_dataup/DPM 链退役 + dma_heap 自载；r76 = mmcli state 解析修；r75 = 固化轮首发；r74 = WiFi 优先路由 + keeper 看门）/ **r4**（11-19，未发布；发布面仍 r3） | 在机 apk live / bb2e9399（apk） | 机上 apk add |
 | rootfs | Release r91-phosh（11-19 直刷在机；plasma-mobile 6.8.3-r0 换装态） | 16147c7d（rootfs 底） | userdata |
 | 上机期望 | `uname -v` → **#132**（r131）+ 模块 r131 + IPA reserved_regions 含 `146a8000 direct`（`cat /sys/bus/platform/devices/3f40000.ipa/iommu_group/reserved_regions`） | — | — |
 

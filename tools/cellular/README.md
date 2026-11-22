@@ -27,6 +27,19 @@ C1 重装配方 = 卡 docs/plasma-mobile-cellular-card-20261119.md §3）。目�
 九件 sha256 对拍等价）。⚠链腿 apk（rmtfs 三件/uim-selection 两件/MM 底座等）仍为
 手工腿，全链自动待拍板。本目录保留 = 收编镜像（包版路径适配 diff 见 pmaports r64）。
 
+**2026-11-22 数据面自动化固化（device r75，pmaports `c5275e8`；一百二十终验正解收编）**：
+**d1_dataup/d1_bindmux/cell-dataup 判负退役**（手工 DPM 链 modem 侧 IPA 通道语义缺，
+dial 通 RX 秒死两 boot 复现；下方「一键判生死」与「三定律」= 历史档案，rmnet0 链已死）。
+**正解 = mm-dial（MM 拨号形态）**：`/usr/lib/meizu20/mm-dial.sh` + mm-dial.service
+（boot 自动：MM failed 死锁 restart 重扫 → simple-connect apn=cbnet → MM 自建
+qmapmux0.0@rmnet_ipa0 → bearer 活体取 IP/gw/DNS → metric 700 WiFi 优先铺配置 +
+resolvectl DNS → `-I qmapmux0.0` 硬判；硬败 = FAIL 撤路由诚实退出，无卡 boot =
+预期 failed 无害；复活 = 插卡后 `systemctl restart mm-dial`）。keeper 数据面看门
+同轮适配 qmapmux 形态；cell-switch 尾接 mm-dial 自动重拨（数据面跟卡走）；NM
+unmanaged 加 qmapmux*（防半接管）。镜像纪律：cell-keeper.sh / cell-switch.sh /
+mm-dial.sh / units/{cell-keeper,mm-dial}.service 与包内件逐字对等（ retired 件镜像
+已删，历史 = git 史）。
+
 双卡形态 = **单 active 槽 + 切换脚本**（非 DSDS 双 standby）：MM qcom-soc 插件在双
 active 槽下 SIM identifier 漂移 → enable 后毫秒级 disable 循环（NM auto-enable 加速）；
 slot 2 power-off 单卡化后稳。真 DSDS 挂候补等 upstream MM。

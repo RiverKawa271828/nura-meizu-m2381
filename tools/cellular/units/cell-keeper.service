@@ -4,7 +4,7 @@ After=rmtfs.service
 
 [Service]
 Type=simple
-ExecStart=/bin/sh /usr/libexec/cell-keeper.sh
+ExecStart=/bin/sh /usr/lib/meizu20/cell-keeper.sh
 Restart=always
 RestartSec=10
 

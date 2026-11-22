@@ -1,0 +1,15 @@
+[Unit]
+Description=Meizu20: cellular data plane via ModemManager (qmapmux0.0 dial, r75)
+# r75: MM 拨号形态固化（一百二十·终验正解；手工 DPM 链退役）。全部等待在脚本
+# 本体（MM 对象轮询 ~3min 上限 + 判活收敛环），Type=simple start job 随 fork 即
+# 刻落地——multi-user 不被拨号窗拖住（r66/r69 事故律：boot 期服务面零硬等待）。
+# 硬败诚实化：FAIL 留 failed 计数可见（无卡 boot = 预期 failed，无害在册；
+# 复活 = 插卡后 systemctl restart mm-dial）。
+After=rmtfs.service ModemManager.service
+
+[Service]
+Type=simple
+ExecStart=/bin/sh /usr/lib/meizu20/mm-dial.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -46,7 +46,7 @@ APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推�
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="131"     # r131 = TD-11 根修轮（11-22 一百二十：DTS +IPA IMEM 恒等映射 ipa-imem@146a8000[iommu-addresses 恒等]，fork cf99fc7ad737；缺它 = IPA FW 撞 SMMU fault[IOVA 0x146a9000/SID 0x4a0]→拨号断流，shum-elli 轮实证）；r130 = S2 环闪收尾件留档
-REL_DEVICE_PKGREL="74"     # r74 = r73 首 boot 双 bug 修（keeper 看门 grep 不匹配 scope link + dial 硬败不走缓存铺死路）；r73 = WiFi 优先路由 metric 50→700 + keeper 数据面看门；r72 = pm8008i 等待环 + hub_2 bind
+REL_DEVICE_PKGREL="77"     # r77 = r76 mmcli state 裸值锚定修 + r75 数据面自动化固化轮（mm-dial oneshot = MM 拨号形态 boot 自动化[failed→restart 重扫→cbnet→qmapmux0.0 铺配置→-I 硬判] + keeper 看门 qmapmux 适配 + cell-switch 尾接重拨 + d1_dataup/DPM 链退役 + dma_heap 自载；11-22 boot 全验插卡即用 PASS，无卡 = 诚实 FAIL）；r76 = mmcli state 解析修；r74 = WiFi 优先路由 + keeper 看门；r72 = pm8008i 等待环 + hub_2 bind
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；发布面 tarball 仍 r3/29c1ee88）
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r131-099b15d8.img"     # mu-r131 = TD-11 根修件（FdtBlob 自 r131 apk 同源 35652d24）
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v90.img.gz"  # v90 = r131 ESP（裸 6efc31e0 / gz 3de0b018）；v89 = r130 件留档（裸 af5a69f9）；⚠构建坑：build-esp 必须等 build-kernel 单元真完 + 定版三写在 verify 前
