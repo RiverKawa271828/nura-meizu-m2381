@@ -264,29 +264,39 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   Type=simple exit 1 也显示 Deactivated successfully / dd 读 by-name 空 sha =
   路径不存在 / **无 -I ping 假绿再实证（qmapmux_rx=0 假 PASS 3 分钟自查纠正）**。
   详录 = experiment-log（一百二十 + 终验节）。
-  **待办池（点名制，用户 11-22 排序拍板；终验后更新）**：①plasma-camera ANALOGUE_GAIN
-  补件（快赢：3P9 进 GUI；真因 = 驱动缺 libcamera 强制 ctrl）＋ **r75 数据面
-  自动化固化（新顶上）** = dataup 手工 DPM 链退役 + mm-dial oneshot（MM restart
-  重扫 + simple-connect + qmapmux IP/route 铺设）+ keeper 看门适配 qmapmux 路由
-  形态 + NM×qmapmux 集成工程（NM 不认 qmapmux0.0）
-  ②TD-11 ~~数据面 IPA 专项~~ ✅ 全案收官（r131 映射 + MM 拨号形态真通）
-  ③SIM 重插 ✅ 已办（11-22 用户插卡，终验完成）
-  ④S2 环闪阳极谜
+  **▶ 下会话排面（用户 11-22 拍板「安排下个会话做这四个」= 新 Release 前置四件，
+  做完发新 Release）**：
+  **A. r75 数据面自动化固化**（blocker 级）= cell-dataup 退役 + mm-dial oneshot
+  （MM restart 重扫 + `simple-connect apn=cbnet` + qmapmux0.0 bearer IP/route
+  metric 700 铺设；配方 = 一百二十终验全通链）+ keeper 看门适配 qmapmux 路由
+  形态（grep rmnet0 → qmapmux0.0）+ dial 硬败不走缓存保留；NM×qmapmux 集成
+  （NM 不认 qmapmux0.0）挂候补不挡发布。
+  **B. plasma-camera ANALOGUE_GAIN 补件**（快赢）= 驱动补 libcamera 强制 ctrl
+  （ANALOGUE_GAIN 缺失[HBLANK 只读] = simple pipeline 建不了 CameraSensor，
+  11-21 探针真因在案）→ 3P9 进 GUI。
+  **C. 完整回归一轮**（设备日级清单）= 音频/触控/睡眠 rtcwake/GPU 钳零件/传感器/
+  多档刷新率/S2 实验系 DTS 残留确认（r131 累 40 轮次，本轮只验了蜂窝/WiFi/boot）。
+  **D. fw r4 随新 Release 出**（发布面 tarball 仍 r3；r4 = modem_pr 158 件已上机
+  全绿未发布）→ 四件齐 = 发布新 Release（Release 件制照 PIPELINE；CI rootfs =
+  r131 apk 底；大件上传验收 = gzip -t + 字节数对拍在册律）。
+  发布判据 = A-D 全绿后新 Release 上线（叙事 = 花屏根治 + 蜂窝数据全自动 + 相机
+  GUI 可用）。
+  **待办池（点名制，排面外照旧挂候补）**：④S2 环闪阳极谜
   （复燃 = stock 画像 REA/硬件探针，dbg_dump 在机默认关）⑤GD2（复燃 = 文档级
   资料/新参照）⑥S3 5E9（配方 = S2 同款，价值有限不急）。
   备件照旧 = stock AON 考古 → 扫频网格 → 顺手件包。
   广角（3P9）参照件 rc=0 满帧恒真。
-  **数据面 IPA 内核域专项（TD-11）= 已排入计划**
-  （用户 11-20 拍板「以后修」；非主线，主线相机段收官后顶上；修法序 = ipa 驱动 init
-  retry 补丁先探——SSR 事件链健康 = retry 有落点，modem 固件域取证次之）。候选池余项照旧 = 干净机首航（Phase-2 判据）/
+  ~~数据面 IPA 内核域专项（TD-11）~~ ✅ 全案收官（11-22 一百二十：r131 IMEM
+  映射 + MM 拨号形态真通；ipa init retry 修法序作废——真凶 = DT 缺映射非时序）。
+  候选池余项照旧 = 干净机首航（Phase-2 判据）/
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
-  tempjson hexagonrpcd 语义取证（小件）；蜂窝残面 = 短信 ✅ 已破（见上②）+ 数据面 =
-  TD-11 已排程（见上），余全挂起（复燃条件在册，见上②）。
-  **设备当前态 = 广电卡 slot 1 在役 + UIM 双槽 card absent**（SIM 物理缺席
-  [no-atr-received，待用户重插 = 待办池③]；registered/数据面 = 重插后自动回归 +
-  TD-11 终验；**WiFi 日用已修复**[r74 路由策略 + 死路由自动撤]；keeper 状态文件 =
-  /var/lib/cell-keeper/active-slot = 1；uim-selection 已卸载[单卡官方形态]；
-  TFTP 根 tmpfiles 化[boot 自成形 image→meizu + readwrite]）。
+  tempjson hexagonrpcd 语义取证（小件）；蜂窝残面 = 短信 ✅ 移动卡已破（广电卡 =
+  运营商 IMS 未授权面）+ 数据面 ✅ 通（自动化 = 排面 A），余全挂起（复燃条件在册）。
+  **设备当前态 = 广电卡 slot 1 在役 registered + 数据面通（MM 拨号形态手工铺配置
+  [reboot 易失，自动化 = 排面 A]**；WiFi 日用已修复[r74 路由策略 + 死路由自动撤]；
+  keeper 状态文件 = /var/lib/cell-keeper/active-slot = 1；uim-selection 已卸载
+  [单卡官方形态]；TFTP 根 tmpfiles 化[boot 自成形 image→meizu + readwrite]；
+  failed = cell-dataup[判负退役失败态，无害] + meizu-touch[r72 在册无害]）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
   **蜂窝用户面探针轮 ✅（同日深夜，四域一窗快扫；战报 = experiment-log 一百零六·乙）**：
