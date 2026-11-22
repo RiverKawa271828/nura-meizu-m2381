@@ -82,8 +82,11 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
    + SHA256SUMS 一并生成；**2026-10-12 起固化条件 = NURA_NO_RELEASE 开关，phosh 默认
    进发布面**）②`setup.sh --fetch-release` 拉现役件+固件+SUMS ③直刷命令文件名与
    Release 页已实刷对拍（r66 首对拍；r84 = 10-12 本机 phosh 回归轮直刷全绿 =（八十七））。
-10. ✅ **发布面切换（2026-10-12，用户拍板「以后专注 phosh」）**：Release r84 = 首个
-    phosh 发布面（7 件制）；r66 已删；r80 = plasma 末版存档未删。**升级口径 = apk 腿
+10. ✅ **发布面切换（2026-10-12，用户拍板「以后专注 phosh」；~~已作废~~ → **2026-11-22
+    再拍板「两个都传，以后默认 plasma」**：Release = 双 UI 件（plasma-mobile + phosh
+    各一 rootfs gz，CI workflow ui_list 输入；默认 UI = plasma-mobile）**；Release
+    r84 = 首个 phosh 发布面（7 件制，存档）；r66 已删；r80 = plasma 末版存档未删。
+    **升级口径 = apk 腿
     （rootfs 内 apk add）+ ESP 腿（recovery_a）原地升级，不重刷 userdata**——rootfs
     全量重刷仅换 UI/换发行版/从零装机。
 
