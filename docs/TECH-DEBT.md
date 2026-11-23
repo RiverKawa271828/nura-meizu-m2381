@@ -100,3 +100,15 @@
    dwc3 掉总线 ⇒ netconsole 唯一通道；配方 = livelock 轮 + /proc/interrupts 差分
    （或 irq trace）→ 定名 waker → 定向修复。A1 疗效存疑（实测全 WFI）——挂 fd
    一发判生死，同窗拼车。
+11. **camss 上电 → RPMH 平台死锁（GUI 相机路径阻断）**（2026-11-22 一百二十一实锤，取证 =
+   私有仓 `cam-rpmh-hang-20261122/`）：plasma-camera 真正上电 3P9 链（csiphy2 power-on
+   @uptime10714）→ 246s 后 `camss_runtime_resume→csiphy_set_power→rpmh_write_batch`
+   报 `Error sending AMC RPMH requests (-110)`（任务 = CameraManager 实锤）→ 157s 后
+   icc 互斥锁雪崩（GPU gmu suspend 卡 icc_set_bw / sugov 卡 RPMH 发送 / **jbd2/sda22 卡
+   __bio_queue_enter = UFS 队列冻结磁盘半瘫**）→ 仅 sysrq-b 可救。属 108「camss 流挂
+   D 态」家族的 RPMH 级变体。**风险纪律 = GUI 相机根治前勿点**（直驱 cam-shot.sh 参照件
+   不受影响）。复燃轴 = csiphy2 950MHz link-freq 上电组合 / RPM AMC 语义 / ICC 带宽路径。
+12. **libcamera SimplePipeline 冷启首开 `csiphy2→csid0` EBUSY 谜**（11-22 同轮）：首轮
+   init 两连 `Failed to setup link ... Resource busy`，pkill 后次轮 disable→enable 仲裁
+   全绿（链路/格式/管线 matched 均通）。当前影响 = 冷启首开相机可能失败一次；复燃 =
+   DEBUG 级冷启复现 + `media_pad_remote_pad_first` 前态残留取证。

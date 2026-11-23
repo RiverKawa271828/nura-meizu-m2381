@@ -101,9 +101,19 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   **设备包 r74**（WiFi 优先路由 metric 700 + keeper 数据面看门 + dial 硬败
   不走缓存；r72 = pm8008 双细胞等待环 + hub_2 bind）；**fw r4**（11-07 蜂窝
   复燃备料，本地全绿未发布）。
-- **发布面**：**Release r91 = Latest 不变**（8 件制）；r95-r101/r64-r70 是否发 Release
-  留用户。升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑须显式
-  --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
+- **发布面**：**Release r131 = Latest（2026-11-24 上线，8 件制，双 UI 首次）**——
+  plasma-mobile `b18a6be1`（**默认 UI**，11-22 用户拍板「两个都传，以后默认 plasma」）
+  / phosh `fcd6c662` + mu `f51b3b09` + ESP v90 gz `037c8dfb`（CI 同号异字节；在机
+  本地件裸 `6efc31e0`）+ **fw r4 tarball `97d7b489`（首次发布）** + linux r131 apk
+  `7156e527` + upgrade-r131.zip + SUMS；CI run 45225314330 全绿；r91 = 上一代
+  （phosh 单 UI）。升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑
+  须显式 --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
+  **云构建种子通道（2026-11-24 起发布轮必备输入）**：`fw_seed_tag`（fw tarball
+  不在历史 Release 时用；草稿 `fw-r4-seed`）+ `nuget_seed_tag`（Project Mu Azure
+  feed 对 GitHub runner 拉取不稳；草稿 `mu-nuget-seed`）。⚠Mu 分支曾被 UniXNU
+  接线污染（`DeviceBuild.py` 加 `../UniXNU/package`）→ 该实验存档于远端分支
+  `unixnu-wiring-20261030`；主分支 = 可构建树。⚠Mu remote 原 SSH，22 断时 `git
+  fetch` 静默失败致本地 ref 陈旧 —— 已改 https，远端结论必须 `git ls-remote` 实证。
 - **队列**：①**花屏科学解 ✅ 达成验收属实收官**（PANEL §6 条 11.7-8）；
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
