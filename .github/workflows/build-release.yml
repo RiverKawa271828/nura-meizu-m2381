@@ -245,23 +245,42 @@ jobs:
             /mnt/nura-work/.pmbootstrap/cache_ccache_x86_64
           key: ccache-aarch64-${{ github.run_id }}
 
-      - name: Seed NuGet global cache（mu_nasm 离线通道）
-        if: ${{ github.event.inputs.nuget_seed_tag != '' }}
+      - name: Prepare mu_nasm NuGet cache（curl 自取；seed 兜底）
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # 2026-11-24：Project Mu 的 Azure feed 对 GitHub runner 稳定拉取失败
-          # （mu_nasm@20016.1.1 "failed to install this version"；本机同 URL
-          # 200/5MB 正常 = runner 侧网络问题，非版本消失）。
-          # 种子 = 预解压的 NuGet 全局缓存（布局 mu_nasm/20016.1.1/mu_nasm/…，
-          # 与 edk2toolext nuget_dependency._fetch_from_nuget_cache 的判据逐字
-          # 对齐 —— 命中即跳过联网）。草稿公网不可见，gh token 可下。
-          gh release download "${{ github.event.inputs.nuget_seed_tag }}" \
-            --repo "$GITHUB_REPOSITORY" --pattern "mu_nasm-nugetcache.tar.gz" \
-            --output /tmp/mu_nasm-nugetcache.tar.gz
-          mkdir -p "$HOME/.nuget/packages"
-          tar xzf /tmp/mu_nasm-nugetcache.tar.gz -C "$HOME/.nuget/packages"
-          ls -la "$HOME/.nuget/packages/mu_nasm/20016.1.1/mu_nasm" | head -5
+          # 2026-11-24：Project Mu 的 Azure feed 对 GitHub runner 的 nuget CLI
+          # 拉取稳定失败（mu_nasm@20016.1.1 "failed to install this version"；
+          # 本机同 URL 200/5MB 正常）。两条通道：
+          #   ① 首选 curl 直取 nupkg（跟随 303 重定向）→ 手工铺成 NuGet 全局缓存
+          #      （布局 <pkg>/<ver>/<pkg>/…，与 edk2toolext
+          #      nuget_dependency._fetch_from_nuget_cache 判据逐字对齐 = 命中即跳过联网）
+          #   ② 兜底 = nuget_seed_tag 隐藏草稿里的预解压缓存 tarball
+          V=20016.1.1
+          D="$HOME/.nuget/packages/mu_nasm/$V"
+          URL="https://pkgs.dev.azure.com/projectmu/mu/_packaging/Basetools-Binary/nuget/v3/flat2/mu_nasm/$V/mu_nasm.$V.nupkg"
+          ok=0
+          for i in 1 2 3; do
+            echo "== curl attempt $i/3 =="
+            if curl -fsSL --retry 2 --connect-timeout 20 --max-time 120 -o /tmp/mu_nasm.nupkg "$URL"; then ok=1; break; fi
+            sleep 20
+          done
+          if [ "$ok" = 1 ]; then
+            mkdir -p "$D"
+            unzip -q -o /tmp/mu_nasm.nupkg -d "$D"
+            cp /tmp/mu_nasm.nupkg "$D/mu_nasm.$V.nupkg"
+            echo "== cache built from feed =="
+          elif [ -n "${{ github.event.inputs.nuget_seed_tag }}" ]; then
+            echo "== feed unreachable → seed draft fallback =="
+            gh release download "${{ github.event.inputs.nuget_seed_tag }}" \
+              --repo "$GITHUB_REPOSITORY" --pattern "mu_nasm-nugetcache.tar.gz" \
+              --output /tmp/mu_nasm-nugetcache.tar.gz
+            mkdir -p "$HOME/.nuget/packages"
+            tar xzf /tmp/mu_nasm-nugetcache.tar.gz -C "$HOME/.nuget/packages"
+          else
+            echo "mu_nasm cache unavailable (feed down, no seed)"; exit 1
+          fi
+          ls "$D/mu_nasm" | head -5
           nuget locals global-packages -list || true
 
       - name: Mu（r85 = config-only 轮 → --no-sync，FdtBlob 不换）
