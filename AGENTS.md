@@ -116,6 +116,13 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
   ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
   远端结论必须 `git ls-remote` 实证。
+- **▶ 下会话排面（用户 2026-11-24 拍板「安排下个会话修吧」）**：
+  **①电池遥测单位 bug 修（r132）= 首选**——`charge_counter`/`energy_now` 少 ×1000
+  （固件 mAh 当 µAh 用）⇒ upower 历史全丢、时间预估荒谬、充电阈值回读 0；修法 =
+  `qcom_battmgr.c` mAh 分支 `charge_count * 1000`（TECH-DEBT 13 有完整诊断）。修好
+  顺带做**蜂窝在网态待机功耗首测**（数据面 11-22 才全自动，无基线）。
+  **②S3 5E9 前摄**（配方同 S2）｜**③camss→RPMH 死锁**（GUI 相机唯一拦路虎，设备窗）
+  ｜**④干净机首航**（Phase-2 最后判据，零设备风险）｜**⑤NM×qmapmux 集成**。
 - **队列**：①**花屏科学解 ✅ 达成验收属实收官**（PANEL §6 条 11.7-8）；
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板

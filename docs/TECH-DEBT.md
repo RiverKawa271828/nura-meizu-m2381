@@ -112,3 +112,15 @@
    init 两连 `Failed to setup link ... Resource busy`，pkill 后次轮 disable→enable 仲裁
    全绿（链路/格式/管线 matched 均通）。当前影响 = 冷启首开相机可能失败一次；复燃 =
    DEBUG 级冷启复现 + `media_pad_remote_pad_first` 前态残留取证。
+13. **battery 遥测单位 bug（`charge_counter`/`energy_now` 少 ×1000）→ upower 历史全丢**（2026-11-24 定谳，**下会话修**）：
+    - 现场：`charge_full=4,085,000 µAh`（对）但 `charge_counter=1492`（应为 1,492,000 µAh = 37%×4085mAh）、
+      `energy_now=6113 µWh`（=0.006 Wh）→ upower 判电池近空 → `/var/lib/upower/history-*.dat` 全 `0.000/unknown`；
+      `time_to_empty_avg=45 天`、`charge_control_*_threshold` 回读恒 0 = 同一连锁。
+    - 根因：固件 `charge_count` 单位 = **mAh**，驱动 `qcom_battmgr.c` 通用 getter 直接当 **µAh** 用
+      （`QCOM_BATTMGR_PROP_CHARGE_COUNTER = info.charge_count` 无缩放；`ENERGY_NOW` 走
+      `qcom_battmgr_charge_to_energy(charge_count, voltage_now)` 同病——该 helper 上游假定 µAh）。
+    - 修法（三处）：`unit == QCOM_BATTMGR_UNIT_mAh` 时 `charge_count * 1000` 再返回
+      （CHARGE_COUNTER / ENERGY_NOW 的 charge 入参；顺手核 `time_to_empty/full` 派生是否自愈）。
+    - 收益：upower 变免费电量记录仪（拔线整夜待机测量白嫖）+ 时间预估正常 + 充电阈值可读写。
+    - 代价：内核轮 r132（驱动改动，**DTS 不变 ⇒ 不重编 Mu**）；刷 apk 腿 + ESP 腿；需 reboot 生效。
+    - 关联待办：修好后做**蜂窝在网态待机功耗**首测（数据面 11-22 才全自动，无基线）。
