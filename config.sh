@@ -35,7 +35,7 @@ PIN_MU_BINARIES_GIT="https://github.com/RiverKawa271828/Device-Binaries"     # �
 PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # 已建独立仓；phoenix 整条已推（10-07 推送窗口；pmOS 官方在 GitLab，GitHub 无镜像 fork 可用）
 
 # ---- Release（Phase-2；setup.sh --fetch-release 按此拉现役件/锚三件）----
-PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r91"  # 发布面（2026-10-21 r91 上线 Latest = 7.3 stable rebase 首发 + device r63 传感器依赖闭合，CI run 39511226412 产物；r87 = 上一个 phosh+waydroid 发布面，r84 再前，r80 = plasma 末版存档；r72 半截流教训在册：大件上传验收 = 本地 gzip -t + 资产字节数逐件对拍，完整下载回读闭环可选[本轮用户令跳过全量下载，工作流内建字节数对拍+gzip -t 已跑]）
+PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r131"  # 发布面（2026-11-24 r131 上线 = 8 件制含**双 UI rootfs**（plasma-mobile b18a6be1 / phosh fcd6c662，11-22 用户拍板「两个都传，以后默认 plasma」）+ mu f51b3b09 + ESP v90 gz 037c8dfb（CI 同号异字节，在机本地件 = 3de0b018 裸 6efc31e0）+ fw r4 tarball 97d7b489 + linux r131 apk 7156e527 + upgrade-r131.zip 2ee9d1d7；CI run 45225314330；r91 = 上一个发布面（phosh 单 UI），r87/r84 再前，r80 = plasma 末版存档；r72 半截流教训在册：大件上传验收 = gzip -t + 资产字节数逐件对拍[CI 内建]，本地抽验 mu/ESP sha256 实过]）
 
 # ---- 包身份 ----
 PKGVER="7.3.0_rc6"
