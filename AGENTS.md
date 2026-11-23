@@ -108,12 +108,14 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   `7156e527` + upgrade-r131.zip + SUMS；CI run 45225314330 全绿；r91 = 上一代
   （phosh 单 UI）。升级口径 = apk 腿 + ESP 腿原地升级（`script/upgrade.sh`，⚠真跑
   须显式 --apk/--esp；CI rootfs 钥墙 = --allow-untrusted）。
-  **云构建种子通道（2026-11-24 起发布轮必备输入）**：`fw_seed_tag`（fw tarball
-  不在历史 Release 时用；草稿 `fw-r4-seed`）+ `nuget_seed_tag`（Project Mu Azure
-  feed 对 GitHub runner 拉取不稳；草稿 `mu-nuget-seed`）。⚠Mu 分支曾被 UniXNU
-  接线污染（`DeviceBuild.py` 加 `../UniXNU/package`）→ 该实验存档于远端分支
-  `unixnu-wiring-20261030`；主分支 = 可构建树。⚠Mu remote 原 SSH，22 断时 `git
-  fetch` 静默失败致本地 ref 陈旧 —— 已改 https，远端结论必须 `git ls-remote` 实证。
+  **云构建两条输入（2026-11-24 起）**：`fw_seed_tag`（仅当本轮 fw tarball 尚未随
+  Release 发布时用；fw r4 已随 r131 发布 ⇒ 后续轮走默认 `PIN_RELEASE_BASE` 拉取即可）
+  + `nuget_seed_tag`（**默认不用**：mu_nasm 现由 CI 自己 curl Azure feed 建 NuGet
+  缓存，探针实证 runner 可达；该输入仅为 feed 长期不可达时的兜底，届时须临时建种子
+  草稿）。⚠Mu 分支曾被 UniXNU 接线污染（`DeviceBuild.py` 加 `../UniXNU/package`）
+  → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
+  ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
+  远端结论必须 `git ls-remote` 实证。
 - **队列**：①**花屏科学解 ✅ 达成验收属实收官**（PANEL §6 条 11.7-8）；
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
