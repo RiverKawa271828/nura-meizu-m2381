@@ -242,8 +242,19 @@ jobs:
           key: ccache-aarch64-${{ github.run_id }}
 
       - name: Mu（r85 = config-only 轮 → --no-sync，FdtBlob 不换）
-        timeout-minutes: 30
-        run: bash script/build-mu.sh --no-sync
+        timeout-minutes: 40
+        run: |
+          # 2026-11-24：Project Mu 的 Azure nuget feed 偶发拉取失败
+          # （mu_nasm@20016.1.1 报 "failed to install this version"；
+          # 实测 feed 本体 200 正常 = fleet 侧抖动，不是版本消失）。
+          # 重试三次 + 间隔 60s；仍败才真报错。
+          for i in 1 2 3; do
+            echo "== Mu build attempt $i/3 =="
+            if bash script/build-mu.sh --no-sync; then exit 0; fi
+            echo "attempt $i failed (nuget feed flake?); retry in 60s"
+            sleep 60
+          done
+          echo "Mu build failed after 3 attempts"; exit 1
 
       - name: Rootfs（双 UI 循环；pmbootstrap install --single-partition 铁律在脚本内）
         timeout-minutes: 180
