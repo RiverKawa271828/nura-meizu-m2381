@@ -25,6 +25,10 @@ on:
         description: "fw tarball 种子草稿 tag（空 = 从 config.sh PIN_RELEASE_BASE 拉）"
         required: false
         default: ""
+      nuget_seed_tag:
+        description: "Mu NuGet 缓存种子草稿 tag（空 = 直接走 Project Mu Azure feed）"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -241,13 +245,29 @@ jobs:
             /mnt/nura-work/.pmbootstrap/cache_ccache_x86_64
           key: ccache-aarch64-${{ github.run_id }}
 
+      - name: Seed NuGet global cache（mu_nasm 离线通道）
+        if: ${{ github.event.inputs.nuget_seed_tag != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # 2026-11-24：Project Mu 的 Azure feed 对 GitHub runner 稳定拉取失败
+          # （mu_nasm@20016.1.1 "failed to install this version"；本机同 URL
+          # 200/5MB 正常 = runner 侧网络问题，非版本消失）。
+          # 种子 = 预解压的 NuGet 全局缓存（布局 mu_nasm/20016.1.1/mu_nasm/…，
+          # 与 edk2toolext nuget_dependency._fetch_from_nuget_cache 的判据逐字
+          # 对齐 —— 命中即跳过联网）。草稿公网不可见，gh token 可下。
+          gh release download "${{ github.event.inputs.nuget_seed_tag }}" \
+            --repo "$GITHUB_REPOSITORY" --pattern "mu_nasm-nugetcache.tar.gz" \
+            --output /tmp/mu_nasm-nugetcache.tar.gz
+          mkdir -p "$HOME/.nuget/packages"
+          tar xzf /tmp/mu_nasm-nugetcache.tar.gz -C "$HOME/.nuget/packages"
+          ls -la "$HOME/.nuget/packages/mu_nasm/20016.1.1/mu_nasm" | head -5
+          nuget locals global-packages -list || true
+
       - name: Mu（r85 = config-only 轮 → --no-sync，FdtBlob 不换）
         timeout-minutes: 40
         run: |
-          # 2026-11-24：Project Mu 的 Azure nuget feed 偶发拉取失败
-          # （mu_nasm@20016.1.1 报 "failed to install this version"；
-          # 实测 feed 本体 200 正常 = fleet 侧抖动，不是版本消失）。
-          # 重试三次 + 间隔 60s；仍败才真报错。
+          # 重试三次 + 间隔 60s（feed 抽风兜底；有种子时实测不进网络）
           for i in 1 2 3; do
             echo "== Mu build attempt $i/3 =="
             if bash script/build-mu.sh --no-sync; then exit 0; fi
