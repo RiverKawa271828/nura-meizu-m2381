@@ -137,12 +137,17 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
   ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
   远端结论必须 `git ls-remote` 实证。
-- **▶ 下会话排面（用户 2026-11-26 拍板：深睡线）**：
+- **▶ 下会话排面（用户 2026-11-26 拍板：深睡线；装备已预武装毕[SUSPEND §TD9]）**：
   **S2IDLE 深睡线（TECH-DEBT 8+9 拼车，rtcwake 长睡窗共享；用户在场 + 设备窗）**：
-  ①TD-9 = freeze 活锁 waker 识别（netconsole 唯一取证通道[宿主侧开工前武装] +
-  /proc/interrupts 差分）+ A1 挂 fd 一发判生死；②TD-8 = 睡中拔线硬复位
-  （rtcwake 长睡中拔线取样 3 发 + RTC 唤醒同态判别）。纪律 = 只读轮间观测窗
-  （开工惯例节）；不开 E 长跑。同会话可并行宿主侧推送/Release（无 fastboot 之争）。
+  ①TD-9 = freeze 活锁 waker 识别（**netconsole 武装配方已备妥**[§TD9：wlan0 通道+
+  宿主 tools/netconsole-receive.sh] + /proc/interrupts 差分 + **suspend_stats 廉价
+  指纹器**[每轮前后抓 last_failed_step/errno，freeze+EBUSY=-16 与 stock 5.15 同机
+  指纹对拍 = 共享路径判据]）+ A1 挂 fd 一发判生死；②TD-8 = 睡中拔线硬复位
+  （rtcwake 长睡中拔线取样 3 发 + RTC 唤醒同态判别）。**交叉印证已入册**：stock
+  5.15 同机 s2idle 也挂（freeze+EBUSY）⇒ 同机共性非主线回归；对方 deep 逃生门
+  不可平移（主线无 deep）；未证线索两条顺手验（WLAN timeout/watchdog panic）。
+  纪律 = 只读轮间观测窗 + **插线不算离线待机验证**（对方互证）；不开 E 长跑。
+  同会话可并行宿主侧推送/Release（无 fastboot 之争）。
   顺延排面：**②S3 5E9 前摄**（配方同 S2）｜**③camss→RPMH 死锁**（GUI 相机唯一
   拦路虎，平台雷需用户在场慎重设备窗 + sysrq-b 救砖预案）｜**④干净机首航**
   （Phase-2 最后判据，零设备风险，等二机/容器）。
@@ -339,7 +344,7 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   r131 apk 底；大件上传验收 = gzip -t + 字节数对拍在册律）。
   发布判据 = A-D 全绿后新 Release 上线（叙事 = 花屏根治 + 蜂窝数据全自动 + 相机
   GUI 可用）。
-  **待办池（点名制，排面外照旧挂候补）**：④S2 环闪阳极谜
+  **待办池（点名制，排面外照旧挂候补）**：ⓐ双击亮屏（原厂触摸固件熄屏双击码 0xcc→键 624，主线触驱可探，快赢[meizu-m2381 org 情报]）ⓑ抬起亮屏（SSC 私有传感器 com.meizu.sensor.raise type 65539，查 ADSP 传感器表即知有无）ⓒhaptics RAM 映射升级（Flyme 11/13/3 + 增益 0x39/0x80 平移 aw8697.c）；④S2 环闪阳极谜
   （复燃 = stock 画像 REA/硬件探针，dbg_dump 在机默认关）⑤GD2（复燃 = 文档级
   资料/新参照）⑥S3 5E9（配方 = S2 同款，价值有限不急）。
   备件照旧 = stock AON 考古 → 扫频网格 → 顺手件包。
