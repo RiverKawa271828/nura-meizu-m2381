@@ -565,3 +565,34 @@ magic packet 不通的根因（代码级，可复燃）：root port 的 of_node 
 | 设备包（wowlan unit / watchdog drop-in / cmdline） | <https://github.com/RiverKawa271828/pmaports>（分支 `phoenix`，device-meizu-meizu20） |
 | 上游回归与修复讨论 | `9e70a5e109a4`；LKML 2026-01 "freeze on resume" 线（lkml.org/lkml/2026/1/29/619）与 "Reintroduce consoles_suspended global state" 系列（patchew.org/linux/20251111144328.887159-1-john.ogness@linutronix.de/） |
 | 完整实验叙事（11 轮判据读数） | 私有工作区 `suspend-test-20261008/FINDINGS-20261008.md` + 实验日志（未公开；本文已收编其全部结论） |
+
+## §TD9 预武装：netconsole 通道（2026-11-26 宿主侧备妥，下会话 TD-9 waker 识别用）
+
+**前提已验**（11-26）：内核 `CONFIG_NETCONSOLE=m` + `NETCONSOLE_DYNAMIC=y`（configfs
+运行时可配，`/proc/config.gz` 在机实证）⇒ **无需重编内核**。
+
+**通道选型 = wlan0（LAN）**：livelock 期 dwc3 掉总线 ⇒ usb0/NCM 必死（TD-9 判词续）；
+WiFi 关联常驻 ⇒ netconsole 走 wlan0 是唯一活口。宿主 = 同 LAN（`ip -4 addr show wlan0`
+实测，当前 192.168.10.194）。
+
+**宿主侧（开工即跑）**：
+```sh
+tools/netconsole-receive.sh          # UDP:6666 → /tmp/netconsole-<ts>.log
+```
+
+**设备侧武装（rtcwake 睡前执行；IP/MAC 现场取）**：
+```sh
+HIP=$(ip -4 addr show wlan0 | awk '/inet /{print $2}' | cut -d/ -f1)   # 宿主实际 IP 以宿主侧为准
+DIP=$(ip -4 addr show wlan0 | awk '/inet /{print $2}' | cut -d/ -f1)
+MAC=$(ip neigh show $HIP | awk '{print $5}' | head -1)                  # 先 ping 一次宿主造 ARP 项
+modprobe netconsole netconsole="@$DIP/wlan0,6666@$HIP/$MAC"
+dmesg | grep -i netconsole                                              # 确认挂上
+echo test > /dev/kmsg && 宿主侧 tail -1 接收文件                          # 双向确认
+```
+NETCONSOLE_DYNAMIC 备选：modprobe 后经 configfs 调目标（`/sys/kernel/config/netconsole/`
+new + 填 remote_ip/local_ip/remote_mac + enable=1）——参数式失败时用。
+
+**TD-9 轮内用法**：armed 后跑 livelock 轮（既往配方：wowlan 关 + cpuidle 开 = 确定性
+挂死态）；死窗期接收文件 = 唯一活日志；醒来后 `/proc/interrupts` 差分（睡前后各抓一份）
+→ 定名 waker。A1 判生死 = `/dev/cpu_wakeup_latency` 持 fd 限定 10µs 一发（同窗拼车，
+疗效存疑[实测全 WFI]——判据 = 挂死是否复现）。
