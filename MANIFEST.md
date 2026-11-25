@@ -12,7 +12,7 @@
 | 内核 apk | 7.3.0_**rc6**-r**132**（11-25：SM8550 charge_count mAh→µAh ×1000 变体门控，fork `24df27f74fc4`；r131 = TD-11 根修轮留档[DTS +IPA IMEM 恒等映射 cf99fc7ad737]；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
 | ESP | **v91**（r132 内核腿，11-25；裸 `b80fb8b2` / gz `db0ac0c8`，**读回 ✓**；v90 = r131 件留档；⚠v86 = 半写 apk 竞态废件已 void） | b80fb8b2（裸） | recovery_a |
 | Mu 镜像 | **mu-r131-099b15d8**（在机，FdtBlob 与 r131 apk 同源 35652d24；r132 无 DTS 变更 ⇒ 续用免重编；**读回 ✓ 按镜像字节截取对拍**） | 099b15d8 | boot_b |
-| 设备包 / 固件包 | **r83**（11-26 一百二十四：profiles `dns-search=cellular` = carrier DNS 上 resolved link 的配置级钥匙[实弹 211.139.5.27/28 上链，r82 FallbackDNS 改冗余保险] + meizu-dsp-mount.sh 有界重试[早期时序雷收账] + tempjson conf 根-路径版[无害留役]；r82 = FallbackDNS 折中留档；r81 = P3 蜂窝标准化留档；r79 = mm-dial BP 抓取修；r78 = 蜂窝 UI 开关轮；r77 = 数据面自动化留档）/ **r4**（11-19，已随 r131 发布） | 在机 apk live | 机上 apk add |
+| 设备包 / 固件包 | **r85**（11-26 一百二十四：启动序修复——touch/amps/sndcard-bind/audio+sensors-barrier 加 `Before=plasma-mobile.service`[+r84 Before=graphical]，桌面等输入基座全链就绪才亮，实机验序 barrier→touch→amps→sndcard→plasma；r84 = Before=graphical 单边不生效留档；r83 = profiles `dns-search=cellular` carrier DNS 上链[实弹 211.139.5.27/28，r82 FallbackDNS 改冗余保险] + dsp-mount 有界重试 + tempjson conf 根-路径版；r82 = FallbackDNS 折中留档；r81 = P3 蜂窝标准化留档；r79/r78/r77 更早留档）/ **r4**（11-19，已随 r131 发布） | 在机 apk live | 机上 apk add |
 | rootfs | Release **r131 双 UI**（2026-11-24 上线 = plasma-mobile `b18a6be1` / phosh `fcd6c662`；11-22 用户拍板「两个都传，以后默认 plasma」；r91 = 上一代 phosh 单 UI） | b18a6be1 / fcd6c662 | userdata |
 | 上机期望 | `uname -v` → **#133**（r132）+ 模块 r132 + `charge_counter` 数量级 = µAh（≈capacity%×charge_full，×1000 修复实证）+ IPA reserved_regions 含 `146a8000 direct`（`cat /sys/bus/platform/devices/3f40000.ipa/iommu_group/reserved_regions`） | — | — |
 

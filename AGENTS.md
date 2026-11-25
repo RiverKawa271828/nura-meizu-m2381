@@ -67,8 +67,9 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   build → 双 pmbootstrap rm/cp APKINDEX 互杀；判完成只认产物落盘）②pmbootstrap x86_64
   宿主 crossdirect 死锁（gcc-x86_64 同宿主 flavor 无仓可解 + chroot 记录被竞态半重置；
   解 = 包加 `!pmb:crossdirect` 转 QEMU 路 ∥ gcc-aarch64 原生链自举）③本地仓 sha512 手工
-  补算（checksum 单元被打死未落）。**在机 = #133 + v91 + mu-r131 + device r83 +
+  补算（checksum 单元被打死未落）。**在机 = #133 + v91 + mu-r131 + device r85 +
   hexagonrpcd r8**；详录 = experiment-log（一百二十四）。
+- **一百二十四·补段（同日晚，用户定谳「触屏/音频/传感器应早于桌面」）= device r85 启动序修复**：touch/amps/sndcard-bind/audio + sensors-barrier 五件加 `Before=plasma-mobile.service`（r84 的 `Before=graphical.target` 对兄弟单位无 pairwise 边不生效 = systemd 排序语义实证留档）；实机 reboot 验序 barrier→touch→amps→sndcard→**plasma 最后亮**，failed=0（modem-gnss 首次全过），传感器/蜂窝/数据/DNS 全绿。非标残余备注：cell-mm-rescue（r81）仍占 multi-user 事务 ~50s = 桌面整体晚亮的下一段优化空间（候补：rescue 挪出 multi-user 事务，动 r81 合同须用户拍板）。
 
 - **设备**：**11-19 双卡轮 ✅（一百零四）= 蜂窝自动化 + 双卡（用户令「插卡即用/
   随意切换/设置状态栏显示」，离场授权捣鼓；战报 = experiment-log 一百零四；
