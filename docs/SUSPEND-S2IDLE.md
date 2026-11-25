@@ -596,3 +596,23 @@ new + 填 remote_ip/local_ip/remote_mac + enable=1）——参数式失败时用
 挂死态）；死窗期接收文件 = 唯一活日志；醒来后 `/proc/interrupts` 差分（睡前后各抓一份）
 → 定名 waker。A1 判生死 = `/dev/cpu_wakeup_latency` 持 fd 限定 10µs 一发（同窗拼车，
 疗效存疑[实测全 WFI]——判据 = 挂死是否复现）。
+
+### §TD9·同机交叉印证（2026-11-26，来源 = GitHub org `meizu-m2381` PixelOS 移植
+### `docs/suspend-adaptation.md`，四仓副本重拉即可[纯宿主零设备]）
+
+1. **stock 5.15.119 同机也挂**：拔 USB 熄屏 s2idle 曾触发 **QCOM Apps Watchdog
+   panic**；标准离线回归 = 28 挂起成功 / **2 次中止在 freeze 阶段、
+   `last_failed_errno=-16`（EBUSY）**，无新 panic。⇒ freeze 阻塞是**同机共性
+   （平台/固件面），非主线回归**——TD-9 定位继续有效且权重上调。
+2. **廉价指纹器（本轮新增武器）**：`/sys/power/suspend_stats`（success/fail/
+   `last_failed_step`/`last_failed_errno`，PM core 维护的 sysfs 快照，**printk 挂死时
+   也工作**）。每轮 rtcwake 前后各抓一份：若我方 livelock 轮出现
+   `last_failed_step=freeze + errno=-16` = 与 stock 指纹跨内核对上 ⇒ 阻塞路径为
+   同一个共享驱动/固件依赖，waker 候选域再收窄。
+3. **未证线索两条（对方也还没钉死，可在 waker 猎捕里顺手验）**：WLAN timeout；
+   早期 QCOM Apps Watchdog panic（我方看门狗已禁[10-meizu-no-watchdog]，panic 面
+   不同，仅记录）。
+4. **对方逃生门不可平移**：stock 5.15 有 `deep` mem_sleep（vendor post_boot 会改回
+   s2idle，须服务停止后重写）——主线 6.8 无 deep，我方车道维持 waker 猎捕。
+5. 纪律互证：**插线状态不能当离线待机验证**（控制器持唤醒锁）——与我们拔线/观测窗
+   纪律同款。
