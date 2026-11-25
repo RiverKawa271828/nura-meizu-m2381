@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="131"     # r131 = TD-11 根修轮（11-22 一百二十：DTS +IPA IMEM 恒等映射 ipa-imem@146a8000[iommu-addresses 恒等]，fork cf99fc7ad737；缺它 = IPA FW 撞 SMMU fault[IOVA 0x146a9000/SID 0x4a0]→拨号断流，shum-elli 轮实证）；r130 = S2 环闪收尾件留档
-REL_DEVICE_PKGREL="77"     # r77 = r76 mmcli state 裸值锚定修 + r75 数据面自动化固化轮（mm-dial oneshot = MM 拨号形态 boot 自动化[failed→restart 重扫→cbnet→qmapmux0.0 铺配置→-I 硬判] + keeper 看门 qmapmux 适配 + cell-switch 尾接重拨 + d1_dataup/DPM 链退役 + dma_heap 自载；11-22 boot 全验插卡即用 PASS，无卡 = 诚实 FAIL）；r76 = mmcli state 解析修；r74 = WiFi 优先路由 + keeper 看门；r72 = pm8008i 等待环 + hub_2 bind
-REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；发布面 tarball 仍 r3/29c1ee88）
-REL_MU_IMG="$NURA_ROOT/artifacts/mu-r131-099b15d8.img"     # mu-r131 = TD-11 根修件（FdtBlob 自 r131 apk 同源 35652d24）
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v90.img.gz"  # v90 = r131 ESP（裸 6efc31e0 / gz 3de0b018）；v89 = r130 件留档（裸 af5a69f9）；⚠构建坑：build-esp 必须等 build-kernel 单元真完 + 定版三写在 verify 前
-REL_KERNEL_VER="#132"      # 期望值（#N = pkgrel+1；上机后 uname -v 实测回填）
+REL_LINUX_PKGREL="132"     # r132 = 电池遥测单位修轮（11-25：SM8550 charge_count mAh→µAh ×1000 变体门控，fork 24df27f74fc4；charge_counter/energy_now 少×1000 = upower 历史全丢/时间预估荒谬/充电阈值回读 0 根治）；r131 = TD-11 根修轮留档（DTS +IPA IMEM 恒等映射 fork cf99fc7ad737）
+REL_DEVICE_PKGREL="79"     # r79 = mm-dial BP 抓取修（11-25 r78 轮实测副产物：modem 输出 initial bearer path 行排在 Bearer 节 paths 前，head -1 抓错对象 ⇒ -b 1 无 IPv4 三连 FAIL；改遍历取 connected+IPv4 者；★单 call 域定谳 = NM×mm-dial 互斥）；r78 = 蜂窝 UI 开关轮（qrtr0 摘出 NM unmanaged + cbnet/cmnet profile 入包均 autoconnect=false）
+REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；已随 r131 发布）
+REL_MU_IMG="$NURA_ROOT/artifacts/mu-r131-099b15d8.img"     # mu-r131 = TD-11 根修件（FdtBlob 自 r131 apk 同源 35652d24；r132 无 DTS 变更 ⇒ Mu 不重编，FdtBlob 同源续用）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v91.img.gz"  # v91 = r132 ESP（裸 b80fb8b2 / gz db0ac0c8）；v90 = r131 件留档（裸 6efc31e0）；⚠构建坑：build-esp 必须等 build-kernel 单元真完 + 定版三写在 verify 前
+REL_KERNEL_VER="#133"      # 期望值（#N = pkgrel+1；上机后 uname -v 实测回填）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。

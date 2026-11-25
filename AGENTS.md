@@ -92,15 +92,12 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   待命；EFS 快照**四份全等**（b85cad2f/c40223e6；第四份 = efs-snapshot-20261119
   -sms-round）；NAS 5gnr-only 偏好非持久（reboot 回 auto，网络侧自驻 5gnr）。
   iOS 线并行走用户——**iOS 工作区/文档零接触，传话 = 用户转告**。
-- **版本钉**：apk **r131**（在机 #132；TD-11 根修 = DTS IPA IMEM 恒等映射
-  fork cf99fc7ad737；r126-r130 = S2 闪光灯实验系；**#113 = ESP v85 的 r112
-  vmlinuz 模块差异态已翻篇**）+ ESP **v90**（裸 `6efc31e0` / gz `3de0b018`，
-  在机，读回全等 ✓）+ **mu-r131-099b15d8**（boot_b，读回 ✓ 按镜像字节截取
-  对拍）；r112 = GD2 总线真值链；r107 = s5kgd2sp03.c + 3P9 libcamera 合规；
-  r101 = modem autostart-off 轮；r91 = 7.3 stable rebase 正式轮；
-  **设备包 r74**（WiFi 优先路由 metric 700 + keeper 数据面看门 + dial 硬败
-  不走缓存；r72 = pm8008 双细胞等待环 + hub_2 bind）；**fw r4**（11-07 蜂窝
-  复燃备料，本地全绿未发布）。
+- **版本钉**：apk **r132**（在机 **#133**，11-25 电池遥修轮上机；SM8550
+  charge_count mAh→µAh ×1000 变体门控 fork 24df27f74fc4；r131 = TD-11 根修轮
+  留档[DTS IPA IMEM 恒等映射 cf99fc7ad737]）+ ESP **v91**（裸 `b80fb8b2` /
+  gz `db0ac0c8`，在机，读回 ✓）+ **mu-r131-099b15d8**（boot_b，r132 无 DTS
+  变更免重编续用，读回 ✓）+ **设备包 r79**（r78 = 蜂窝 UI 开关轮 + r79 =
+  mm-dial BP 抓取修；r74 = WiFi 优先路由留档）；**fw r4**（已随 r131 发布）。
 - **发布面**：**Release r131 = Latest（2026-11-24 上线，8 件制，双 UI 首次）**——
   plasma-mobile `b18a6be1`（**默认 UI**，11-22 用户拍板「两个都传，以后默认 plasma」）
   / phosh `fcd6c662` + mu `f51b3b09` + ESP v90 gz `037c8dfb`（CI 同号异字节；在机
@@ -116,13 +113,19 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
   ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
   远端结论必须 `git ls-remote` 实证。
-- **▶ 下会话排面（用户 2026-11-24 拍板「安排下个会话修吧」）**：
-  **①电池遥测单位 bug 修（r132）= 首选**——`charge_counter`/`energy_now` 少 ×1000
-  （固件 mAh 当 µAh 用）⇒ upower 历史全丢、时间预估荒谬、充电阈值回读 0；修法 =
-  `qcom_battmgr.c` mAh 分支 `charge_count * 1000`（TECH-DEBT 13 有完整诊断）。修好
-  顺带做**蜂窝在网态待机功耗首测**（数据面 11-22 才全自动，无基线）。
+- **▶ 下会话排面（2026-11-25 更新：①已收官）**：
+  **~~①电池遥测单位 bug 修（r132）~~ ✅ 11-25 收官**（#133 上机修复实证 +
+  upower 复活；阈值写读仍 0 = firmware 域独立案改判候补；功耗首测取消
+  [用户口径：花屏修复后功耗明显下降]）；**同轮加做（用户插卡+无人值守授权）：
+  蜂窝 UI 开关 + 上游回归 = P2 全通**（NM 拨号全链真通：bearer→qmapmux0.0
+  IP→表 1430→ping/HTTP；r78 qrtr0 managed + profile 入包；r79 mm-dial BP 修；
+  **★单 call 域定谳 = NM×mm-dial 互斥**；标准化路线 P3[退役 mm-dial/keeper
+  数据面看门]→P4[profile autoconnect=true] 等下个有卡窗，执行卡
+  battery-cellular-ui-card-20261125 有全档）。
   **②S3 5E9 前摄**（配方同 S2）｜**③camss→RPMH 死锁**（GUI 相机唯一拦路虎，设备窗）
-  ｜**④干净机首航**（Phase-2 最后判据，零设备风险）｜**⑤NM×qmapmux 集成**。
+  ｜**④干净机首航**（Phase-2 最后判据，零设备风险）｜**⑤NM 标准化 P3-P4**
+  （原「NM×qmapmux 集成」升格：P2 已通，剩 mm-dial 退役取舍 + DNS 推 resolved
+  缺口 + autoconnect 翻正，全等有卡窗）。
 - **队列**：①**花屏科学解 ✅ 达成验收属实收官**（PANEL §6 条 11.7-8）；
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
@@ -311,11 +314,12 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
   tempjson hexagonrpcd 语义取证（小件）；蜂窝残面 = 短信 ✅ 移动卡已破（广电卡 =
   运营商 IMS 未授权面）+ 数据面 ✅ 通（自动化 = 排面 A），余全挂起（复燃条件在册）。
-  **设备当前态 = 广电卡 slot 1 在役 registered + 数据面通（MM 拨号形态手工铺配置
-  [reboot 易失，自动化 = 排面 A]**；WiFi 日用已修复[r74 路由策略 + 死路由自动撤]；
-  keeper 状态文件 = /var/lib/cell-keeper/active-slot = 1；uim-selection 已卸载
-  [单卡官方形态]；TFTP 根 tmpfiles 化[boot 自成形 image→meizu + readwrite]；
-  failed = cell-dataup[判负退役失败态，无害] + meizu-touch[r72 在册无害]）。
+  **设备当前态 = 移动卡 slot 1 在网（11-25 换卡；cbnet 被受理）+ 数据面通
+  （mm-dial 自动链[package r79 修后 PASS]；NM 路径 P2 已验待 P3 接管，
+  profile autoconnect=false = boot 不自动拨 NM 侧）；WiFi 日用正常；keeper
+  active-slot = 1；TFTP 根 tmpfiles 化；在机 = **#133 + v91 + mu-r131 + r79**
+  + plasma rootfs；failed = modem-gnss[一百零七在案固件域，SIM 在位即重试败，
+  无害]）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
   **蜂窝用户面探针轮 ✅（同日深夜，四域一窗快扫；战报 = experiment-log 一百零六·乙）**：
