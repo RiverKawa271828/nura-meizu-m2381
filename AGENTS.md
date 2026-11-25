@@ -123,9 +123,12 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   数据面看门]→P4[profile autoconnect=true] 等下个有卡窗，执行卡
   battery-cellular-ui-card-20261125 有全档）。
   **②S3 5E9 前摄**（配方同 S2）｜**③camss→RPMH 死锁**（GUI 相机唯一拦路虎，设备窗）
-  ｜**④干净机首航**（Phase-2 最后判据，零设备风险）｜**⑤NM 标准化 P3-P4**
-  （原「NM×qmapmux 集成」升格：P2 已通，剩 mm-dial 退役取舍 + DNS 推 resolved
-  缺口 + autoconnect 翻正，全等有卡窗）。
+  ｜**④干净机首航**（Phase-2 最后判据，零设备风险）｜**~~⑤NM 标准化 P3-P4~~
+  ✅ 11-25 晚收官**（P3 = r80+r81：数据面交还 NM 标准形态[autoconnect=true +
+  mm-dial boot 退役 + cell-mm-rescue 补 boot 救援隐性依赖]；failover/DNS 实验
+  全有答案[路由晋升主表原生可用 / FallbackDNS 兜底]；reboot 全验通过；P4 无余项
+  ——上游形态已完全就位，余 = carrier DNS 不落 resolved 已接受[NM upstream 面]）。
+  待办池加：carrier DNS push 缺口（NM upstream 面候选小件）。
 - **队列**：①**花屏科学解 ✅ 达成验收属实收官**（PANEL §6 条 11.7-8）；
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
@@ -314,12 +317,11 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   S2IDLE 深睡线复燃（之后，需设备窗+用户在场）/ NFC/通话音频（点名制）/
   tempjson hexagonrpcd 语义取证（小件）；蜂窝残面 = 短信 ✅ 移动卡已破（广电卡 =
   运营商 IMS 未授权面）+ 数据面 ✅ 通（自动化 = 排面 A），余全挂起（复燃条件在册）。
-  **设备当前态 = 移动卡 slot 1 在网（11-25 换卡；cbnet 被受理）+ 数据面通
-  （mm-dial 自动链[package r79 修后 PASS]；NM 路径 P2 已验待 P3 接管，
-  profile autoconnect=false = boot 不自动拨 NM 侧）；WiFi 日用正常；keeper
-  active-slot = 1；TFTP 根 tmpfiles 化；在机 = **#133 + v91 + mu-r131 + r79**
-  + plasma rootfs；failed = modem-gnss[一百零七在案固件域，SIM 在位即重试败，
-  无害]）。
+  **设备当前态 = 移动卡 slot 1 在网 + 数据面 = **NM 标准形态**（11-25 晚 P3
+  收官：boot→cell-mm-rescue→MM→NM autoconnect 全自动，mm-dial 已退役在册，
+  profile autoconnect=true；WiFi 掉线 failover 原生可用）；WiFi 日用正常；keeper
+  active-slot = 1；在机 = **#133 + v91 + mu-r131 + r81**
+  + plasma rootfs；failed = 0[modem-gnss 本 boot 未触发]）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。
   **蜂窝用户面探针轮 ✅（同日深夜，四域一窗快扫；战报 = experiment-log 一百零六·乙）**：

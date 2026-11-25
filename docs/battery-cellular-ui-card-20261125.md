@@ -4,6 +4,42 @@
 > + 蜂窝 UI 开关活 + **P2 上游回归全通（NM 拨号链真通）** + 单 call 域互斥定谳 +
 > mm-dial 潜在 bug 修（r79）+ 数据面恢复。SIM 后半程 = 用户插卡 + ≤50MB 授权
 > （实际消耗 <20KB）。功耗首测取消（用户口径）。
+>
+> **✅ 加演：P3 蜂窝标准化收官（同日晚，用户拍板「跟着上游来」，卡在机全程）**——
+> 数据面交还 NM 标准形态（r80+r81），reboot 全验通过，详见文末 P3 节。
+
+## P3 蜂窝标准化（r80+r81，收官补记）
+
+**实验先行（两问全有答案）**：
+- **WiFi failover**：断 WiFi → NM 把 qmapmux 默认路由**晋升进主表**（metric 700），
+  非绑定流量即走蜂窝（HTTP 实弹）——`50-wwan-policy.conf` 表 1430 形态原生可用，
+  无需任何手工路由；WiFi 回来自动退回（600<700）。
+- **DNS**：NM 收到 carrier DNS（journal 实录）但**不推 resolved**（qmapmux 被
+  注册为 Generic device，push 环节 NM 侧断）；断 WiFi 时 resolved 走 systemd
+  上游默认 **FallbackDNS（quad9）** 经蜂窝解析实证成功（baidu 真解出）。功能无
+  缺口，carrier DNS 缺席 = 已知小缺口接受（纯上游默认行为；复燃 = NM upstream）。
+- keeper 数据面看门**结构性失活**（只 grep 主表 qmapmux 路由；NM 形态路由在表
+  1430）⇒ keeper 零改动，注册面自愈照旧。
+
+**实现（pmaports b1bc18d，REL_DEVICE=81）**：
+- **r80**：profile autoconnect=true×2 + preset mm-dial enable→disable + tmpfiles
+  `meizu20-retire-mmdial.conf`（清扫旧装机 enable 残链）+ cell-switch.sh 数据尾
+  改「NM autoconnect 跟卡」（显式 mm-dial 重拨 = 单 call 域双死路径）。
+- **r81（reboot 全验暴露的隐性依赖）**：mm-dial 退役连带拔掉它内嵌的 boot 救援
+  （等 modem 对象 + failed→restart MM 重扫）——本平台 MM×qcom-soc boot 竞速
+  **常态性落 failed/power-off**，无人救则 NM autoconnect 永远 unavailable。
+  补 `cell-mm-rescue` oneshot（只 restart MM 不拨号不铺路，≤2 轮有界，After
+  禁 multi-user[pas 自环前科]）。
+- **终验（reboot 全程）**：rescue 开机自启（boot+54s 完成退出）→ MM 恢复 →
+  **NM autoconnect 自动激活 cmnet** → qmapmux0.0 → `ping -I` 3/3 @39ms；
+  mm-dial 全程未跑；failed=0； keeper 注册面舞步正常。
+- **回滚**：`systemctl enable mm-dial` + profile autoconnect 翻回 false +
+  装回 r79；一条 preset 翻转即复活。
+
+**现态语义**：插卡即用 = 纯上游形态（NM autoconnect），短信/信号/双卡切换 UI 面
+= MM/plasma-nm 标准；非标残余仅两件有上游理由的：单 active 槽（upstream MM
+双槽 bug workaround）+ keeper 注册面自愈（DMS offline 平台特有）+ boot 救援
+oneshot（平台竞速特有）。
 
 ## 结果速记（收官时补）
 

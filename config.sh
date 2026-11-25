@@ -46,7 +46,7 @@ APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推�
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="132"     # r132 = 电池遥测单位修轮（11-25：SM8550 charge_count mAh→µAh ×1000 变体门控，fork 24df27f74fc4；charge_counter/energy_now 少×1000 = upower 历史全丢/时间预估荒谬/充电阈值回读 0 根治）；r131 = TD-11 根修轮留档（DTS +IPA IMEM 恒等映射 fork cf99fc7ad737）
-REL_DEVICE_PKGREL="79"     # r79 = mm-dial BP 抓取修（11-25 r78 轮实测副产物：modem 输出 initial bearer path 行排在 Bearer 节 paths 前，head -1 抓错对象 ⇒ -b 1 无 IPv4 三连 FAIL；改遍历取 connected+IPv4 者；★单 call 域定谳 = NM×mm-dial 互斥）；r78 = 蜂窝 UI 开关轮（qrtr0 摘出 NM unmanaged + cbnet/cmnet profile 入包均 autoconnect=false）
+REL_DEVICE_PKGREL="81"     # r81 = P3 蜂窝标准化轮（11-25，用户拍板「跟着上游来」：r80 = profile autoconnect=true + mm-dial boot 退役[preset flip + retire-mmdial tmpfiles + cell-switch 尾改 NM 跟卡；数据面 = NM 标准形态：表 1430 + WiFi 掉线路由晋升主表 failover 原生可用] + r81 = cell-mm-rescue oneshot 补 mm-dial 内嵌 boot 救援的隐性依赖[MM×qcom-soc boot 竞速常态落 failed，只 restart MM 不拨号]；reboot 全验：rescue 自启→NM 自连→ping -I 3/3；★carrier DNS 不落 resolved = 已知小缺口接受[FallbackDNS 兜底]）；r79 = mm-dial BP 抓取修；r78 = 蜂窝 UI 开关轮
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；已随 r131 发布）
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r131-099b15d8.img"     # mu-r131 = TD-11 根修件（FdtBlob 自 r131 apk 同源 35652d24；r132 无 DTS 变更 ⇒ Mu 不重编，FdtBlob 同源续用）
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v91.img.gz"  # v91 = r132 ESP（裸 b80fb8b2 / gz db0ac0c8）；v90 = r131 件留档（裸 6efc31e0）；⚠构建坑：build-esp 必须等 build-kernel 单元真完 + 定版三写在 verify 前
