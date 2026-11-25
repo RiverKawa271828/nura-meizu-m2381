@@ -41,6 +41,15 @@
 双槽 bug workaround）+ keeper 注册面自愈（DMS offline 平台特有）+ boot 救援
 oneshot（平台竞速特有）。
 
+**r82 收尾折中（11-26，用户拍板）**：carrier DNS push 缺口落地补偿——resolved
+vendor drop-in（`/usr/lib/systemd/resolved.conf.d/meizu20-fallback-dns.conf`）把
+断 WiFi 兜底从 quad9 换成 **移动 carrier DNS（211.139.5.27/28，bearer 实录）+
+AliDNS 223.5.5.5**（carrier 中立）。FallbackDNS 仅在所有口无 DNS 时启用
+（WiFi 在 = 沉默，日常解析路径不变）。验证：Global Fallback 列表生效 ✓ +
+断 WiFi 实弹 `nslookup www.qq.com` 返回移动 CDN 地址（2409:8c54::/32）=
+查询真走 carrier resolver ✓。根治仍挂 NM upstream 候补（Generic device push
+路径）。换卡后可按 bearer 实报调整名单（keeper log 的 mm-dial PASS dns= 行）。
+
 ## 结果速记（收官时补）
 
 **任务 A（电池 r132）✅**：

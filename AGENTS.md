@@ -128,7 +128,7 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   mm-dial boot 退役 + cell-mm-rescue 补 boot 救援隐性依赖]；failover/DNS 实验
   全有答案[路由晋升主表原生可用 / FallbackDNS 兜底]；reboot 全验通过；P4 无余项
   ——上游形态已完全就位，余 = carrier DNS 不落 resolved 已接受[NM upstream 面]）。
-  待办池加：carrier DNS push 缺口（NM upstream 面候选小件）。
+  carrier DNS push 缺口已折中落地（r82：resolved FallbackDNS = 移动 carrier DNS+AliDNS，11-26 断 WiFi 实弹验证）；根治候补 = NM upstream 查 Generic device push 路径。
 - **队列**：①**花屏科学解 ✅ 达成验收属实收官**（PANEL §6 条 11.7-8）；
   残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
   （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板

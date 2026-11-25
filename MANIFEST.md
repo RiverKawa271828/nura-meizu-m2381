@@ -12,7 +12,7 @@
 | 内核 apk | 7.3.0_**rc6**-r**132**（11-25：SM8550 charge_count mAh→µAh ×1000 变体门控，fork `24df27f74fc4`；r131 = TD-11 根修轮留档[DTS +IPA IMEM 恒等映射 cf99fc7ad737]；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
 | ESP | **v91**（r132 内核腿，11-25；裸 `b80fb8b2` / gz `db0ac0c8`，**读回 ✓**；v90 = r131 件留档；⚠v86 = 半写 apk 竞态废件已 void） | b80fb8b2（裸） | recovery_a |
 | Mu 镜像 | **mu-r131-099b15d8**（在机，FdtBlob 与 r131 apk 同源 35652d24；r132 无 DTS 变更 ⇒ 续用免重编；**读回 ✓ 按镜像字节截取对拍**） | 099b15d8 | boot_b |
-| 设备包 / 固件包 | **r81**（11-25 晚 P3 蜂窝标准化：数据面交还 NM 标准形态[profile autoconnect=true + mm-dial boot 退役 + cell-mm-rescue boot 救援 oneshot；reboot 全验 ping -I 3/3]；r79 = mm-dial BP 抓取修；r78 = 蜂窝 UI 开关轮；r77 = 数据面自动化固化轮留档）/ **r4**（11-19，已随 r131 发布） | 在机 apk live | 机上 apk add |
+| 设备包 / 固件包 | **r82**（11-26：resolved FallbackDNS 折中[quad9→移动 carrier DNS+AliDNS，补偿 NM carrier DNS push 缺口]；r81 = 11-25 晚 P3 蜂窝标准化：数据面交还 NM 标准形态[profile autoconnect=true + mm-dial boot 退役 + cell-mm-rescue boot 救援 oneshot；reboot 全验 ping -I 3/3]；r79 = mm-dial BP 抓取修；r78 = 蜂窝 UI 开关轮；r77 = 数据面自动化固化轮留档）/ **r4**（11-19，已随 r131 发布） | 在机 apk live | 机上 apk add |
 | rootfs | Release **r131 双 UI**（2026-11-24 上线 = plasma-mobile `b18a6be1` / phosh `fcd6c662`；11-22 用户拍板「两个都传，以后默认 plasma」；r91 = 上一代 phosh 单 UI） | b18a6be1 / fcd6c662 | userdata |
 | 上机期望 | `uname -v` → **#133**（r132）+ 模块 r132 + `charge_counter` 数量级 = µAh（≈capacity%×charge_full，×1000 修复实证）+ IPA reserved_regions 含 `146a8000 direct`（`cat /sys/bus/platform/devices/3f40000.ipa/iommu_group/reserved_regions`） | — | — |
 
