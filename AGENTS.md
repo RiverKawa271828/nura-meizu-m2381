@@ -45,7 +45,30 @@ artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜
 docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119.md；蜂窝复燃卡+根治卡已 ✅ 归档 docs/archive/）
 ```
 
-## 现态（2026-11-19 双卡轮收官 = 插卡即用全自动链 + 双卡切换实证 ✅；新会话从这里接）
+## 现态（2026-11-26 一百二十四轮收官 = 三调研 + carrier DNS 上链 + temp.json 判负回滚 ✅；新会话从这里接）
+
+- **一百二十四（11-26 无人值守轮，用户授权刷写）**：①**carrier DNS 上链定谳+修复** = NM
+  resolved 插件对「无 search domain 且未赢得 ~ 默认路由竞选」的条目**整条丢弃**
+  （`nm-dns-systemd-resolved.c update_add_ip_config` 早退门；TRACE 实录
+  `default-route=0, search=`；MM bearer→NM 全程带 DNS 无涉；wlan0 持 ~ 故蜂窝条目被
+  shadow）→ 修 = profiles `dns-search=cellular` 过门，**实弹 211.139.5.27/28 上链
+  qmapmux0.0**（r82 FallbackDNS 改冗余保险；NM upstream「Generic push」候补**关闭**）。
+  ②**temp.json 判负回滚** = 语义取证结案（apps_std 无条件拒写开、先拒再解析、上游同态）
+  → 0006 写通道补丁部署**前半程全绿**（刷屏 981→0 + 0x190 + 传感器活）随后引爆：PD 后续
+  **>256B 输入缓冲 RPC 撞解码器上限**（`Large (>256B) input buffers aren't implemented`）
+  → sensorspd Restart=always 重启环（16 次/boot）→ ADSP 风暴 → **整机自动重启 ×4**（用户
+  目击）→ **设备回滚 hexagonrpcd r8**（pmaports 回退 d810d39）；根治前置 = iobuffer 解码器
+  >256B 支持（TD-10 改判挂候补）。③upstream MM 复燃判据核查 = qcom-soc 快照 20261005 后
+  零提交，真 DSDS/NM×MM 判据不变。④**device r83 留役**（dsp-mount 有界重试 + tempjson
+  conf 根-路径版 + dns-search profiles；全被动零险；实机 dns-search 冷 boot 即上链）。
+  ⑤「触屏/音频桌面后才起」定谳非 r83 = touch/amps/sndcard 挂 After=multi-user（r78 设计）
+  vs plasma accel-barrier 链并行赛跑，本 boot cell-mm-rescue 拖 multi-user 50s > barrier
+  24s → 桌面先亮（P3 已知形态）。**坑册**：①wrapper 即发即返竞速（checksum 单元未完即发
+  build → 双 pmbootstrap rm/cp APKINDEX 互杀；判完成只认产物落盘）②pmbootstrap x86_64
+  宿主 crossdirect 死锁（gcc-x86_64 同宿主 flavor 无仓可解 + chroot 记录被竞态半重置；
+  解 = 包加 `!pmb:crossdirect` 转 QEMU 路 ∥ gcc-aarch64 原生链自举）③本地仓 sha512 手工
+  补算（checksum 单元被打死未落）。**在机 = #133 + v91 + mu-r131 + device r83 +
+  hexagonrpcd r8**；详录 = experiment-log（一百二十四）。
 
 - **设备**：**11-19 双卡轮 ✅（一百零四）= 蜂窝自动化 + 双卡（用户令「插卡即用/
   随意切换/设置状态栏显示」，离场授权捣鼓；战报 = experiment-log 一百零四；
@@ -329,7 +352,7 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   **设备当前态 = 移动卡 slot 1 在网 + 数据面 = **NM 标准形态**（11-25 晚 P3
   收官：boot→cell-mm-rescue→MM→NM autoconnect 全自动，mm-dial 已退役在册，
   profile autoconnect=true；WiFi 掉线 failover 原生可用）；WiFi 日用正常；keeper
-  active-slot = 1；在机 = **#133 + v91 + mu-r131 + r81**
+  active-slot = 1；在机 = **#133 + v91 + mu-r131 + r83 + hexagonrpcd r8**
   + plasma rootfs；failed = 0[modem-gnss 本 boot 未触发]）。
   **SFOS 线 = 独立新仓 `~/work/sfos-meizu-m2381`（11-19 立骨架未开发，遇话题指路
   不接手；复燃入口 = 其 docs/SPIKE-PLAN.md 阶段 0[ofono×QRTR 零刷写探针]）**。

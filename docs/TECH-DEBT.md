@@ -96,7 +96,7 @@
    typec/ucsi/pmic-glink wake IRQ 深 suspend 语境崩溃；复现配方 = rtcwake 长睡中
    拔线；判别 = RTC 唤醒同态全净。独立小战役，与 D4-1/花屏无涉。
 9. **s2idle freeze 活锁 waker 识别**（11-19 kprobe 判词续）：活锁期系统仍响应但
-10. **temp.json 刷屏根治 = hexagonrpcd 文件服务语义取证**（11-20 r70 还债改判）：persist 未挂载 → PD 字面路径写开失败刷 ~980 行/boot；tmpfiles 可写路径已造**但刷屏未止** = 白名单/alias 层另有乾坤；无害留机，根治需读 hexagonrpcd 源码 open-for-writing 语义。
+10. **temp.json 刷屏根治 = hexagonrpcd 解码器 >256B 输入缓冲支持**（11-26 一百二十四改判）：语义取证已结案（apps_std 层无条件拒写开，先拒再解析路径，上游 master 同态）；0006 写通道补丁**判负回滚**——写开放行后 PD 后续校准/配置推送的 >256B 输入缓冲 RPC 撞解码器硬上限（`Large (>256B) input buffers aren't implemented`）→ sensorspd 重启环 → ADSP 风暴 → 整机重启 ×4（设备已回 r8，刷屏基线 980 行/boot 无害回归）。**去债两步**：①iobuffer 解码器大输入缓冲支持（独立件）→ ②重开 0006（写通道本体已判过：dirent 白名单 + FWRITE (1,1,1,0) 可行）。无害留机照旧。
    dwc3 掉总线 ⇒ netconsole 唯一通道；配方 = livelock 轮 + /proc/interrupts 差分
    （或 irq trace）→ 定名 waker → 定向修复。A1 疗效存疑（实测全 WFI）——挂 fd
    一发判生死，同窗拼车。
