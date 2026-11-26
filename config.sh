@@ -22,7 +22,7 @@ PIN_LINUX_BRANCH="meizu20-t4b"
 PIN_MU_DIR="${NURA_MU_DIR:-$NURA_WORK/meizu20/mu-uefi/Mu-Silicium-new}"   # Mu 树（独立多设备树）
 PIN_MU_BRANCH="meizu20-mars-port"
 PIN_PMAPORTS="${NURA_PMAPORTS_DIR:-$NURA_WORK/pmos_linux/pmos/pmaports}"  # pmaports fork（K30+魅族多设备包源）
-PIN_PMAPORTS_BRANCH="phoenix"
+PIN_PMAPORTS_BRANCH="meizu20"   # 11-27 由 phoenix 改名（phoenix = K30 代号化石，K30 已退役；远端默认已切+旧名已删）
 PIN_PMB_WRAPPER="${NURA_PMB_WRAPPER:-$NURA_ROOT/script/pmbootstrap-meizu.sh}"  # 已收编本仓
 PMB_CHECKOUT="${NURA_PMB_CHECKOUT:-$NURA_WORK/pmos_linux/pmos/pmbootstrap}"    # 官方 pmbootstrap（setup.sh --clone 补齐；通用工具独立树）
 PMB_WORK="${NURA_PMB_WORK:-$NURA_WORK/pmos_linux/pmos/.pmbootstrap}"           # work dir（K30 已退役 10-09；单设备线独占，防本机并发即可）
@@ -32,7 +32,7 @@ PIN_TOOLS="${NURA_TOOLS_DIR:-$NURA_ROOT/tools}"                                #
 PIN_LINUX_GIT="https://github.com/RiverKawa271828/linux-mobile-ports"        # fork torvalds/linux → 推分支 meizu20-t4b（基点 58785836 = 主线 7.3 merge window，只传 79 个增量 commit）
 PIN_MU_GIT="https://github.com/RiverKawa271828/Mu-Silicium"                  # fork Project-Silicium/Mu-Silicium → 推分支 meizu20-mars-port
 PIN_MU_BINARIES_GIT="https://github.com/RiverKawa271828/Device-Binaries"     # 已建 fork；main 已强推至钉住的 036ba9f7（= silime「mars: Initial support」，10-07 推送窗口）
-PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # 已建独立仓；phoenix 整条已推（10-07 推送窗口；pmOS 官方在 GitLab，GitHub 无镜像 fork 可用）
+PIN_PMAPORTS_GIT="https://github.com/RiverKawa271828/pmaports"               # 已建独立仓（10-07 推送窗口；pmOS 官方在 GitLab，GitHub 无镜像 fork 可用）；分支 11-27 phoenix→meizu20
 
 # ---- Release（Phase-2；setup.sh --fetch-release 按此拉现役件/锚三件）----
 PIN_RELEASE_BASE="https://github.com/RiverKawa271828/nura-meizu-m2381/releases/download/r131"  # 发布面（2026-11-24 r131 上线 = 8 件制含**双 UI rootfs**（plasma-mobile b18a6be1 / phosh fcd6c662，11-22 用户拍板「两个都传，以后默认 plasma」）+ mu f51b3b09 + ESP v90 gz 037c8dfb（CI 同号异字节，在机本地件 = 3de0b018 裸 6efc31e0）+ fw r4 tarball 97d7b489 + linux r131 apk 7156e527 + upgrade-r131.zip 2ee9d1d7；CI run 45225314330；r91 = 上一个发布面（phosh 单 UI），r87/r84 再前，r80 = plasma 末版存档；r72 半截流教训在册：大件上传验收 = gzip -t + 资产字节数逐件对拍[CI 内建]，本地抽验 mu/ESP sha256 实过]）

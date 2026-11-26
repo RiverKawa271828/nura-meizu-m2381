@@ -164,7 +164,7 @@ trees stay where they are, pinned by `config.sh`; the vendor blob archive
 | Kernel fork | <https://github.com/RiverKawa271828/linux-mobile-ports> | fork of torvalds/linux, Meizu 20 incremental commits | meizu20-t4b |
 | Mu-UEFI firmware | <https://github.com/RiverKawa271828/Mu-Silicium> | fork of Project-Silicium/Mu-Silicium, m2381Pkg | meizu20-mars-port |
 | Mu Binaries | <https://github.com/RiverKawa271828/Device-Binaries> | Mu device-binaries submodule (pinned `036ba9f7`) | main |
-| pmaports | <https://github.com/RiverKawa271828/pmaports> | kernel/device/firmware packages + hexagonrpcd patches | phoenix |
+| pmaports | <https://github.com/RiverKawa271828/pmaports> | kernel/device/firmware packages + hexagonrpcd patches | meizu20 |
 
 The toolchain is the official pmbootstrap (gitlab.postmarketos.org, pulled automatically
 by `setup.sh --clone`). Replication: clone this repo → `export NURA_WORK=/<work root>` →

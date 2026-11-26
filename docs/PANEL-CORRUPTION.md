@@ -678,7 +678,7 @@ leluo123/m2468-mainline，11-05 加门条件触发即审）**——
 | 想查什么 | 在哪 |
 |---|---|
 | 面板驱动 / 调试旋钮源码 | <https://github.com/RiverKawa271828/linux-mobile-ports>（分支 `meizu20-t4b`，`panel-boe-meizu20.c` + profiles） |
-| 设备包 / 内核配置 | <https://github.com/RiverKawa271828/pmaports>（分支 `phoenix`） |
+| 设备包 / 内核配置 | <https://github.com/RiverKawa271828/pmaports>（分支 `meizu20`） |
 | Demura/sleep-out 自重载机制 | 公开专利 EP4089666A1；Novatek 页选/解锁命令族 = mu_aloha Kailua 面板 XML 公开面 |
 | 下游 msm display 源码（stock 参照） | CodeLinaro display-drivers（display-kernel.lnx.5.15.1.r*-rel） |
 | 完整实验叙事（深夜二/ProfileID 破案、r22 诊断轮全系列、E/H 实验判据读数、遮罩能量图档案） | 私有工作区实验日志 + `panel-diag/`（未公开；本文已收编其全部结论） |

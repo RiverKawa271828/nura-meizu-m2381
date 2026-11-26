@@ -89,6 +89,12 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   **推送窗 ✅ 清零（同日用户令）**：nura master 8 笔（125 轮 3 + 本日 5）+ pmaports
   phoenix 13 笔（含 r85 补录/r86）全推，ls-remote 双实证齐（31133ba / 9cb9128）；
   fork 零改动无涉；pmos 私有无远端照旧。
+  **pmaports 分支改名（同日用户拍板）**：`phoenix`→**`meizu20`**（phoenix = K30 代号
+  化石[K30 已退役 10-09]；远端推新名 + gh 切默认 + 删旧名，本地 rename + tracking
+  修正 + config.sh 钉子/CI build-release.yml/六份活文档全对齐；ls-remote 实证唯一
+  分支 meizu20 @9cb9128 默认 HEAD；历史叙述中的 phoenix 保留原样 = 当时事实；
+  坑册 = gh 在沙箱直通[走代理路径]，systemd-run 包装 gh 反而全静默；443 间歇断
+  照旧 ls-remote/删除等操作带退避重试）。
 
 - **一百二十五（11-27 功耗核查轮，拔电夜取证，用户在场）**：**屏灭整夜 0.9-1.1W
   定谳 = 三重禁睡锁**（①`meizu-wfi.service` multi-user oneshot 禁三簇深 cpuidle

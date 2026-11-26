@@ -111,7 +111,7 @@ jobs:
           clone_shallow https://github.com/RiverKawa271828/linux-mobile-ports \
             "$NURA_LINUX_DIR" meizu20-t4b
           clone_shallow "$(bash -c '. ./config.sh && echo "$PIN_PMAPORTS_GIT"')" \
-            "$NURA_PMAPORTS_DIR" phoenix
+            "$NURA_PMAPORTS_DIR" meizu20
           clone_shallow "$(bash -c '. ./config.sh && echo "$PIN_MU_GIT"')" \
             "$NURA_MU_DIR" meizu20-mars-port
           # 补 Mu Binaries submodule + pmbootstrap 跳过检查（树全在位则纯校验）

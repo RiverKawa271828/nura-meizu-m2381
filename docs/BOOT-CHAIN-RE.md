@@ -807,4 +807,4 @@ python3 tools/abl-re/disfunc.py 0x37934 0x38000 out/mod*.efi
 | 解包/反汇编脚本 | 本仓 [tools/abl-re/](../tools/abl-re/) |
 | Mu 移植源码（BootShim/m2381Pkg） | <https://github.com/RiverKawa271828/Mu-Silicium>（分支 `meizu20-mars-port`） |
 | 内核 fork（DTS/驱动/config） | <https://github.com/RiverKawa271828/linux-mobile-ports>（分支 `meizu20-t4b`） |
-| 设备包/固件包配方 | <https://github.com/RiverKawa271828/pmaports>（分支 `phoenix`） |
+| 设备包/固件包配方 | <https://github.com/RiverKawa271828/pmaports>（分支 `meizu20`，11-27 前名 `phoenix` = K30 代号化石已弃） |

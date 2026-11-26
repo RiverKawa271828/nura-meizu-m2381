@@ -562,7 +562,7 @@ magic packet 不通的根因（代码级，可复燃）：root port 的 of_node 
 | 刷机 / 交付链背景 | 本仓 [FLASHING.md](FLASHING.md)、[DESIGN.md](DESIGN.md) |
 | ABL 与 ramoops 地址的关系 | [BOOT-CHAIN-RE.md §6.3](BOOT-CHAIN-RE.md) |
 | 内核 fork（printk 仪器补丁 / ath12k 系列补丁，本文全部 hash 所在） | <https://github.com/RiverKawa271828/linux-mobile-ports>（分支 `meizu20-t4b`；rc3 时代旧 hash 见 tag `archive/pre-rc6-meizu20-t4b`） |
-| 设备包（wowlan unit / watchdog drop-in / cmdline） | <https://github.com/RiverKawa271828/pmaports>（分支 `phoenix`，device-meizu-meizu20） |
+| 设备包（wowlan unit / watchdog drop-in / cmdline） | <https://github.com/RiverKawa271828/pmaports>（分支 `meizu20`，device-meizu-meizu20） |
 | 上游回归与修复讨论 | `9e70a5e109a4`；LKML 2026-01 "freeze on resume" 线（lkml.org/lkml/2026/1/29/619）与 "Reintroduce consoles_suspended global state" 系列（patchew.org/linux/20251111144328.887159-1-john.ogness@linutronix.de/） |
 | 完整实验叙事（11 轮判据读数） | 私有工作区 `suspend-test-20261008/FINDINGS-20261008.md` + 实验日志（未公开；本文已收编其全部结论） |
 

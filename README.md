@@ -136,7 +136,7 @@ NFC（芯片应答、NCI init 不完成；**用户态默认摘除**）。
 | fork 内核 | <https://github.com/RiverKawa271828/linux-mobile-ports> | fork torvalds/linux，魅族 20 增量 commit | meizu20-t4b |
 | Mu-UEFI 固件 | <https://github.com/RiverKawa271828/Mu-Silicium> | fork Project-Silicium/Mu-Silicium，m2381Pkg | meizu20-mars-port |
 | Mu Binaries | <https://github.com/RiverKawa271828/Device-Binaries> | Mu 设备二进制 submodule（钉 `036ba9f7`） | main |
-| pmaports | <https://github.com/RiverKawa271828/pmaports> | 内核/设备/固件三包 + hexagonrtc 补丁 | phoenix |
+| pmaports | <https://github.com/RiverKawa271828/pmaports> | 内核/设备/固件三包 + hexagonrtc 补丁 | meizu20 |
 
 工具链用官方 pmbootstrap（gitlab.postmarketos.org，`setup.sh --clone` 自动拉取）。
 复刻路径：clone 本仓 → `export NURA_WORK=/<工作根>` → `script/setup.sh --clone`（按

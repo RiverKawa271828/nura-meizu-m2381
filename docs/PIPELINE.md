@@ -60,7 +60,7 @@ verify.sh  ←── 每轮必跑：dtb↔FdtBlob sha 对拍 / tarball 扫残留
 2. ✅ `PIN_MU_GIT` = RiverKawa271828/Mu-Silicium（fork Project-Silicium；推
    `meizu20-mars-port`）；`PIN_MU_BINARIES_GIT` = RiverKawa271828/Device-Binaries
    （fork 已建，main 钉在 `036ba9f7`）；
-3. ✅ `PIN_PMAPORTS_GIT` = RiverKawa271828/pmaports（独立仓已建整条推 `phoenix`）；
+3. ✅ `PIN_PMAPORTS_GIT` = RiverKawa271828/pmaports（独立仓已建整条推 `meizu20`；11-27 由 phoenix 改名）；
 4. 内核 tarball **无需 Release**：build-kernel.sh 每轮从 fork 现打（git archive）+
    checksum 重算，APKBUILD `source=` 保持本地文件名——外人 clone 后自给自足；
 5. ✅ 固件 tarball（81MB，meizu20_linux 厂商资产，永不入 git）已上 Release
