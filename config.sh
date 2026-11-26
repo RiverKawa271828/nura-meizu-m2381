@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="136"     # r136 = CMA 回滚轮（11-27：CONFIG_CMA_SIZE_MBYTES 回滚 512→32——512 本平台早期分配窗 Failed to reserve[32MB 恰卡 0xf0800000 缝隙]，reserved 堆维持基线；GUI 相机缓冲改由 libcamera 0003 堆序补丁走 system 堆解决；r135 = 同内容被 --bump 叠号顺延的空档）；r134 = CMA 512 尝试轮留档；r133 = RPMH 收兵轮留档（fork 79a4a228c09d rpmh 超时收兵——相机上电撞 RPM 不应答时 -110 一次 10s 停顿不再全平台 icc 饥荒）
-REL_DEVICE_PKGREL="86"     # r86 = TD-10 去债（11-27 一百二十六深睡线）：摘 meizu-wfi.service（解禁定谳：禁三簇深 cpuidle = 屏灭功耗真凶 0.9-1.1W → 解禁 0.58W 档中位 0.555W + s2idle 7/7 全净）+ preset 摘 enable + tmpfiles meizu20-retire-wfi.conf 清旧装机 /etc mask 残链；r85 = 启动序修复（11-26 用户定谳「触屏/音频/传感器应早于桌面」）：touch/amps/sndcard-bind/audio + sensors-barrier 五件加 `Before=plasma-mobile.service`（+r84 的 Before=graphical），桌面现在等输入基座全链就绪才亮（实机验序 barrier→touch→amps→sndcard→plasma，failed=0）；r84 = 四件 Before=graphical（对兄弟单位无 pairwise 边不生效的实证留档）；r83 = carrier DNS 上链（dns-search profiles）+ dsp-mount 有界重试 + tempjson conf；r82 = FallbackDNS 折中留档（cbnet/cmnet profiles + dns-search=cellular = NM resolved 插件早退门的配置级钥匙，实弹验证 211.139.5.27/28 上链[一百二十三 r82 FallbackDNS 折中改冗余保险]）+ meizu-dsp-mount.sh 有界重试（plasma 轮早期时序雷收账，禁 systemd Restart= 无限重试 = r66 死锁形态）+ meizu20-sensors-tempjson.conf 根-路径版（配 hexagonrpcd 写通道用；该件已判负回滚 r8，conf 无害留役）；r82 = resolved FallbackDNS 折中留档；r81 = P3 蜂窝标准化轮留档；r79 = mm-dial BP 抓取修；r78 = 蜂窝 UI 开关轮
+REL_LINUX_PKGREL="138"     # r138 = 相机残面轮·二段（11-27）：DT rotation 90→270（眼判回执 = 90 修好侧转但上下颠倒，真安装角 270；fork df96b0421841）；r137 = 相机残面轮·一段留档（s5k3p9sx 暴露 V4L2_CID_CAMERA_ORIENTATION/_SENSOR_ROTATION 只读控制 + DT orientation/rotation 属性，fork 04d52720bf7f；libcamera 0.8.0 CameraSensorLegacy 无 fwnode 回退实证）；r136 = CMA 回滚轮留档
+REL_DEVICE_PKGREL="87"     # r87 = 相机用户会话轮（11-27）：73-meizu20-dma-heap.rules（SUBSYSTEM dma_heap → video 0660；上游 systemd 262 无规则，0600 root:root = 用户会话 libcamera 全灭真凶[127 图标打不开④破案]）+ meizu-touch-load.sh retrigger 地址不可知化（cci 子总线编号跨 boot 漂移实证 0-002d/2-002d 同日两 boot；deferred 自愈 = 主机制，retrigger 补枪 glob 全 *-002d + 段尾 exit 0 消假 failed）；r86 = TD-10 去债留档（摘 meizu-wfi）；r85 = 启动序修复留档（五件 Before=plasma-mobile）；r83 = carrier DNS 上链；r82 = FallbackDNS 折中留档
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；已随 r131 发布）
-REL_MU_IMG="$NURA_ROOT/artifacts/mu-r131-099b15d8.img"     # mu-r131 = TD-11 根修件（FdtBlob 自 r131 apk 同源 35652d24；r132~r136 无 DTS 变更 ⇒ Mu 不重编，FdtBlob 同源续用）
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v94.img.gz"  # v94 = r136 ESP（裸 6c1e000e / gz 0700ce47）；v93 = r134 件留档（裸 31d5f3fa）；v92 = r133 件留档（裸 ee0fcd4b）；⚠构建坑：build-esp 必须等 build-kernel 单元真完 + 定版三写在 verify 前
-REL_KERNEL_VER="#137"      # 期望值（#N = pkgrel+1；上机后 uname -v 实测回填）
+REL_MU_IMG="$NURA_ROOT/artifacts/mu-r138-3f909a93.img"     # mu-r138 = 相机残面轮·二段（FdtBlob 自 r138 apk 同源 dbbbcfc6；rotation 270 定谳）；mu-r137-26462574 = 一段留档
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v96.img.gz"  # v96 = r138 ESP（gz 14402949B）；v95 = r137 件留档；⚠构建坑：build-esp 必须等 build-kernel 单元真完 + 定版三写在 verify 前
+REL_KERNEL_VER="#139"      # 期望值（#N = pkgrel+1；上机后 uname -v 实测回填）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。
