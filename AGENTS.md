@@ -237,6 +237,12 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   弹药）。⚠userdata 抹除先备份；modemst/persist 红线照旧；回程 = flash-batch +
   rootfs 首刷路径实测（FLASHING §3 顺手验真）。注：此轮 ≠ 干净机首航（后者 = 构建
   侧二机/容器从零 clone-build-flash，仍待二机/容器）。
+  **弹药已备（2026-11-27 预置）**：执行卡 = `docs/flyme-forensics-card-20261127.md`
+  （前置/工具/流程/回程/判据五节）+ 探针 = `tools/flyme-forensics/`（00-prep 静态
+  自建[pmbootstrap chroot musl -static，勿外来二进制] + 10-torch/20-camera/
+  30-call-audio/40-gnss/99-collect + src/ 四件自研 C[media-dump/v4l-fmt/tiny-mix/
+  i2c-scan，Android 零动态库依赖]）。**触发协议：用户刷回 Flyme 后说「取证轮」→
+  第一步跑 00-prep 出静态件 → 窗口纯执行。**
   深睡线残面（全部候补不挡路）：TD-8 睡中拔线雷取样（用户拍板延后）｜deep
   （PSCI SYSTEM_SUSPEND）档未测（§8 旧判进不去 AOSS，另案）｜s2idle 日用长稳观察
   （挂 AutoSuspend 与否 = 用户自选；解禁态已 7/7 全净）。
