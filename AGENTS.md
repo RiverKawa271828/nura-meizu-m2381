@@ -228,6 +228,15 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   包现成[驱动模板/CFA 红盒法/cam-shot/libcamera 集成]；OIS/AF 马达先跳过定焦拍摄）；
   **GD2 = 不可排期**（研究墙 = FW 过渡态编排，复燃条件 = 文档级资料/新外部参照，
   勿主动排）；**5E9 = GN5 后低优捡漏**。
+  **★Flyme 取证窗口轮（用户 11-27 提案，排 A/B/C 后、GN5 前，需用户在场多窗口）**：
+  12.6 EDL 整刷工作流在档（71 分区一次点亮实证）+ stock 镜像本地备份 + EFS 快照
+  四份全等——取证清单先写好再动手：①闪光灯 torch 点亮态探针（PMIC/GPIO/轨电压实况
+  = 阳极供电谜复燃条件本体）②GD2 前摄工作流 camx/csiphy/csid 寄存器 dump 与我方
+  失败态差分（= 「新外部参照」本体，研究墙钥匙）③通话中 tinymix 全量 + AGM graph
+  （= 通话音频施工图）④GNSS LOC 会话行为探针⑤GN5 OIS/AF 马达 I2C 探针（GN5 轮
+  弹药）。⚠userdata 抹除先备份；modemst/persist 红线照旧；回程 = flash-batch +
+  rootfs 首刷路径实测（FLASHING §3 顺手验真）。注：此轮 ≠ 干净机首航（后者 = 构建
+  侧二机/容器从零 clone-build-flash，仍待二机/容器）。
   深睡线残面（全部候补不挡路）：TD-8 睡中拔线雷取样（用户拍板延后）｜deep
   （PSCI SYSTEM_SUSPEND）档未测（§8 旧判进不去 AOSS，另案）｜s2idle 日用长稳观察
   （挂 AutoSuspend 与否 = 用户自选；解禁态已 7/7 全净）。
