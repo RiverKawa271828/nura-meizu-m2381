@@ -45,7 +45,20 @@ artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜
 docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119.md；蜂窝复燃卡+根治卡已 ✅ 归档 docs/archive/）
 ```
 
-## 现态（2026-11-26 一百二十四轮收官 = 三调研 + carrier DNS 上链 + temp.json 判负回滚 ✅；新会话从这里接）
+## 现态（2026-11-27 一百二十五轮收官 = 功耗核查定谳（屏灭三重禁睡锁）✅；新会话从这里接）
+
+- **一百二十五（11-27 功耗核查轮，拔电夜取证，用户在场）**：**屏灭整夜 0.9-1.1W
+  定谳 = 三重禁睡锁**（①`meizu-wfi.service` multi-user oneshot 禁三簇深 cpuidle
+  [自述 s2idle flakiness 规避 = K30 r24 WFI 同族；本 boot power collapse 仅 43 次/
+  186ms] ②`tuned` 2.28 balanced 握 `/dev/cpu_dma_latency`[PM QoS 禁深 idle；停掉
+  即释放实证，已重启还原；与①独立] ③用户 AutoSuspend=0[保留]）；组件面全净（无
+  流氓中断/wake 锁/WiFi PS/BT 封）；**屏灭 = 真断电**（bl_power=4 + DSI disabled +
+  msm/dsi/gpu IRQ 零跳）；「灰屏」判词 = AC 档无 Display 节永不自动灭屏 + 电池档
+  5min 调暗阶段（用户拍板不改，手动关屏即可）；**坑册** = /proc/interrupts pmic_arb
+  行 NF-2 是 SPMI 外设 ID 非计数（曾误判 temp-alarm 风暴 1850/s 后撤案）。窗口账 =
+  11-26 17:45→01:15 共 7.7h 掉 43% 平均 1.05W（亮屏段 2.1-2.5W×~0.5h = 差额大头）。
+  **钉子不变**（#133+v91+mu-r131+device r85+hexagonrpcd r8；零构建零刷写）；
+  详录 = experiment-log（一百二十五）。
 
 - **一百二十四（11-26 无人值守轮，用户授权刷写）**：①**carrier DNS 上链定谳+修复** = NM
   resolved 插件对「无 search domain 且未赢得 ~ 默认路由竞选」的条目**整条丢弃**
@@ -137,17 +150,22 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
   ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
   远端结论必须 `git ls-remote` 实证。
-- **▶ 下会话排面（用户 2026-11-26 拍板：深睡线；装备已预武装毕[SUSPEND §TD9]）**：
-  **S2IDLE 深睡线（TECH-DEBT 8+9 拼车，rtcwake 长睡窗共享；用户在场 + 设备窗）**：
-  ①TD-9 = freeze 活锁 waker 识别（**netconsole 武装配方已备妥**[§TD9：wlan0 通道+
-  宿主 tools/netconsole-receive.sh] + /proc/interrupts 差分 + **suspend_stats 廉价
-  指纹器**[每轮前后抓 last_failed_step/errno，freeze+EBUSY=-16 与 stock 5.15 同机
-  指纹对拍 = 共享路径判据]）+ A1 挂 fd 一发判生死；②TD-8 = 睡中拔线硬复位
-  （rtcwake 长睡中拔线取样 3 发 + RTC 唤醒同态判别）。**交叉印证已入册**：stock
-  5.15 同机 s2idle 也挂（freeze+EBUSY）⇒ 同机共性非主线回归；对方 deep 逃生门
-  不可平移（主线无 deep）；未证线索两条顺手验（WLAN timeout/watchdog panic）。
-  纪律 = 只读轮间观测窗 + **插线不算离线待机验证**（对方互证）；不开 E 长跑。
-  同会话可并行宿主侧推送/Release（无 fastboot 之争）。
+- **▶ 下会话排面（用户 2026-11-27 拍板：S2IDLE 深睡线 + 禁睡锁解锁；一百二十五功耗定谳为入口）**：
+  **主件 = 边解锁边观测**：①解 `meizu-wfi.service` 深cpuidle 禁令（disable+mask 或
+  摘包；⚠freeze+EBUSY 挂死风险回归 = 本线主目标，须按 §TD9 配方武装后再动）；
+  ②tuned 处置（cpu_dma_latency 持有：停用/卸载/换 profile = 用户到场拍板）；③判据 =
+  解锁前后同态对拍，屏灭底噪 0.9-1.1W → 目标 0.5-0.6W 档。**TD-8/9 原配方不变**：
+  TD-9 = freeze 活锁 waker 识别（**netconsole 武装配方已备妥**[§TD9：wlan0 通道+
+  宿主 tools/netconsole-receive.sh] + /proc/interrupts 差分[⚠只加 $2..$9 每-CPU 列，
+  pmic_arb 行 NF-2 = SPMI ID 非计数] + **suspend_stats 廉价指纹器**[每轮前后抓
+  last_failed_step/errno，freeze+EBUSY=-16 与 stock 5.15 同机指纹对拍 = 共享路径
+  判据]）+ A1 挂 fd 一发判生死；TD-8 = 睡中拔线硬复位（rtcwake 长睡中拔线取样
+  3 发 + RTC 唤醒同态判别）。**交叉印证已入册**：stock 5.15 同机 s2idle 也挂
+  （freeze+EBUSY）⇒ 同机共性非主线回归；对方 deep 逃生门不可平移（主线无 deep）；
+  未证线索两条顺手验（WLAN timeout/watchdog panic）。AutoSuspend=0 保留（用户自选）；
+  AC 灭屏规则不补（用户 11-27 拍板：手动关屏即可）。
+  纪律 = 只读轮间观测窗 + **插线不算离线待机验证**（对方互证）；不开 E 长跑；
+  用户在场 + 设备窗；同会话可并行宿主侧推送/Release（无 fastboot 之争）。
   顺延排面：**②S3 5E9 前摄**（配方同 S2）｜**③camss→RPMH 死锁**（GUI 相机唯一
   拦路虎，平台雷需用户在场慎重设备窗 + sysrq-b 救砖预案）｜**④干净机首航**
   （Phase-2 最后判据，零设备风险，等二机/容器）。
