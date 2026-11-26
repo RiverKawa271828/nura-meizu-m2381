@@ -45,7 +45,7 @@ artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜
 docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119.md；蜂窝复燃卡+根治卡已 ✅ 归档 docs/archive/）
 ```
 
-## 现态（2026-11-27 一百二十六轮收官 = S2IDLE 深睡线解锁（屏灭 0.58W 档 + s2idle 7/7 全净）✅；新会话从这里接）
+## 现态（2026-11-27 一百二十六轮收官 = S2IDLE 深睡线解锁（屏灭 0.58W 档 + s2idle 7/7 全净）+ TD-10 已还（device r86 在机）✅；新会话从这里接）
 
 - **一百二十六（11-27 深睡线解锁轮，用户全程在场，零构建零刷写）✅**：**主件全胜 =
   屏灭底噪 0.9-1.1W → 0.58W 档（中位 0.555W / min 0.523W，排面目标 0.5-0.6W 命中，
@@ -70,6 +70,21 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   取证 runner 留机 = /var/tmp/deepsleep/{sleeprun.sh,powsamp.sh}。
   **钉子不变**（#133+v91+mu-r131+device r85+hexagonrpcd r8）；failed=1（modem-gnss
   在册）；详录 = experiment-log（一百二十六）。
+
+- **一百二十六·补段（同日 TD-10 去债 + s2idle 功耗判定）✅**：**TD-10 已还** =
+  device **r86**（pmaports 40d7b1e 补录 r85 五件 + 9cb9128 摘 meizu-wfi：APKBUILD
+  摘 source/preset-enable + pkgrel 86 + tmpfiles `meizu20-retire-wfi.conf` 清机上
+  mask 残链；verify 全绿；sha 737ce0ca 对拍后 apk 腿 WiFi 通道上机）→ **reboot 全验
+  绿**：wfi 三处消失（unit/mask/systemd not-found）+ **fresh boot 深态即开**（8 核
+  dis=0 use 即爬）+ wowlan 保持 + keeper/MM/connected + plasma active（r85 排序晚亮
+  预期内）+ failed=0 + 60s s2idle 复认干净（62s 墙钟 succ=1）。★顺手账 = r85 五件
+  曾漏 pmaports commit（树态=在机真值），本笔补登。**s2idle 睡态功耗首测 =
+  ≈0.45W**（±0.05；22min 拔电库仑计窗 39mAh×4.40V，5×240s 真睡 + 5×25s 醒隙解耦，
+  采样器空档=睡相对齐）→ **睡比醒省**（0.45 < 0.58W 清醒屏灭；锁死时代 1.15W 反
+  修订史）→ **AutoSuspend 建议 = 电池档开 600s / AC 档保持关**（过夜 10h 32%→25%；
+  用户自选档，未代操作）。坑册 = ssh 会话 systemd-run 需权（sudo -S 包装；devsh
+  root 会话免）+ resume 后宿主 usb0 偶不回 = 老雷复现（WiFi 通道全程顶用）。
+  设备现态 = **#133 + v91 + mu-r131 + device r86 + hexagonrpcd r8**。
 
 - **一百二十五（11-27 功耗核查轮，拔电夜取证，用户在场）**：**屏灭整夜 0.9-1.1W
   定谳 = 三重禁睡锁**（①`meizu-wfi.service` multi-user oneshot 禁三簇深 cpuidle
@@ -157,8 +172,10 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   charge_count mAh→µAh ×1000 变体门控 fork 24df27f74fc4；r131 = TD-11 根修轮
   留档[DTS IPA IMEM 恒等映射 cf99fc7ad737]）+ ESP **v91**（裸 `b80fb8b2` /
   gz `db0ac0c8`，在机，读回 ✓）+ **mu-r131-099b15d8**（boot_b，r132 无 DTS
-  变更免重编续用，读回 ✓）+ **设备包 r79**（r78 = 蜂窝 UI 开关轮 + r79 =
-  mm-dial BP 抓取修；r74 = WiFi 优先路由留档）；**fw r4**（已随 r131 发布）。
+  变更免重编续用，读回 ✓）+ **设备包 r86**（r86 = 11-27 深睡线摘 meizu-wfi.service
+  [TD-10 去债：解禁定谳屏灭 0.58W 档 + s2idle 7/7] + preset 摘 enable + tmpfiles
+  retire-wfi 清 mask 残链；r85 = 启动序修复五件 Before=plasma-mobile；r79 = mm-dial
+  BP 抓取修留档）；**fw r4**（已随 r131 发布）。
 - **发布面**：**Release r131 = Latest（2026-11-24 上线，8 件制，双 UI 首次）**——
   plasma-mobile `b18a6be1`（**默认 UI**，11-22 用户拍板「两个都传，以后默认 plasma」）
   / phosh `fcd6c662` + mu `f51b3b09` + ESP v90 gz `037c8dfb`（CI 同号异字节；在机
@@ -174,10 +191,9 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
   ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
   远端结论必须 `git ls-remote` 实证。
-- **▶ 下会话排面（2026-11-27 一百二十六收官后重排）**：
-  **①TD-10 去债 = device 包摘 meizu-wfi.service**（快赢，搭下一版 package 轮：
-  APKBUILD 摘件 + mask 死链清理[包卸载钩子或 tmpfiles] + bump 发布；恢复门已验证 =
-  unmask+reboot）；**②S3 5E9 前摄**（配方同 S2）｜**③camss→RPMH 死锁**（GUI 相机唯一
+- **▶ 下会话排面（2026-11-27 一百二十六+补段收官后重排）**：
+  ~~①TD-10 去债~~ **✅ 同日已还（device r86 在机，见补段）**；
+  **②S3 5E9 前摄**（配方同 S2）｜**③camss→RPMH 死锁**（GUI 相机唯一
   拦路虎，平台雷需用户在场慎重设备窗 + sysrq-b 救砖预案）｜**④干净机首航**
   （Phase-2 最后判据，零设备风险，等二机/容器）。
   深睡线残面（全部候补不挡路）：TD-8 睡中拔线雷取样（用户拍板延后）｜deep
