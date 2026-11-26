@@ -3,7 +3,7 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-27 **RPMH 收兵轮（相机线③ camss→RPMH 死锁防御落地）**：内核 r133（fork `79a4a228c09d` = rpmh 超时收兵——`rpmh_write_batch`/`rpmh_write`/`rpmh_read` 超时后主动回收卡死 TCS（镜像 tx_done 序列 + req[] 先置 NULL 防迟 IRQ UAF），把「一次 RPM 不应答 → 全平台 icc 饥荒[UFS 冻结/sysrq-b 救砖]」降级为「一次 10s 停顿 + 相机打开报错」；死锁链源码级钉死 = bcm-voter AMC 提交超时留 TCS 占用 + `rpmh_rsc_send_data` 无限等 + `qcom_icc_bcm_voter_commit` 持 icc_lock；案发取证 = 11-22 boot -15 journal 侧尽、栈面全靠源码重建）+ ESP **v92**（裸 `ee0fcd4b`/gz `1a643633`）双腿上机 **#134**（DTS 不变 ⇒ Mu 不重编 mu-r131 续用）→ 复现窗战果 = experiment-log 一百二十七 → ）
+## 工作态（2026-11-27 **RPMH 收兵轮 + CMA 512MB 轮 ✅（相机线③ + 用户所见 GUI 报错破案，同日双构建）**：内核 **r133**（fork `79a4a228c09d` = rpmh 超时收兵——`rpmh_write_batch`/`rpmh_write`/`rpmh_read` 超时后主动回收卡死 TCS（镜像 tx_done 序列 + req[] 先置 NULL 防迟 IRQ UAF），把「一次 RPM 不应答 → 全平台 icc 饥荒[UFS 冻结/sysrq-b 救砖]」降级为「一次 10s 停顿 + 相机打开报错」；死锁链源码级钉死 = bcm-voter AMC 提交超时留 TCS 占用 + `rpmh_rsc_send_data` 无限等 + `qcom_icc_bcm_voter_commit` 持 icc_lock；案发取证 = 11-22 boot -15 journal 尾段尽、栈面全靠源码重建）→ #134 上机 + **r134**（`CONFIG_CMA_SIZE_MBYTES 32→512` = plasma-camera「configuration not valid」真凶修复——libcamera 0.8.0 堆选择 linux,cma(无)→reserved(在→独占零回退)→system(永不试)，reserved = CMA 池仅 32MB < SoftwareIsp 全分辨率输出缓冲 61.7MB；系统堆实测 61.7MB 健康）+ ESP **v93**（裸 `31d5f3fa`/gz `1d4bddd3`）双腿上机 **#135**（DTS 不变 ⇒ Mu 不重编 mu-r131 续用）→ GUI 复测战果 = experiment-log 一百二十七 → ）
 
 ## 工作态（2026-11-25 **电池遥修 + 蜂窝 UI/上游回归轮 ✅ + P3 蜂窝标准化加演 ✅（同日晚，无人值守→用户在场）**：内核 r132（fork `24df27f74fc4` SM8550 charge_count mAh→µAh ×1000 变体门控；**DTS 不变 ⇒ Mu 不重编**）+ ESP **v91**（裸 `b80fb8b2`/gz `db0ac0c8`，读回 ✓）双腿上机 **#133 实测**：`charge_counter=3,994,000 µAh`/`energy_now=17.58Wh` 修复实证 + upower 历史复活；充电阈值写读仍 0 = **firmware 域独立案**（非本连锁，TD-13 残面改判候补）。设备包 **r78→r81**：r78 = qrtr0 摘出 NM unmanaged（plasma-nm CellularModem 需 NM ModemDevice）+ cbnet/cmnet profile 入包 ⇒ UI 开关活/APN 可配；**P2 上游回归全通**（NM 拨号全链：MM bearer→qmapmux0.0 IP→表 1430 路由→ping/HTTP 实弹，"NM 不认 qmapmux"旧判词翻案 = r75 conf 才是 blocker）；**★单 call 域定谳**：mm-dial 占线时 NM 激活 = `call-already-present` 且带走旧 bearer（双死）⇒ 互斥；r79 = mm-dial BP 抓取修；**P3（用户拍板「跟着上游来」）= r80+r81：数据面交还 NM 标准形态**——profile autoconnect=true + mm-dial boot 退役[preset flip + retire-mmdial tmpfiles] + cell-switch 尾改 NM 跟卡 + **cell-mm-rescue oneshot**（补 mm-dial 内嵌 boot 救援的隐性依赖：MM×qcom-soc boot 竞速常态落 failed/power-off）；实验定谳：WiFi 掉线 NM 路由晋升主表 = failover 原生可用，DNS 断粮走 systemd 上游 FallbackDNS 兜底实证；reboot 全验：rescue 自启→NM 自连→ping -I 3/3 @39ms。移动卡 slot1 在网纯上游形态交回。叙事 = 执行卡 battery-cellular-ui-card-20261125；Release r131（Latest）不变 → ）
 
@@ -11,12 +11,12 @@
 
 | 件 | 版本 | sha8 | 刷写目标 |
 |---|---|---|---|
-| 内核 apk | 7.3.0_**rc6**-r**133**（11-27：RPMH 收兵轮，fork `79a4a228c09d` 超时后回收卡死 TCS = 相机上电雷防御落地；r132 = 电池遥修留档[24df27f74fc4]；r131 = TD-11 根修轮留档[DTS +IPA IMEM 恒等映射 cf99fc7ad737]；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
-| ESP | **v92**（r133 内核腿，11-27；裸 `ee0fcd4b` / gz `1a643633`；v91 = r132 件留档[裸 b80fb8b2]；⚠v86 = 半写 apk 竞态废件已 void） | ee0fcd4b（裸） | recovery_a |
-| Mu 镜像 | **mu-r131-099b15d8**（在机，FdtBlob 与 r131 apk 同源 35652d24；r132/r133 无 DTS 变更 ⇒ 续用免重编；**读回 ✓ 按镜像字节截取对拍**） | 099b15d8 | boot_b |
+| 内核 apk | 7.3.0_**rc6**-r**134**（11-27：CMA 512MB 轮[CONFIG_CMA_SIZE_MBYTES 32→512，GUI 相机缓冲真凶修复]；r133 = RPMH 收兵轮留档[fork `79a4a228c09d` 超时回收卡死 TCS]；r132 = 电池遥修留档[24df27f74fc4]；r131 = TD-11 根修轮留档[DTS +IPA IMEM 恒等映射 cf99fc7ad737]；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
+| ESP | **v93**（r134 内核腿，11-27；裸 `31d5f3fa` / gz `1d4bddd3`；v92 = r133 件留档[裸 ee0fcd4b]；⚠v86 = 半写 apk 竞态废件已 void） | 31d5f3fa（裸） | recovery_a |
+| Mu 镜像 | **mu-r131-099b15d8**（在机，FdtBlob 与 r131 apk 同源 35652d24；r132~r134 无 DTS 变更 ⇒ 续用免重编；**读回 ✓ 按镜像字节截取对拍**） | 099b15d8 | boot_b |
 | 设备包 / 固件包 | **r86**（11-27 一百二十六深睡线 TD-10 去债：摘 meizu-wfi.service[解禁定谳：禁三簇深 cpuidle = 屏灭功耗真凶 0.9-1.1W → 解禁 0.58W 档中位 0.555W + s2idle 7/7 全净] + preset 摘 enable + tmpfiles retire-wfi 清旧装机 /etc mask 残链；r85 = 11-26 启动序修复——touch/amps/sndcard-bind/audio+sensors-barrier 加 `Before=plasma-mobile.service`[+r84 Before=graphical]，桌面等输入基座全链就绪才亮，实机验序 barrier→touch→amps→sndcard→plasma；r84 = Before=graphical 单边不生效留档；r83 = profiles `dns-search=cellular` carrier DNS 上链[实弹 211.139.5.27/28，r82 FallbackDNS 改冗余保险] + dsp-mount 有界重试 + tempjson conf 根-路径版；r82 = FallbackDNS 折中留档；r81 = P3 蜂窝标准化留档；r79/r78/r77 更早留档）/ **r4**（11-19，已随 r131 发布） | 在机 apk live | 机上 apk add |
 | rootfs | Release **r131 双 UI**（2026-11-24 上线 = plasma-mobile `b18a6be1` / phosh `fcd6c662`；11-22 用户拍板「两个都传，以后默认 plasma」；r91 = 上一代 phosh 单 UI） | b18a6be1 / fcd6c662 | userdata |
-| 上机期望 | `uname -v` → **#134**（r133）+ 模块 r133 + `charge_counter` 数量级 = µAh（≈capacity%×charge_full，×1000 修复实证）+ IPA reserved_regions 含 `146a8000 direct`（`cat /sys/bus/platform/devices/3f40000.ipa/iommu_group/reserved_regions`） | — | — |
+| 上机期望 | `uname -v` → **#135**（r134）+ 模块 r134 + CMA 池 512MB（dmesg `cma: Reserved 512 MiB`）+ `charge_counter` 数量级 = µAh + IPA reserved_regions 含 `146a8000 direct` | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。

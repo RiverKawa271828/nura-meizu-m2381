@@ -45,12 +45,12 @@ PKG_FIRMWARE="firmware-meizu-meizu20"
 APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推导（CI 重定向 /mnt 时自动跟随）
 
 # ---- 现役版本（随每个发布轮更新）----
-REL_LINUX_PKGREL="133"     # r133 = RPMH 收兵轮（11-27：fork 79a4a228c09d = rpmh 超时后主动收兵卡死 TCS——相机上电撞 RPM 不应答时 -110 只值一次 10s 停顿不再全平台 icc 饥荒；r132 = 电池遥测单位修轮留档[24df27f74fc4]）
+REL_LINUX_PKGREL="134"     # r134 = CMA 512MB 轮（11-27：CONFIG_CMA_SIZE_MBYTES 32→512——libcamera 0.8.0 堆选择独占 reserved=CMA 池零回退，SoftwareIsp 全分辨率输出缓冲 61.7MB > 32MB 池 = plasma-camera「configuration not valid」真凶；512MB 容 4 预览缓冲 259MB 留余量）；r133 = RPMH 收兵轮留档（fork 79a4a228c09d rpmh 超时收兵——相机上电撞 RPM 不应答时 -110 一次 10s 停顿不再全平台 icc 饥荒）
 REL_DEVICE_PKGREL="86"     # r86 = TD-10 去债（11-27 一百二十六深睡线）：摘 meizu-wfi.service（解禁定谳：禁三簇深 cpuidle = 屏灭功耗真凶 0.9-1.1W → 解禁 0.58W 档中位 0.555W + s2idle 7/7 全净）+ preset 摘 enable + tmpfiles meizu20-retire-wfi.conf 清旧装机 /etc mask 残链；r85 = 启动序修复（11-26 用户定谳「触屏/音频/传感器应早于桌面」）：touch/amps/sndcard-bind/audio + sensors-barrier 五件加 `Before=plasma-mobile.service`（+r84 的 Before=graphical），桌面现在等输入基座全链就绪才亮（实机验序 barrier→touch→amps→sndcard→plasma，failed=0）；r84 = 四件 Before=graphical（对兄弟单位无 pairwise 边不生效的实证留档）；r83 = carrier DNS 上链（dns-search profiles）+ dsp-mount 有界重试 + tempjson conf；r82 = FallbackDNS 折中留档（cbnet/cmnet profiles + dns-search=cellular = NM resolved 插件早退门的配置级钥匙，实弹验证 211.139.5.27/28 上链[一百二十三 r82 FallbackDNS 折中改冗余保险]）+ meizu-dsp-mount.sh 有界重试（plasma 轮早期时序雷收账，禁 systemd Restart= 无限重试 = r66 死锁形态）+ meizu20-sensors-tempjson.conf 根-路径版（配 hexagonrpcd 写通道用；该件已判负回滚 r8，conf 无害留役）；r82 = resolved FallbackDNS 折中留档；r81 = P3 蜂窝标准化轮留档；r79 = mm-dial BP 抓取修；r78 = 蜂窝 UI 开关轮
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；已随 r131 发布）
-REL_MU_IMG="$NURA_ROOT/artifacts/mu-r131-099b15d8.img"     # mu-r131 = TD-11 根修件（FdtBlob 自 r131 apk 同源 35652d24；r132/r133 无 DTS 变更 ⇒ Mu 不重编，FdtBlob 同源续用）
-REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v92.img.gz"  # v92 = r133 ESP（裸 ee0fcd4b / gz 1a643633）；v91 = r132 件留档（裸 b80fb8b2）；⚠构建坑：build-esp 必须等 build-kernel 单元真完 + 定版三写在 verify 前
-REL_KERNEL_VER="#134"      # 期望值（#N = pkgrel+1；上机后 uname -v 实测回填）
+REL_MU_IMG="$NURA_ROOT/artifacts/mu-r131-099b15d8.img"     # mu-r131 = TD-11 根修件（FdtBlob 自 r131 apk 同源 35652d24；r132~r134 无 DTS 变更 ⇒ Mu 不重编，FdtBlob 同源续用）
+REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v93.img.gz"  # v93 = r134 ESP（裸 31d5f3fa / gz 1d4bddd3）；v92 = r133 件留档（裸 ee0fcd4b）；⚠构建坑：build-esp 必须等 build-kernel 单元真完 + 定版三写在 verify 前
+REL_KERNEL_VER="#135"      # 期望值（#N = pkgrel+1；上机后 uname -v 实测回填）
 
 # ---- 回滚锚 ----
 # 已删（2026-10-13 用户拍板：T 时代旧版 bug 多，不再回滚）；rollback.sh 一并删除。
