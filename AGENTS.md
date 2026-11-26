@@ -222,7 +222,12 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   （xwayland）+ 深睡解禁 0.58W + 蜂窝全自动；发灰 = 质量项不挡可用性叙事，A 后切
   或直接切由用户定。⚠三仓推送窗未清（fork 2 + pmaports 5 + nura 8 笔照律待推）。
   候补池照旧：GL upload 回退（效率小损）｜视频编码面（venus encode 独立线）｜
-  S3 5E9 前摄｜干净机首航（Phase-2 判据）。
+  干净机首航（Phase-2 判据）。
+  **相机矩阵排期（用户 11-27 问「其他摄像头何时做」）**：**GN5 主摄 = A/B/C 之后
+  的下一个主件轮**（50MP 日用价值最高；bin 已全解 + stock FDT 真值在档 + 3P9 配方
+  包现成[驱动模板/CFA 红盒法/cam-shot/libcamera 集成]；OIS/AF 马达先跳过定焦拍摄）；
+  **GD2 = 不可排期**（研究墙 = FW 过渡态编排，复燃条件 = 文档级资料/新外部参照，
+  勿主动排）；**5E9 = GN5 后低优捡漏**。
   深睡线残面（全部候补不挡路）：TD-8 睡中拔线雷取样（用户拍板延后）｜deep
   （PSCI SYSTEM_SUSPEND）档未测（§8 旧判进不去 AOSS，另案）｜s2idle 日用长稳观察
   （挂 AutoSuspend 与否 = 用户自选；解禁态已 7/7 全净）。
