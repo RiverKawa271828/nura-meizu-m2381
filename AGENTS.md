@@ -86,6 +86,9 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   root 会话免）+ USB 通道全程不可用 = 用户窗口超时未插线（用户勘误，非老 usb0
   雷复现，历史雷未涉仅备查）。
   设备现态 = **#133 + v91 + mu-r131 + device r86 + hexagonrpcd r8**。
+  **推送窗 ✅ 清零（同日用户令）**：nura master 8 笔（125 轮 3 + 本日 5）+ pmaports
+  phoenix 13 笔（含 r85 补录/r86）全推，ls-remote 双实证齐（31133ba / 9cb9128）；
+  fork 零改动无涉；pmos 私有无远端照旧。
 
 - **一百二十五（11-27 功耗核查轮，拔电夜取证，用户在场）**：**屏灭整夜 0.9-1.1W
   定谳 = 三重禁睡锁**（①`meizu-wfi.service` multi-user oneshot 禁三簇深 cpuidle
