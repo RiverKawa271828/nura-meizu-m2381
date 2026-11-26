@@ -209,9 +209,14 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 预览出画；眼判回执后「相机 GUI 可用」叙事可进下个 Release）**；
   **②S3 5E9 前摄**（配方同 S2，价值有限不急）｜**④干净机首航**
   （Phase-2 最后判据，零设备风险，等二机/容器）。
-  相机残面（全部候补不挡路）：GUI 预览眼判回执（画面/色彩/方向；色彩偏 = GBRG
-  核对面）｜GL import input DMABuf upload 回退（效率小损）｜GD2 前摄链残墙
-  （MIPI 零包，候补池在册）。
+  相机残面（用户眼判回执在案 = 出画验收过线，五瑕疵定案排下会话相机残面轮）：
+  ①预览旋转 90°（修 = DT `rotation=<90>`[Mu 腿] + App orientation 认不认待验）
+  ②复古/糊/暗淡 = **CFA 错配实锤**（驱动 SGBRG10 vs 物理 GBRG[112 轮红盒真值]，
+  修 = s5k3p9sx.c:79 一行改 GBRG10 → r137；暗淡次轴 = 无调参 yaml AE/AWB 默认）
+  ③拍照不落盘（全盘无 jpg = save 链静默失败，先杀 root 实例干净复测）
+  ④桌面图标打不开（疑 root 实例占相机/会话，清场复测）｜⑤视频编码面 =
+  待办池独立线（venus encode 未 bring-up）｜GL import upload 回退（小损）。
+  下会话排面语：①②③④ 捆一个相机残面轮（r137 + Mu 腿一次刷写）。
   深睡线残面（全部候补不挡路）：TD-8 睡中拔线雷取样（用户拍板延后）｜deep
   （PSCI SYSTEM_SUSPEND）档未测（§8 旧判进不去 AOSS，另案）｜s2idle 日用长稳观察
   （挂 AutoSuspend 与否 = 用户自选；解禁态已 7/7 全净）。
