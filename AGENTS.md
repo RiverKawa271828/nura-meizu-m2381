@@ -45,8 +45,9 @@ artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜
 docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119.md；蜂窝复燃卡+根治卡已 ✅ 归档 docs/archive/）
 ```
 
-## 现态（2026-11-27 一百二十六轮收官 = S2IDLE 深睡线解锁（屏灭 0.58W 档 + s2idle 7/7 全净）+ TD-10 已还（device r86 在机）✅；新会话从这里接）
+## 现态（2026-11-27 一百二十七轮收官 = 相机线③ 主件全胜（RPMH 死锁收兵 r133 防御 + GUI 相机缓冲双修 → plasma-camera 预览出画）；在机 #137 + v94 + r136 模块 + libcamera r2 ✅；新会话从这里接）
 
+- **一百二十七（11-27 相机轮：③camss→RPMH 死锁 + 用户所见 GUI 报错，用户在场，三构建两 reboot）✅**：**主件全胜 = RPMH 死锁防御落地 + GUI 相机缓冲双修 → plasma-camera 预览出画**（SoftwareIsp debayer 8445µs/frame 30 帧实证 + RPMH 全窗零雷）。①**RPMH 全案闭合**（死锁链源码级：bcm-voter AMC 提交超时留 TCS 永久占用 + `rpmh_rsc_send_data` 无限等 + icc_lock 饥荒；案发 = 11-22 boot -15 journal 尾段尽失[/run 未刷盘]，栈面源码重建五要素全对上）→ fork `79a4a228c09d` 收兵补丁（超时后按地址回收卡死 TCS，req[] 先 NULL 防迟 IRQ UAF）→ r133 上机 #134。②**GUI 报错「configuration not valid」真凶** = libcamera 0.8.0 堆序首开独占零回退（reserved = CMA 32MB 池 < SoftwareIp 输出缓冲 61.7MB；系统堆实测健康）；CMA 512 尝试轮（r134/v93 → #135）实锤**平台早期分配窗放不下**（`cma: Failed to reserve 512 MiB`，32MB = 0xf0800000 缝隙天然上限，大 CMA 只能走 DT）→ 回滚 32（r136/v94）+ **pmaports temp/libcamera 刷上游 99990.8.0 + 0003 堆序补丁**（system 队首，pkgrel r2）→ #137 预览出画。**坑册五连**（--pipe 五五开秒退 2 / pkill 自咬+apk.static 孤儿 ETXTBSY / pmbootstrap 默认 native 要 --arch aarch64 / journal --grep 不可靠 / apk add 主包 purge 子包须补装 libcamera-ipa）。**眼判待回执**（画面/色彩/方向）；候补 = GL import upload 回退（效率小损）。详录 = experiment-log（一百二十七）。
 - **一百二十六（11-27 深睡线解锁轮，用户全程在场，零构建零刷写）✅**：**主件全胜 =
   屏灭底噪 0.9-1.1W → 0.58W 档（中位 0.555W / min 0.523W，排面目标 0.5-0.6W 命中，
   ≈砍半）+ s2idle 7/7 全净**。①**E1 解禁**：meizu-wfi 三簇深态 sysfs 可逆翻转
@@ -178,12 +179,14 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   待命；EFS 快照**四份全等**（b85cad2f/c40223e6；第四份 = efs-snapshot-20261119
   -sms-round）；NAS 5gnr-only 偏好非持久（reboot 回 auto，网络侧自驻 5gnr）。
   iOS 线并行走用户——**iOS 工作区/文档零接触，传话 = 用户转告**。
-- **版本钉**：apk **r132**（在机 **#133**，11-25 电池遥修轮上机；SM8550
-  charge_count mAh→µAh ×1000 变体门控 fork 24df27f74fc4；r131 = TD-11 根修轮
-  留档[DTS IPA IMEM 恒等映射 cf99fc7ad737]）+ ESP **v91**（裸 `b80fb8b2` /
-  gz `db0ac0c8`，在机，读回 ✓）+ **mu-r131-099b15d8**（boot_b，r132 无 DTS
-  变更免重编续用，读回 ✓）+ **设备包 r86**（r86 = 11-27 深睡线摘 meizu-wfi.service
-  [TD-10 去债：解禁定谳屏灭 0.58W 档 + s2idle 7/7] + preset 摘 enable + tmpfiles
+- **版本钉**：apk **r136**（在机 **#137**，11-27 相机轮：CMA 回滚 32 基线恢复；
+  r134 = CMA 512 尝试轮留档[平台窗上限实证]；r133 = RPMH 收兵轮留档[fork
+  79a4a228c09d]；r132 = 电池遥修留档[24df27f74fc4]；r131 = TD-11 根修轮留档
+  [DTS IPA IMEM 恒等映射 cf99fc7ad737]）+ ESP **v94**（裸 `6c1e000e` /
+  gz `0700ce47`，在机，读回 ✓）+ **mu-r131-099b15d8**（boot_b，r132~r136 无 DTS
+  变更免重编续用，读回 ✓）+ **libcamera 99990.8.0-r2**（pmaports temp/libcamera
+  刷上游 + 0003 堆序补丁 system 队首；ipa-r2 已补装）+ **设备包 r86**（r86 =
+  11-27 深睡线摘 meizu-wfi.service [TD-10 去债] + preset 摘 enable + tmpfiles
   retire-wfi 清 mask 残链；r85 = 启动序修复五件 Before=plasma-mobile；r79 = mm-dial
   BP 抓取修留档）；**fw r4**（已随 r131 发布）。
 - **发布面**：**Release r131 = Latest（2026-11-24 上线，8 件制，双 UI 首次）**——
@@ -201,17 +204,21 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
   ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
   远端结论必须 `git ls-remote` 实证。
-- **▶ 下会话排面（2026-11-27 一百二十六+补段收官后重排）**：
-  ~~①TD-10 去债~~ **✅ 同日已还（device r86 在机，见补段）**；
-  **②S3 5E9 前摄**（配方同 S2）｜**③camss→RPMH 死锁**（GUI 相机唯一
-  拦路虎，平台雷需用户在场慎重设备窗 + sysrq-b 救砖预案）｜**④干净机首航**
+- **▶ 下会话排面（2026-11-27 一百二十七收官后重排）**：
+  ~~①TD-10 去债~~ ✅ ｜ ~~③camss→RPMH 死锁~~ **✅ 同日已还（r133 收兵 + GUI 缓冲双修
+  → 预览出画；眼判回执后「相机 GUI 可用」叙事可进下个 Release）**；
+  **②S3 5E9 前摄**（配方同 S2，价值有限不急）｜**④干净机首航**
   （Phase-2 最后判据，零设备风险，等二机/容器）。
+  相机残面（全部候补不挡路）：GUI 预览眼判回执（画面/色彩/方向；色彩偏 = GBRG
+  核对面）｜GL import input DMABuf upload 回退（效率小损）｜GD2 前摄链残墙
+  （MIPI 零包，候补池在册）。
   深睡线残面（全部候补不挡路）：TD-8 睡中拔线雷取样（用户拍板延后）｜deep
   （PSCI SYSTEM_SUSPEND）档未测（§8 旧判进不去 AOSS，另案）｜s2idle 日用长稳观察
   （挂 AutoSuspend 与否 = 用户自选；解禁态已 7/7 全净）。
   纪律存档：sleep 探针 = 设备侧 systemd-run 脱会话 + 睡窗宿主零流量 + 真实时长只认
   墙钟（dmesg 跨睡停走）；netconsole 勿再投（双通道结构性废，§TD9 勘误已入册）；
-  插线不算离线待机验证；不开 E 长跑（挂过夜循环长跑须用户明示解禁）。
+  插线不算离线待机验证；不开 E 长跑（挂过夜循环长跑须用户明示解禁）；
+  journalctl --grep 全库扫描勿用（先 --list-boots 定 boot 再整取）。
 - **上轮排面存档（2026-11-25 更新：①已收官）**：
   **~~①电池遥测单位 bug 修（r132）~~ ✅ 11-25 收官**（#133 上机修复实证 +
   upower 复活；阈值写读仍 0 = firmware 域独立案改判候补；功耗首测取消
