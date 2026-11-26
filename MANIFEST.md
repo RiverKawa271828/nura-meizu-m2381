@@ -16,7 +16,7 @@
 | 内核 apk | 7.3.0_**rc6**-r**138**（11-27 相机残面轮·二段：DT rotation 270 定谳[df96b0421841]；r137 = 一段留档[s5k3p9sx orientation/rotation 控制 04d52720bf7f]；r136 = CMA 回滚轮留档；r133 = RPMH 收兵轮留档[fork `79a4a228c09d`]；**r117 = 空 bump 死包勿用**） | 在机 apk（模块文件 live） | 机上 apk add |
 | ESP | **v96**（r138 内核腿，11-27；裸 `20be6b58` / gz 14402949B；v95 = r137 件留档；v94 = r136 件留档） | 20be6b58（裸） | recovery_a |
 | Mu 镜像 | **mu-r138-3f909a93**（在机，FdtBlob 与 r138 apk 同源 dbbbcfc6；**读回 ✓ 限长截取对拍[boot_b 分区 96MB ≫ 镜像 1.1MB，整分区读回必掺尾垃圾]**） | 3f909a93 | boot_b |
-| 设备包 / 固件包 | **r87**（11-27 相机用户会话轮：`73-meizu20-dma-heap.rules` = dma_heap video 0660[上游 systemd 262 无规则 = 用户会话 libcamera 全灭真凶④破案] + meizu-touch-load.sh retrigger 地址不可知化[glob 全 *-002d + exit 0；cci 子总线编号跨 boot 漂移实证]；r86 = TD-10 去债留档；r85 = 启动序修复留档；r83 = carrier DNS 上链留档）/ **r4**（11-19，已随 r131 发布） | 在机 apk live | 机上 apk add |
+| 设备包 / 固件包 | **r88**（11-27：depends **+xwayland**[图标启动挂死根修——pmOS plasma-minimal 不带该包，kwin 握监听 fd + 会话发 DISPLAY=:0 无人 accept = 任何碰 DISPLAY 的应用 connect 永久阻塞]；r87 = dma_heap udev 规则[video 0660，用户会话 libcamera 全灭真凶④破案] + touch retrigger glob 化[cci i2c 编号跨 boot 漂移]；r86 = TD-10 去债留档；r85 = 启动序修复留档；r83 = carrier DNS 上链留档）/ **r4**（11-19，已随 r131 发布） | 在机 apk live | 机上 apk add |
 | libcamera | **99990.8.0-r2**（11-27：pmaports temp/libcamera 刷新上游 0.8.0 + 0003 system-heap-first 补丁 = GUI 相机缓冲真凶修复） | 在机 apk live | 机上 apk add |
 | rootfs | Release **r131 双 UI**（2026-11-24 上线 = plasma-mobile `b18a6be1` / phosh `fcd6c662`；11-22 用户拍板「两个都传，以后默认 plasma」；r91 = 上一代 phosh 单 UI） | b18a6be1 / fcd6c662 | userdata |
 | 上机期望 | `uname -v` → **#139**（r138）+ 模块 r138 + CMA 池 32MB + `apk list --installed \| grep libcamera` = 99990.8.0-r2 + `/dev/dma_heap/*` = root:video 0660 + `systemctl --failed` = 0 + IPA reserved_regions 含 `146a8000 direct` | — | — |
