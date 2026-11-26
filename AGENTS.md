@@ -45,8 +45,9 @@ artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜
 docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119.md；蜂窝复燃卡+根治卡已 ✅ 归档 docs/archive/）
 ```
 
-## 现态（2026-11-27 一百二十七轮收官 = 相机线③ 主件全胜（RPMH 死锁收兵 r133 防御 + GUI 相机缓冲双修 → plasma-camera 预览出画）；在机 #137 + v94 + r136 模块 + libcamera r2 ✅；新会话从这里接）
+## 现态（2026-11-27 一百二十八轮收官 = 相机残面轮 ✅（④dma_heap 权限破案[用户会话相机全灭真凶] + ①旋转 270 定谳[plasma-camera 应用实证] + touch 假 failed 消音 → failed=0 全清；②「CFA 一行修」判词作废 = 命名撞车零码改；koko+KDE 移动端应用顺手入机）；在机 **#139 + v96 + mu-r138-3f909a93 + r138 模块 + device r87 修订版 + libcamera r2** ✅ 读回双对；新会话从这里接）
 
+- **一百二十八（11-27 相机残面轮：④①②③五瑕疵清单大清算，用户全程在场，双轮刷写两 reboot）✅**：**④「图标打不开/转圈自杀」破案 = `/dev/dma_heap/*` 0600 root:root 且 systemd 262 上游零 udev 规则** → 用户会话（uid 10000）libcamera「Could not open any dma-buf provider」→ SoftwareIsp 禁 → 相机起不来（**127「预览出画」全是 devsh root 拉起 = 权限失败被系统性掩盖一整天；GUI 相机验证必须真实用户身份**）→ 修 = device **r87** `73-meizu20-dma-heap.rules`（video 0660 镜像 video4linux 惯例；即时落机免 reboot 生效）→ 用户侧预览出画 30 帧实证。**①旋转全案** = s5k3p9sx 暴露 V4L2_CID_CAMERA_ORIENTATION/_SENSOR_ROTATION 只读控制（libcamera 0.8.0 CameraSensorLegacy 只认控制 default、无 fwnode 回退 = 源码级钉死；fork `04d52720bf7f`）+ DT rotation <90>（r137/v95/#138）→ 眼判「侧转修好但上下颠倒」→ **270 定谳**（fork `df96b0421841`，r138/v96/mu-r138）→ libcamera Rotation=270 + plasma-camera「Camera offset orientation: 270」应用实证。**②「CFA 一行修 GBRG10」127 判词作废 = 命名撞车误判**（4 字符 GBRG ≡ V4L2 SGBRG10，驱动标签本来就对；主线无 GBRG10 常量，硬改反引入真对调；复古/暗淡主嫌 = 无调参 yaml AE/AWB 默认）。**touch 假 failed 消音** = cci 子总线 i2c 编号跨 boot 漂移实证（同日两 boot 0-002d/2-002d 各一；deferred 在 vdda 注册后自愈 = 主机制）→ r87 修订 = glob 全 `*-002d` 补枪 + 段尾 exit 0 → **failed=0 全清**（modem-gnss 本 boot 亦过）。**拍照查看链** = 设备零图片查看器 + portal 选择器桌面尺寸（Plasma 上游 UX 缺陷非移植债，屏幕 1080×2400@120 健康）→ 装 **koko** 设 mime 默认 + gwenview 备胎 + 用户选装 kalk/krecorder/qrca/calindori/alligator（kongress 判无用卸）。**坑册四连**：boot_b readback 整分区≠镜像 sha（分区 96MB≫镜像 1.1MB，限长 count 对拍）/ devpush nc 监听竞态（devsh 会话关 → nc 吃 stdin EOF 早死，60MB 进死套接字；**确定性形态 = FIFO 持握手** `mkfifo+sleep 300>fifo & exec nc -l < fifo`）/ pmbootstrap 单实例互撞（后台 build 与前台 checksum 并发 = 构建单元静默死）/ watcher newermt 阈值勿写未来时刻。残面余件 = 色彩 yaml 候补 + 拍照落盘复测（眼判回执待）+ GL upload 回退小损 + 视频编码面独立线。详录 = experiment-log（一百二十八）。
 - **一百二十七（11-27 相机轮：③camss→RPMH 死锁 + 用户所见 GUI 报错，用户在场，三构建两 reboot）✅**：**主件全胜 = RPMH 死锁防御落地 + GUI 相机缓冲双修 → plasma-camera 预览出画**（SoftwareIsp debayer 8445µs/frame 30 帧实证 + RPMH 全窗零雷）。①**RPMH 全案闭合**（死锁链源码级：bcm-voter AMC 提交超时留 TCS 永久占用 + `rpmh_rsc_send_data` 无限等 + icc_lock 饥荒；案发 = 11-22 boot -15 journal 尾段尽失[/run 未刷盘]，栈面源码重建五要素全对上）→ fork `79a4a228c09d` 收兵补丁（超时后按地址回收卡死 TCS，req[] 先 NULL 防迟 IRQ UAF）→ r133 上机 #134。②**GUI 报错「configuration not valid」真凶** = libcamera 0.8.0 堆序首开独占零回退（reserved = CMA 32MB 池 < SoftwareIp 输出缓冲 61.7MB；系统堆实测健康）；CMA 512 尝试轮（r134/v93 → #135）实锤**平台早期分配窗放不下**（`cma: Failed to reserve 512 MiB`，32MB = 0xf0800000 缝隙天然上限，大 CMA 只能走 DT）→ 回滚 32（r136/v94）+ **pmaports temp/libcamera 刷上游 99990.8.0 + 0003 堆序补丁**（system 队首，pkgrel r2）→ #137 预览出画。**坑册五连**（--pipe 五五开秒退 2 / pkill 自咬+apk.static 孤儿 ETXTBSY / pmbootstrap 默认 native 要 --arch aarch64 / journal --grep 不可靠 / apk add 主包 purge 子包须补装 libcamera-ipa）。**眼判待回执**（画面/色彩/方向）；候补 = GL import upload 回退（效率小损）。详录 = experiment-log（一百二十七）。
 - **一百二十六（11-27 深睡线解锁轮，用户全程在场，零构建零刷写）✅**：**主件全胜 =
   屏灭底噪 0.9-1.1W → 0.58W 档（中位 0.555W / min 0.523W，排面目标 0.5-0.6W 命中，
@@ -179,15 +180,17 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   待命；EFS 快照**四份全等**（b85cad2f/c40223e6；第四份 = efs-snapshot-20261119
   -sms-round）；NAS 5gnr-only 偏好非持久（reboot 回 auto，网络侧自驻 5gnr）。
   iOS 线并行走用户——**iOS 工作区/文档零接触，传话 = 用户转告**。
-- **版本钉**：apk **r136**（在机 **#137**，11-27 相机轮：CMA 回滚 32 基线恢复；
-  r134 = CMA 512 尝试轮留档[平台窗上限实证]；r133 = RPMH 收兵轮留档[fork
+- **版本钉**：apk **r138**（在机 **#139**，11-27 相机残面轮二段：DT rotation 270
+  定谳[df96b0421841]；r137 = orientation/rotation V4L2 控制一段轮留档
+  [04d52720bf7f]；r136 = CMA 回滚 32 基线恢复留档；r133 = RPMH 收兵轮留档[fork
   79a4a228c09d]；r132 = 电池遥修留档[24df27f74fc4]；r131 = TD-11 根修轮留档
-  [DTS IPA IMEM 恒等映射 cf99fc7ad737]）+ ESP **v94**（裸 `6c1e000e` /
-  gz `0700ce47`，在机，读回 ✓）+ **mu-r131-099b15d8**（boot_b，r132~r136 无 DTS
-  变更免重编续用，读回 ✓）+ **libcamera 99990.8.0-r2**（pmaports temp/libcamera
-  刷上游 + 0003 堆序补丁 system 队首；ipa-r2 已补装）+ **设备包 r86**（r86 =
-  11-27 深睡线摘 meizu-wfi.service [TD-10 去债] + preset 摘 enable + tmpfiles
-  retire-wfi 清 mask 残链；r85 = 启动序修复五件 Before=plasma-mobile；r79 = mm-dial
+  [DTS IPA IMEM 恒等映射 cf99fc7ad737]）+ ESP **v96**（裸 `20be6b58` /
+  gz 14402949B，在机，读回 ✓ 限长截取）+ **mu-r138-3f909a93**（boot_b，
+  FdtBlob 与 r138 apk 同源 dbbbcfc6，读回 ✓ 限长截取；⚠boot_b readback 整分区
+  ≠ 镜像 sha）+ **libcamera 99990.8.0-r2**（pmaports temp/libcamera
+  刷上游 + 0003 堆序补丁 system 队首；ipa-r2 已补装）+ **设备包 r87 修订版**（r87 =
+  11-27 dma_heap udev 规则 video 0660[用户会话相机全灭真凶] + touch retrigger
+  glob 化+exit 0[cci i2c 编号跨 boot 漂移]；r86 = TD-10 去债留档；r85 = 启动序修复五件 Before=plasma-mobile；r79 = mm-dial
   BP 抓取修留档）；**fw r4**（已随 r131 发布）。
 - **发布面**：**Release r131 = Latest（2026-11-24 上线，8 件制，双 UI 首次）**——
   plasma-mobile `b18a6be1`（**默认 UI**，11-22 用户拍板「两个都传，以后默认 plasma」）
@@ -204,19 +207,16 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
   ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
   远端结论必须 `git ls-remote` 实证。
-- **▶ 下会话排面（2026-11-27 一百二十七收官后重排）**：
-  ~~①TD-10 去债~~ ✅ ｜ ~~③camss→RPMH 死锁~~ **✅ 同日已还（r133 收兵 + GUI 缓冲双修
-  → 预览出画；眼判回执后「相机 GUI 可用」叙事可进下个 Release）**；
+- **▶ 下会话排面（2026-11-27 一百二十八收官后重排）**：
+  ~~①TD-10 去债~~ ✅ ｜ ~~③camss→RPMH 死锁~~ ✅ ｜ **~~相机残面五瑕疵轮~~ ✅ 一百二十八**
+  （④dma_heap 破案 + ①旋转 270 + touch 消音 + ②CFA 判词作废；③拍照落盘 = koko
+  已装待用户快门回执）；
+  **相机残面余件（全部候补不挡路）**：色彩调参 yaml（s5k3p9sx.yaml AE/AWB，
+  暗淡/复古感主嫌；眼判复核后定轮）｜GL import upload 回退（debayer 效率小损）｜
+  视频编码面（venus encode 未 bring-up，待办池独立线）；
   **②S3 5E9 前摄**（配方同 S2，价值有限不急）｜**④干净机首航**
   （Phase-2 最后判据，零设备风险，等二机/容器）。
-  相机残面（用户眼判回执在案 = 出画验收过线，五瑕疵定案排下会话相机残面轮）：
-  ①预览旋转 90°（修 = DT `rotation=<90>`[Mu 腿] + App orientation 认不认待验）
-  ②复古/糊/暗淡 = **CFA 错配实锤**（驱动 SGBRG10 vs 物理 GBRG[112 轮红盒真值]，
-  修 = s5k3p9sx.c:79 一行改 GBRG10 → r137；暗淡次轴 = 无调参 yaml AE/AWB 默认）
-  ③拍照不落盘（全盘无 jpg = save 链静默失败，先杀 root 实例干净复测）
-  ④桌面图标打不开（疑 root 实例占相机/会话，清场复测）｜⑤视频编码面 =
-  待办池独立线（venus encode 未 bring-up）｜GL import upload 回退（小损）。
-  下会话排面语：①②③④ 捆一个相机残面轮（r137 + Mu 腿一次刷写）。
+  「相机 GUI 可用」叙事进下个 Release（等③落盘回执定稿）。
   深睡线残面（全部候补不挡路）：TD-8 睡中拔线雷取样（用户拍板延后）｜deep
   （PSCI SYSTEM_SUSPEND）档未测（§8 旧判进不去 AOSS，另案）｜s2idle 日用长稳观察
   （挂 AutoSuspend 与否 = 用户自选；解禁态已 7/7 全净）。
