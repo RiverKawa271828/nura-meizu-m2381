@@ -45,7 +45,31 @@ artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜
 docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119.md；蜂窝复燃卡+根治卡已 ✅ 归档 docs/archive/）
 ```
 
-## 现态（2026-11-27 一百二十五轮收官 = 功耗核查定谳（屏灭三重禁睡锁）✅；新会话从这里接）
+## 现态（2026-11-27 一百二十六轮收官 = S2IDLE 深睡线解锁（屏灭 0.58W 档 + s2idle 7/7 全净）✅；新会话从这里接）
+
+- **一百二十六（11-27 深睡线解锁轮，用户全程在场，零构建零刷写）✅**：**主件全胜 =
+  屏灭底噪 0.9-1.1W → 0.58W 档（中位 0.555W / min 0.523W，排面目标 0.5-0.6W 命中，
+  ≈砍半）+ s2idle 7/7 全净**。①**E1 解禁**：meizu-wfi 三簇深态 sysfs 可逆翻转
+  （cpu-sleep-0/1/2-0 = silver×3/gold×4/prime×1），90s 窗每核深态 220-6299 次 ≈
+  **近 100% 深态驻留**（cpu0 state1 use 201→153k）；②**E2 tuned 翻案**：只持
+  `/dev/cpu_dma_latency` fd **未写限制**（QoS 停止前后恒默认 2e9ns），**非禁睡锁**，
+  已还原不动——125 判词「三重禁睡锁」改判 = **真锁只有 meizu-wfi 一把**；
+  ③**E3 rtcwake 阶梯 30/60/120/300/600/600s = 7/7 全净**（succ=7 fail=0，Freezing
+  0.002-0.003s，resume 恒 0.428-0.452s，**freeze+EBUSY 零复现**，wowlan 开 = 日用形态；
+  中断差分全为醒后噪声，waker 猎捕没上桌）；**功耗窗** = 拔电+灭屏 140 样×5s
+  （WiFi ssh 收数，采样器设备侧脱会话）。**处置（用户三拍板）**：meizu-wfi
+  disable+**mask 落机**（恢复门 = unmask+reboot 或 sysfs 回写）+ **入包摘除挂下一版
+  device 包**（含 mask 死链清理，TD-10 去债）｜s2idle 加码 600s×2（已跑完）｜
+  TD-8 拔线雷延后候补。**★坑册 = netconsole 双通道结构性全废**（usb0 = NCM gadget
+  原子发送死[宿主 tcpdump 0 包] / wlan0 = mac80211 原子发送死[tx.c:3928 WARN]，裸
+  UDP 通 = 链路无墙）→ TD-9 取证改道 = 事后 dmesg + suspend_stats 指纹 + 中断差分；
+  **sleep 探针必须设备侧 systemd-run 脱会话**（宿主会话把睡窗打醒，r1 早醒 1.2s 实证）；
+  dmesg 跨睡停走只认墙钟；mem_sleep 本机 `[s2idle] deep` 双档在册（deep = PSCI
+  SYSTEM_SUSPEND 未测另案，§TD9「主线无 deep」记勘误候选）；未证线索 WLAN timeout
+  本 boot 零命中注销；busybox fuser 无 -v；电池供给名 = qcom-battmgr-bat。
+  取证 runner 留机 = /var/tmp/deepsleep/{sleeprun.sh,powsamp.sh}。
+  **钉子不变**（#133+v91+mu-r131+device r85+hexagonrpcd r8）；failed=1（modem-gnss
+  在册）；详录 = experiment-log（一百二十六）。
 
 - **一百二十五（11-27 功耗核查轮，拔电夜取证，用户在场）**：**屏灭整夜 0.9-1.1W
   定谳 = 三重禁睡锁**（①`meizu-wfi.service` multi-user oneshot 禁三簇深 cpuidle
@@ -150,25 +174,18 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
   ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
   远端结论必须 `git ls-remote` 实证。
-- **▶ 下会话排面（用户 2026-11-27 拍板：S2IDLE 深睡线 + 禁睡锁解锁；一百二十五功耗定谳为入口）**：
-  **主件 = 边解锁边观测**：①解 `meizu-wfi.service` 深cpuidle 禁令（disable+mask 或
-  摘包；⚠freeze+EBUSY 挂死风险回归 = 本线主目标，须按 §TD9 配方武装后再动）；
-  ②tuned 处置（cpu_dma_latency 持有：停用/卸载/换 profile = 用户到场拍板）；③判据 =
-  解锁前后同态对拍，屏灭底噪 0.9-1.1W → 目标 0.5-0.6W 档。**TD-8/9 原配方不变**：
-  TD-9 = freeze 活锁 waker 识别（**netconsole 武装配方已备妥**[§TD9：wlan0 通道+
-  宿主 tools/netconsole-receive.sh] + /proc/interrupts 差分[⚠只加 $2..$9 每-CPU 列，
-  pmic_arb 行 NF-2 = SPMI ID 非计数] + **suspend_stats 廉价指纹器**[每轮前后抓
-  last_failed_step/errno，freeze+EBUSY=-16 与 stock 5.15 同机指纹对拍 = 共享路径
-  判据]）+ A1 挂 fd 一发判生死；TD-8 = 睡中拔线硬复位（rtcwake 长睡中拔线取样
-  3 发 + RTC 唤醒同态判别）。**交叉印证已入册**：stock 5.15 同机 s2idle 也挂
-  （freeze+EBUSY）⇒ 同机共性非主线回归；对方 deep 逃生门不可平移（主线无 deep）；
-  未证线索两条顺手验（WLAN timeout/watchdog panic）。AutoSuspend=0 保留（用户自选）；
-  AC 灭屏规则不补（用户 11-27 拍板：手动关屏即可）。
-  纪律 = 只读轮间观测窗 + **插线不算离线待机验证**（对方互证）；不开 E 长跑；
-  用户在场 + 设备窗；同会话可并行宿主侧推送/Release（无 fastboot 之争）。
-  顺延排面：**②S3 5E9 前摄**（配方同 S2）｜**③camss→RPMH 死锁**（GUI 相机唯一
+- **▶ 下会话排面（2026-11-27 一百二十六收官后重排）**：
+  **①TD-10 去债 = device 包摘 meizu-wfi.service**（快赢，搭下一版 package 轮：
+  APKBUILD 摘件 + mask 死链清理[包卸载钩子或 tmpfiles] + bump 发布；恢复门已验证 =
+  unmask+reboot）；**②S3 5E9 前摄**（配方同 S2）｜**③camss→RPMH 死锁**（GUI 相机唯一
   拦路虎，平台雷需用户在场慎重设备窗 + sysrq-b 救砖预案）｜**④干净机首航**
   （Phase-2 最后判据，零设备风险，等二机/容器）。
+  深睡线残面（全部候补不挡路）：TD-8 睡中拔线雷取样（用户拍板延后）｜deep
+  （PSCI SYSTEM_SUSPEND）档未测（§8 旧判进不去 AOSS，另案）｜s2idle 日用长稳观察
+  （挂 AutoSuspend 与否 = 用户自选；解禁态已 7/7 全净）。
+  纪律存档：sleep 探针 = 设备侧 systemd-run 脱会话 + 睡窗宿主零流量 + 真实时长只认
+  墙钟（dmesg 跨睡停走）；netconsole 勿再投（双通道结构性废，§TD9 勘误已入册）；
+  插线不算离线待机验证；不开 E 长跑（挂过夜循环长跑须用户明示解禁）。
 - **上轮排面存档（2026-11-25 更新：①已收官）**：
   **~~①电池遥测单位 bug 修（r132）~~ ✅ 11-25 收官**（#133 上机修复实证 +
   upower 复活；阈值写读仍 0 = firmware 域独立案改判候补；功耗首测取消
@@ -186,9 +203,8 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   ——上游形态已完全就位，余 = carrier DNS 不落 resolved 已接受[NM upstream 面]）。
   carrier DNS push 缺口已折中落地（r82：resolved FallbackDNS = 移动 carrier DNS+AliDNS，11-26 断 WiFi 实弹验证）；根治候补 = NM upstream 查 Generic device push 路径。
 - **队列**：①**花屏科学解 ✅ 达成验收属实收官**（PANEL §6 条 11.7-8）；
-  残面挂起 = **S2IDLE 深睡线**（E 长跑已停跑[挂死率初步 1/3 轮样本]，waker 识别
-  （netconsole）+ A1 一发判生死 + 拔线雷独立查 → TECH-DEBT 候补 8-9，用户拍板
-  「放到以后做」）；
+  ~~残面挂起 = S2IDLE 深睡线~~ **✅ 11-27 一百二十六主件收官**（解锁+0.58W+7/7；
+  残面收窄 = TD-8 拔线雷候补 + deep 档另案，见下会话排面节）；
   ②**蜂窝线 ✅ 八连收官（11-19~20，短信破墙轮 = 用户点名复燃后收官）：
   registered（一百零一）→ DPM 根治（一百零二）→ 数据面全通+托盘（一百零三）→
   双卡自动化：插卡即用全自动链+切换实证+keeper 自愈+rmnet0 持久化（一百零四）→

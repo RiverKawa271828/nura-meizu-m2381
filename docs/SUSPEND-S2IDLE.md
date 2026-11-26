@@ -616,3 +616,22 @@ new + 填 remote_ip/local_ip/remote_mac + enable=1）——参数式失败时用
    s2idle，须服务停止后重写）——主线 6.8 无 deep，我方车道维持 waker 猎捕。
 5. 纪律互证：**插线状态不能当离线待机验证**（控制器持唤醒锁）——与我们拔线/观测窗
    纪律同款。
+
+### §TD9·实跑勘误（2026-11-27 一百二十六：netconsole 双通道结构性判负）
+
+本节原配方「wlan0 是唯一活口」**实跑推翻，双通道皆死**：
+
+- **wlan0 目标**：包进 mac80211 发送栈（netpoll→ieee80211_subif_start_xmit 全链在
+  dmesg）但 **kmsg 内容行零送达**——ath12k 发送队列需进程上下文，printk 原子路径发包
+  被丢（`WARNING: net/mac80211/tx.c:3928 ieee80211_tx_dequeue`，netconsole 专有）。
+  同窗裸 UDP（`nc -u`）正常到达宿主 = 链路无墙，死在原子上下文。
+- **usb0 目标**：宿主 tcpdump **0 packets**——帧在设备侧就死（NCM gadget 原子上下文
+  发送不兼容）。
+- netconsole 自产「printk messages dropped」标记行偶尔可达，无取证价值。
+- **TD-9 取证改道（本轮实证够用）**：事后 dmesg 环形缓冲（活锁可被打回时 = 活证）+
+  suspend_stats 指纹 + /proc/interrupts 差分（显式 $2..$9）。ramoops-1 console 在
+  /proc/consoles 在册 = 硬复位兜底（未实战验证）。
+- **sleep 探针纪律再实证**：宿主侧活跃会话（devsh/USB TCP）会把睡窗打醒（本轮 r1 早醒
+  1.2s 复现）；正解 = 设备侧 `systemd-run` 脱会话跑 rtcwake，睡窗内宿主零流量。
+- 同轮定性：解禁后 dmesg 跨睡时间戳只走 ~1s = timekeeping 挂起停走（sched_clock 深睡
+  停走旧账复认）——**rtcwake 真实时长看墙钟 `date +%s` 差，勿拿 dmesg 时间戳算睡眠时长**。
