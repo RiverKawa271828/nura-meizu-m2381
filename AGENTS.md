@@ -207,16 +207,22 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
   ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
   远端结论必须 `git ls-remote` 实证。
-- **▶ 下会话排面（2026-11-27 一百二十八收官后重排）**：
-  ~~①TD-10 去债~~ ✅ ｜ ~~③camss→RPMH 死锁~~ ✅ ｜ **~~相机残面五瑕疵轮~~ ✅ 一百二十八**
-  （④dma_heap 破案 + ①旋转 270 + touch 消音 + ②CFA 判词作废；③拍照落盘 = koko
-  已装待用户快门回执）；
-  **相机残面余件（全部候补不挡路）**：色彩调参 yaml（s5k3p9sx.yaml AE/AWB，
-  暗淡/复古感主嫌；眼判复核后定轮）｜GL import upload 回退（debayer 效率小损）｜
-  视频编码面（venus encode 未 bring-up，待办池独立线）；
-  **②S3 5E9 前摄**（配方同 S2，价值有限不急）｜**④干净机首航**
-  （Phase-2 最后判据，零设备风险，等二机/容器）。
-  「相机 GUI 可用」叙事进下个 Release（等③落盘回执定稿）。
+- **▶ 下会话排面（2026-11-27 一百二十八终验后立，用户令「安排下个会话」）**：
+  ~~①TD-10~~ ✅ ｜ ~~③RPMH~~ ✅ ｜ ~~相机残面五瑕疵~~ ✅ 终验过线（图标/预览/快门/
+  落盘/koko 全通）；
+  **A. s5k3p9sx.yaml 调参轮（主件，治发灰）**——soft ISP 调参档：BlackLevel 64
+  （decode-color.py 8bit 域 16×4 线索，上机 raw 直方图实证）+ colourGains 实测
+  （灰卡/白纸场景校准）+ 对比度曲线；交付 = libcamera r3 → 上机 → 用户眼判对比。
+  **B. r89 设备包（MP 收尾）**——meizu,meizu-20.conf 入包（797B 已验到 stride 前）
+  + temp/libmegapixels Padding 配置键补丁（parse.c 加键 → mode.c padding 优先取
+  配置值；可上游零破坏 daisy）→ MP 端到端（预览/拍照/EXIF orientation/姿态跟随）。
+  **C. accel claim 小案（快件）**——iio-sensor-proxy "Sensor claim not allowed"
+  D-Bus 策略取证 = MP 动态旋转前置（桌面 sensors 正常非链路病）。
+  **D.（用户拍板）新 Release 时机**——叙事候选 = 相机 GUI 可用 + 图标挂死修复
+  （xwayland）+ 深睡解禁 0.58W + 蜂窝全自动；发灰 = 质量项不挡可用性叙事，A 后切
+  或直接切由用户定。⚠三仓推送窗未清（fork 2 + pmaports 5 + nura 8 笔照律待推）。
+  候补池照旧：GL upload 回退（效率小损）｜视频编码面（venus encode 独立线）｜
+  S3 5E9 前摄｜干净机首航（Phase-2 判据）。
   深睡线残面（全部候补不挡路）：TD-8 睡中拔线雷取样（用户拍板延后）｜deep
   （PSCI SYSTEM_SUSPEND）档未测（§8 旧判进不去 AOSS，另案）｜s2idle 日用长稳观察
   （挂 AutoSuspend 与否 = 用户自选；解禁态已 7/7 全净）。
