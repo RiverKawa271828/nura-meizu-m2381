@@ -5,6 +5,9 @@
 > 施工图 / GNSS 边界 / GN5 马达弹药。**清单先立后动手，窗内纯执行。**
 > 红线继承：modemst / persist（EFS）永不碰（快照四份已归档 b85cad2f/c40223e6）；
 > 9008 需用户在场；回程 = flash-batch + rootfs 首刷（顺手验真 FLASHING §3）。
+> **前置 ✅（11-27 晚）**：设备包 r89（直装收编）+ 仓内回程镜像
+> `meizu-meizu20-r138-plasma-mobile.img.gz`（sha256 040e6437…）已建——回程零再
+> 构建零补 apk，见 §4。本会话排面 = 下会话主件（用户拍板）。
 
 ## 0 · 前置（用户侧，刷机时）
 
@@ -71,10 +74,13 @@ stock FDT 791KB + bootargs（10-19 窗口）；sensormodule 四星 bin 解码（
 vendor_a EROFS 全量（camera.qcom.so 26.7MB 等）；modem_pr 158 件（= fw r4 同源）；
 SWR 麦域 418 控件清单；EFS 四分区哈希。
 
-## 4 · 回程（取证完毕即回）
-`script/flash-batch.sh --i-am-present`（boot_b + recovery_a）→ rootfs 刷写
-（userdata 全新 = **首刷路径实测**，FLASHING §3/§5 验真）→ upgrade.sh 补 apk
-（r138/r88 在本地仓）→ readback + 开工惯例全套。
+## 4 · 回程（取证完毕即回；✅ 前置已毕 = 零再构建）
+`script/flash-batch.sh --i-am-present`（boot_b = mu-r138-3f909a93 + recovery_a =
+esp v96，仓内在钉）→ rootfs 刷写 = **`artifacts/meizu-meizu20-r138-plasma-mobile.img.gz`**
+（或裸件 `meizu-meizu20-plasma-mobile-local.img` 免解压直刷；已含设备包 **r89**
+直装收编 + libcamera 99990.8.0-r2 + koko 查看链 + xwayland，**无需 upgrade.sh 补
+apk**；userdata 全新 = **首刷路径实测**，FLASHING §3/§5 验真；首 boot failed=3
+件非回归在册 MANIFEST）→ readback + 开工惯例全套。
 最坏情况 = EDL 整刷工作流（71 分区直写，一次点亮先例）。
 
 ## 5 · 判据

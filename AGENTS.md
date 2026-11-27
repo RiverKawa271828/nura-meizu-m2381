@@ -45,7 +45,7 @@ artifacts/       本仓自产产物：mu 裸镜像 + esp .img.gz（100MiB 裸镜
 docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119.md；蜂窝复燃卡+根治卡已 ✅ 归档 docs/archive/）
 ```
 
-## 现态（2026-11-27 一百二十八轮收官 = 相机残面轮 ✅（④dma_heap 权限破案[用户会话相机全灭真凶] + ①旋转 270 定谳[plasma-camera 应用实证] + touch 假 failed 消音 → failed=0 全清；②「CFA 一行修」判词作废 = 命名撞车零码改；koko+KDE 移动端应用顺手入机）；在机 **#139 + v96 + mu-r138-3f909a93 + r138 模块 + device r87 修订版 + libcamera r2** ✅ 读回双对；新会话从这里接）
+## 现态（2026-11-27 一百二十八轮收官 = 相机残面轮 ✅（④dma_heap 权限破案[用户会话相机全灭真凶] + ①旋转 270 定谳[plasma-camera 应用实证] + touch 假 failed 消音 → failed=0 全清；②「CFA 一行修」判词作废 = 命名撞车零码改；koko+KDE 移动端应用顺手入机）；在机 **#139 + v96 + mu-r138-3f909a93 + r138 模块 + device r87 修订版 + libcamera r2** ✅ 读回双对；**下会话 = Flyme 取证轮（用户拍板；前置 ✅ = 设备包 r89 直装收编 + 仓内回程镜像 r138-plasma[sha 040e6437]，卡 docs/flyme-forensics-card-20261127.md，触发协议 = 用户说「取证轮」，回程零再构建）**；新会话从这里接）
 
 - **一百二十八（11-27 相机残面轮：④①②③五瑕疵清单大清算，用户全程在场，双轮刷写两 reboot）✅**：**④「图标打不开/转圈自杀」破案 = `/dev/dma_heap/*` 0600 root:root 且 systemd 262 上游零 udev 规则** → 用户会话（uid 10000）libcamera「Could not open any dma-buf provider」→ SoftwareIsp 禁 → 相机起不来（**127「预览出画」全是 devsh root 拉起 = 权限失败被系统性掩盖一整天；GUI 相机验证必须真实用户身份**）→ 修 = device **r87** `73-meizu20-dma-heap.rules`（video 0660 镜像 video4linux 惯例；即时落机免 reboot 生效）→ 用户侧预览出画 30 帧实证。**①旋转全案** = s5k3p9sx 暴露 V4L2_CID_CAMERA_ORIENTATION/_SENSOR_ROTATION 只读控制（libcamera 0.8.0 CameraSensorLegacy 只认控制 default、无 fwnode 回退 = 源码级钉死；fork `04d52720bf7f`）+ DT rotation <90>（r137/v95/#138）→ 眼判「侧转修好但上下颠倒」→ **270 定谳**（fork `df96b0421841`，r138/v96/mu-r138）→ libcamera Rotation=270 + plasma-camera「Camera offset orientation: 270」应用实证。**②「CFA 一行修 GBRG10」127 判词作废 = 命名撞车误判**（4 字符 GBRG ≡ V4L2 SGBRG10，驱动标签本来就对；主线无 GBRG10 常量，硬改反引入真对调；复古/暗淡主嫌 = 无调参 yaml AE/AWB 默认）。**touch 假 failed 消音** = cci 子总线 i2c 编号跨 boot 漂移实证（同日两 boot 0-002d/2-002d 各一；deferred 在 vdda 注册后自愈 = 主机制）→ r87 修订 = glob 全 `*-002d` 补枪 + 段尾 exit 0 → **failed=0 全清**（modem-gnss 本 boot 亦过）。**拍照查看链** = 设备零图片查看器 + portal 选择器桌面尺寸（Plasma 上游 UX 缺陷非移植债，屏幕 1080×2400@120 健康）→ 装 **koko** 设 mime 默认 + gwenview 备胎 + 用户选装 kalk/krecorder/qrca/calindori/alligator（kongress 判无用卸）。**终验（用户）= plasma-camera 图标正常打开 ✅**（DISPLAY 拆雷管 + r88 端到端实证；相机日用链 = 图标→预览→快门→落盘→koko 查看全通）。**⑤图标启动挂死全案破（二段新雷）**：清场后图标仍两次失败 → 取证 = 进程活着零 CPU 无窗口无崩溃 → 环境二分复现（图标全环境含 **DISPLAY=:0** 卡死 / 去 DISPLAY 完美 / 强制 QT_QPA_PLATFORM=wayland 仍卡 = 卡点非 QPA）→ strace 死点 = `connect(@/tmp/.X11-unix/X0)` 永不返回 → 终局 = **Xwayland 二进制没装**（pmOS plasma-minimal 不带），kwin "Xwayland process failed to start" 但保留监听 fd + 会话照发 DISPLAY → backlog=0 无人 accept 任何碰 DISPLAY 的应用永久阻塞（devsh/su 直拉无 DISPLAY = 纯 wayland 结构性不触雷 = 第二个掩盖面）→ 修 = **device r88 depends +xwayland**（根修组件）+ 本会话拆雷管（`systemctl --user unset-environment DISPLAY` + restart plasma-plasmashell）。**⑥色彩眼判回执 = 发灰**（实图复核：黑位抬升+饱和压制灰纱感）= soft ISP uncalibrated.yaml 兜底 → **s5k3p9sx.yaml 调参轮正式立项**（下轮相机线主件）。**③落盘回执 ✅**：四张实拍全落 ~/Pictures（127「不落盘」= dma_heap 综合症）+ EXIF Orientation 四张全缺 = 姿态跟随缺口定案 plasma-camera 上游 App 层（D4 动态半边），非移植债。**坑册四连**：boot_b readback 整分区≠镜像 sha（分区 96MB≫镜像 1.1MB，限长 count 对拍）/ devpush nc 监听竞态（devsh 会话关 → nc 吃 stdin EOF 早死，60MB 进死套接字；**确定性形态 = FIFO 持握手** `mkfifo+sleep 300>fifo & exec nc -l < fifo`）/ pmbootstrap 单实例互撞（后台 build 与前台 checksum 并发 = 构建单元静默死）/ watcher newermt 阈值勿写未来时刻。残面余件 = 色彩 yaml 候补 + 拍照落盘复测（眼判回执待）+ GL upload 回退小损 + 视频编码面独立线。详录 = experiment-log（一百二十八）。
 - **一百二十七（11-27 相机轮：③camss→RPMH 死锁 + 用户所见 GUI 报错，用户在场，三构建两 reboot）✅**：**主件全胜 = RPMH 死锁防御落地 + GUI 相机缓冲双修 → plasma-camera 预览出画**（SoftwareIsp debayer 8445µs/frame 30 帧实证 + RPMH 全窗零雷）。①**RPMH 全案闭合**（死锁链源码级：bcm-voter AMC 提交超时留 TCS 永久占用 + `rpmh_rsc_send_data` 无限等 + icc_lock 饥荒；案发 = 11-22 boot -15 journal 尾段尽失[/run 未刷盘]，栈面源码重建五要素全对上）→ fork `79a4a228c09d` 收兵补丁（超时后按地址回收卡死 TCS，req[] 先 NULL 防迟 IRQ UAF）→ r133 上机 #134。②**GUI 报错「configuration not valid」真凶** = libcamera 0.8.0 堆序首开独占零回退（reserved = CMA 32MB 池 < SoftwareIp 输出缓冲 61.7MB；系统堆实测健康）；CMA 512 尝试轮（r134/v93 → #135）实锤**平台早期分配窗放不下**（`cma: Failed to reserve 512 MiB`，32MB = 0xf0800000 缝隙天然上限，大 CMA 只能走 DT）→ 回滚 32（r136/v94）+ **pmaports temp/libcamera 刷上游 99990.8.0 + 0003 堆序补丁**（system 队首，pkgrel r2）→ #137 预览出画。**坑册五连**（--pipe 五五开秒退 2 / pkill 自咬+apk.static 孤儿 ETXTBSY / pmbootstrap 默认 native 要 --arch aarch64 / journal --grep 不可靠 / apk add 主包 purge 子包须补装 libcamera-ipa）。**眼判待回执**（画面/色彩/方向）；候补 = GL import upload 回退（效率小损）。详录 = experiment-log（一百二十七）。
@@ -216,7 +216,8 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   → 该实验存档于远端分支 `unixnu-wiring-20261030`；主分支 = 可构建树。
   ⚠Mu remote 原 SSH，22 断时 `git fetch` 静默失败致本地 ref 陈旧 —— 已改 https，
   远端结论必须 `git ls-remote` 实证。
-- **▶ 下会话排面（2026-11-27 一百二十八终验后立，用户令「安排下个会话」）**：
+- **▶ 下会话排面（2026-11-27 立；**用户晚拍板：下会话 = Flyme 取证轮**，见下
+  ★Flyme 段——前置已毕，回程零再构建；本节 A/B/C/D 顺延取证轮之后）**：
   ~~①TD-10~~ ✅ ｜ ~~③RPMH~~ ✅ ｜ ~~相机残面五瑕疵~~ ✅ 终验过线（图标/预览/快门/
   落盘/koko 全通）；
   **A. s5k3p9sx.yaml 调参轮（主件，治发灰）**——soft ISP 调参档：BlackLevel 64
@@ -237,21 +238,25 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   包现成[驱动模板/CFA 红盒法/cam-shot/libcamera 集成]；OIS/AF 马达先跳过定焦拍摄）；
   **GD2 = 不可排期**（研究墙 = FW 过渡态编排，复燃条件 = 文档级资料/新外部参照，
   勿主动排）；**5E9 = GN5 后低优捡漏**。
-  **★Flyme 取证窗口轮（用户 11-27 提案，排 A/B/C 后、GN5 前，需用户在场多窗口）**：
+  **★Flyme 取证窗口轮 = 下会话主件（用户 11-27 晚拍板「下个会话就是取证轮」；
+  A/B/C/D 顺延在取证轮后；需用户在场多窗口）**：
   12.6 EDL 整刷工作流在档（71 分区一次点亮实证）+ stock 镜像本地备份 + EFS 快照
   四份全等——取证清单先写好再动手：①闪光灯 torch 点亮态探针（PMIC/GPIO/轨电压实况
   = 阳极供电谜复燃条件本体）②GD2 前摄工作流 camx/csiphy/csid 寄存器 dump 与我方
   失败态差分（= 「新外部参照」本体，研究墙钥匙）③通话中 tinymix 全量 + AGM graph
   （= 通话音频施工图）④GNSS LOC 会话行为探针⑤GN5 OIS/AF 马达 I2C 探针（GN5 轮
-  弹药）。⚠userdata 抹除先备份；modemst/persist 红线照旧；回程 = flash-batch +
-  rootfs 首刷路径实测（FLASHING §3 顺手验真）。注：此轮 ≠ 干净机首航（后者 = 构建
-  侧二机/容器从零 clone-build-flash，仍待二机/容器）。
+  弹药）。⚠userdata 抹除先备份；modemst/persist 红线照旧；回程 = flash-batch
+  （mu-r138 + v96）→ userdata 刷**仓内回程镜像 r138-plasma**（r89 直装收编 +
+  libcamera r2 内置，**零再构建零补 apk**；FLASHING §3 首刷路径顺手验真）。
+  注：此轮 ≠ 干净机首航（后者 = 构建侧二机/容器从零 clone-build-flash，仍待二机/容器）。
   **弹药已备（2026-11-27 预置）**：执行卡 = `docs/flyme-forensics-card-20261127.md`
   （前置/工具/流程/回程/判据五节）+ 探针 = `tools/flyme-forensics/`（00-prep 静态
   自建[pmbootstrap chroot musl -static，勿外来二进制] + 10-torch/20-camera/
   30-call-audio/40-gnss/99-collect + src/ 四件自研 C[media-dump/v4l-fmt/tiny-mix/
-  i2c-scan，Android 零动态库依赖]）。**触发协议：用户刷回 Flyme 后说「取证轮」→
-  第一步跑 00-prep 出静态件 → 窗口纯执行。**
+  i2c-scan，Android 零动态库依赖]）。**前置 ✅（11-27 晚，nura `ea4a827`）**：
+  设备包 **r89** 直装收编 + 仓内回程镜像 r138-plasma（gz sha256 `040e6437…`，
+  debugfs 内容抽验 + gzip -t + verify 全绿）——回程零再构建。**触发协议：用户刷回
+  Flyme 后说「取证轮」→ 第一步跑 00-prep 出静态件 → 窗口纯执行。**
   深睡线残面（全部候补不挡路）：TD-8 睡中拔线雷取样（用户拍板延后）｜deep
   （PSCI SYSTEM_SUSPEND）档未测（§8 旧判进不去 AOSS，另案）｜s2idle 日用长稳观察
   （挂 AutoSuspend 与否 = 用户自选；解禁态已 7/7 全净）。
