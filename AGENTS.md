@@ -191,7 +191,16 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   刷上游 + 0003 堆序补丁 system 队首；ipa-r2 已补装）+ **设备包 r87 修订版**（r87 =
   11-27 dma_heap udev 规则 video 0660[用户会话相机全灭真凶] + touch retrigger
   glob 化+exit 0[cci i2c 编号跨 boot 漂移]；r86 = TD-10 去债留档；r85 = 启动序修复五件 Before=plasma-mobile；r79 = mm-dial
-  BP 抓取修留档）；**fw r4**（已随 r131 发布）。
+  BP 抓取修留档）；**fw r4**（已随 r131 发布；11-27 随 r89 轮 --force 重打同内容）。
+  **→ 11-27 取证前置推进**：设备包仓内已到 **r89**（直装件收编 = world 差分法：
+  koko/gwenview/kalk/qrca + gnss-share 两件 + ofono + megapixels +
+  i2c-tools/v4l-utils/strace + libcamera/libcamera-ipa 显式化[99990.8.0-r2 版本
+  胜出]；机上未装不碍事——回程镜像内建，下次 apk 腿升级自然带上；MP 收尾轮顺延
+  **r90+**，pmaports `6d64a92`）+ **仓内回程镜像**
+  `meizu-meizu20-r138-plasma-mobile.img.gz`（gz 1242733575B sha256 `040e6437…` /
+  raw 4978638848B；本地裸件 plasma-mobile-local.img 免解压直刷；gzip -t +
+  debugfs 内容抽验 + verify [1]-[5] 全绿）——**Flyme 取证窗回程 = flash-batch
+  （mu-r138 + v96 在仓在钉）→ userdata 刷本图，零再构建**。
 - **发布面**：**Release r131 = Latest（2026-11-24 上线，8 件制，双 UI 首次）**——
   plasma-mobile `b18a6be1`（**默认 UI**，11-22 用户拍板「两个都传，以后默认 plasma」）
   / phosh `fcd6c662` + mu `f51b3b09` + ESP v90 gz `037c8dfb`（CI 同号异字节；在机
@@ -213,7 +222,7 @@ docs/*-card-*.md 各轮执行卡（现役 = plasma-mobile-cellular-card-20261119
   **A. s5k3p9sx.yaml 调参轮（主件，治发灰）**——soft ISP 调参档：BlackLevel 64
   （decode-color.py 8bit 域 16×4 线索，上机 raw 直方图实证）+ colourGains 实测
   （灰卡/白纸场景校准）+ 对比度曲线；交付 = libcamera r3 → 上机 → 用户眼判对比。
-  **B. r89 设备包（MP 收尾）**——meizu,meizu-20.conf 入包（797B 已验到 stride 前）
+  **B. r90 设备包（MP 收尾；r89 已被 11-27 取证前置直装收编轮占用）**——meizu,meizu-20.conf 入包（797B 已验到 stride 前）
   + temp/libmegapixels Padding 配置键补丁（parse.c 加键 → mode.c padding 优先取
   配置值；可上游零破坏 daisy）→ MP 端到端（预览/拍照/EXIF orientation/姿态跟随）。
   **C. accel claim 小案（快件）**——iio-sensor-proxy "Sensor claim not allowed"

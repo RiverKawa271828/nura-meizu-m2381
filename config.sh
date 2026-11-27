@@ -46,7 +46,7 @@ APK_DIR="${NURA_APK_DIR:-$PMB_WORK/packages/edge/aarch64}"   # 随 PMB_WORK 推�
 
 # ---- 现役版本（随每个发布轮更新）----
 REL_LINUX_PKGREL="138"     # r138 = 相机残面轮·二段（11-27）：DT rotation 90→270（眼判回执 = 90 修好侧转但上下颠倒，真安装角 270；fork df96b0421841）；r137 = 相机残面轮·一段留档（s5k3p9sx 暴露 V4L2_CID_CAMERA_ORIENTATION/_SENSOR_ROTATION 只读控制 + DT orientation/rotation 属性，fork 04d52720bf7f；libcamera 0.8.0 CameraSensorLegacy 无 fwnode 回退实证）；r136 = CMA 回滚轮留档
-REL_DEVICE_PKGREL="88"     # r88 = +xwayland depends（11-27 图标挂死全案根修：pmOS plasma-minimal 不带 xwayland，kwin 握监听 fd + 会话发 DISPLAY=:0 无人 accept → 碰 DISPLAY 的应用 connect 永久挂死[图标启动静默死]）；r87 = dma_heap udev 规则（video 0660，用户会话 libcamera 全灭真凶）+ touch retrigger glob 化+exit 0（cci i2c 编号跨 boot 漂移）；r86 = TD-10 去债留档；r85 = 启动序修复留档
+REL_DEVICE_PKGREL="89"     # r89 = 机上直装件收编（11-27 取证轮回程镜像前置：koko/gwenview/kalk/qrca + gnss-share 两件 + ofono + megapixels + i2c-tools/v4l-utils/strace + libcamera/libcamera-ipa 显式化；world 差分法，详见 APKBUILD r89 注记；注：MP 收尾轮原计划占 r89，顺延为 r90+）；r88 = +xwayland depends（11-27 图标挂死全案根修：pmOS plasma-minimal 不带 xwayland，kwin 握监听 fd + 会话发 DISPLAY=:0 无人 accept → 碰 DISPLAY 的应用 connect 永久挂死[图标启动静默死]）；r87 = dma_heap udev 规则（video 0660，用户会话 libcamera 全灭真凶）+ touch retrigger glob 化+exit 0（cci i2c 编号跨 boot 漂移）；r86 = TD-10 去债留档；r85 = 启动序修复留档
 REL_FW_PKGREL="4"          # r4 = 11-19 蜂窝复燃轮上机（+modem_pr mcfg/so 158 件，pmaports f2885ef；已随 r131 发布）
 REL_MU_IMG="$NURA_ROOT/artifacts/mu-r138-3f909a93.img"     # mu-r138 = 相机残面轮·二段（FdtBlob 自 r138 apk 同源 dbbbcfc6；rotation 270 定谳）；mu-r137-26462574 = 一段留档
 REL_ESP_IMG="$NURA_ROOT/artifacts/esp-recovery-v96.img.gz"  # v96 = r138 ESP（gz 14402949B）；v95 = r137 件留档；⚠构建坑：build-esp 必须等 build-kernel 单元真完 + 定版三写在 verify 前
