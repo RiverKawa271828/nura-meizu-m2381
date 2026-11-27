@@ -2,6 +2,7 @@
  * usage: media-dump /dev/mediaN   (prints device info + entities + pads + links)
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>

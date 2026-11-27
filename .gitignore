@@ -29,3 +29,4 @@ __pycache__/
 # Release 验收下载件不入 git（Release 随时可拉；台账 = 目录内 SHA256SUMS，继续跟踪）
 .relcheck-r91/*
 !.relcheck-r91/SHA256SUMS
+tools/flyme-forensics/out/
