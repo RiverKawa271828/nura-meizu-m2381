@@ -123,6 +123,8 @@ b41b88889cadf6060e35…）**——「b41b8889cadf」系连排四个 8 丢一位�
 | pmic-spmi 0-0c/0-0d | probe failed -5 | 在册已知（多轮 boot 一致，无功能影响） |
 | 应用商店「系统升级」提示 | 显示快照版本串如 v20260805-… | UI 噪音：滚动发行版无 distro upgrade，商店列不出（journal: failed to get upgrades），快照标签 vs edge 的版本串观感差；apk 实测升级/降级候选均 0。**忽略之，系统升级只走 UPGRADE.md** |
 | **首会话（向导期）SIM 页「选择配置」点击无响应；走完向导进桌面后顶部白块遮挡 + 触摸不动** | plasma-mobile 6.8.3 × KF6 6.32 组合的首启会话缺陷（11-27 一百三十实测：plasma 栈与旧机同为 6.8.3 无更新可升；锁屏输入正常 = 输入链没病；NM 蜂窝数据全程自动连接正常 = 功能没病） | **走完向导后重启会话即愈**：`systemctl restart plasma-mobile.service`（若新会话起不来 = 旧 ksmserver/kwin 残留占 wayland-1，stop 服务 + kill -9 user 会话 kwin_wayland/plasmashell/ksmserver/startplasma 残件再 start）。向导 done 后重启预期不再复发；SIM 配置日常走「设置」页（NM 链路健康） |
+| **modem-gnss.service 每 30s 失败一次（Restart=on-failure 环）** | pmOS 上游「定位引擎配置」oneshot 撞我方 modem PDS 固件闸门（引擎锁可设 / NMEA 设置 NotSupported 94 → exit 1）——GNSS 定位本身 = 大后期档（GeneralError 46 家族；复燃靶 = 取证轮 mQmiMask 0x71220e060a24b） | **用户拍板不处置**（一百三十：之后本来就是要修的）；本机已掩蔽（可逆，`systemctl unmask modem-gnss && systemctl restart modem-gnss` 还原）——掩蔽只静音刷屏，不挡复燃修复 |
+| **mm-dial.service boot-1 失败一条（boot-2+ 不再出现）** | chroot 烤链残留：r75 时代 preset=enable 把 /etc wants 链接烤进复用 rootfs chroot → 新镜像 boot-1 事务先于 tmpfiles 排队 → boot-1 拉起一次（单 call 域下 NM 赢，mm-dial FAIL 留痕）；tmpfiles retire-mmdial 清链后 boot-2+ 干净 | **不处置**（boot-1 噪音自愈）；rootfs chroot 清烤链挂候补小件（下次动 chroot 时顺手） |
 
 （历史行留档：rmtfs activating / uim-selection start-limit-hit = 蜂窝用户态在役时代现象，
 现役 rootfs 蜂窝摘除态 + 未装四件套时不见；postmarketos-zram-swap failed 仅 r<60 内核，r60 起修复。）
