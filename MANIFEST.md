@@ -3,7 +3,11 @@
 > 每个发布轮更新「现役」表；锚点表只在变动时更新并同步 `config.sh` + FLASHING.md。
 > 历史轮次明细 = 本仓 git log + 私有工作区 experiment-log，本表只保现役。
 
-## 工作态（2026-11-27 **取证轮前置 ✅（设备包 r89 直装收编 + 仓内回程镜像 r138 plasma；零设备侧改动）**：Flyme 取证窗回程 = flash-batch（boot_b mu-r138 + recovery_a v96）→ userdata 刷本图。**r89 = 直装件收编**（world 差分法：机上 /etc/apk/world 对 chroot 基线 + UI `_pmb_recommends` 取差）= koko/gwenview/kalk/qrca[128 拍照查看链；calindori/alligator 用户已卸不收] + gnss-share 两件 + ofono[探针残留 inert 保态] + megapixels[MP 收尾顺延 r90+] + i2c-tools/v4l-utils/strace + libcamera/libcamera-ipa 显式[本地 99990.8.0-r2 版本胜出，IPA 显式防 127 purge 坑]；fw r4 --force 重打同内容；**回程镜像 = meizu-meizu20-r138-plasma-mobile.img.gz**（gz 1242733575B / raw 4978638848B，sha256 040e6437…，gzip -t 过；本地裸件 = meizu-meizu20-plasma-mobile-local.img 免解压直刷；debugfs 内容抽验：r138/r89/libcamera r2/iio fork r3/koko 全在；verify [1]-[5] 全绿）→ ）
+## 工作态（2026-11-27 **一百三十：回程镜像 boot 循环破案 ✅ + 设备已救活**——现役三件 = mu-r138 + v96 + 上表回程镜像（hexagonrpcd 0.4.0-r8 版）；设备现机 = 全新 r138-plasma rootfs 在跑（r89 + hexagonrpcd r8 + failed=0），**无需重刷**；首会话向导插曲入非回归表；详录 = 现态节一百三十 → ）
+
+
+## 工作态（2026-11-27 **一百三十：回程镜像 boot 循环破案 ✅（hexagonrpcd r9 孤儿坏件活体降级 + 仓清毒 + 镜像重打三折收官）**：用户自刷回程镜像 → **boot 循环**（NCM 短窗，控制台卡 ssc session）→ **真凶 = hexagonrpcd 0.4.0-r9**（124 轮 temp.json 0006 判负件——pmaports 源码回退了但坏 apk 留在本地仓，全新装机版本选举 r9>r8 中招 → sensorspd 重启环 → ADSP 风暴 → 整机重启循环，124 原样复刻）→ **活体抢救** = NCM 窗口 devpush r8 三件（tar 流 + FIFO 持握手 nc 监听）+ apk 三件显式降级 + reboot → HEALTHY_R8（failed=0/1334 包/uptime 稳）→ **仓清毒三件套** = 删 r9 五件 + `pmbootstrap index` 全量重索引（r9 条目 0，TOTAL 264 对拍）+ 全仓 sweep（repo vs pmaports 源版本逐包对拍）= 唯一孤儿即 hexagonrpcd → **镜像重打三折**（①apk.static 楔死 DB 完整态杀单元重跑 ②qt6-qtwebengine-6.140.0-r3 镜像源下载 I/O error+代理 45MB 掐断 ③**用户人肉下载**[Alpine 验签 OK]入本地仓 `pmbootstrap index` 后本地命中）→ **新回程镜像 = gz 1242737060B sha256 `ec969644…` / raw 4979687424B**，debugfs 复验 **hexagonrpcd=0.4.0-r8** ✓ + 全清单在位，gzip -t + verify 全绿。**桌面插曲** = 首会话向导期 SIM 选择失效 + 白块遮挡（plasma 6.8.3 × KF 6.32 组合缺陷，重启会话即愈，向导 done 后不再复发，入非回归表；plasma 栈与旧机同版 6.8.3 无更新可升，KDE Plasma Setup SoK'26 重做在途）。**工程规则 9 立** = 判负回滚必须清仓（源码回退 + 删 apk + index + sweep）→ ）
+
 
 ## 工作态（2026-11-27 **相机残面轮 ✅（一百二十八：④图标打不开破案 = dma_heap 权限 + ①旋转全案 270 定谳 + touch 假 failed 消音，双刷写两 reboot）**：**④真凶 = `/dev/dma_heap/*` 0600 root:root 且 systemd 262 上游零规则** → 用户会话 libcamera「Could not open any dma-buf provider」→ SoftwareIsp 禁 → plasma-camera 转圈自杀（127 轮「预览出画」全是 devsh root 拉起 = 权限失败被系统性掩盖）；修 = device **r87** `73-meizu20-dma-heap.rules`（video 0660，镜像 video4linux 惯例）→ 用户侧预览出画 30 帧实证；**①旋转 = 驱动暴露 V4L2_CID_CAMERA_ORIENTATION/_SENSOR_ROTATION 只读控制**（libcamera 0.8.0 CameraSensorLegacy 只读控制 default、无 fwnode 回退，fork `04d52720bf7f`）+ DT orientation=<1>/rotation=<270>（90 眼判 = 侧转修好但上下颠倒 → 270 定谳，fork `df96b0421841`）→ plasma-camera 应用实证「Camera offset orientation: 270」；**r137 留档**（rotation=90 一段轮）；**②「CFA 一行修」作废 = 命名撞车误判**（4 字符 GBRG ≡ V4L2 SGBRG10，驱动标签本来就对；复古感主嫌 = 无调参 yaml AE/AWB，待眼判复核）；**touch retrigger 地址不可知化**（cci 子总线编号跨 boot 漂移实证 0-002d/2-002d 同日两 boot；deferred 自愈 = 主机制 + 段尾 exit 0）→ failed=0 全清；**#139 + v96 + mu-r138-3f909a93 在机**，读回双对 ✓。相机 GUI 残面 = 色彩 yaml 候补 + 拍照落盘复测；详录 = experiment-log 一百二十八 → ）
 
@@ -20,8 +24,8 @@
 | Mu 镜像 | **mu-r138-3f909a93**（在机，FdtBlob 与 r138 apk 同源 dbbbcfc6；**读回 ✓ 限长截取对拍[boot_b 分区 96MB ≫ 镜像 1.1MB，整分区读回必掺尾垃圾]**） | 3f909a93 | boot_b |
 | 设备包 / 固件包 | **r89**（11-27 取证轮回程镜像前置：机上直装件收编——koko/gwenview/kalk/qrca + gnss-share 两件 + ofono + megapixels + i2c-tools/v4l-utils/strace + libcamera/libcamera-ipa 显式化；注：MP 收尾轮原占 r89 顺延 r90+；r88 = +xwayland 留档；r87 = dma_heap udev 规则[video 0660，用户会话 libcamera 全灭真凶④破案] + touch retrigger glob 化[cci i2c 编号跨 boot 漂移]；r86 = TD-10 去债留档；r85 = 启动序修复留档）/ **r4**（11-19，已随 r131 发布；11-27 随 r89 轮 --force 重打同内容） | 在机 apk live | 机上 apk add |
 | libcamera | **99990.8.0-r2**（11-27：pmaports temp/libcamera 刷新上游 0.8.0 + 0003 system-heap-first 补丁 = GUI 相机缓冲真凶修复） | 在机 apk live | 机上 apk add |
-| rootfs | **仓内回程件 meizu-meizu20-r138-plasma-mobile.img.gz**（11-27 取证回程镜像：内核 r138 + 设备包 r89 + libcamera r2 + 直装收编 + edge 基础包当日态；裸 4978638848B / gz 1242733575B，sha256 `040e6437…`，gzip -t + debugfs 内容抽验过；本地裸件 `meizu-meizu20-plasma-mobile-local.img` 免解压直刷）｜ Release 面 = r131 双 UI（plasma `b18a6be1` / phosh `fcd6c662`，2026-11-24 上线；本 gz 为下一 Release 的 plasma rootfs 天然候选） | 040e6437（gz） | userdata |
-| 上机期望 | `uname -v` → **#139**（r138）+ 模块 r138 + CMA 池 32MB + `apk list --installed \| grep libcamera` = 99990.8.0-r2 + `/dev/dma_heap/*` = root:video 0660 + `systemctl --failed` = 0 + IPA reserved_regions 含 `146a8000 direct` | — | — |
+| rootfs | **仓内回程件 meizu-meizu20-r138-plasma-mobile.img.gz**（11-27 一百三十重打版：内核 r138 + 设备包 r89 + **hexagonrpcd 0.4.0-r8**[r9 孤儿坏件清除后] + libcamera r2 + 直装收编 + edge 基础包当日态含 webengine 6.140.0-r3[用户人肉下载入本地仓]；裸 4979687424B / gz 1242737060B，sha256 `ec969644…`，gzip -t + debugfs 全量版本对拍过；本地裸件 `meizu-meizu20-plasma-mobile-local.img` 免解压直刷；⚠旧 gz sha 040e6437 = **含毒 r9 已作废勿刷**）｜ Release 面 = r131 双 UI（plasma `b18a6be1` / phosh `fcd6c662`，2026-11-24 上线；本 gz 为下一 Release 的 plasma rootfs 天然候选） | ec969644（gz） | userdata |
+| 上机期望 | `uname -v` → **#139**（r138）+ 模块 r138 + CMA 池 32MB + `apk list --installed \| grep libcamera` = 99990.8.0-r2 + `grep hexagonrpcd` = **0.4.0-r8**（r9 = 毒件在册勿装）+ `/dev/dma_heap/*` = root:video 0660 + `systemctl --failed` = 0 + IPA reserved_regions 含 `146a8000 direct` | — | — |
 
 **历史实验件判词（叙事细节 = git log + PANEL-CORRUPTION §6，本表不追记）**：
 - **r88/v69**（`msm.zero_clkout_timing` 旋钮，10-19 上机）→ **0xC4 洗清**（排雷表 #13 终审）+ bloff 结构性免疫实锤（PANEL §5④/§6 条 1）+ upgrade.sh UNTRUSTED 假绿坑根治。
@@ -118,6 +122,7 @@ b41b88889cadf6060e35…）**——「b41b8889cadf」系连排四个 8 丢一位�
 | a740_sqe.fw | failed with error -2 | 假警报（27s 后重试成功；silime 时代已定性） |
 | pmic-spmi 0-0c/0-0d | probe failed -5 | 在册已知（多轮 boot 一致，无功能影响） |
 | 应用商店「系统升级」提示 | 显示快照版本串如 v20260805-… | UI 噪音：滚动发行版无 distro upgrade，商店列不出（journal: failed to get upgrades），快照标签 vs edge 的版本串观感差；apk 实测升级/降级候选均 0。**忽略之，系统升级只走 UPGRADE.md** |
+| **首会话（向导期）SIM 页「选择配置」点击无响应；走完向导进桌面后顶部白块遮挡 + 触摸不动** | plasma-mobile 6.8.3 × KF6 6.32 组合的首启会话缺陷（11-27 一百三十实测：plasma 栈与旧机同为 6.8.3 无更新可升；锁屏输入正常 = 输入链没病；NM 蜂窝数据全程自动连接正常 = 功能没病） | **走完向导后重启会话即愈**：`systemctl restart plasma-mobile.service`（若新会话起不来 = 旧 ksmserver/kwin 残留占 wayland-1，stop 服务 + kill -9 user 会话 kwin_wayland/plasmashell/ksmserver/startplasma 残件再 start）。向导 done 后重启预期不再复发；SIM 配置日常走「设置」页（NM 链路健康） |
 
 （历史行留档：rmtfs activating / uim-selection start-limit-hit = 蜂窝用户态在役时代现象，
 现役 rootfs 蜂窝摘除态 + 未装四件套时不见；postmarketos-zram-swap failed 仅 r<60 内核，r60 起修复。）
